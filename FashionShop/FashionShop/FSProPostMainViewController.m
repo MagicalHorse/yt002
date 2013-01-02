@@ -18,6 +18,7 @@
 #import "UIViewController+Loading.h"
 #import "FSProItemEntity.h"
 #import "FSCoreStore.h"
+#import "FSImageUploadCell.h"
 
 
 @interface FSProPostMainViewController ()
@@ -145,6 +146,7 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:229 green:229 blue:229]];
     [_tbAction setBackgroundView:nil];
     [_tbAction setBackgroundColor:[UIColor clearColor]];
+    [_tbAction registerClass:[FSImageUploadCell class] forCellReuseIdentifier:@"imageuploadcell"];
     [self setProgress:PostBegin withObject:nil];
     _tbAction.dataSource = self;
     _tbAction.delegate = self;
@@ -154,7 +156,7 @@
 
 -(void) clearData
 {
-    _proRequest.img = nil;
+    _proRequest.imgs = nil;
     [self initActionsSource];
     [self bindControl];
 }
@@ -201,7 +203,9 @@
         }
         case PostStep1Finished:
         {
-            _proRequest.img = (UIImage *)value[0];
+            if (!_proRequest.imgs)
+                _proRequest.imgs = [@[] mutableCopy];
+            [_proRequest.imgs addObject:(UIImage *)value[0]];
             break;
         }
         case PostStep2Finished:
@@ -259,7 +263,7 @@
 {
     int finishedFields = 0;
     int totalFields = _totalFields;
-    _proRequest.img && (_availFields&ImageField)?finishedFields++:finishedFields;
+    _proRequest.imgs && (_availFields&ImageField)?finishedFields++:finishedFields;
     _proRequest.descrip && (_availFields&TitleField)?finishedFields++:finishedFields;
     _proRequest.startdate &&(_availFields & DurationField)?finishedFields++:finishedFields;
     _proRequest.enddate&&(_availFields &DurationField)?finishedFields++:finishedFields;
@@ -412,13 +416,23 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (![NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil) isEqualToString:[_sections objectAtIndex:section]])
-        return 1;
-    else
-        return [[_rows objectForKey:[_sections objectAtIndex:section]] count];
+    int keyIndex = [_keySections indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        BOOL match = [[_sections objectAtIndex:section] isEqualToString:obj];
+        *stop = match;
+        return match;
+    }];
+    switch (keyIndex) {
+       // case 0:
+       //     return _proRequest.imgs?_proRequest.imgs.count:1;
+        case 2:
+            return [[_rows objectForKey:[_sections objectAtIndex:section]] count];
+        default:
+            return 1;
+    }
 }
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    
     return [_sections objectAtIndex:section];
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -439,10 +453,11 @@
     switch (keyIndex) {
         case 0:
         {
-            if (_proRequest.img)
+            if (_proRequest.imgs &&
+                _proRequest.imgs.count>0)
             {
-                detailCell.imageView.image = _proRequest.img;
-                detailCell.textLabel.text = @"";
+                detailCell = [tableView dequeueReusableCellWithIdentifier:@"imageuploadcell"];
+                [(FSImageUploadCell *)detailCell setImages:_proRequest.imgs];
             }
             else
             {
@@ -511,7 +526,23 @@
             break;
     }
 }
-
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int keyIndex = [_keySections indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        BOOL match = [[_sections objectAtIndex:indexPath.section] isEqualToString:obj];
+        *stop = match;
+        return match;
+    }];
+    if (keyIndex==0 &&
+        _proRequest.imgs>0)
+    {
+        return floor((_proRequest.imgs.count+2)/3)*150;
+    }
+    else
+    {
+        return tableView.rowHeight;
+    }
+}
 #pragma UIImagePicker delegate
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {

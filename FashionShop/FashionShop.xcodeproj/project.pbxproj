@@ -21,6 +21,9 @@
 		741C8FA81656387500DDEC44 /* FSEntityBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 741C8FA71656387500DDEC44 /* FSEntityBase.m */; };
 		741C8FAB165638E200DDEC44 /* FSEntityRequestBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 741C8FAA165638E200DDEC44 /* FSEntityRequestBase.m */; };
 		741C8FAE1656468400DDEC44 /* FSSuggestListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 741C8FAD1656468400DDEC44 /* FSSuggestListRequest.m */; };
+		742FF91A1693E344005B9BD9 /* FSImageUploadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 742FF9191693E344005B9BD9 /* FSImageUploadCell.m */; };
+		742FF91C1693E66B005B9BD9 /* FSImageCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 742FF91B1693E66B005B9BD9 /* FSImageCollectionCell.xib */; };
+		742FF91F1693E80A005B9BD9 /* FSImageCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 742FF91E1693E809005B9BD9 /* FSImageCollectionCell.m */; };
 		7433F49A16646FD400D19335 /* FSResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7433F49916646FD400D19335 /* FSResource.m */; };
 		7433F49D16649A9600D19335 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7433F49B16649A9600D19335 /* Model.xcdatamodeld */; };
 		7433F4A41664A1D300D19335 /* FSCoreModelBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7433F4A31664A1D300D19335 /* FSCoreModelBase.m */; };
@@ -87,6 +90,8 @@
 		74A3822916512CD2003FF79D /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A3822416512CD2003FF79D /* NSData+Base64.m */; };
 		74A3822A16512CD2003FF79D /* NSDictionary+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A3822616512CD2003FF79D /* NSDictionary+Extention.m */; };
 		74A3822B16512CD2003FF79D /* NSString+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A3822816512CD2003FF79D /* NSString+Extention.m */; };
+		74A9E4E01692E03300E5C299 /* FSImageSlideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74A9E4DE1692E03300E5C299 /* FSImageSlideViewController.m */; };
+		74A9E4E11692E03300E5C299 /* FSImageSlideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74A9E4DF1692E03300E5C299 /* FSImageSlideViewController.xib */; };
 		74AABEE81691AE5E00DCED5A /* cancel2_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AABEE61691AE5E00DCED5A /* cancel2_icon.png */; };
 		74AABEE91691AE5E00DCED5A /* cancel2_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AABEE71691AE5E00DCED5A /* cancel2_icon@2x.png */; };
 		74AABEED1691B3A800DCED5A /* FSBrandItemsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74AABEEB1691B3A800DCED5A /* FSBrandItemsViewController.m */; };
@@ -483,6 +488,11 @@
 		741C8FAA165638E200DDEC44 /* FSEntityRequestBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSEntityRequestBase.m; path = ModelService/FSEntityRequestBase.m; sourceTree = "<group>"; };
 		741C8FAC1656468300DDEC44 /* FSSuggestListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSSuggestListRequest.h; path = ModelService/FSSuggestListRequest.h; sourceTree = "<group>"; };
 		741C8FAD1656468400DDEC44 /* FSSuggestListRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSSuggestListRequest.m; path = ModelService/FSSuggestListRequest.m; sourceTree = "<group>"; };
+		742FF9181693E344005B9BD9 /* FSImageUploadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSImageUploadCell.h; path = Controls/FSImageUploadCell.h; sourceTree = "<group>"; };
+		742FF9191693E344005B9BD9 /* FSImageUploadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSImageUploadCell.m; path = Controls/FSImageUploadCell.m; sourceTree = "<group>"; };
+		742FF91B1693E66B005B9BD9 /* FSImageCollectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSImageCollectionCell.xib; path = Controls/FSImageCollectionCell.xib; sourceTree = "<group>"; };
+		742FF91D1693E809005B9BD9 /* FSImageCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSImageCollectionCell.h; path = Controls/FSImageCollectionCell.h; sourceTree = "<group>"; };
+		742FF91E1693E809005B9BD9 /* FSImageCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSImageCollectionCell.m; path = Controls/FSImageCollectionCell.m; sourceTree = "<group>"; };
 		7433F49816646FD400D19335 /* FSResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSResource.h; path = Model/FSResource.h; sourceTree = "<group>"; };
 		7433F49916646FD400D19335 /* FSResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSResource.m; path = Model/FSResource.m; sourceTree = "<group>"; };
 		7433F49C16649A9600D19335 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -584,6 +594,9 @@
 		74A3822616512CD2003FF79D /* NSDictionary+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Extention.m"; sourceTree = "<group>"; };
 		74A3822716512CD2003FF79D /* NSString+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extention.h"; sourceTree = "<group>"; };
 		74A3822816512CD2003FF79D /* NSString+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extention.m"; sourceTree = "<group>"; };
+		74A9E4DD1692E03300E5C299 /* FSImageSlideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSImageSlideViewController.h; sourceTree = "<group>"; };
+		74A9E4DE1692E03300E5C299 /* FSImageSlideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSImageSlideViewController.m; sourceTree = "<group>"; };
+		74A9E4DF1692E03300E5C299 /* FSImageSlideViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSImageSlideViewController.xib; sourceTree = "<group>"; };
 		74AABEE61691AE5E00DCED5A /* cancel2_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel2_icon.png; sourceTree = "<group>"; };
 		74AABEE71691AE5E00DCED5A /* cancel2_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel2_icon@2x.png"; sourceTree = "<group>"; };
 		74AABEEA1691B3A800DCED5A /* FSBrandItemsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSBrandItemsViewController.h; sourceTree = "<group>"; };
@@ -1242,6 +1255,11 @@
 				7438D79B1691463000AC5599 /* FSCouponProDetailCell.h */,
 				7438D79C1691463000AC5599 /* FSCouponProDetailCell.m */,
 				7438D79E1691465000AC5599 /* FSCouponProDetailCell.xib */,
+				742FF9181693E344005B9BD9 /* FSImageUploadCell.h */,
+				742FF9191693E344005B9BD9 /* FSImageUploadCell.m */,
+				742FF91B1693E66B005B9BD9 /* FSImageCollectionCell.xib */,
+				742FF91D1693E809005B9BD9 /* FSImageCollectionCell.h */,
+				742FF91E1693E809005B9BD9 /* FSImageCollectionCell.m */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1789,6 +1807,9 @@
 				74AABEEA1691B3A800DCED5A /* FSBrandItemsViewController.h */,
 				74AABEEB1691B3A800DCED5A /* FSBrandItemsViewController.m */,
 				74AABEEC1691B3A800DCED5A /* FSBrandItemsViewController.xib */,
+				74A9E4DD1692E03300E5C299 /* FSImageSlideViewController.h */,
+				74A9E4DE1692E03300E5C299 /* FSImageSlideViewController.m */,
+				74A9E4DF1692E03300E5C299 /* FSImageSlideViewController.xib */,
 			);
 			name = Prod;
 			sourceTree = "<group>";
@@ -2424,6 +2445,8 @@
 				74C427A316928BC200651F79 /* cancel_follow_btn@2x.png in Resources */,
 				74C427AE16929D9500651F79 /* bottom_nav_notlike_icon.png in Resources */,
 				74C427AF16929D9500651F79 /* bottom_nav_notlike_icon@2x.png in Resources */,
+				74A9E4E11692E03300E5C299 /* FSImageSlideViewController.xib in Resources */,
+				742FF91C1693E66B005B9BD9 /* FSImageCollectionCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2620,6 +2643,9 @@
 				7438D79D1691463000AC5599 /* FSCouponProDetailCell.m in Sources */,
 				7438D7A21691584C00AC5599 /* UITableViewCell+BG.m in Sources */,
 				74AABEED1691B3A800DCED5A /* FSBrandItemsViewController.m in Sources */,
+				74A9E4E01692E03300E5C299 /* FSImageSlideViewController.m in Sources */,
+				742FF91A1693E344005B9BD9 /* FSImageUploadCell.m in Sources */,
+				742FF91F1693E80A005B9BD9 /* FSImageCollectionCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

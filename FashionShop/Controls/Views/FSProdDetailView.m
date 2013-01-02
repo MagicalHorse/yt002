@@ -107,7 +107,7 @@
     origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _lblStoreAddress.superview.frame.size.height+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _lblStoreAddress.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
     

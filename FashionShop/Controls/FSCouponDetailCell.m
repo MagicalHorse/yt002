@@ -33,7 +33,9 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self setBackgroundViewUniveral];
+        UIView *bg = [[UIView alloc] initWithFrame:self.frame];
+        bg.backgroundColor =[UIColor grayColor];
+        self.selectedBackgroundView =bg;
     }
     return self;
 }

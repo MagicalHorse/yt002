@@ -14,6 +14,7 @@
 #import "SYPaginator.h"
 #import "UIViewController+Loading.h"
 #import "FSThumView.h"
+#import "FSImageSlideViewController.h"
 
 @class FSProDetailViewController;
 @protocol FSProDetailItemSourceProvider <NSObject>
@@ -26,7 +27,7 @@
 
 @end
 
-@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,FSThumViewDelegate>
+@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,FSThumViewDelegate,FSImageSlideDataSource>
 - (IBAction)doBack:(id)sender;
 - (IBAction)doComment:(id)sender;
 

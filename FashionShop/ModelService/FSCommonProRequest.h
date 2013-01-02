@@ -18,7 +18,7 @@
 @interface FSCommonProRequest : FSEntityRequestBase<RKRequestDelegate>
 
 @property(nonatomic,strong) NSString *uToken;
-@property(nonatomic,strong) UIImage *img;
+@property(nonatomic,strong) NSMutableArray *imgs;
 @property(nonatomic,strong) NSNumber * storeId;
 @property(nonatomic,strong) NSString *storeName;
 @property(nonatomic,strong) NSNumber * tagId;

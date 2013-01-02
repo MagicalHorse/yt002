@@ -122,6 +122,7 @@
         else
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProdDetailView" owner:self options:nil] lastObject];
     }
+    __block FSProDetailViewController *blockSelf = self;
     [(FSDetailBaseView *)view setPType:source];
     
     [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
@@ -130,6 +131,13 @@
         if ([view respondsToSelector:@selector(imgThumb)])
         {
             [(FSThumView *)[view imgThumb] setDelegate:self];
+        }
+        if ([view respondsToSelector:@selector(imgView)])
+        {
+            UIImageView *prodImage = (UIImageView *)[view imgView];
+            [prodImage setUserInteractionEnabled:TRUE];
+            UITapGestureRecognizer *imgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapProImage:)];
+            [prodImage addGestureRecognizer:imgTap];
         }
         [[view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
         
@@ -170,7 +178,7 @@
                         if ([view respondsToSelector:@selector(btnFavor)])
                         {
                             UIBarButtonItem *favorButton = [view btnFavor];
-                            [self updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
+                            [blockSelf updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
                         }
 
                     }
@@ -185,7 +193,7 @@
             if ([view respondsToSelector:@selector(btnFavor)])
             {
                 UIBarButtonItem *favorButton = [view btnFavor];
-                [self updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
+                [blockSelf updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
             }
 
         }
@@ -203,7 +211,8 @@
                 if (resp.isSuccess)
                 {
                     [[(FSDetailBaseView *)view data] setComments:resp.responseData];
-                    [[view tbComment] reloadData];
+                    if (blockSelf)
+                        [[view tbComment] reloadData];
                    
                 }
                 else
@@ -502,6 +511,15 @@
     }
     
 }
+-(void)didTapProImage:(id) sender
+{
+    if ([self numberOfImagesInSlides:nil]<=0)
+        return;
+    FSImageSlideViewController *slide = [[FSImageSlideViewController alloc] initWithNibName:@"FSImageSlideViewController" bundle:nil];
+    slide.source = self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:slide];
+    [self presentViewController:nav animated:TRUE completion:nil];
+}
 
 - (IBAction)doGoStoreDetail:(id)sender {
 }
@@ -562,10 +580,15 @@
 {
     [self hideCommentInputView:self.view];
 }
--(void)saveComment:(UIButton *)sender
+-(NSString *)transformCommentText
 {
     FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
-    NSString *trimedText = [commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    NSString *trimedText = [[commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return [commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+}
+-(void)saveComment:(UIButton *)sender
+{
+    NSString *trimedText = [self transformCommentText];
     if (trimedText.length>40 ||trimedText.length<1)
     {
         [self reportError:NSLocalizedString(@"PRO_COMMENT_LENGTH_NOTCORRECT", Nil)];
@@ -618,7 +641,7 @@
 -(void) internalDoComent:(dispatch_block_t)callback
 {
     FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
-    NSString *commentText = commentView.txtComment.text;
+    NSString *commentText = [self transformCommentText];
     FSCommonCommentRequest *request = [[FSCommonCommentRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.comment = commentText;
@@ -636,8 +659,7 @@
         {
             [[[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments] insertObject:respData.responseData atIndex:0];
             [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
-            commentView.txtComment.text = @"";
-            [commentView.txtComment resignFirstResponder];
+            [blockSelf hideCommentInputView:self];
             [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
             
         }
@@ -647,37 +669,34 @@
     
 
 }
-#pragma UIScrollView delegate
-/*
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+#pragma FSImageSlide datasource
+-(int)numberOfImagesInSlides:(FSImageSlideViewController *)view
 {
-    if( scrollView.contentOffset.y>80)
+    return [[self itemSource] resource].count;
+}
+-(NSURL *)imageSlide:(FSImageSlideViewController *)view imageNameForIndex:(int)index
+{
+    return [(FSResource *)[[[self itemSource] resource] objectAtIndex:index] absoluteUrl320];
+}
+-(void)imageSlide:(FSImageSlideViewController *)view didShareTap:(BOOL)shared
+{
+    NSMutableArray *shareItems = [@[] mutableCopy];
+    id curView = self.paginatorView.currentPage;
+    NSString *title = [self.itemSource valueForKey:@"title"];
+    [shareItems addObject:title?title:@""];
+    if ([curView imgView].image != nil)
     {
-        [self displayCommentInputView:nil];
+        [shareItems addObject:[curView imgView].image];
     }
-    else
-    {
-        [self hideCommentInputView:nil];
-    }
+    
+    [[FSShareView instance] shareBegin:view withShareItems:shareItems  completeHander:^(NSString *activityType, BOOL completed){
+        if (completed)
+        {
+            [view reportError:NSLocalizedString(@"COMM_OPERATE_COMPL", nil)];
+        }
+    }];
 
 }
-
-
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    
-    if( scrollView.contentOffset.y>80)
-    {
-        [self displayCommentInputView:nil];
-    }
-    else
-    {
-        [self hideCommentInputView:nil];
-    }
-    
-    
-}
- */
 #pragma FSThumbView delegate
 -(void)didTapThumView:(id)sender
 {

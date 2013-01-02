@@ -147,8 +147,19 @@ static FSShareView *_instance;
 
 - (void)activityDidFinish:(BOOL)completed
 {
-    if (_completeHandler)
-        _completeHandler(nil,completed);
+        if (![UIActivityViewController class] &&
+            _completeHandler)
+            _completeHandler(nil,completed);
+        else
+        {
+            if ([self isKindOfClass:[UIActivity class]])
+            {
+                Class uaclass = [UIActivity class];
+                IMP impl = class_getMethodImplementation(uaclass,_cmd);
+                impl(self, _cmd,completed);
+            }
+        }
+    
 }
 
 __attribute__((constructor)) static void FSCreateUIActivityClasses(void) {

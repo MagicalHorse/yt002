@@ -21,7 +21,7 @@
 @end
 @implementation FSCommonProRequest
 @synthesize uToken;
-@synthesize img;
+@synthesize imgs;
 @synthesize descrip;
 @synthesize tagId;
 @synthesize tagName;
@@ -52,7 +52,6 @@
     [map mapKeyPath:@"startdate" toAttribute:@"request.startdate"];
     [map mapKeyPath:@"enddate" toAttribute:@"request.enddate"];
     [map mapKeyPath:@"storeid" toAttribute:@"request.brandId"];
-   // [map mapKeyPath:@"img" toAttribute:@"request.img"];
     
 }
 
@@ -90,7 +89,11 @@
     [params setValue:storeId forParam:@"storeid"];
     [params setValue:brandId forParam:@"brandid"];
     [params setValue:tagId forParam:@"tagid"];
-    [params setData:UIImageJPEGRepresentation(img, 0.5) MIMEType:@"image/jpeg" forParam:@"resource.jpeg"];
+    int i =0;
+    for (UIImage* img in imgs) {
+        [params setData:UIImageJPEGRepresentation(img, 0.5) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
+    }
+    
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
     completeBlock = blockcomplete;
     errorBlock = blockerror;

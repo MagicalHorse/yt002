@@ -48,7 +48,7 @@
     if (self) {
         [self setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
         IconDelegate = delegate;
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 10, 320, 105*rowCount)];
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 10, 320, 60*rowCount)];
         [scrollView setPagingEnabled:YES];
         [scrollView setBackgroundColor:[UIColor clearColor]];
         [scrollView setShowsHorizontalScrollIndicator:NO];
@@ -58,15 +58,7 @@
         [scrollView setBounces:NO];
         
         [self addSubview:scrollView];
-        
-        if (cout > 9) {
-            self.pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 105*rowCount, 0, 20)];
-            [pageControl setNumberOfPages:0];
-            [pageControl setCurrentPage:0];
-            [pageControl addTarget:self action:@selector(changePage:)forControlEvents:UIControlEventValueChanged];
-            [self addSubview:pageControl];
-        }
-        
+    
         
         self.items = [[NSMutableArray alloc] initWithCapacity:cout];
         
@@ -107,11 +99,11 @@
     
     if (count <= 3) {
         [self setTitle:@"\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 105)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, 60)];
         rowCount = 1;
     } else if (count <= 6) {
         [self setTitle:@"\n\n\n\n\n\n\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 210)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, 120)];
         rowCount = 2;
     }
     [scrollView setContentSize:CGSizeMake(320*(count/itemPerPage+1), scrollView.frame.size.height)];
@@ -122,7 +114,6 @@
     for (int i = 0; i< count; i++) {
         AWActionSheetCell* cell = [IconDelegate cellForActionAtIndex:i];
         int PageNo = i/itemPerPage;
-        //        NSLog(@"page %d",PageNo);
         int index  = i%itemPerPage;
         
         if (itemPerPage == 9) {
@@ -133,9 +124,7 @@
             
             float centerY = (1+row*2)*self.scrollView.frame.size.height/(2*rowCount);
             float centerX = (1+column*2)*self.scrollView.frame.size.width/6;
-            
-            //            NSLog(@"%f %f",centerX+320*PageNo,centerY);
-            
+
             [cell setCenter:CGPointMake(centerX+320*PageNo, centerY)];
             [self.scrollView addSubview:cell];
             
@@ -191,26 +180,17 @@
 
 -(id)init
 {
-    self = [super initWithFrame:CGRectMake(0, 0, 70, 70)];
+    self = [super initWithFrame:CGRectMake(0, 0, 60, 60)];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         
-        self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(6.5, 0, 57, 57)];
+        self.iconView = [[UIImageView alloc] initWithFrame:self.frame];
         [iconView setBackgroundColor:[UIColor clearColor]];
         [[iconView layer] setCornerRadius:8.0f];
         [[iconView layer] setMasksToBounds:YES];
         
         [self addSubview:iconView];
         
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 63, 70, 13)];
-        [titleLabel setBackgroundColor:[UIColor clearColor]];
-        [titleLabel setTextAlignment:UITextAlignmentCenter];
-        [titleLabel setFont:[UIFont boldSystemFontOfSize:13]];
-        [titleLabel setTextColor:[UIColor whiteColor]];
-        [titleLabel setShadowColor:[UIColor blackColor]];
-        [titleLabel setShadowOffset:CGSizeMake(0, 0.5)];
-        [titleLabel setText:@""];
-        [self addSubview:titleLabel];
     }
     return self;
 }

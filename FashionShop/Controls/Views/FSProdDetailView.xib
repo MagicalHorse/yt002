@@ -81,7 +81,7 @@
 											<int key="NSColorSpace">3</int>
 											<bytes key="NSWhite">MCAwAA</bytes>
 										</object>
-										<int key="IBUIContentMode">3</int>
+										<int key="IBUIContentMode">1</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 									</object>
@@ -250,7 +250,7 @@
 										<int key="IBUIContentMode">7</int>
 										<bool key="IBUIUserInteractionEnabled">NO</bool>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-										<string key="IBUIText">Label</string>
+										<string key="IBUIText"/>
 										<reference key="IBUITextColor" ref="1049723036"/>
 										<nil key="IBUIHighlightedColor"/>
 										<int key="IBUIBaselineAdjustment">0</int>
@@ -273,14 +273,14 @@
 										<reference key="NSNextKeyView" ref="473283093"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<bool key="IBUIOpaque">NO</bool>
+										<int key="IBUIContentMode">4</int>
 										<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 										<int key="IBUIContentHorizontalAlignment">0</int>
 										<int key="IBUIContentVerticalAlignment">0</int>
-										<double key="IBUITitleEdgeInsets.top">0.0</double>
+										<double key="IBUITitleEdgeInsets.top">2</double>
 										<double key="IBUITitleEdgeInsets.bottom">0.0</double>
 										<double key="IBUITitleEdgeInsets.left">4</double>
 										<double key="IBUITitleEdgeInsets.right">0.0</double>
-										<string key="IBUINormalTitle">Button</string>
 										<reference key="IBUIHighlightedTitleColor" ref="282370751"/>
 										<object class="NSColor" key="IBUINormalTitleColor">
 											<int key="NSColorSpace">1</int>
@@ -376,6 +376,7 @@
 						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="467063917"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>

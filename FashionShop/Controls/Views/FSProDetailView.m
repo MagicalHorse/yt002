@@ -107,7 +107,7 @@
     
     CGSize originContent = self.svContent.contentSize;
    
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_lblStoreAddress.superview.frame.size.height+ 10+PRO_DETAIL_COMMENT_INPUT_HEIGHT;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_lblStoreAddress.superview.frame.size.height+ 10;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
 
