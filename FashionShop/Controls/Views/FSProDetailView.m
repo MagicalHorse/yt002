@@ -8,6 +8,7 @@
 
 #import "FSProDetailView.h"
 #import "UIImageView+WebCache.h"
+#import "NSString+Extention.h"
 
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
@@ -61,7 +62,7 @@
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d",_data.favorTotal] forKey:@"text"];
     _lblFavorCount.font = ME_FONT(12);
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
-    _lblDescrip.text = _data.descrip;
+    _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
     _lblDescrip.font = ME_FONT(12);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 2;
@@ -81,6 +82,15 @@
     _lblStoreAddress.text = [NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000];
     _lblStoreAddress.font = ME_FONT(14);
     _lblStoreAddress.textColor = [UIColor colorWithRed:229 green:0 blue:79];
+    
+    CGSize storesize =[_lblStoreAddress sizeThatFits:_lblStoreAddress.frame.size];
+    _lblStoreAddress.frame = CGRectMake(_lblStoreAddress.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+5, storesize.width, storesize.height);
+    CGRect superFrame =   _lblStoreAddress.superview.frame;
+    superFrame.size.height = _lblStoreAddress.frame.size.height +_lblStoreAddress.frame.origin.y+5;
+    _lblStoreAddress.superview.frame = superFrame;
+    CGRect commentFrame = _tbComment.frame;
+    commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+2;
+    _tbComment.frame = commentFrame;
     [self updateInteraction:_data];
 
 }

@@ -106,6 +106,13 @@
     {
         [_images removeObjectAtIndex:indexPath.row];
         [imageView deleteItemsAtIndexPaths:@[indexPath]];
+        if (_images.count<=0 &&
+            _imageRemoveDelegate &&
+            [_imageRemoveDelegate respondsToSelector:@selector(didImageRemoveAll)])
+        {
+            [_imageRemoveDelegate performSelector:@selector(didImageRemoveAll)];
+        }
+            
     }
     
 }

@@ -28,6 +28,7 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblStoreAddress;
+@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
 
 
 @property (strong, nonatomic) IBOutlet UIScrollView *svContent;

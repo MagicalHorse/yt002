@@ -32,6 +32,7 @@
 @property(nonatomic,strong) NSNumber *lantit;
 @property(nonatomic,strong) NSDate* startdate;
 @property(nonatomic,strong) NSDate* enddate;
+@property(nonatomic,strong) NSNumber *price;
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
 

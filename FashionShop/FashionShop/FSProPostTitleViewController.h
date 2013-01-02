@@ -17,8 +17,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblName;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescName;
 
+@property (strong, nonatomic) IBOutlet UILabel *lblPrice;
 @property (strong, nonatomic) IBOutlet UITextView *txtDesc;
 - (IBAction)doSave:(id)sender;
+@property (strong, nonatomic) IBOutlet UITextField *txtPrice;
 
 - (IBAction)doCancel:(id)sender;
 

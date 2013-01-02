@@ -12,6 +12,7 @@
 
 @interface FSImageUploadCell : UITableViewCell<SpringboardLayoutDelegate,PSUICollectionViewDataSource>
 @property(nonatomic,strong) NSMutableArray *images;
+@property(nonatomic) id imageRemoveDelegate;;
 -(void)refreshImages;
 
 @end

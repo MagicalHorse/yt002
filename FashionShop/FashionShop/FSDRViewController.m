@@ -17,9 +17,13 @@
 #import "FSProListRequest.h"
 #import "FSLocationManager.h"
 #import "FSBothItems.h"
+#import "FSFavorRequest.h"
+#import "FSCommonProRequest.h"
+#import "FSPagedFavor.h"
 
 
 #define DR_DETAIL_CELL @"DRdetailcell"
+#define DR_FAVOR_DETAIL_CELL @"DR_FAVOR_DETAIL_CELL"
 #define  PROD_LIST_DETAIL_CELL_WIDTH 100
 #define ITEM_CELL_WIDTH 100;
 #define PROD_PAGE_SIZE 20;
@@ -94,6 +98,7 @@
     _itemsView.dataSource = self;
     _itemsView.delegate = self;
     [_itemsView registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:DR_DETAIL_CELL];
+    [_itemsView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
     [self prepareRefreshLayout:_itemsView withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^{
             action();
@@ -128,7 +133,7 @@
     [_btnFans setTitleColor:[UIColor colorWithRed:102 green:102 blue:102] forState:UIControlStateNormal];
     _btnFans.titleLabel.font = ME_FONT(9);
     _lblItemTitle.font = ME_FONT(12);
-    _lblItemTitle.text = NSLocalizedString(@"Ta like", nil);
+    _lblItemTitle.text = _daren.userLevelId==FSDARENUser?NSLocalizedString(@"Ta share", nil):NSLocalizedString(@"Ta like", nil);
     _lblItemTitle.textColor = [UIColor colorWithRed:0 green:0 blue:0];
     if (!isUpdateCollection)
         return;
@@ -137,7 +142,9 @@
     [self beginLoading:_itemsView];
     
     _prodPageIndex = 1;
-    FSProListRequest *request = [self createListRequest:_prodPageIndex isRefresh:FALSE];
+    FSEntityRequestBase *request = [self createListRequest:_prodPageIndex isRefresh:FALSE];
+    if ([self isDR])
+    {
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:_itemsView];
         if (!resp.isSuccess)
@@ -155,6 +162,27 @@
             [self fillProdInMemory:result.prodItems isInsert:self.isInRefresh];
         }
     }];
+    } else
+    {
+        [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            [self endLoading:_itemsView];
+            if (!resp.isSuccess)
+                [self reportError:resp.errorDescrip];
+            else
+            {
+                FSPagedFavor *result = resp.responseData;
+                if (self.isInRefresh)
+                    _refreshLatestDate = [[NSDate alloc] init];
+                else
+                {
+                    if (result.totalPageCount <= _prodPageIndex+1)
+                        _noMoreResult = TRUE;
+                }
+                [self fillFavorInMemory:result.items isInsert:self.isInRefresh];
+            }
+        }];
+ 
+    }
 
 }
 
@@ -197,6 +225,43 @@
     
 }
 
+-(void) fillFavorInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
+{
+    if(!_items)
+        _items = [@[] mutableCopy];
+    if (!prods)
+        return;
+    [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        int index = [_items indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1)
+                     {
+                         if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
+                         {
+                             return TRUE;
+                             *stop1 = TRUE;
+                         }
+                         return FALSE;
+                     }];
+        if (index==NSNotFound)
+        {
+            if (!isinserted)
+            {
+                [_items addObject:obj];
+            } else
+            {
+                [_items insertObject:obj atIndex:0];
+            }
+            
+            
+        }
+    }];
+    
+    [_itemsView reloadData];
+    if (!_items ||
+        _items.count<=0)
+        [self showNoResult:_itemsView withText:NSLocalizedString(@"no products shared", Nil)];
+    else
+        [self hideNoResult:_itemsView];
+}
 
 -(FSCommonUserRequest *)createDRRequest
 {
@@ -208,8 +273,10 @@
 }
 
 
--(FSProListRequest *)createListRequest:(int)page isRefresh:(BOOL)isRefresh
+-(FSEntityRequestBase *)createListRequest:(int)page isRefresh:(BOOL)isRefresh
 {
+    if (_daren.userLevelId == FSDARENUser)
+    {
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_PROD_DR_LIST;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
@@ -227,7 +294,25 @@
     request.nextPage = page;
     request.pageSize = PROD_PAGE_SIZE;
     request.drUserId = [NSNumber numberWithInt:_userId];
-    return request;
+        return request;
+    } else
+    {
+        FSFavorRequest *request = [[FSFavorRequest alloc] init];
+        request.userToken = [FSModelManager sharedModelManager].loginToken;
+        request.productType = FSSourceProduct;
+        request.routeResourcePath = RK_REQUEST_FAVOR_LIST;
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.pageSize = [NSNumber numberWithInt:20] ;
+        if (isRefresh)
+            request.nextPage = @1;
+        else
+            request.nextPage =[NSNumber numberWithInt:page];
+        request.userid = [NSNumber numberWithInt:_userId];
+        return request;
+
+    }
+ 
 }
 
 -(void)doLike
@@ -349,7 +434,10 @@
     [self.navigationItem setRightBarButtonItem:barSet];
     
 }
-
+-(BOOL)isDR
+{
+    return _daren.userLevelId == FSDARENUser;
+}
 
 -(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
 {
@@ -359,7 +447,9 @@
         _prodPageIndex++;
         nextPage = _prodPageIndex +1;
     }
-    FSProListRequest *request = [self createListRequest:nextPage isRefresh:TRUE];
+    FSEntityRequestBase *request = [self createListRequest:nextPage isRefresh:TRUE];
+    if ([self isDR])
+    {
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         callback();
         if (resp.isSuccess)
@@ -379,6 +469,29 @@
             [self reportError:resp.errorDescrip];
         }
     }];
+    } else
+    {
+        [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            callback();
+            if (resp.isSuccess)
+            {
+                FSPagedFavor *result = resp.responseData;
+                if (isRefresh)
+                    _refreshLatestDate = [[NSDate alloc] init];
+                else
+                {
+                    if (result.totalPageCount <= _prodPageIndex+1)
+                        _noMoreResult = TRUE;
+                }
+                [self fillFavorInMemory:result.items isInsert:isRefresh];
+            }
+            else
+            {
+                [self reportError:resp.errorDescrip];
+            }
+        }];
+
+    }
     
 }
 
@@ -451,8 +564,10 @@
 }
 
 - (PSUICollectionViewCell *)collectionView:(PSUICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    PSUICollectionViewCell * cell = [cv dequeueReusableCellWithReuseIdentifier:DR_DETAIL_CELL forIndexPath:indexPath];
-    [(FSProdDetailCell *)cell setData:[_items objectAtIndex:indexPath.row]];
+
+    NSString *identifier = [self isDR]?DR_DETAIL_CELL:DR_FAVOR_DETAIL_CELL;
+    PSUICollectionViewCell * cell = [cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    [(id)cell setData:[_items objectAtIndex:indexPath.row]];
     cell.layer.borderColor = [UIColor grayColor].CGColor;
     cell.layer.borderWidth = 1;
     if (_itemsView.dragging == NO &&
@@ -486,8 +601,8 @@
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-
-        [(FSProdDetailCell *)cell willRemoveFromView];
+    if ([cell respondsToSelector:@selector(willRemoveFromView)])
+        [(id)cell willRemoveFromView];
 
 }
 
@@ -495,8 +610,15 @@
                    layout:(SpringboardLayout *)collectionViewLayout
  heightForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSProdItemEntity * data = [_items objectAtIndex:indexPath.row];
-    FSResource * resource = data.resource&&data.resource.count>0?[data.resource objectAtIndex:0]:nil;
+    NSArray * resources = nil;
+    if ([self isDR])
+    {
+        resources = [[_items objectAtIndex:indexPath.row] resource];
+    } else
+    {
+        resources = [(FSFavor *)[_items objectAtIndex:indexPath.row] resources];
+    }
+    FSResource * resource = resources&&resources.count>0?[resources objectAtIndex:0]:nil;
     float totalHeight = 0.0f;
     if (resource)
     {
@@ -514,11 +636,50 @@
 #pragma FSProDetailItemSourceProvider
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
+    if ([self isDR])
+    {
     FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
     if (item)
         block(item);
     else
         errorBlock();
+    } else
+    {
+        __block FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
+        FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+        request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.uToken = [FSModelManager sharedModelManager].loginToken;
+        Class respClass;
+        
+        if (favorCurrent.sourceType == FSSourceProduct)
+        {
+            request.pType = FSSourceProduct;
+            request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            request.pType = FSSourcePromotion;
+            request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+            respClass = [FSProItemEntity class];
+            
+        }
+        [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            if (!resp.isSuccess)
+            {
+                [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                errorBlock();
+            }
+            else
+            {
+                block(resp.responseData);
+            }
+        }];
+
+    }
     
 }
 
@@ -528,7 +689,7 @@
 }
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
-    return TRUE;
+    return [self isDR];
 }
 
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout

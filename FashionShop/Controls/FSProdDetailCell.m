@@ -23,7 +23,19 @@
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;
-    
+    if (_data.price &&
+        [_data.price intValue]>0)
+    {
+        _btnPrice.alpha =1;
+        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%d",[_data.price intValue]] forState:UIControlStateNormal];
+        [_btnPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _btnPrice.titleLabel.font = [UIFont systemFontOfSize:9];
+        CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
+        _btnPrice.frame = CGRectMake(self.frame.size.width-newsize.width, self.frame.size.height-newsize.height, newsize.width, newsize.height);
+    } else
+    {
+        _btnPrice.alpha = 0;
+    }
 }
 
 - (void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop

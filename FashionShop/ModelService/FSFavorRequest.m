@@ -17,6 +17,7 @@
 @synthesize nextPage;
 @synthesize longit;
 @synthesize lantit;
+@synthesize userid;
 
 -(NSString *) routeResourcePath
 {
@@ -51,5 +52,6 @@
     [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];
     [map mapKeyPath:@"lat" toAttribute:@"request.lantit"];
+    [map mapKeyPath:@"userid" toAttribute:@"request.userid"];
 }
 @end

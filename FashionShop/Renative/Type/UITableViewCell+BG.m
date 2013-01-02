@@ -13,7 +13,7 @@
 -(void)setBackgroundViewUniveral
 {
     UIView *bg = [[UIView alloc] initWithFrame:self.frame];
-    bg.backgroundColor =PRO_LIST_NEAR_CELL2_BGCOLOR;
+    bg.backgroundColor =[UIColor grayColor];
     self.selectedBackgroundView =bg;
 }
 

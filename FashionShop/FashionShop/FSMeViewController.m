@@ -847,7 +847,7 @@
     {
         int cellWidth = ITEM_CELL_WIDTH;
         float imgHeight = (cellWidth * resource.height)/(resource.width);
-        totalHeight = totalHeight+imgHeight;
+        totalHeight =imgHeight;
     }
     return totalHeight;
 }

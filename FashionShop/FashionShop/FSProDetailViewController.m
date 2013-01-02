@@ -455,11 +455,10 @@
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
-- (IBAction)goDR:(id)sender {
-    FSDetailBaseView * view = self.paginatorView.currentPage;
-    NSNumber *userId = [view.data fromUser].uid;
+- (IBAction)goDR:(NSNumber *)userid {
+
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
-    dr.userId = [userId intValue];
+    dr.userId = [userid intValue];
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
@@ -700,7 +699,10 @@
 #pragma FSThumbView delegate
 -(void)didTapThumView:(id)sender
 {
-    [self goDR:nil];
+   if ([sender isKindOfClass:[FSThumView class]])
+   {
+    [self goDR:[(FSThumView *)sender ownerUser].uid];
+   }
 }
 
 #pragma UITableViewSource delegate
@@ -736,6 +738,7 @@
     FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
     FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
     [detailCell setData:[[parentView.data comments] objectAtIndex:indexPath.row]];
+    detailCell.imgThumb.delegate = self;
    
     return detailCell;
 }

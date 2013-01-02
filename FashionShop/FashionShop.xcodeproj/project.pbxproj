@@ -378,6 +378,8 @@
 		74DE308B166883DA008D0CA6 /* FSProPostMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DE3089166883DA008D0CA6 /* FSProPostMainViewController.m */; };
 		74DE308C166883DA008D0CA6 /* FSProPostMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74DE308A166883DA008D0CA6 /* FSProPostMainViewController.xib */; };
 		74DE308F16688D3E008D0CA6 /* FSCommonProRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DE308E16688D3E008D0CA6 /* FSCommonProRequest.m */; };
+		74E8FCF116941D440069EF24 /* price_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74E8FCEF16941D440069EF24 /* price_bg.png */; };
+		74E8FCF216941D440069EF24 /* price_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74E8FCF016941D440069EF24 /* price_bg@2x.png */; };
 		74F40CB5168FDAA600840510 /* cancel_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F40CA5168FDAA600840510 /* cancel_btn.png */; };
 		74F40CB6168FDAA600840510 /* cancel_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F40CA6168FDAA600840510 /* cancel_btn@2x.png */; };
 		74F40CB7168FDAA600840510 /* fans_label.png in Resources */ = {isa = PBXBuildFile; fileRef = 74F40CA7168FDAA600840510 /* fans_label.png */; };
@@ -1043,6 +1045,8 @@
 		74DE308A166883DA008D0CA6 /* FSProPostMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSProPostMainViewController.xib; sourceTree = "<group>"; };
 		74DE308D16688D3E008D0CA6 /* FSCommonProRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCommonProRequest.h; path = ModelService/FSCommonProRequest.h; sourceTree = "<group>"; };
 		74DE308E16688D3E008D0CA6 /* FSCommonProRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCommonProRequest.m; path = ModelService/FSCommonProRequest.m; sourceTree = "<group>"; };
+		74E8FCEF16941D440069EF24 /* price_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = price_bg.png; sourceTree = "<group>"; };
+		74E8FCF016941D440069EF24 /* price_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "price_bg@2x.png"; sourceTree = "<group>"; };
 		74F40CA5168FDAA600840510 /* cancel_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancel_btn.png; sourceTree = "<group>"; };
 		74F40CA6168FDAA600840510 /* cancel_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cancel_btn@2x.png"; sourceTree = "<group>"; };
 		74F40CA7168FDAA600840510 /* fans_label.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fans_label.png; sourceTree = "<group>"; };
@@ -1577,6 +1581,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				74E8FCEF16941D440069EF24 /* price_bg.png */,
+				74E8FCF016941D440069EF24 /* price_bg@2x.png */,
 				74C427AC16929D9500651F79 /* bottom_nav_notlike_icon.png */,
 				74C427AD16929D9500651F79 /* bottom_nav_notlike_icon@2x.png */,
 				74C427A016928BC200651F79 /* cancel_follow_btn.png */,
@@ -2447,6 +2453,8 @@
 				74C427AF16929D9500651F79 /* bottom_nav_notlike_icon@2x.png in Resources */,
 				74A9E4E11692E03300E5C299 /* FSImageSlideViewController.xib in Resources */,
 				742FF91C1693E66B005B9BD9 /* FSImageCollectionCell.xib in Resources */,
+				74E8FCF116941D440069EF24 /* price_bg.png in Resources */,
+				74E8FCF216941D440069EF24 /* price_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

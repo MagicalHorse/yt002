@@ -36,6 +36,7 @@
 @synthesize enddate;
 @synthesize comment;
 @synthesize pType;
+@synthesize price;
 
 @synthesize routeResourcePath;
 
@@ -89,6 +90,7 @@
     [params setValue:storeId forParam:@"storeid"];
     [params setValue:brandId forParam:@"brandid"];
     [params setValue:tagId forParam:@"tagid"];
+    [params setValue:price forParam:@"price"];
     int i =0;
     for (UIImage* img in imgs) {
         [params setData:UIImageJPEGRepresentation(img, 0.5) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];

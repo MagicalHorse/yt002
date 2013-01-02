@@ -64,9 +64,16 @@
     [_txtDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtDesc.layer.borderWidth = 2;
     _txtDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+    _lblPrice.font = ME_FONT(14);
+    _lblPrice.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
+    _lblPrice.textAlignment = NSTextAlignmentRight;
+    [_txtPrice setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+    _txtPrice.layer.borderWidth = 1;
+    _txtPrice.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
    
     _txtTitle.delegate = self;
     _txtDesc.delegate = self;
+    _txtPrice.delegate = self;
 }
 
 
@@ -96,6 +103,9 @@
     else if ([_txtDesc isFirstResponder])
     {
         [_txtDesc resignFirstResponder];
+    } else if ([_txtPrice isFirstResponder])
+    {
+        [_txtPrice resignFirstResponder];
     }
 
 }
@@ -137,6 +147,8 @@
 - (void)viewDidUnload {
     [self setLblName:nil];
     [self setLblDescName:nil];
+    [self setLblPrice:nil];
+    [self setTxtPrice:nil];
     [super viewDidUnload];
 }
 @end

@@ -26,13 +26,14 @@
 @synthesize coupons;
 @synthesize comments;
 @synthesize brand;
+@synthesize price;
 @synthesize isCouponed;
 @synthesize isFavored;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"recommendedreason",@"descrip",@"isfavorited",@"isFavored",@"isreceived",@"isCouponed",nil];
+    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"isreceived",@"isCouponed",@"price",@"price",nil];
     NSString *relationKeyPath = @"store";
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];

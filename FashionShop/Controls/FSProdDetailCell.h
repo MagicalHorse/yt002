@@ -13,6 +13,7 @@
 @interface FSProdDetailCell : PSUICollectionViewCell<ImageContainerDownloadDelegate>
 @property (strong, nonatomic) IBOutlet UIImageView *imgPic;
 
+@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
 
 @property(nonatomic,strong) FSProdItemEntity *data;
 

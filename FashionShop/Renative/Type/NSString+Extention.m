@@ -57,6 +57,11 @@
 	
 	return output;
 }
+-(NSString *) trimReturnEmptyChar
+{
+    return [[self stringByReplacingOccurrencesOfString:@"\n" withString:@""]
+            stringByReplacingOccurrencesOfString:@" " withString:@""];
+}
 
 + (BOOL)isNilOrEmpty:(NSString *)aNSString
 {

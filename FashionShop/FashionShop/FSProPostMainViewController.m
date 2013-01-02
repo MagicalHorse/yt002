@@ -205,13 +205,17 @@
         {
             if (!_proRequest.imgs)
                 _proRequest.imgs = [@[] mutableCopy];
-            [_proRequest.imgs addObject:(UIImage *)value[0]];
+            if (value && [value count]>0)
+                [_proRequest.imgs addObject:(UIImage *)value[0]];
             break;
         }
         case PostStep2Finished:
         {
             _proRequest.title = [(NSArray *)value objectAtIndex:0];
             _proRequest.descrip = [(NSArray *)value objectAtIndex:1];
+            NSString *price = [(NSArray *)value objectAtIndex:2];
+            
+            _proRequest.price =[NSNumber numberWithInt:[price intValue]];
             break;
         }
         case PostStep3Finished:
@@ -304,7 +308,10 @@
     
 
 }
-
+-(void)didImageRemoveAll
+{
+    [self proPostStep:PostStep1Finished didCompleteWithObject:nil];
+}
 
 - (IBAction)doTakeDescrip:(id)sender {
     if (!_titleSel)
@@ -607,7 +614,7 @@
 }
 -(void)titleViewControllerSetTitle:(FSProPostTitleViewController *)viewController
 {
-    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text,viewController.txtDesc.text]];
+    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text,viewController.txtDesc.text,viewController.txtPrice.text]];
     [self dismissSemiModalViewController:_titleSel];
 }
 

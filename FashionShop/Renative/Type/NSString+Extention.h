@@ -14,7 +14,9 @@
 - (NSString *)urlEncode;
 - (NSString *)urlEncodeUsingEncoding:(NSStringEncoding)encoding;
 - (BOOL) contains:(NSString *)value;
+-(NSString *) trimReturnEmptyChar;
 + (BOOL)isNilOrEmpty:(NSString *)aNSString;
 
 +(NSString *)stringMetersFromDouble:(double)input;
+
 @end

@@ -24,5 +24,6 @@
 @property(nonatomic,strong) NSNumber *lantit;
 @property(nonatomic,strong) NSNumber * nextPage;
 @property(nonatomic,strong) NSNumber * pageSize;
+@property(nonatomic,strong) NSNumber *userid;
 
 @end
