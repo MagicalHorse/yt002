@@ -586,8 +586,6 @@
 		25B6E95D14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 25B6E95A14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		25B6E95E14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B6E95B14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.m */; };
 		25B6E95F14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B6E95B14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.m */; };
-		25B6E9A414CF829400B1E881 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 25B6E97B14CF829400B1E881 /* InfoPlist.strings */; };
-		25B6E9A514CF829400B1E881 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 25B6E97B14CF829400B1E881 /* InfoPlist.strings */; };
 		25B6E9A614CF829400B1E881 /* NSInvocation+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B6E97E14CF829400B1E881 /* NSInvocation+OCMAdditions.m */; };
 		25B6E9A714CF829400B1E881 /* NSInvocation+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B6E97E14CF829400B1E881 /* NSInvocation+OCMAdditions.m */; };
 		25B6E9A814CF829400B1E881 /* NSMethodSignature+OCMAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 25B6E98014CF829400B1E881 /* NSMethodSignature+OCMAdditions.m */; };
@@ -1112,7 +1110,6 @@
 		25B6E95714CF7A1C00B1E881 /* RKErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKErrors.m; sourceTree = "<group>"; };
 		25B6E95A14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKDynamicObjectMappingMatcher.h; sourceTree = "<group>"; };
 		25B6E95B14CF7E3C00B1E881 /* RKDynamicObjectMappingMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKDynamicObjectMappingMatcher.m; sourceTree = "<group>"; };
-		25B6E97C14CF829400B1E881 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		25B6E97D14CF829400B1E881 /* NSInvocation+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSInvocation+OCMAdditions.h"; sourceTree = "<group>"; };
 		25B6E97E14CF829400B1E881 /* NSInvocation+OCMAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSInvocation+OCMAdditions.m"; sourceTree = "<group>"; };
 		25B6E97F14CF829400B1E881 /* NSMethodSignature+OCMAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMethodSignature+OCMAdditions.h"; sourceTree = "<group>"; };
@@ -2030,7 +2027,6 @@
 		25B6E97A14CF829400B1E881 /* OCMock */ = {
 			isa = PBXGroup;
 			children = (
-				25B6E97B14CF829400B1E881 /* InfoPlist.strings */,
 				25B6E97D14CF829400B1E881 /* NSInvocation+OCMAdditions.h */,
 				25B6E97E14CF829400B1E881 /* NSInvocation+OCMAdditions.m */,
 				25B6E97F14CF829400B1E881 /* NSMethodSignature+OCMAdditions.h */,
@@ -2563,7 +2559,6 @@
 				73D3907414CA1AE00093E3D6 /* parent.json in Resources */,
 				73D3907614CA1AE60093E3D6 /* child.json in Resources */,
 				73D3907914CA1DD40093E3D6 /* channels.xml in Resources */,
-				25B6E9A414CF829400B1E881 /* InfoPlist.strings in Resources */,
 				25B6E9BE14CF829400B1E881 /* OCMock-Info.plist in Resources */,
 				252EFB2814DA0689004863C8 /* NakedEvents.json in Resources */,
 				25CAAA9415254E7800CAE5D7 /* ArrayOfHumans.json in Resources */,
@@ -2625,7 +2620,6 @@
 				73D3907514CA1AE20093E3D6 /* parent.json in Resources */,
 				73D3907714CA1AE60093E3D6 /* child.json in Resources */,
 				73D3907A14CA1DD50093E3D6 /* channels.xml in Resources */,
-				25B6E9A514CF829400B1E881 /* InfoPlist.strings in Resources */,
 				25B6E9BF14CF829400B1E881 /* OCMock-Info.plist in Resources */,
 				252EFB2914DA0689004863C8 /* NakedEvents.json in Resources */,
 				25CAAA9515254E7800CAE5D7 /* ArrayOfHumans.json in Resources */,
@@ -3109,17 +3103,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		25B6E97B14CF829400B1E881 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				25B6E97C14CF829400B1E881 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		25160D3814564E820060A5C5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -3169,7 +3152,7 @@
 					armv7,
 				);
 				"ARCHS[sdk=iphoneos6.0]" = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yi gong (233N38FV8Q)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yong Yi gong (XSE5RGF58U)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
@@ -3178,7 +3161,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/Private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0BA16CC4-8381-4B56-871C-9D97ABA0B095";
+				PROVISIONING_PROFILE = "8344B3F5-E3E5-4F78-94F9-7F223D25C05C";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/RestKit;
 				SKIP_INSTALL = YES;
 				SYMROOT = "$(SRCROOT)/Build/Products";
@@ -3193,7 +3176,7 @@
 					armv7,
 				);
 				"ARCHS[sdk=iphoneos6.0]" = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yi gong (233N38FV8Q)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yi gong";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
 				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
@@ -3202,7 +3185,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/Private";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "0BA16CC4-8381-4B56-871C-9D97ABA0B095";
+				PROVISIONING_PROFILE = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
 				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/RestKit;
 				SKIP_INSTALL = YES;
 				SYMROOT = "$(SRCROOT)/Build/Products";
@@ -3399,6 +3382,142 @@
 			};
 			name = Release;
 		};
+		74582E2C1695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Archive;
+		};
+		74582E2D1695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"ARCHS[sdk=iphoneos*]" = (
+					armv6,
+					armv7,
+				);
+				"ARCHS[sdk=iphoneos6.0]" = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Yi gong";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OBJROOT = "$(SRCROOT)/Build";
+				OTHER_LDFLAGS = "-ObjC";
+				PRIVATE_HEADERS_FOLDER_PATH = "$(PUBLIC_HEADERS_FOLDER_PATH)/Private";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
+				PUBLIC_HEADERS_FOLDER_PATH = ../../Headers/RestKit;
+				SKIP_INSTALL = YES;
+				SYMROOT = "$(SRCROOT)/Build/Products";
+			};
+			name = Archive;
+		};
+		74582E2E1695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SRCROOT)/Tests/Vendor\"",
+					"\"$(SRCROOT)/Tests/Vendor/OCHamcrest\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Tests/Vendor/OCMock\"";
+				INFOPLIST_FILE = "Resources/PLISTs/RestKitTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = "${CONFIGURATION_BUILD_DIR}";
+				OBJROOT = "$(SRCROOT)/Build";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = "$(SRCROOT)/Build/Products";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Archive;
+		};
+		74582E2F1695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				HEADER_SEARCH_PATHS = "${SDKROOT}/usr/include/libxml2";
+				INFOPLIST_FILE = "Resources/PLISTs/RestKitFramework-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = RestKit;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Archive;
+		};
+		74582E301695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"\"$(SRCROOT)/Tests/Vendor\"",
+					"\"$(SRCROOT)/Tests/Vendor/OCHamcrest\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Code/Support/RestKit-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/Tests/Vendor/OCMock\"";
+				INFOPLIST_FILE = "Resources/PLISTs/RestKitFrameworkTests-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Tests/Vendor/OCMock\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Archive;
+		};
+		74582E311695313E007CDDF3 /* Archive */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Resources/RestKitResources-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "Resources/PLISTs/RestKitResources-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Archive;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3407,6 +3526,7 @@
 			buildConfigurations = (
 				25160D3814564E820060A5C5 /* Debug */,
 				25160D3914564E820060A5C5 /* Release */,
+				74582E2C1695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3416,6 +3536,7 @@
 			buildConfigurations = (
 				25160D3B14564E820060A5C5 /* Debug */,
 				25160D3C14564E820060A5C5 /* Release */,
+				74582E2D1695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3425,6 +3546,7 @@
 			buildConfigurations = (
 				25160D3E14564E820060A5C5 /* Debug */,
 				25160D3F14564E820060A5C5 /* Release */,
+				74582E2E1695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3434,6 +3556,7 @@
 			buildConfigurations = (
 				25160E88145651060060A5C5 /* Debug */,
 				25160E89145651060060A5C5 /* Release */,
+				74582E2F1695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3443,6 +3566,7 @@
 			buildConfigurations = (
 				25160E8B145651060060A5C5 /* Debug */,
 				25160E8C145651060060A5C5 /* Release */,
+				74582E301695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -3452,6 +3576,7 @@
 			buildConfigurations = (
 				259C302015128079003066A2 /* Debug */,
 				259C302115128079003066A2 /* Release */,
+				74582E311695313E007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

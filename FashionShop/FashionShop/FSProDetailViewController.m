@@ -280,27 +280,25 @@
     request.productId = [[self.itemSource valueForKey:@"id"] intValue];
     request.productType = _sourceType ;
     request.includePass = [PKPass class]?TRUE:FALSE;
+    request.rootKeyPath = @"data.coupon";
     
     __block FSProDetailViewController *blockSelf = self;
-    [request send:[self convertSourceTypeToClass:_sourceType] withRequest:request completeCallBack:^(FSEntityBase *respData){
+    [request send:[FSCoupon class] withRequest:request completeCallBack:^(FSEntityBase *respData){
         if(!respData.isSuccess)
         {
             [blockSelf updateProgress:respData.errorDescrip];
         }
         else
         {
-            proItem = respData.responseData;
-            FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
-            int prevTotal = [view.data couponTotal];
-            [view.data setCouponTotal:prevTotal+1];
-            [view setData:view.data];
+            FSCoupon *coupon = respData.responseData;
+            //FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
+            
             //add pass to passbook
-            if ([proItem coupons] &&
-                [PKPass class] &&
-                [(FSCoupon *)[[proItem coupons] objectAtIndex:0] pass])
+            if (coupon.pass &&
+                [PKPass class])
             {
                 NSError *error = nil;
-                NSString *passByte = [(FSCoupon *)[[proItem coupons] objectAtIndex:0] pass];
+                NSString *passByte = coupon.pass;
                  PKPass *pass = [[PKPass alloc] initWithData:[NSData dataFromBase64String:passByte] error:&error];
                 if (pass)
                 {
@@ -516,6 +514,7 @@
         return;
     FSImageSlideViewController *slide = [[FSImageSlideViewController alloc] initWithNibName:@"FSImageSlideViewController" bundle:nil];
     slide.source = self;
+    slide.wantsFullScreenLayout = YES;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:slide];
     [self presentViewController:nav animated:TRUE completion:nil];
 }
@@ -583,7 +582,7 @@
 {
     FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     NSString *trimedText = [[commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return [commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
+    return trimedText;
 }
 -(void)saveComment:(UIButton *)sender
 {

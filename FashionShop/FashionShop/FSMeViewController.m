@@ -184,7 +184,10 @@
     [self switchView];
        
 }
-
+-(void)viewDidAppear:(BOOL)animated
+{
+    //[self switchView];
+}
 -(void) switchView
 {
     if (_isFirstLoad)
@@ -212,7 +215,6 @@
 
 -(void) displayUserLogin
 {
-    [self configThirdPatyEngine];
     [_loginView removeFromSuperview];
     [self.view addSubview:_loginView];
     if (self.presentingViewController)
@@ -231,23 +233,9 @@
     
 }
 
-- (void) configThirdPatyEngine{
-    if (_weibo==nil)
-    {
-        _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
-        
-    }
-    if (!_qq)
-    {
-        _qq = [[TCWBEngine alloc] initWithAppKey:WiressSDKDemoAppKey andSecret:WiressSDKDemoAppSecret andRedirectUrl:@"http://www.ying7wang7.com"];
-        _qq.rootViewController = self;
-        
-    }
-    
-}
-
 
 - (IBAction)doLogin:(id)sender {
+     _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
     [_weibo logIn];
     
 }
@@ -288,6 +276,12 @@
 }
 
 - (IBAction)doLoginQQ:(id)sender {
+    if (!_qq)
+    {
+        _qq = [[TCWBEngine alloc] initWithAppKey:WiressSDKDemoAppKey andSecret:WiressSDKDemoAppSecret andRedirectUrl:@"http://www.ying7wang7.com"];
+        _qq.rootViewController = self;
+        
+    }
     [_qq logInWithDelegate:self onSuccess:@selector(onQQLoginSuccess) onFailure:@selector(onQQLoginFail:)];
 }
 

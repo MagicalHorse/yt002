@@ -488,6 +488,14 @@
 					<int key="connectionID">350</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">imgFansBG</string>
+						<reference key="source" ref="191373211"/>
+						<reference key="destination" ref="563747122"/>
+					</object>
+					<int key="connectionID">352</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">doComment:</string>
 						<reference key="source" ref="846382321"/>
@@ -698,7 +706,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">350</int>
+			<int key="maxID">352</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -717,6 +725,7 @@
 						<string key="btnCoupon">UIBarButtonItem</string>
 						<string key="btnFavor">UIBarButtonItem</string>
 						<string key="couponTitle">UILabel</string>
+						<string key="imgFansBG">UIImageView</string>
 						<string key="imgView">UIImageView</string>
 						<string key="lblCoupons">UILabel</string>
 						<string key="lblDescrip">UILabel</string>
@@ -740,6 +749,10 @@
 						<object class="IBToOneOutletInfo" key="couponTitle">
 							<string key="name">couponTitle</string>
 							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="imgFansBG">
+							<string key="name">imgFansBG</string>
+							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="imgView">
 							<string key="name">imgView</string>
@@ -795,7 +808,6 @@
 						<string key="doComment:">id</string>
 						<string key="doFavor:">id</string>
 						<string key="doGetCoupon:">id</string>
-						<string key="doGoStoreDetail:">id</string>
 						<string key="doShare:">id</string>
 						<string key="showBrand:">id</string>
 					</dictionary>
@@ -814,10 +826,6 @@
 						</object>
 						<object class="IBActionInfo" key="doGetCoupon:">
 							<string key="name">doGetCoupon:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="doGoStoreDetail:">
-							<string key="name">doGoStoreDetail:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="doShare:">

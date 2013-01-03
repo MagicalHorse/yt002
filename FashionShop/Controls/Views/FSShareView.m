@@ -35,6 +35,7 @@ static FSShareView *_instance;
 
 -(void)shareBegin:(UIViewController *)vc withShareItems:(NSMutableArray *)items completeHander:(FSShareCompleteHandler)action
 {
+    /*
     if ([UIActivityViewController class])
     {
         UIActivityViewController *shareController =  [FSShareView shareViewController:items];
@@ -44,13 +45,14 @@ static FSShareView *_instance;
     }
     else
     {
+     */
         parentVC = vc;
         shareItems = items;
         shareCompleteaction = action;
         [self configActionsIcon];
         AWActionSheet *sheet = [[AWActionSheet alloc] initWithIconSheetDelegate:self ItemCount:shareCells.count];
         [sheet showInView:vc.view];
-    }
+    //}
 }
 
 +(UIActivityViewController *)shareViewController:(NSMutableArray *)shareItems
@@ -147,6 +149,9 @@ static FSShareView *_instance;
 
 - (void)activityDidFinish:(BOOL)completed
 {
+    if (_completeHandler)
+        _completeHandler(nil,completed);
+    /*
         if (![UIActivityViewController class] &&
             _completeHandler)
             _completeHandler(nil,completed);
@@ -159,9 +164,9 @@ static FSShareView *_instance;
                 impl(self, _cmd,completed);
             }
         }
-    
+    */
 }
-
+/*
 __attribute__((constructor)) static void FSCreateUIActivityClasses(void) {
     @autoreleasepool {
         
@@ -175,7 +180,7 @@ __attribute__((constructor)) static void FSCreateUIActivityClasses(void) {
       
     }
 }
-
+*/
 @end
 
 

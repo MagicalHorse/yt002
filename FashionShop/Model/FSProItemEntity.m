@@ -25,7 +25,7 @@
 @synthesize couponTotal,favorTotal;
 @synthesize resource;
 @synthesize coupons;
-@synthesize comments;
+@synthesize comments=_comments;
 @synthesize isFavored;
 @synthesize isCouponed;
 
@@ -49,5 +49,10 @@
 
     return relationMap;
 }
-
+-(NSMutableArray *)comments
+{
+    if (!_comments)
+        _comments= [@[] mutableCopy];
+    return _comments;
+}
 @end

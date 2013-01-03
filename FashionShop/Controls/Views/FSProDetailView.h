@@ -27,6 +27,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblStoreAddress;
 @property (strong, nonatomic) IBOutlet UIScrollView *svContent;
 
+@property (strong, nonatomic) IBOutlet UIImageView *imgFansBG;
+
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 
 

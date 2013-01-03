@@ -1,0 +1,21 @@
+
+/* Class = "IBUITabBarItem"; title = "东东"; ObjectID = "1D6-0R-X4f"; */
+"1D6-0R-X4f.title" = "东东";
+
+/* Class = "IBUINavigationItem"; title = "Me的主页"; ObjectID = "Zcu-Mv-pH9"; */
+"Zcu-Mv-pH9.title" = "Me的主页";
+
+/* Class = "IBUISegmentedControl"; bJm-cR-UK6.segmentTitles[0] = "最近"; ObjectID = "bJm-cR-UK6"; */
+"bJm-cR-UK6.segmentTitles[0]" = "最近";
+
+/* Class = "IBUISegmentedControl"; bJm-cR-UK6.segmentTitles[1] = "最新"; ObjectID = "bJm-cR-UK6"; */
+"bJm-cR-UK6.segmentTitles[1]" = "最新";
+
+/* Class = "IBUINavigationController"; title = "Third"; ObjectID = "dRO-en-ZNo"; */
+"dRO-en-ZNo.title" = "Third";
+
+/* Class = "IBUITabBarItem"; title = "优惠"; ObjectID = "llC-FE-9sM"; */
+"llC-FE-9sM.title" = "优惠";
+
+/* Class = "IBUITabBarItem"; title = "我"; ObjectID = "vCv-zG-nRD"; */
+"vCv-zG-nRD.title" = "我";

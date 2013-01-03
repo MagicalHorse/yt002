@@ -65,11 +65,12 @@
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
     _lblDescrip.font = ME_FONT(12);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
-    _lblDescrip.numberOfLines = 2;
+    _lblDescrip.numberOfLines = 0;
     CGRect origFrame = _lblDescrip.frame;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
+    origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+2;
     _lblDescrip.frame = origFrame;
 
     FSResource *imgObj = [_data.resource lastObject];
@@ -84,9 +85,9 @@
     _lblStoreAddress.textColor = [UIColor colorWithRed:229 green:0 blue:79];
     
     CGSize storesize =[_lblStoreAddress sizeThatFits:_lblStoreAddress.frame.size];
-    _lblStoreAddress.frame = CGRectMake(_lblStoreAddress.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+5, storesize.width, storesize.height);
+    _lblStoreAddress.frame = CGRectMake(_lblStoreAddress.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
     CGRect superFrame =   _lblStoreAddress.superview.frame;
-    superFrame.size.height = _lblStoreAddress.frame.size.height +_lblStoreAddress.frame.origin.y+5;
+    superFrame.size.height = _lblStoreAddress.frame.size.height +_lblStoreAddress.frame.origin.y+2;
     _lblStoreAddress.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+2;

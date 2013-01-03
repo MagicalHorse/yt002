@@ -20,7 +20,7 @@
 {
     BOOL _isConfigLoaded;
     NSOperationQueue *_asyncQueue;
-    
+    SinaWeibo *_weibo;
 }
 
 @end
@@ -147,7 +147,9 @@ static FSModelManager *_modelManager;
 
 -(SinaWeibo *)instantiateWeiboClient:(id<SinaWeiboDelegate>)delegate
 {
-   SinaWeibo * _weibo = [[SinaWeibo alloc] initWithAppKey:SINA_WEIBO_APP_KEY appSecret:SINA_WEIBO_APP_SECRET_KEY appRedirectURI:SINA_WEIBO_APP_REDIRECT_URI andDelegate:delegate];
+    if (!_weibo)
+    {
+       _weibo = [[SinaWeibo alloc] initWithAppKey:SINA_WEIBO_APP_KEY appSecret:SINA_WEIBO_APP_SECRET_KEY appRedirectURI:SINA_WEIBO_APP_REDIRECT_URI andDelegate:delegate];
         
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSDictionary *sinaweiboInfo = [defaults objectForKey:@"SinaWeiboAuthData"];
@@ -157,6 +159,8 @@ static FSModelManager *_modelManager;
             _weibo.expirationDate = [sinaweiboInfo objectForKey:@"ExpirationDateKey"];
             _weibo.userID = [sinaweiboInfo objectForKey:@"UserIDKey"];
         }
+    }
+    _weibo.delegate = delegate;
     return _weibo;
 }
 

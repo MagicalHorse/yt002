@@ -41,6 +41,7 @@
 {
     self.navigationItem.leftBarButtonItem = [self createPlainBarButtonItem:@"goback_icon" target:self action:@selector(close)];
     self.navigationItem.rightBarButtonItem = [self createPlainBarButtonItem:@"share_icon" target:self action:@selector(doShare)] ;
+    [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     _pageGapWidth = 0.0f;
     curPage = -1;
     _reusedImages = [@[] mutableCopy];
@@ -130,8 +131,6 @@
     CGFloat pageWidth = _svContent.frame.size.width;
     int nextPage = floor((_svContent.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     [self setCurrentPage:nextPage];
-    NSLog(@"x:%d",(int)_svContent.contentOffset.x);
-    NSLog(@"%d",nextPage);
 }
 
 -(void)setShowBar:(BOOL)show

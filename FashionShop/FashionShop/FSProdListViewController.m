@@ -19,6 +19,7 @@
 #import "FSLocationManager.h"
 #import "FSBothItems.h"
 #import "FSModelManager.h"
+#import "FSConfigListRequest.h"
 
 #define  PROD_LIST_TAG_CELL @"FSProdListTagCell"
 #define PROD_LIST_DETAIL_CELL @"FSProdListDetailCell"
@@ -95,19 +96,38 @@
     _prods = [@[] mutableCopy];
      _actualTagWidth = 0;
     [self zeroMemoryBlock];
-    [self beginLoading:_cvTags];
     [_tags addObjectsFromArray:[FSTag localTags]];
-    [self endLoading:_cvTags];
+    if (!_tags ||
+        _tags.count<1)
+    {
+        [self beginLoading:_cvTags];
+        __block FSProdListViewController *blockSelf = self;
+        FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
+        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            [blockSelf endLoading:_cvTags];
+            [_tags addObjectsFromArray:[FSTag localTags]];
+            [blockSelf endPrepareData];
+        }];
+    } else
+    {
+        [self endPrepareData];
+    }
+    
+    
+
+    
+}
+-(void)endPrepareData
+{
     if (!_tags ||
         _tags.count<1)
         return;
-
+    
     _cvTags.delegate = self;
     _cvTags.dataSource = self;
     _cvContent.delegate = self;
     _cvContent.dataSource = self;
-
-    
 }
 -(void) zeroMemoryBlock
 {

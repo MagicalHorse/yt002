@@ -207,6 +207,8 @@
                 _proRequest.imgs = [@[] mutableCopy];
             if (value && [value count]>0)
                 [_proRequest.imgs addObject:(UIImage *)value[0]];
+            else
+                [_proRequest.imgs removeAllObjects];
             break;
         }
         case PostStep2Finished:
@@ -267,7 +269,7 @@
 {
     int finishedFields = 0;
     int totalFields = _totalFields;
-    _proRequest.imgs && (_availFields&ImageField)?finishedFields++:finishedFields;
+    _proRequest.imgs &&_proRequest.imgs.count>0 && (_availFields&ImageField)?finishedFields++:finishedFields;
     _proRequest.descrip && (_availFields&TitleField)?finishedFields++:finishedFields;
     _proRequest.startdate &&(_availFields & DurationField)?finishedFields++:finishedFields;
     _proRequest.enddate&&(_availFields &DurationField)?finishedFields++:finishedFields;
@@ -364,7 +366,6 @@
     switch (step) {
         case PostStep1Finished:
         {
-            //[_rows setValue:[object objectAtIndex:0] forKey:NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil)];
             [_tbAction reloadData];
             break;
         }
@@ -465,6 +466,7 @@
             {
                 detailCell = [tableView dequeueReusableCellWithIdentifier:@"imageuploadcell"];
                 [(FSImageUploadCell *)detailCell setImages:_proRequest.imgs];
+                [(FSImageUploadCell *)detailCell setImageRemoveDelegate:self];
             }
             else
             {
@@ -541,7 +543,7 @@
         return match;
     }];
     if (keyIndex==0 &&
-        _proRequest.imgs>0)
+        _proRequest.imgs.count>0)
     {
         return floor((_proRequest.imgs.count+2)/3)*150;
     }

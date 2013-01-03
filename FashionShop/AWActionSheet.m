@@ -27,7 +27,6 @@
     
 }
 
-
 -(id)initWithIconSheetDelegate:(id<AWActionSheetDelegate>)delegate ItemCount:(int)cout
 {
     int rowCount = 3;
@@ -42,7 +41,7 @@
     }
     self = [super initWithTitle:titleBlank
                        delegate:nil
-              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
+              cancelButtonTitle:nil//NSLocalizedString(@"Cancel", nil)
          destructiveButtonTitle:nil
               otherButtonTitles:nil];
     if (self) {
@@ -127,14 +126,10 @@
 
             [cell setCenter:CGPointMake(centerX+320*PageNo, centerY)];
             [self.scrollView addSubview:cell];
-            
-            UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionForItem:)];
-            [cell addGestureRecognizer:tap];
-
-
-            
+          
         }
-        
+        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionForItem:)];
+        [self addGestureRecognizer:tap];
         [items addObject:cell];
     }
     
@@ -142,8 +137,13 @@
 
 - (void)actionForItem:(UITapGestureRecognizer*)recongizer
 {
-    AWActionSheetCell* cell = (AWActionSheetCell*)[recongizer view];
-    [IconDelegate DidTapOnItemAtIndex:cell.index];
+    CGPoint touchPoint = [recongizer locationInView:self];
+    UIView* touchedView = [self hitTest:touchPoint withEvent:nil];
+    if ([touchedView isKindOfClass:[AWActionSheetCell class]])
+    {
+        AWActionSheetCell* cell = (AWActionSheetCell*)touchedView;
+        [IconDelegate DidTapOnItemAtIndex:cell.index];
+    };
     [self dismissWithClickedButtonIndex:0 animated:YES];
 }
 

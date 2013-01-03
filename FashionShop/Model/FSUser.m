@@ -54,7 +54,7 @@
 {
     [[FSLocalPersist sharedPersist] removeObjectInMemory:LOCAL_STORE_USER_KEY];
     [[FSLocalPersist sharedPersist] removeObjectInDisk:LOCAL_STORE_USER_LOGIN_TOKEN];
- 
+    [[FSModelManager sharedModelManager] removeWeiboAuthCache];
     
 }
 
