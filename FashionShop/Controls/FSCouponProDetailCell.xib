@@ -45,7 +45,7 @@
 								<string key="NSFrame">{{10, 10}, {218, 20}}</string>
 								<reference key="NSSuperview" ref="436652756"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="989153758"/>
+								<reference key="NSNextKeyView" ref="897750958"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -77,10 +77,9 @@
 							<object class="IBUILabel" id="607980643">
 								<reference key="NSNextResponder" ref="436652756"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{54, 30}, {183, 21}}</string>
+								<string key="NSFrame">{{200, 45}, {100, 21}}</string>
 								<reference key="NSSuperview" ref="436652756"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="897750958"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -91,6 +90,7 @@
 								<reference key="IBUITextColor" ref="245996390"/>
 								<reference key="IBUIHighlightedColor" ref="798908316"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="160967572"/>
 								<reference key="IBUIFont" ref="422339238"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -98,7 +98,7 @@
 							<object class="IBUILabel" id="989153758">
 								<reference key="NSNextResponder" ref="436652756"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{10, 50}, {195, 20}}</string>
+								<string key="NSFrame">{{10, 45}, {195, 15}}</string>
 								<reference key="NSSuperview" ref="436652756"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="607980643"/>
@@ -119,9 +119,10 @@
 							<object class="IBUILabel" id="897750958">
 								<reference key="NSNextResponder" ref="436652756"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{210, 30}, {100, 21}}</string>
+								<string key="NSFrame">{{200, 10}, {100, 21}}</string>
 								<reference key="NSSuperview" ref="436652756"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="989153758"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -132,6 +133,7 @@
 								<reference key="IBUITextColor" ref="245996390"/>
 								<reference key="IBUIHighlightedColor" ref="798908316"/>
 								<int key="IBUIBaselineAdjustment">0</int>
+								<int key="IBUITextAlignment">2</int>
 								<reference key="IBUIFontDescription" ref="160967572"/>
 								<reference key="IBUIFont" ref="422339238"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -221,9 +223,9 @@
 						<reference key="object" ref="921293820"/>
 						<array class="NSMutableArray" key="children">
 							<reference ref="651658823"/>
-							<reference ref="607980643"/>
 							<reference ref="989153758"/>
 							<reference ref="897750958"/>
+							<reference ref="607980643"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

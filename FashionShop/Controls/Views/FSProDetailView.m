@@ -79,16 +79,15 @@
         CGSize cropSize = CGSizeMake(self.frame.size.width, 400 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
+    [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000] forState:UIControlStateNormal];
+    [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
+    _btnStore.titleLabel.font = ME_FONT(14);
     
-    _lblStoreAddress.text = [NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000];
-    _lblStoreAddress.font = ME_FONT(14);
-    _lblStoreAddress.textColor = [UIColor colorWithRed:229 green:0 blue:79];
-    
-    CGSize storesize =[_lblStoreAddress sizeThatFits:_lblStoreAddress.frame.size];
-    _lblStoreAddress.frame = CGRectMake(_lblStoreAddress.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
-    CGRect superFrame =   _lblStoreAddress.superview.frame;
-    superFrame.size.height = _lblStoreAddress.frame.size.height +_lblStoreAddress.frame.origin.y+2;
-    _lblStoreAddress.superview.frame = superFrame;
+    CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
+    CGRect superFrame =   _btnStore.superview.frame;
+    superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+2;
+    _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+2;
     _tbComment.frame = commentFrame;
@@ -118,7 +117,7 @@
     
     CGSize originContent = self.svContent.contentSize;
    
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_lblStoreAddress.superview.frame.size.height+ 10;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_btnStore.superview.frame.size.height+ 10;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
 

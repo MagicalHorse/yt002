@@ -43,7 +43,7 @@
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUILabel" id="734813645">
 								<reference key="NSNextResponder" ref="391732143"/>
-								<int key="NSvFlags">306</int>
+								<int key="NSvFlags">288</int>
 								<string key="NSFrame">{{75, 31}, {210, 25}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
@@ -128,7 +128,6 @@
 								<string key="NSFrame">{{0, 72}, {320, 1}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -303,7 +302,7 @@
 					<string key="className">FSProCommentCell</string>
 					<string key="superclassName">UITableViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="imgThumb">UIImageView</string>
+						<string key="imgThumb">FSThumView</string>
 						<string key="lblComment">UILabel</string>
 						<string key="lblInDate">UILabel</string>
 						<string key="lblNickie">UILabel</string>
@@ -311,7 +310,7 @@
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="imgThumb">
 							<string key="name">imgThumb</string>
-							<string key="candidateClassName">UIImageView</string>
+							<string key="candidateClassName">FSThumView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="lblComment">
 							<string key="name">lblComment</string>

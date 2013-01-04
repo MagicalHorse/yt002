@@ -16,11 +16,13 @@
 #import "FSCoreStore.h"
 #import "FSCoreBrand.h"
 
+
 @interface FSModelManager()
 {
     BOOL _isConfigLoaded;
     NSOperationQueue *_asyncQueue;
     SinaWeibo *_weibo;
+
 }
 
 @end
@@ -37,6 +39,7 @@ static FSModelManager *_modelManager;
     RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"FSShop.sqlite"];
     objectManager.objectStore = objectStore;
     RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+   
 
 }
 
@@ -191,5 +194,14 @@ static FSModelManager *_modelManager;
     }];
 
 }
+#pragma BAIDU MAP DELEGATE
+- (void)onGetNetworkState:(int)iError
+{
+}
+
+- (void)onGetPermissionState:(int)iError
+{
+}
+
 
 @end

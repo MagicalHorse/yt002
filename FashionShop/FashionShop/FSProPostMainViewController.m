@@ -146,7 +146,7 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:229 green:229 blue:229]];
     [_tbAction setBackgroundView:nil];
     [_tbAction setBackgroundColor:[UIColor clearColor]];
-    [_tbAction registerClass:[FSImageUploadCell class] forCellReuseIdentifier:@"imageuploadcell"];
+    [_tbAction registerNib:[UINib nibWithNibName:@"FSImageUploadCell" bundle:nil] forCellReuseIdentifier:@"imageuploadcell"];
     [self setProgress:PostBegin withObject:nil];
     _tbAction.dataSource = self;
     _tbAction.delegate = self;
@@ -319,7 +319,7 @@
     if (!_titleSel)
         _titleSel = [[FSProPostTitleViewController alloc] initWithNibName:@"FSProPostTitleViewController" bundle:nil];
     _titleSel.delegate = self;
-    [self presentSemiModalViewController:_titleSel];
+    [self presentViewController:_titleSel animated:TRUE completion:nil];
     
     
 }
@@ -612,12 +612,12 @@
 #pragma titleViewControllerDelegate
 -(void)titleViewControllerCancel:(FSProPostTitleViewController *)viewController
 {
-    [self dismissSemiModalViewController:_titleSel];
+    [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 -(void)titleViewControllerSetTitle:(FSProPostTitleViewController *)viewController
 {
     [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text,viewController.txtDesc.text,viewController.txtPrice.text]];
-    [self dismissSemiModalViewController:_titleSel];
+    [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
 @end

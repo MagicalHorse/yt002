@@ -44,8 +44,8 @@
     _lblComment.font = ME_FONT(12);
     _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblComment.numberOfLines = 0;
-    CGSize newSize = [_lblComment sizeThatFits:_lblComment.frame.size];
-    _lblComment.frame = CGRectMake(_lblComment.frame.origin.x,_lblComment.frame.origin.y,newSize.width,newSize.height);
+    [_lblComment sizeToFit];
+  
     _lblInDate.text = [_data.indate toLocalizedString];
     _lblInDate.font = ME_FONT(10);
     _lblInDate.textColor = [UIColor colorWithRed:153 green:153 blue:153];

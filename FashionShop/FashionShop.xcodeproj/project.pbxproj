@@ -244,6 +244,11 @@
 		74C427AE16929D9500651F79 /* bottom_nav_notlike_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C427AC16929D9500651F79 /* bottom_nav_notlike_icon.png */; };
 		74C427AF16929D9500651F79 /* bottom_nav_notlike_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C427AD16929D9500651F79 /* bottom_nav_notlike_icon@2x.png */; };
 		74C427C71692C2E300651F79 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74C427BC1692C20700651F79 /* libRestKit.a */; };
+		74C4FC7916969D110055D90C /* FSImageUploadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC7816969D110055D90C /* FSImageUploadCell.xib */; };
+		74C4FC7C1696BB190055D90C /* location_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC7A1696BB190055D90C /* location_icon.png */; };
+		74C4FC7D1696BB190055D90C /* location_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC7B1696BB190055D90C /* location_icon@2x.png */; };
+		74C4FC8A1696C4050055D90C /* FSStoreDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C4FC881696C4050055D90C /* FSStoreDetailViewController.m */; };
+		74C4FC8B1696C4050055D90C /* FSStoreDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC891696C4050055D90C /* FSStoreDetailViewController.xib */; };
 		74C5403D16684BAB006548EC /* FSNickieViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C5403B16684BAB006548EC /* FSNickieViewController.m */; };
 		74C5403E16684BAB006548EC /* FSNickieViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C5403C16684BAB006548EC /* FSNickieViewController.xib */; };
 		74C5BEB1164642D7003CBEE3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74C5BEB0164642D7003CBEE3 /* ImageIO.framework */; };
@@ -844,6 +849,15 @@
 		74C427AC16929D9500651F79 /* bottom_nav_notlike_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom_nav_notlike_icon.png; sourceTree = "<group>"; };
 		74C427AD16929D9500651F79 /* bottom_nav_notlike_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_nav_notlike_icon@2x.png"; sourceTree = "<group>"; };
 		74C427B01692C20600651F79 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = Library/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
+		74C4FC7816969D110055D90C /* FSImageUploadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSImageUploadCell.xib; path = Controls/FSImageUploadCell.xib; sourceTree = "<group>"; };
+		74C4FC7A1696BB190055D90C /* location_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = location_icon.png; sourceTree = "<group>"; };
+		74C4FC7B1696BB190055D90C /* location_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location_icon@2x.png"; sourceTree = "<group>"; };
+		74C4FC871696C4050055D90C /* FSStoreDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreDetailViewController.h; sourceTree = "<group>"; };
+		74C4FC881696C4050055D90C /* FSStoreDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreDetailViewController.m; sourceTree = "<group>"; };
+		74C4FC891696C4050055D90C /* FSStoreDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSStoreDetailViewController.xib; sourceTree = "<group>"; };
+		74C4FCDA1696EC3C0055D90C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		74C4FCDB1696EC3C0055D90C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = "zh-Hans"; path = "zh-Hans.lproj/MainStoryboard.storyboard"; sourceTree = "<group>"; };
+		74C4FCE91696ECA30055D90C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Language.strings"; sourceTree = "<group>"; };
 		74C5403A16684BAB006548EC /* FSNickieViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSNickieViewController.h; sourceTree = "<group>"; };
 		74C5403B16684BAB006548EC /* FSNickieViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSNickieViewController.m; sourceTree = "<group>"; };
 		74C5403C16684BAB006548EC /* FSNickieViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSNickieViewController.xib; sourceTree = "<group>"; };
@@ -1262,6 +1276,7 @@
 				742FF91B1693E66B005B9BD9 /* FSImageCollectionCell.xib */,
 				742FF91D1693E809005B9BD9 /* FSImageCollectionCell.h */,
 				742FF91E1693E809005B9BD9 /* FSImageCollectionCell.m */,
+				74C4FC7816969D110055D90C /* FSImageUploadCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1579,6 +1594,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				74C4FC7A1696BB190055D90C /* location_icon.png */,
+				74C4FC7B1696BB190055D90C /* location_icon@2x.png */,
 				74E8FCEF16941D440069EF24 /* price_bg.png */,
 				74E8FCF016941D440069EF24 /* price_bg@2x.png */,
 				74C427AC16929D9500651F79 /* bottom_nav_notlike_icon.png */,
@@ -1814,6 +1831,9 @@
 				74A9E4DD1692E03300E5C299 /* FSImageSlideViewController.h */,
 				74A9E4DE1692E03300E5C299 /* FSImageSlideViewController.m */,
 				74A9E4DF1692E03300E5C299 /* FSImageSlideViewController.xib */,
+				74C4FC871696C4050055D90C /* FSStoreDetailViewController.h */,
+				74C4FC881696C4050055D90C /* FSStoreDetailViewController.m */,
+				74C4FC891696C4050055D90C /* FSStoreDetailViewController.xib */,
 			);
 			name = Prod;
 			sourceTree = "<group>";
@@ -2454,6 +2474,10 @@
 				742FF91C1693E66B005B9BD9 /* FSImageCollectionCell.xib in Resources */,
 				74E8FCF116941D440069EF24 /* price_bg.png in Resources */,
 				74E8FCF216941D440069EF24 /* price_bg@2x.png in Resources */,
+				74C4FC7916969D110055D90C /* FSImageUploadCell.xib in Resources */,
+				74C4FC7C1696BB190055D90C /* location_icon.png in Resources */,
+				74C4FC7D1696BB190055D90C /* location_icon@2x.png in Resources */,
+				74C4FC8B1696C4050055D90C /* FSStoreDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2653,6 +2677,7 @@
 				74A9E4E01692E03300E5C299 /* FSImageSlideViewController.m in Sources */,
 				742FF91A1693E344005B9BD9 /* FSImageUploadCell.m in Sources */,
 				742FF91F1693E80A005B9BD9 /* FSImageCollectionCell.m in Sources */,
+				74C4FC8A1696C4050055D90C /* FSStoreDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2671,6 +2696,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				740910B81695AA5E0018D692 /* en */,
+				74C4FCE91696ECA30055D90C /* zh-Hans */,
 			);
 			name = Language.strings;
 			sourceTree = "<group>";
@@ -2679,6 +2705,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				740910B61695A9FC0018D692 /* en */,
+				74C4FCDA1696EC3C0055D90C /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			path = FashionShop;
@@ -2688,6 +2715,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				740910B71695AA240018D692 /* en */,
+				74C4FCDB1696EC3C0055D90C /* zh-Hans */,
 			);
 			name = MainStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -2745,6 +2773,8 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Library/qqweixin\"",
 					"\"$(SRCROOT)/Library/flurry\"",
+					"\"$(SRCROOT)/libs/Release-iphoneos\"",
+					"\"$(SRCROOT)/libs/Release-iphonesimulator\"",
 				);
 				OTHER_LDFLAGS = (
 					"-v",
@@ -2753,8 +2783,8 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
+				PROVISIONING_PROFILE = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -2844,6 +2874,8 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Library/qqweixin\"",
 					"\"$(SRCROOT)/Library/flurry\"",
+					"\"$(SRCROOT)/libs/Release-iphoneos\"",
+					"\"$(SRCROOT)/libs/Release-iphonesimulator\"",
 				);
 				OTHER_LDFLAGS = (
 					"-v",
@@ -2887,6 +2919,8 @@
 					"\"$(SRCROOT)\"",
 					"\"$(SRCROOT)/Library/qqweixin\"",
 					"\"$(SRCROOT)/Library/flurry\"",
+					"\"$(SRCROOT)/libs/Release-iphoneos\"",
+					"\"$(SRCROOT)/libs/Release-iphonesimulator\"",
 				);
 				OTHER_LDFLAGS = (
 					"-v",

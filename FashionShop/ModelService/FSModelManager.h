@@ -12,6 +12,7 @@
 #import "SinaWeibo.h"
 #import "FSConfiguration.h"
 
+
 @interface FSModelManager : NSObject
 
 - (void) initModelManager;

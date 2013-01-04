@@ -17,4 +17,6 @@
 
 
 @property (strong,nonatomic) FSCoupon *data;
+
+-(BOOL) isExpired;
 @end

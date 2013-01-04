@@ -42,6 +42,15 @@
     }
     return self;
 }
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        [self prepareLayout];
+    }
+    return self;
+}
 -(void)prepareLayout
 {
     SpringboardLayout *layout = [[SpringboardLayout alloc] init];

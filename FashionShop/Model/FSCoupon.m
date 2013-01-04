@@ -18,6 +18,9 @@
 @synthesize product;
 @synthesize promotion;
 @synthesize pass;
+@synthesize beginDate;
+@synthesize endDate;
+@synthesize isUsed;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -34,6 +37,9 @@
     [relationMapping mapKeyPath:@"productname" toAttribute:@"productname"];
     [relationMapping mapKeyPath:@"producttype" toAttribute:@"producttype"];
     [relationMapping mapKeyPath:@"pass" toAttribute:@"pass"];
+    [relationMapping mapKeyPath:@"begindate" toAttribute:@"beginDate"];
+    [relationMapping mapKeyPath:@"enddate" toAttribute:@"endDate"];
+    [relationMapping mapKeyPath:@"isused" toAttribute:@"isUsed"];
     RKObjectMapping *prodRelationMap = [FSProdItemEntity getRelationDataMap];
     [relationMapping mapKeyPath:@"product" toRelationship:@"product" withMapping:prodRelationMap];
     RKObjectMapping *proRelationMap = [FSProItemEntity getRelationDataMap];
@@ -43,4 +49,12 @@
     return relationMapping;
 }
 
+-(BOOL)isExpired
+{
+    if (!endDate || endDate <[[NSDate alloc] init])
+    {
+        return YES;
+    }
+    return NO;
+}
 @end

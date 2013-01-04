@@ -19,6 +19,7 @@
 #import "FSDRViewController.h"
 #import "FSProCommentHeader.h"
 #import "FSBrandItemsViewController.h"
+#import "FSStoreDetailViewController.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -197,8 +198,6 @@
             }
 
         }
-        if ([[(FSDetailBaseView *)view data] comments]== nil)
-        {
             FSCommonCommentRequest * request=[[FSCommonCommentRequest alloc] init];
             request.routeResourcePath = RK_REQUEST_COMMENT_LIST;
             request.sourceid = [[(FSDetailBaseView *)view data] valueForKey:@"id"];
@@ -221,11 +220,6 @@
                 }
                 
             }];
-        }
-        else
-        {
-            [[view tbComment] setNeedsLayout];
-        }
        
                 
     } errorCallback:^{
@@ -306,8 +300,8 @@
                     [self presentViewController:passController animated:TRUE completion:nil];
                 }
             }
-            [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
-            
+            [blockSelf updateProgress:NSLocalizedString(@"coupon added to account",nil)];
+            [blockSelf updateProgress:NSLocalizedString(@"coupon use instruction",nil)];
         }
         if (cleanup)
             cleanup();
@@ -453,6 +447,14 @@
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
+- (IBAction)goStore:(id)sender {
+    FSDetailBaseView * view = self.paginatorView.currentPage;
+    FSStore *store = [view.data store];
+    FSStoreDetailViewController *sv = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
+    sv.store =store;
+    [self.navigationController pushViewController:sv animated:TRUE];
+}
+
 - (IBAction)goDR:(NSNumber *)userid {
 
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
@@ -586,6 +588,8 @@
 }
 -(void)saveComment:(UIButton *)sender
 {
+    FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    [commentView.txtComment resignFirstResponder];
     NSString *trimedText = [self transformCommentText];
     if (trimedText.length>40 ||trimedText.length<1)
     {

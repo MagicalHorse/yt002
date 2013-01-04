@@ -88,9 +88,12 @@
     [params setValue:startdate forParam:@"startdate"];
     [params setValue:enddate forParam:@"enddate"];
     [params setValue:storeId forParam:@"storeid"];
-    [params setValue:brandId forParam:@"brandid"];
-    [params setValue:tagId forParam:@"tagid"];
-    [params setValue:price forParam:@"price"];
+    if (brandId)
+        [params setValue:brandId forParam:@"brandid"];
+    if (tagId)
+        [params setValue:tagId forParam:@"tagid"];
+    if (price)
+        [params setValue:price forParam:@"price"];
     int i =0;
     for (UIImage* img in imgs) {
         [params setData:UIImageJPEGRepresentation(img, 0.5) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
@@ -130,6 +133,7 @@
 
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error
 {
+    if (errorBlock)
     errorBlock();
 }
 

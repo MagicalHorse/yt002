@@ -24,7 +24,8 @@
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnFavor;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
 
-@property (strong, nonatomic) IBOutlet UILabel *lblStoreAddress;
+@property (strong, nonatomic) IBOutlet UIButton *btnStore;
+
 @property (strong, nonatomic) IBOutlet UIScrollView *svContent;
 
 @property (strong, nonatomic) IBOutlet UIImageView *imgFansBG;

@@ -48,18 +48,37 @@
     [_imgPro setImageWithURL:defaultRes.absoluteUrl120];
     _lblCode.text = _data.code;
     _lblCode.font = ME_FONT(14);
-    _lblCode.textColor = [UIColor redColor];
+    _lblCode.textColor = [UIColor whiteColor];
+    [_lblCode sizeToFit];
+    _lblCode.backgroundColor = [UIColor grayColor];
     _lblTitle.text = _data.productname;
-    _lblTitle.font = ME_FONT(14);
+    _lblTitle.font = [UIFont fontWithName:@"HiraginoSansGB-W6" size:14];
+;
     _lblTitle.textColor = [UIColor colorWithRed:0 green:0 blue:0];
     [_lblTitle sizeToFit];
     _lblStore.text = [NSString stringWithFormat:NSLocalizedString(@"User_Coupon_store%a", nil),_data.product.store.name];
     _lblStore.font = ME_FONT(12);
     _lblStore.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     [_lblStore sizeToFit];
-   // _lblDuration.text = _data.
-    
-    
+    NSString *dateString =@"";
+    if ([_data isUsed])
+    {
+        dateString = NSLocalizedString(@"coupon used", nil);
+    } else if ([_data isExpired])
+    {
+        dateString = NSLocalizedString(@"coupon expired", nil);
+    } else
+    {
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"yyyy-MM-dd"];
+        dateString = [NSString stringWithFormat:NSLocalizedString(@"coupon will expired:%@", nil),[df stringFromDate:_data.endDate]];
+    }
+    _lblDuration.text = dateString;
+    _lblDuration.font =ME_FONT(9);
+    _lblDuration.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    [_lblDuration sizeToFit];
+
+ 
 }
 
 

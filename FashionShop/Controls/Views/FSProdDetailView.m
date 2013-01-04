@@ -88,12 +88,11 @@
         CGSize cropSize = CGSizeMake(300, 300 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
-    
-    _lblStoreAddress.text = [NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000];
-    _lblStoreAddress.font = ME_FONT(14);
-    _lblStoreAddress.textColor = [UIColor colorWithRed:229 green:0 blue:79];
-    CGSize storesize =[_lblStoreAddress sizeThatFits:_lblStoreAddress.frame.size];
-    _lblStoreAddress.frame = CGRectMake(_lblStoreAddress.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
+    [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000] forState:UIControlStateNormal];
+    _btnStore.titleLabel.font = ME_FONT(14);
+    [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
+    CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
     if (_data.price &&
         [_data.price intValue]>0)
     {
@@ -107,9 +106,9 @@
     {
         _btnPrice.alpha = 0;
     }
-    CGRect superFrame =   _lblStoreAddress.superview.frame;
-    superFrame.size.height = _lblStoreAddress.frame.size.height +_lblStoreAddress.frame.origin.y+2;
-    _lblStoreAddress.superview.frame = superFrame;
+    CGRect superFrame =   _btnStore.superview.frame;
+    superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+2;
+    _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+2;
     _tbComment.frame = commentFrame;
@@ -129,7 +128,7 @@
     origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _lblStoreAddress.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
     

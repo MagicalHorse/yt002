@@ -45,7 +45,6 @@
 								<int key="NSvFlags">1298</int>
 								<string key="NSFrame">{{0, -5}, {100, 164}}</string>
 								<reference key="NSSuperview" ref="794710952"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="840109285"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<int key="IBUIContentMode">1</int>
@@ -57,8 +56,6 @@
 								<int key="NSvFlags">1316</int>
 								<string key="NSFrameSize">{15, 16}</string>
 								<reference key="NSSuperview" ref="794710952"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -94,7 +91,6 @@
 						</array>
 						<string key="NSFrameSize">{100, 153}</string>
 						<reference key="NSSuperview" ref="994656819"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="908935905"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -110,7 +106,6 @@
 				<object class="NSPSMatrix" key="NSFrameMatrix"/>
 				<string key="NSFrameSize">{100, 153}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="794710952"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<bool key="IBUIOpaque">NO</bool>
@@ -202,67 +197,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">20</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">FSImageCollectionCell</string>
-					<string key="superclassName">UICollectionViewCell</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="btnRemove">UIButton</string>
-						<string key="imageView">UIImageView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="btnRemove">
-							<string key="name">btnRemove</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="imageView">
-							<string key="name">imageView</string>
-							<string key="candidateClassName">UIImageView</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/FSImageCollectionCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">FSImageUploadCell</string>
-					<string key="superclassName">UITableViewCell</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">btnRemove:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">btnRemove:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">btnRemove:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/FSImageUploadCell.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UICollectionReusableView</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/UICollectionReusableView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">UICollectionViewCell</string>
-					<string key="superclassName">UICollectionReusableView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/UICollectionViewCell.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

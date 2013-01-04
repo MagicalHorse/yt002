@@ -19,4 +19,8 @@
 @property (nonatomic,strong) FSProItemEntity *promotion;
 @property (nonatomic,strong) FSProdItemEntity *product;
 @property (nonatomic,strong) NSString *pass;
+@property (nonatomic,strong) NSDate *beginDate;
+@property (nonatomic,strong) NSDate *endDate;
+@property (nonatomic) BOOL isUsed;
+-(BOOL)isExpired;
 @end
