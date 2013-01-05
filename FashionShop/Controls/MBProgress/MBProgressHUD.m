@@ -654,6 +654,8 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 		[self updateIndicators];
 	} else if ([keyPath isEqualToString:@"labelText"]) {
 		label.text = self.labelText;
+        label.numberOfLines=0;
+        [label sizeToFit];
 	} else if ([keyPath isEqualToString:@"labelFont"]) {
 		label.font = self.labelFont;
 	} else if ([keyPath isEqualToString:@"detailsLabelText"]) {

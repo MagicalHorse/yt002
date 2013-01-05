@@ -118,7 +118,7 @@
         FSEntityBase *response = [[FSEntityBase alloc] init];
         response.isSuccess = false;
         response.errorType = NetworkError;
-        response.errorDescrip = @"Network failed!";
+        response.errorDescrip = NSLocalizedString(@"Network failed", nil);
         requestCompleteCallback(response);
     }
 }

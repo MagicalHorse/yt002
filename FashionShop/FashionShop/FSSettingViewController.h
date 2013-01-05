@@ -11,13 +11,17 @@
 
 @protocol FSSettingCompleteDelegate;
 
-@interface FSSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface FSSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 
 @property(nonatomic,strong) FSUser *currentUser;
 
 @property(nonatomic) id<FSSettingCompleteDelegate> delegate;
+
+- (IBAction)clickToComment:(id)sender;
+- (IBAction)clickToClean:(id)sender;
+- (IBAction)clickToExit:(id)sender;
 
 @end
 

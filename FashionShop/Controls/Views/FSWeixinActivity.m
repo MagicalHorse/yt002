@@ -125,7 +125,7 @@ static FSWeixinActivity *singleon;
 {
     if([resp isKindOfClass:[SendMessageToWXResp class]])
     {
-        [self activityDidFinish:true];
+        [self activityDidFinish:resp.errCode==0?TRUE:FALSE];
     }
     else if([resp isKindOfClass:[SendAuthResp class]])
     {

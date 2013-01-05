@@ -207,6 +207,9 @@
             request.userToken = [FSModelManager sharedModelManager].loginToken;
             ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_GET_USER_PROFILE])(request);
             
+        } else
+        {
+            [self displayUserProfile];
         }
     }
 
@@ -255,8 +258,11 @@
             FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
             uploadController.currentUser = _userProfile;
             [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
+            [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
             [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
+            uploadController.publishSource = FSSourceProduct;
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
+            uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
             [self presentViewController:navController animated:TRUE completion:nil];
             break;
         }
@@ -264,8 +270,11 @@
         {
             FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
             uploadController.currentUser = _userProfile;
-            [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField];
+            [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField|BrandField|TagField];
+            [uploadController setMustFields:ImageField|TitleField|DurationField|StoreField];
             [uploadController setRoute:RK_REQUEST_PRO_UPLOAD];
+            uploadController.publishSource = FSSourcePromotion;
+            uploadController.navigationItem.title = NSLocalizedString(@"Publish promotion", nil);
             UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
             [self presentViewController:navController animated:TRUE completion:nil];
             break;

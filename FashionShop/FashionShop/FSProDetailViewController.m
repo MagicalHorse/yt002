@@ -281,6 +281,8 @@
         if(!respData.isSuccess)
         {
             [blockSelf updateProgress:respData.errorDescrip];
+            if (cleanup)
+                cleanup();
         }
         else
         {
@@ -301,10 +303,9 @@
                 }
             }
             [blockSelf updateProgress:NSLocalizedString(@"coupon added to account",nil)];
-            [blockSelf updateProgress:NSLocalizedString(@"coupon use instruction",nil)];
+            [blockSelf updateProgressThenEnd:NSLocalizedString(@"coupon use instruction",nil) withDuration:3];
         }
-        if (cleanup)
-            cleanup();
+
     }];
 }
 
@@ -318,7 +319,7 @@
     __block BOOL favored = [[self.itemSource valueForKey:@"isFavored"] boolValue];
     if (favored)
     {
-        request.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+        request.routeResourcePath = _sourceType==FSSourceProduct?RK_REQUEST_FAVOR_PROD_REMOVE:RK_REQUEST_FAVOR_PRO_REMOVE;
     }
     [self updateFavorButtonStatus:button canFavored:favored];
     button.enabled = false;
@@ -333,11 +334,12 @@
             if (!favored)
             {
                 [proItem setValue:[NSNumber numberWithBool:TRUE] forKey:@"isFavored"];
-                [view setData:proItem];
+
             } else
             {
                 [proItem setValue:[NSNumber numberWithBool:FALSE] forKey:@"isFavored"];
             }
+            [view setData:proItem];
         } else
         {
            [blockSelf updateFavorButtonStatus:button canFavored:!favored];
@@ -421,6 +423,7 @@
     NSMutableArray *shareItems = [@[] mutableCopy];
     id view = self.paginatorView.currentPage;
     NSString *title = [self.itemSource valueForKey:@"title"];
+    title = [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"share prefix", nil),title];
     [shareItems addObject:title?title:@""];
     if ([view imgView].image != nil)
     {

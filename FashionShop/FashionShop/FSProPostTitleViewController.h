@@ -25,6 +25,7 @@
 - (IBAction)doCancel:(id)sender;
 
 @property (strong,nonatomic) id delegate;
+@property (nonatomic) FSSourceType publishSource;
 
 @end
 

@@ -27,6 +27,7 @@ typedef void (^FSProgressExecBlock) (dispatch_block_t);
 -(void) startProgress:(NSString *)message withExeBlock:(FSProgressExecBlock)block completeCallbck:(dispatch_block_t)callback;
 
 -(void) updateProgress:(NSString *) message ;
+-(void) updateProgressThenEnd:(NSString *) message withDuration:(float)duration;
 
 -(void) endProgress;
 

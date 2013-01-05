@@ -36,6 +36,7 @@
     int _dateRowIndex;
     
     PostFields _availFields;
+    PostFields _mustFields;
     int _totalFields;
     NSString * _route;
 }
@@ -85,31 +86,37 @@
     if (_availFields & ImageField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil)];
-        _totalFields++;
+        if (_mustFields & ImageField)
+            _totalFields++;
     }
     if (_availFields & TitleField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil)];
+         if (_mustFields & TitleField)
         _totalFields++;
     }
     if (_availFields & DurationField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil)];
-        _totalFields+=2;
+         if (_mustFields & DurationField)
+             _totalFields+=2;
     }
     if (_availFields & BrandField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil)];
+         if (_mustFields & BrandField)
         _totalFields++;
     }
     if (_availFields & TagField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
+        if (_mustFields & TagField)
         _totalFields++;
     }
     if (_availFields & StoreField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
+         if (_mustFields & StoreField)
         _totalFields++;
     }
     
@@ -129,6 +136,10 @@
     _availFields = fields;
 }
 
+-(void) setMustFields:(PostFields)fields
+{
+    _mustFields = fields;
+}
 
 -(void) setRoute:(NSString *)route
 {
@@ -142,7 +153,7 @@
 
 -(void) bindControl
 {
-    self.navigationItem.title = NSLocalizedString(@"Publish product", nil);
+
     [self.view setBackgroundColor:[UIColor colorWithRed:229 green:229 blue:229]];
     [_tbAction setBackgroundView:nil];
     [_tbAction setBackgroundColor:[UIColor clearColor]];
@@ -269,13 +280,13 @@
 {
     int finishedFields = 0;
     int totalFields = _totalFields;
-    _proRequest.imgs &&_proRequest.imgs.count>0 && (_availFields&ImageField)?finishedFields++:finishedFields;
-    _proRequest.descrip && (_availFields&TitleField)?finishedFields++:finishedFields;
-    _proRequest.startdate &&(_availFields & DurationField)?finishedFields++:finishedFields;
-    _proRequest.enddate&&(_availFields &DurationField)?finishedFields++:finishedFields;
-    _proRequest.brandId&&(_availFields &TagField)?finishedFields++:finishedFields;
-    _proRequest.storeId&&(_availFields &StoreField)?finishedFields++:finishedFields;
-    _proRequest.tagId&&(_availFields &TagField)?finishedFields++:finishedFields;
+    _proRequest.imgs &&_proRequest.imgs.count>0 && (_mustFields&ImageField)?finishedFields++:finishedFields;
+    _proRequest.descrip && (_mustFields&TitleField)?finishedFields++:finishedFields;
+    _proRequest.startdate &&(_mustFields & DurationField)?finishedFields++:finishedFields;
+    _proRequest.enddate&&(_mustFields &DurationField)?finishedFields++:finishedFields;
+    _proRequest.brandId&&(_mustFields &TagField)?finishedFields++:finishedFields;
+    _proRequest.storeId&&(_mustFields &StoreField)?finishedFields++:finishedFields;
+    _proRequest.tagId&&(_mustFields &TagField)?finishedFields++:finishedFields;
     return _totalFields==0?0:(float)finishedFields/(float)totalFields;
 
 }
@@ -319,6 +330,7 @@
     if (!_titleSel)
         _titleSel = [[FSProPostTitleViewController alloc] initWithNibName:@"FSProPostTitleViewController" bundle:nil];
     _titleSel.delegate = self;
+    _titleSel.publishSource = _publishSource;
     [self presentViewController:_titleSel animated:TRUE completion:nil];
     
     

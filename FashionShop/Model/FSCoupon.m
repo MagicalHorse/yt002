@@ -37,8 +37,8 @@
     [relationMapping mapKeyPath:@"productname" toAttribute:@"productname"];
     [relationMapping mapKeyPath:@"producttype" toAttribute:@"producttype"];
     [relationMapping mapKeyPath:@"pass" toAttribute:@"pass"];
-    [relationMapping mapKeyPath:@"begindate" toAttribute:@"beginDate"];
-    [relationMapping mapKeyPath:@"enddate" toAttribute:@"endDate"];
+    [relationMapping mapKeyPath:@"validstartdate" toAttribute:@"beginDate"];
+    [relationMapping mapKeyPath:@"validenddate" toAttribute:@"endDate"];
     [relationMapping mapKeyPath:@"isused" toAttribute:@"isUsed"];
     RKObjectMapping *prodRelationMap = [FSProdItemEntity getRelationDataMap];
     [relationMapping mapKeyPath:@"product" toRelationship:@"product" withMapping:prodRelationMap];

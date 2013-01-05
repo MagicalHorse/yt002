@@ -9,11 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
 
-@interface FSNickieViewController : UIViewController<UITextFieldDelegate>
+@interface FSNickieViewController : UIViewController<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate> 
 
-@property (strong, nonatomic) IBOutlet UITextField *txtNicke;
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
 - (IBAction)doSave:(id)sender;
-@property (strong, nonatomic) IBOutlet UITextField *txtPhone;
 
 @property (strong, nonatomic) FSUser *currentUser;
 @end

@@ -78,9 +78,10 @@
     _lblDescrip.numberOfLines = 0;
     origFrame = _lblDescrip.frame;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
+    int yOff = 2;
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
-    origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+2;
+    origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff;
     _lblDescrip.frame = origFrame;
     FSResource *imgObj = [_data.resource lastObject];
     if (imgObj)
@@ -88,11 +89,18 @@
         CGSize cropSize = CGSizeMake(300, 300 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
-    [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%d公里)",_data.store.name,(int)_data.store.distance/1000] forState:UIControlStateNormal];
+    NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
+    if (distanceString.length>0)
+    {
+        [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%@)",_data.store.name,distanceString] forState:UIControlStateNormal];
+    } else
+    {
+        [_btnStore setTitle:_data.store.name forState:UIControlStateNormal];
+    }
     _btnStore.titleLabel.font = ME_FONT(14);
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+2, storesize.width, storesize.height);
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff, storesize.width, storesize.height);
     if (_data.price &&
         [_data.price intValue]>0)
     {
@@ -107,10 +115,10 @@
         _btnPrice.alpha = 0;
     }
     CGRect superFrame =   _btnStore.superview.frame;
-    superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+2;
+    superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
     _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
-    commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+2;
+    commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+yOff;
     _tbComment.frame = commentFrame;
 }
 

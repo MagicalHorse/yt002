@@ -59,20 +59,26 @@
 
 #pragma mark - UIWebViewDelegate Methods
 
+
 - (void)webViewDidStartLoad:(UIWebView *)aWebView{
+    if (self)
 	[self beginLoading:_mapView];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)aWebView{
+    if (self)
 	[self endLoading:_mapView];
 }
 
 - (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error{
+    if (self)
     [self endLoading:_mapView];
 }
 
 - (BOOL)webView:(UIWebView *)aWebView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    
+    if (self)
+        return YES;
+    return NO;
 }
 
 
@@ -82,7 +88,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)dealloc
+{
+    [_mapView setDelegate:nil];
+}
 - (void)viewDidUnload {
+
     [self setMapView:nil];
     [super viewDidUnload];
 }

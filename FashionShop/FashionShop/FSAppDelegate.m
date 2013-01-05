@@ -59,6 +59,7 @@ void uncaughtExceptionHandler(NSException *exception)
     self.window.rootViewController = root;
     
     [[FSAnalysis instance] autoTrackPages:root];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     [self.window makeKeyAndVisible];
 

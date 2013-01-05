@@ -145,7 +145,7 @@
         statusReport.tag = UIVIEWCONTROLLER_CAT_PROGRESS_ID;
     }
     [self.view addSubview:statusReport];
-    statusReport.labelText = message;
+    statusReport.detailsLabelText = message;
     [statusReport show:true];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
         block(callback);
@@ -158,8 +158,16 @@
 {
     MBProgressHUD * statusReport =(MBProgressHUD *)[self.view viewWithTag:UIVIEWCONTROLLER_CAT_PROGRESS_ID];
 
-    statusReport.labelText = message;
+    statusReport.detailsLabelText = message;
    
+}
+-(void) updateProgressThenEnd:(NSString *) message withDuration:(float)duration
+{
+    MBProgressHUD * statusReport =(MBProgressHUD *)[self.view viewWithTag:UIVIEWCONTROLLER_CAT_PROGRESS_ID];
+    
+    statusReport.detailsLabelText = message;
+    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:duration];
+    
 }
 
 -(void) endProgress

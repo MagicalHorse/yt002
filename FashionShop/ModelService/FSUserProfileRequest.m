@@ -31,6 +31,10 @@
     [map mapKeyPath:@"token" toAttribute:@"request.userToken"];
     [map mapKeyPath:@"nickie" toAttribute:@"request.nickie"];
     [map mapKeyPath:@"phone" toAttribute:@"request.phone"];
+    
+    [map mapKeyPath:@"gender" toAttribute:@"request.gender"];
+    [map mapKeyPath:@"desc" toAttribute:@"request.signature"];
+
    
 }
 @end

@@ -82,6 +82,8 @@
 
 +(NSString *)stringMetersFromDouble:(double)input
 {
+    if (input <=0)
+        return @"";
     int kilos = 1000;
     int numberOfKilos = (int)input/kilos;
     if (input>=1)
