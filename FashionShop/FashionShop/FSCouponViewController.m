@@ -211,6 +211,7 @@
     detailView.dataProviderInContext = self;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
     [self presentViewController:navControl animated:true completion:nil];
+      [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 
 }
 

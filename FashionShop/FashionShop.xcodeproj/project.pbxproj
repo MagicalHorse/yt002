@@ -53,8 +53,6 @@
 		746C3926164E3C1B00531DBB /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C3925164E3C1B00531DBB /* MessageUI.framework */; };
 		746C3928164E3C4500531DBB /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C3927164E3C4500531DBB /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		746C392A164E3C5E00531DBB /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 746C3929164E3C5E00531DBB /* CoreFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		7476F8E1169078D6003D358B /* qq_login_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476F8DD169078D6003D358B /* qq_login_btn.png */; };
-		7476F8E2169078D6003D358B /* qq_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476F8DE169078D6003D358B /* qq_login_btn@2x.png */; };
 		7476F8E3169078D6003D358B /* weibo_login_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476F8DF169078D6003D358B /* weibo_login_btn.png */; };
 		7476F8E4169078D6003D358B /* weibo_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476F8E0169078D6003D358B /* weibo_login_btn@2x.png */; };
 		7476F8EB16907B49003D358B /* tengxun_weibo_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 7476F8E516907B48003D358B /* tengxun_weibo_icon.png */; };
@@ -244,6 +242,26 @@
 		74BF30261665F5D500B8A0FE /* FSLikeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74BF30241665F5D400B8A0FE /* FSLikeViewController.xib */; };
 		74BF30281665F81D00B8A0FE /* FSLikeDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74BF30271665F81D00B8A0FE /* FSLikeDetailCell.xib */; };
 		74BF302B1665F95200B8A0FE /* FSLikeDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BF302A1665F95200B8A0FE /* FSLikeDetailCell.m */; };
+		74C018F41699105F00576942 /* FSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C018F21699105F00576942 /* FSSearchViewController.m */; };
+		74C018F51699105F00576942 /* FSSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C018F31699105F00576942 /* FSSearchViewController.xib */; };
+		74C0190016992DC600576942 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C018FF16992DC600576942 /* SplashViewController.m */; };
+		74C0190416992E9B00576942 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190116992E9B00576942 /* Default.png */; };
+		74C0190516992E9B00576942 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190216992E9B00576942 /* Default@2x.png */; };
+		74C0190616992E9B00576942 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190316992E9B00576942 /* Default-568h@2x.png */; };
+		74C0190D16992EC700576942 /* Splash1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190716992EC700576942 /* Splash1.jpg */; };
+		74C0190E16992EC700576942 /* Splash1@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190816992EC700576942 /* Splash1@2x.jpg */; };
+		74C0190F16992EC700576942 /* Splash2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190916992EC700576942 /* Splash2.jpg */; };
+		74C0191016992EC700576942 /* Splash2@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190A16992EC700576942 /* Splash2@2x.jpg */; };
+		74C0191116992EC700576942 /* Splash3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190B16992EC700576942 /* Splash3.jpg */; };
+		74C0191216992EC700576942 /* Splash3@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190C16992EC700576942 /* Splash3@2x.jpg */; };
+		74C01915169937A300576942 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C01913169937A300576942 /* icon.png */; };
+		74C01916169937A300576942 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C01914169937A300576942 /* icon@2x.png */; };
+		74C0191D1699574000576942 /* phone_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0191B1699574000576942 /* phone_icon.png */; };
+		74C0191E1699574000576942 /* phone_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0191C1699574000576942 /* phone_icon@2x.png */; };
+		74C0192116995E6500576942 /* qq_login_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0191F16995E6500576942 /* qq_login_btn.png */; };
+		74C0192216995E6500576942 /* qq_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0192016995E6500576942 /* qq_login_btn@2x.png */; };
+		74C019251699808900576942 /* pro_tag_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C019231699808800576942 /* pro_tag_bg.png */; };
+		74C019261699808900576942 /* pro_tag_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C019241699808800576942 /* pro_tag_bg@2x.png */; };
 		74C1C84A16747424000B51BE /* FSProCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C1C84916747424000B51BE /* FSProCommentCell.xib */; };
 		74C1C84D167474C5000B51BE /* FSProCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C1C84C167474C5000B51BE /* FSProCommentCell.m */; };
 		74C1C85016747570000B51BE /* FSComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C1C84F16747570000B51BE /* FSComment.m */; };
@@ -563,8 +581,6 @@
 		746C3925164E3C1B00531DBB /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		746C3927164E3C4500531DBB /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
 		746C3929164E3C5E00531DBB /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		7476F8DD169078D6003D358B /* qq_login_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq_login_btn.png; sourceTree = "<group>"; };
-		7476F8DE169078D6003D358B /* qq_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qq_login_btn@2x.png"; sourceTree = "<group>"; };
 		7476F8DF169078D6003D358B /* weibo_login_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = weibo_login_btn.png; sourceTree = "<group>"; };
 		7476F8E0169078D6003D358B /* weibo_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "weibo_login_btn@2x.png"; sourceTree = "<group>"; };
 		7476F8E516907B48003D358B /* tengxun_weibo_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tengxun_weibo_icon.png; sourceTree = "<group>"; };
@@ -862,6 +878,28 @@
 		74BF30271665F81D00B8A0FE /* FSLikeDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSLikeDetailCell.xib; path = Controls/FSLikeDetailCell.xib; sourceTree = "<group>"; };
 		74BF30291665F95200B8A0FE /* FSLikeDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSLikeDetailCell.h; path = Controls/FSLikeDetailCell.h; sourceTree = "<group>"; };
 		74BF302A1665F95200B8A0FE /* FSLikeDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSLikeDetailCell.m; path = Controls/FSLikeDetailCell.m; sourceTree = "<group>"; };
+		74C018F11699105F00576942 /* FSSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSearchViewController.h; sourceTree = "<group>"; };
+		74C018F21699105F00576942 /* FSSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSearchViewController.m; sourceTree = "<group>"; };
+		74C018F31699105F00576942 /* FSSearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSSearchViewController.xib; sourceTree = "<group>"; };
+		74C018FE16992DC600576942 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		74C018FF16992DC600576942 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		74C0190116992E9B00576942 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		74C0190216992E9B00576942 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		74C0190316992E9B00576942 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		74C0190716992EC700576942 /* Splash1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Splash1.jpg; sourceTree = "<group>"; };
+		74C0190816992EC700576942 /* Splash1@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash1@2x.jpg"; sourceTree = "<group>"; };
+		74C0190916992EC700576942 /* Splash2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Splash2.jpg; sourceTree = "<group>"; };
+		74C0190A16992EC700576942 /* Splash2@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash2@2x.jpg"; sourceTree = "<group>"; };
+		74C0190B16992EC700576942 /* Splash3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Splash3.jpg; sourceTree = "<group>"; };
+		74C0190C16992EC700576942 /* Splash3@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash3@2x.jpg"; sourceTree = "<group>"; };
+		74C01913169937A300576942 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		74C01914169937A300576942 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		74C0191B1699574000576942 /* phone_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = phone_icon.png; sourceTree = "<group>"; };
+		74C0191C1699574000576942 /* phone_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "phone_icon@2x.png"; sourceTree = "<group>"; };
+		74C0191F16995E6500576942 /* qq_login_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq_login_btn.png; sourceTree = "<group>"; };
+		74C0192016995E6500576942 /* qq_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qq_login_btn@2x.png"; sourceTree = "<group>"; };
+		74C019231699808800576942 /* pro_tag_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pro_tag_bg.png; sourceTree = "<group>"; };
+		74C019241699808800576942 /* pro_tag_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pro_tag_bg@2x.png"; sourceTree = "<group>"; };
 		74C1C84916747424000B51BE /* FSProCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSProCommentCell.xib; path = Controls/FSProCommentCell.xib; sourceTree = "<group>"; };
 		74C1C84B167474C5000B51BE /* FSProCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSProCommentCell.h; path = Controls/FSProCommentCell.h; sourceTree = "<group>"; };
 		74C1C84C167474C5000B51BE /* FSProCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSProCommentCell.m; path = Controls/FSProCommentCell.m; sourceTree = "<group>"; };
@@ -1627,6 +1665,23 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				74C019231699808800576942 /* pro_tag_bg.png */,
+				74C019241699808800576942 /* pro_tag_bg@2x.png */,
+				74C0191F16995E6500576942 /* qq_login_btn.png */,
+				74C0192016995E6500576942 /* qq_login_btn@2x.png */,
+				74C0191B1699574000576942 /* phone_icon.png */,
+				74C0191C1699574000576942 /* phone_icon@2x.png */,
+				74C01913169937A300576942 /* icon.png */,
+				74C01914169937A300576942 /* icon@2x.png */,
+				74C0190716992EC700576942 /* Splash1.jpg */,
+				74C0190816992EC700576942 /* Splash1@2x.jpg */,
+				74C0190916992EC700576942 /* Splash2.jpg */,
+				74C0190A16992EC700576942 /* Splash2@2x.jpg */,
+				74C0190B16992EC700576942 /* Splash3.jpg */,
+				74C0190C16992EC700576942 /* Splash3@2x.jpg */,
+				74C0190116992E9B00576942 /* Default.png */,
+				74C0190216992E9B00576942 /* Default@2x.png */,
+				74C0190316992E9B00576942 /* Default-568h@2x.png */,
 				749B2B9D169846210073F4B5 /* btn_bg.png */,
 				749B2B9E169846210073F4B5 /* btn_bg@2x.png */,
 				749B2B9F169846210073F4B5 /* btn_short_left.png */,
@@ -1655,8 +1710,6 @@
 				7476F8E816907B49003D358B /* weixin_icon@2x.png */,
 				7476F8E916907B49003D358B /* xinlang_weibo_icon.png */,
 				7476F8EA16907B49003D358B /* xinlang_weibo_icon@2x.png */,
-				7476F8DD169078D6003D358B /* qq_login_btn.png */,
-				7476F8DE169078D6003D358B /* qq_login_btn@2x.png */,
 				7476F8DF169078D6003D358B /* weibo_login_btn.png */,
 				7476F8E0169078D6003D358B /* weibo_login_btn@2x.png */,
 				74F40D0016903FE200840510 /* next_icon.png */,
@@ -1877,6 +1930,9 @@
 				74C4FC871696C4050055D90C /* FSStoreDetailViewController.h */,
 				74C4FC881696C4050055D90C /* FSStoreDetailViewController.m */,
 				74C4FC891696C4050055D90C /* FSStoreDetailViewController.xib */,
+				74C018F11699105F00576942 /* FSSearchViewController.h */,
+				74C018F21699105F00576942 /* FSSearchViewController.m */,
+				74C018F31699105F00576942 /* FSSearchViewController.xib */,
 			);
 			name = Prod;
 			sourceTree = "<group>";
@@ -2125,6 +2181,8 @@
 		74CD919C1643A78600970F55 /* FashionShop */ = {
 			isa = PBXGroup;
 			children = (
+				74C018FE16992DC600576942 /* SplashViewController.h */,
+				74C018FF16992DC600576942 /* SplashViewController.m */,
 				74CD28AF1675A8B0001DFE4D /* Prod */,
 				74CD28AD1675A876001DFE4D /* Pro */,
 				74DE30871668815E008D0CA6 /* ProUpload */,
@@ -2493,8 +2551,6 @@
 				74F40CF2169036C200840510 /* publish_btn@2x.png in Resources */,
 				74F40D0216903FE200840510 /* next_icon.png in Resources */,
 				74F40D0316903FE200840510 /* next_icon@2x.png in Resources */,
-				7476F8E1169078D6003D358B /* qq_login_btn.png in Resources */,
-				7476F8E2169078D6003D358B /* qq_login_btn@2x.png in Resources */,
 				7476F8E3169078D6003D358B /* weibo_login_btn.png in Resources */,
 				7476F8E4169078D6003D358B /* weibo_login_btn@2x.png in Resources */,
 				7476F8EB16907B49003D358B /* tengxun_weibo_icon.png in Resources */,
@@ -2532,6 +2588,24 @@
 				749B2BAE169846210073F4B5 /* gendar_icon@2x.png in Resources */,
 				749B2BAF169846210073F4B5 /* logout_icon.png in Resources */,
 				749B2BB0169846210073F4B5 /* logout_icon@2x.png in Resources */,
+				74C018F51699105F00576942 /* FSSearchViewController.xib in Resources */,
+				74C0190416992E9B00576942 /* Default.png in Resources */,
+				74C0190516992E9B00576942 /* Default@2x.png in Resources */,
+				74C0190616992E9B00576942 /* Default-568h@2x.png in Resources */,
+				74C0190D16992EC700576942 /* Splash1.jpg in Resources */,
+				74C0190E16992EC700576942 /* Splash1@2x.jpg in Resources */,
+				74C0190F16992EC700576942 /* Splash2.jpg in Resources */,
+				74C0191016992EC700576942 /* Splash2@2x.jpg in Resources */,
+				74C0191116992EC700576942 /* Splash3.jpg in Resources */,
+				74C0191216992EC700576942 /* Splash3@2x.jpg in Resources */,
+				74C01915169937A300576942 /* icon.png in Resources */,
+				74C01916169937A300576942 /* icon@2x.png in Resources */,
+				74C0191D1699574000576942 /* phone_icon.png in Resources */,
+				74C0191E1699574000576942 /* phone_icon@2x.png in Resources */,
+				74C0192116995E6500576942 /* qq_login_btn.png in Resources */,
+				74C0192216995E6500576942 /* qq_login_btn@2x.png in Resources */,
+				74C019251699808900576942 /* pro_tag_bg.png in Resources */,
+				74C019261699808900576942 /* pro_tag_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2734,6 +2808,8 @@
 				74C4FC8A1696C4050055D90C /* FSStoreDetailViewController.m in Sources */,
 				749B2B9A169845680073F4B5 /* FSFeedbackRequest.m in Sources */,
 				749B2B9B169845680073F4B5 /* FSFeedbackViewController.m in Sources */,
+				74C018F41699105F00576942 /* FSSearchViewController.m in Sources */,
+				74C0190016992DC600576942 /* SplashViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2838,7 +2914,7 @@
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
@@ -2939,7 +3015,7 @@
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "DA4D4A33-230C-4F0B-8581-0C1169BA6C4E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA4D4A33-230C-4F0B-8581-0C1169BA6C4E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
@@ -2984,7 +3060,7 @@
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CCE5AA39-B52D-4A33-B81A-F71A3DD7C736";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;

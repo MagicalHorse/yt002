@@ -17,12 +17,14 @@
 @synthesize longit;
 @synthesize lantit;
 @synthesize distance;
-
+@synthesize resource;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
     [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",nil];
+    RKObjectMapping *resourceRelationMap = [FSResource getRelationDataMap];
+    [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:resourceRelationMap];
     return relationMapping;
 }
 

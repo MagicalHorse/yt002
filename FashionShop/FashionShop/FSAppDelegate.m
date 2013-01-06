@@ -14,6 +14,7 @@
 #import "FSUser.h"
 #import "FSDeviceRegisterRequest.h"
 #import "FSAnalysis.h"
+#import "SplashViewController.h"
 
 @interface FSAppDelegate(){
 
@@ -50,21 +51,36 @@ void uncaughtExceptionHandler(NSException *exception)
     
     //set global layout
     [self setGlobalLayout];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
+    //goto splash
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];  
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunched"]) {
+		SplashViewController *SVCtrl = [[SplashViewController alloc] init];
+        SVCtrl.view.alpha = 1.0f;
+        self.window.backgroundColor = [UIColor whiteColor];
+		self.window.rootViewController =  SVCtrl;
+        [self.window makeKeyAndVisible];
+	} else {
+        [self entryMain];
+	}
+
+    return YES;
+}
+
+//HeQingshan
+-(void)entryMain
+{
     //launch story board
     UITabBarController *root = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil] instantiateInitialViewController];
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
     self.window.rootViewController = root;
-    
     [[FSAnalysis instance] autoTrackPages:root];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    
     [self.window makeKeyAndVisible];
-
-    return YES;
 }
+
 
 +(FSAppDelegate *)app{
     return (FSAppDelegate *)[UIApplication sharedApplication];

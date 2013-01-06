@@ -29,7 +29,7 @@
 
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{
     [map mapKeyPath:@"token" toAttribute:@"request.userToken"];
-    [map mapKeyPath:@"nickie" toAttribute:@"request.nickie"];
+    [map mapKeyPath:@"nickname" toAttribute:@"request.nickie"];
     [map mapKeyPath:@"phone" toAttribute:@"request.phone"];
     
     [map mapKeyPath:@"gender" toAttribute:@"request.gender"];

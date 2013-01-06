@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import "FSLocationManager.h"
 #import "UIViewController+Loading.h"
+#import "UIImageView+WebCache.h"
 
 
 #define BAIDU_MAP_URL @"http://api.map.baidu.com/marker?location=%f,%f&title=%@&content=%@&output=html"
@@ -38,6 +39,74 @@
 }
 -(void)prepareLayout
 {
+    int xOff = 10;
+
+    int yOff = 10;
+    int yOff2 = 15;
+    int curYOff =0;
+    if (_store.resource &&
+        _store.resource.count>0)
+    {
+        UIImageView *storeLogo = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, yOff, 320, 35)];
+        storeLogo.contentMode = UIViewContentModeScaleAspectFit;
+        [storeLogo setImageWithURL:[(FSResource *)[_store.resource lastObject] absoluteUrlOrigin]];
+        [self.view addSubview:storeLogo];
+        curYOff = storeLogo.frame.size.height +storeLogo.frame.origin.y;
+    }
+    UIImage *locImg = [UIImage imageNamed:@"location_icon"];
+    UIImageView *locImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff, locImg.size.width, locImg.size.height)];
+    [locImgView setContentMode:UIViewContentModeScaleAspectFit];
+    [locImgView setImage:locImg];
+    [self.view addSubview:locImgView];
+    
+    UILabel *lblAddress = [[UILabel alloc] initWithFrame:CGRectMake(locImgView.frame.origin.x+locImgView.frame.size.width+2, locImgView.frame.origin.y, 320-xOff*2, locImgView.frame.size.height)];
+    lblAddress.text = [NSString stringWithFormat:NSLocalizedString(@"address: %@", nil),_store.address];
+    lblAddress.font = ME_FONT(12);
+    lblAddress.textColor =[UIColor colorWithRed:102 green:102 blue:102];
+    [lblAddress sizeToFit];
+    [self.view addSubview:lblAddress];
+    curYOff=locImgView.frame.size.height+locImgView.frame.origin.y;
+    
+    UIImage *phoneImg = [UIImage imageNamed:@"phone_icon"];
+    UIImageView *phImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff2, phoneImg.size.width, phoneImg.size.height)];
+    [phImgView setContentMode:UIViewContentModeScaleAspectFit];
+    [phImgView setImage:phoneImg];
+    [self.view addSubview:phImgView];
+    UILabel *lblPhone = [[UILabel alloc] initWithFrame:CGRectMake(phImgView.frame.origin.x+phImgView.frame.size.width+2, phImgView.frame.origin.y, 300, phImgView.frame.size.height)];
+    lblPhone.text = [NSString stringWithFormat:NSLocalizedString(@"phone: %@", nil),_store.phone];
+    lblPhone.font = ME_FONT(12);
+    lblPhone.textColor =[UIColor colorWithRed:102 green:102 blue:102];
+    [lblPhone sizeToFit];
+    [self.view addSubview:lblPhone];
+
+    
+    curYOff=phImgView.frame.size.height+phImgView.frame.origin.y;
+    
+    if (_store.descrip)
+    {
+        UILabel *lblDesTitle = [[UILabel alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff2, 320, 20)];
+        lblDesTitle.text = NSLocalizedString(@"detail descritpion", nil);
+        lblDesTitle.font = ME_FONT(14);
+        lblDesTitle.textColor =[UIColor colorWithRed:51 green:51 blue:51];
+        [lblDesTitle sizeToFit];
+        [self.view addSubview:lblDesTitle];
+        curYOff=lblDesTitle.frame.size.height+lblDesTitle.frame.origin.y;
+        UILabel *lblDes = [[UILabel alloc] initWithFrame:CGRectMake(xOff, curYOff, 320-xOff*2, 320)];
+        lblDes.text = _store.descrip;
+        lblDes.font = ME_FONT(10);
+        lblDes.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+        lblDes.numberOfLines = 0;
+        [lblDes sizeToFit];
+        [self.view addSubview:lblDes];
+        curYOff=lblDes.frame.size.height+lblDes.frame.origin.y;
+    }
+    _detailContainer.frame = CGRectMake(_detailContainer.frame.origin.x,_detailContainer.frame.origin.y,_detailContainer.frame.size.width,curYOff+yOff);
+
+    CGRect mapFrame = _mapView.frame;
+    mapFrame.origin.y = _detailContainer.frame.size.height;
+    mapFrame.origin.x = 0;
+    mapFrame.size.width = 320;
+    _mapView.frame = mapFrame;
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
     [_mapView setDelegate:self];
     NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[self generateMapUrl]]
@@ -95,6 +164,7 @@
 - (void)viewDidUnload {
 
     [self setMapView:nil];
+    [self setDetailContainer:nil];
     [super viewDidUnload];
 }
 @end

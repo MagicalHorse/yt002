@@ -210,12 +210,55 @@
         } else
         {
             [self displayUserProfile];
+
         }
+        [self registerLocalNotification];
+        
     }
 
 }
+-(void)registerLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didCustomerChanged:) name:LN_USER_UPDATED object:nil];
+}
+-(void)unregisterLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+-(void)registerKVO
+{
+    [_userProfile addObserver:self forKeyPath:@"nickie" options:NSKeyValueObservingOptionNew context:NULL];
+}
+-(void)unregisterKVO
+{
+    [_userProfile removeObserver:self forKeyPath:@"nickie"];
+}
 
-
+-(void)didCustomerChanged:(id)user
+{
+    FSUser *newUser = [user valueForKey:@"object"];
+    if (!newUser)
+        return;
+    
+    _userProfile.nickie = [newUser nickie];
+    _userProfile.phone = [newUser phone];
+    _userProfile.gender = [newUser gender];
+    _userProfile.signature = [newUser signature];
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (![NSThread isMainThread]) {
+		[self performSelectorOnMainThread:@selector(updateCustomerChangeUI:) withObject:keyPath waitUntilDone:NO];
+	} else {
+		[self updateCustomerChangeUI:keyPath];
+	}
+}
+-(void)updateCustomerChangeUI:(NSString *)keyPath
+{
+    if([keyPath isEqualToString:@"nickie"])
+    {
+        _lblNickie.text = _userProfile.nickie;
+    }
+}
 -(void) displayUserLogin
 {
     [_loginView removeFromSuperview];
@@ -310,6 +353,7 @@
     {
         [_loginView removeFromSuperview];
     }
+    [self registerKVO];
     
 }
 
@@ -1044,6 +1088,11 @@
 
 - (IBAction)doShowCoupons:(id)sender {
     [self filterAccount:2];
+}
+-(void)dealloc
+{
+    [self unregisterKVO];
+    [self unregisterLocalNotification];
 }
 - (void)viewDidUnload {
     [self setLikeView:nil];

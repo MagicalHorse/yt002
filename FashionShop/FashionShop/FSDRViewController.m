@@ -714,6 +714,7 @@
     FSLikeViewController *likeView = [[FSLikeViewController alloc] initWithNibName:@"FSLikeViewController" bundle:nil];
     likeView.likeType = 0;
     likeView.currentUser = _daren;
+    likeView.searchById = true;
     likeView.navigationItem.title = NSLocalizedString(@"Ta likes persons", nil);
     [self.navigationController pushViewController:likeView animated:TRUE];
 }
@@ -722,6 +723,7 @@
     FSLikeViewController *likeView = [[FSLikeViewController alloc] initWithNibName:@"FSLikeViewController" bundle:nil];
     likeView.likeType = 1;
     likeView.currentUser = _daren;
+    likeView.searchById = TRUE;
     likeView.navigationItem.title = NSLocalizedString(@"Ta fans", nil);
     [self.navigationController pushViewController:likeView animated:TRUE];
 }

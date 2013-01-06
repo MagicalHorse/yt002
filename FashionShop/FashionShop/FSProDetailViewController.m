@@ -20,6 +20,7 @@
 #import "FSProCommentHeader.h"
 #import "FSBrandItemsViewController.h"
 #import "FSStoreDetailViewController.h"
+#import "FSSearchViewController.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -139,6 +140,11 @@
             [prodImage setUserInteractionEnabled:TRUE];
             UITapGestureRecognizer *imgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapProImage:)];
             [prodImage addGestureRecognizer:imgTap];
+        }
+        if ([view respondsToSelector:@selector(btnTag)])
+        {
+            UIButton *tagButton = (UIButton *)[view btnTag];
+            [tagButton addTarget:self action:@selector(goTag:) forControlEvents:UIControlEventTouchUpInside];
         }
         [[view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
         
@@ -465,6 +471,19 @@
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
+-(void) goTag:(id)sender
+{
+    
+    if (![[self itemSource] respondsToSelector:@selector(tagId)])
+    {
+        return;
+    }
+    int input = [[[self itemSource] valueForKey:@"tagId"] intValue];
+    FSSearchViewController *tag = [[FSSearchViewController alloc] initWithNibName:@"FSSearchViewController" bundle:nil];
+    tag.searchTag = input;
+    tag.navigationItem.title = [[self itemSource] valueForKey:@"title"];
+    [self.navigationController pushViewController:tag animated:TRUE];
+}
 - (IBAction)doFavor:(id)sender {
     
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];

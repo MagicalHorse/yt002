@@ -77,7 +77,7 @@
     FSResource *imgObj = [_data.resource lastObject];
     if (imgObj)
     {
-        CGSize cropSize = CGSizeMake(self.frame.size.width, 400 );
+        CGSize cropSize = CGSizeMake(self.frame.size.width, 277 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
@@ -93,6 +93,21 @@
     
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
     _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff, storesize.width, storesize.height);
+    if (_data.tagId!=0)
+    {
+        _btnTag.alpha =1;
+        [_btnTag setTitle:NSLocalizedString(@"see  more products", nil) forState:UIControlStateNormal];
+        [_btnTag setBackgroundImage:[UIImage imageNamed:@"pro_tag_bg"] forState:UIControlStateNormal];
+        [_btnTag setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _btnTag.titleLabel.font = [UIFont systemFontOfSize:12];
+        CGSize newsize = CGSizeMake(77, 22);
+        _btnTag.frame = CGRectMake(_imgView.frame.size.width+_imgView.frame.origin.x-newsize.width, _imgView.frame.size.height+_imgView.frame.origin.y-newsize.height, newsize.width, newsize.height);
+
+    } else
+    {
+        _btnTag.alpha = 0;
+    }
+
     CGRect superFrame =   _btnStore.superview.frame;
     superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
     _btnStore.superview.frame = superFrame;

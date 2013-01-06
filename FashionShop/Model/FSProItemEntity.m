@@ -26,13 +26,14 @@
 @synthesize resource;
 @synthesize coupons;
 @synthesize comments=_comments;
+@synthesize tagId;
 @synthesize isFavored;
 @synthesize isCouponed;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",nil];
+    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",nil];
     NSString *relationKeyPath = @"store";
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];
@@ -46,8 +47,7 @@
    // [relationMap mapKeyPath:@"coupon" toRelationship:@"coupons" withMapping:couponRelationMap];
     RKObjectMapping *commentRelationMap = [FSComment getRelationDataMap];
     [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];
-
-    return relationMap;
+        return relationMap;
 }
 -(NSMutableArray *)comments
 {

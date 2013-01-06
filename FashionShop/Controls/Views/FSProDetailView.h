@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UIScrollView *svContent;
 
 @property (strong, nonatomic) IBOutlet UIImageView *imgFansBG;
+@property (strong, nonatomic) IBOutlet UIButton *btnTag;
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 

@@ -15,7 +15,7 @@
 @interface FSFeedbackViewController () {
     UIPlaceHolderTextView *_contentView;
     UITextField *_contactField;
-    BOOL isKeyBourdShown;
+    BOOL isKeyBourdShown; 
 }
 
 @end
@@ -55,7 +55,7 @@
      */
     
     _tbAction.backgroundView = [[UIView alloc]init];
-    _tbAction.backgroundColor = [UIColor whiteColor];
+    _tbAction.backgroundColor = RGBCOLOR(245,245,245);
     [_tbAction reloadData];
 }
 
@@ -186,12 +186,13 @@
         _contactLb.text = NSLocalizedString(@"Contact method", nil);
         _contactLb.font = [UIFont systemFontOfSize:14];
         _contactLb.textColor = RGBCOLOR(83, 90, 109);
+        _contactLb.backgroundColor = [UIColor clearColor];
         [_contactLb sizeToFit];
         [view addSubview:_contactLb];
         
         if (!_contactField) {
             int xStart = _contactLb.frame.origin.x + _contactLb.frame.size.width + xOffset;
-            _contactField= [[UITextField alloc] initWithFrame:CGRectMake(xStart, xOffset+2, Table_Cell_Width - xStart + 15, 31)];
+            _contactField= [[UITextField alloc] initWithFrame:CGRectMake(xStart + 2, xOffset+2, Table_Cell_Width - xStart + 18, 31)];
             _contactField.placeholder = NSLocalizedString(@"Contact place holder", nil);
             _contactField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
             _contactField.delegate = self;
@@ -201,7 +202,7 @@
             _contactField.layer.borderColor = RGBCOLOR(166, 166, 166).CGColor;
             _contactField.keyboardType = UIKeyboardTypeNumberPad;
             _contactField.font = [UIFont systemFontOfSize:14];
-            _contactField.backgroundColor = RGBCOLOR(245,245,245);
+            _contactField.backgroundColor =  [UIColor whiteColor];
             _contactField.clearButtonMode = UITextFieldViewModeWhileEditing;
         }
         [view addSubview:_contactField];
@@ -239,7 +240,7 @@
                 _contentView.font = [UIFont systemFontOfSize:14];
             }
             [cell.contentView addSubview:_contentView];
-            cell.backgroundColor = RGBCOLOR(245, 245, 245);
+            cell.backgroundColor = [UIColor whiteColor];
         }
             break;
         default:

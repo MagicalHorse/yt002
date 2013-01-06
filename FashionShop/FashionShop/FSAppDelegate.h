@@ -20,4 +20,6 @@
 @property (strong,nonatomic) FSLocationManager *locationManager;
 
 +(FSAppDelegate *)app;
+-(void)entryMain;
+
 @end

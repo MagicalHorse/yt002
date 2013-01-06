@@ -33,6 +33,8 @@
 
 #define BAIDU_MAP_KEY @"D768745A12D429DEC85D896036A25C50A52313E6"
 
+//notification
+#define LN_USER_UPDATED @"LN_USER_UPDATED"
 
 //HeQingshan
 #define NAV_HIGH        44

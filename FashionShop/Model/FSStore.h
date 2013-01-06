@@ -7,6 +7,7 @@
 //
 
 #import "FSModelBase.h"
+#import "FSResource.h"
 
 @interface FSStore : FSModelBase
 @property (nonatomic, assign) NSInteger  id;
@@ -17,4 +18,5 @@
 @property (nonatomic, strong) NSString * lantit;
 @property (nonatomic, strong) NSString * address;
 @property(nonatomic,assign) double distance;
+@property (nonatomic,strong) NSMutableArray *resource;
 @end

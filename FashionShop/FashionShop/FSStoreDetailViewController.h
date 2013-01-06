@@ -11,5 +11,7 @@
 
 @interface FSStoreDetailViewController : UIViewController<UIWebViewDelegate>
 @property (strong, nonatomic) IBOutlet UIWebView *mapView;
+
+@property (strong, nonatomic) IBOutlet UIView *detailContainer;
 @property (strong, nonatomic) FSStore *store;
 @end

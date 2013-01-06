@@ -634,6 +634,7 @@ typedef enum {
     detailViewController.sourceType = FSSourcePromotion;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
     
 }
 

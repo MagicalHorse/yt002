@@ -133,6 +133,8 @@
     request.sort = @0;
     request.likeType = [NSNumber numberWithInt:_likeType];
     request.routeResourcePath = RK_REQUEST_LIKE_LIST;
+    if (_searchById)
+        request.userId = currentUser.uid;
     return request;
 }
 -(void) presentData
@@ -193,6 +195,7 @@
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
     dr.userId = [userId intValue];
     [self.navigationController pushViewController:dr animated:TRUE];
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 
 }
 

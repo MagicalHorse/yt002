@@ -86,7 +86,7 @@
     FSResource *imgObj = [_data.resource lastObject];
     if (imgObj)
     {
-        CGSize cropSize = CGSizeMake(300, 300 );
+        CGSize cropSize = CGSizeMake(310, 300 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];

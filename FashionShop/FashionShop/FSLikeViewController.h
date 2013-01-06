@@ -14,5 +14,5 @@
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
 @property(strong,nonatomic) FSUser *currentUser;
 @property(nonatomic) int likeType;
-
+@property(nonatomic) BOOL searchById;
 @end

@@ -368,6 +368,7 @@
                 currentUser.signature = request.signature;
                 currentUser.gender = [request.gender intValue];
                 [self reportError:NSLocalizedString(@"COMM_OPERATE_COMPL", nil)];
+                [[NSNotificationCenter defaultCenter] postNotificationName:LN_USER_UPDATED object:currentUser];
                 
                 //让键盘或者PIckerview消失
                 [_activityField resignFirstResponder];
