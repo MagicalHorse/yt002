@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7414A1FA169AF57300D2549F /* refresh-spinner-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7414A1F8169AF57300D2549F /* refresh-spinner-dark.png */; };
+		7414A1FB169AF57300D2549F /* refresh-spinner-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */; };
 		741571CA16684309006A7B58 /* FSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741571C816684309006A7B58 /* FSSettingViewController.m */; };
 		741571CB16684309006A7B58 /* FSSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741571C916684309006A7B58 /* FSSettingViewController.xib */; };
 		7418EF95168989F40067B030 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7418EF94168989F40067B030 /* libWeChatSDK_armv7_armv7s.a */; };
@@ -114,7 +116,6 @@
 		74AD943E1682E3F9000F7BBF /* head_icon_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AD94371682E3F9000F7BBF /* head_icon_bg.png */; };
 		74AD943F1682E3F9000F7BBF /* like_header_top_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AD94381682E3F9000F7BBF /* like_header_top_bg.png */; };
 		74AD94401682E3F9000F7BBF /* like_header_top_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AD94391682E3F9000F7BBF /* like_header_top_bg@2x.png */; };
-		74AD944416830644000F7BBF /* Hiragino Sans GB W3.otf in Resources */ = {isa = PBXBuildFile; fileRef = 74AD94411682EC85000F7BBF /* Hiragino Sans GB W3.otf */; };
 		74B305E8166F122E00A614CC /* FSStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B305E7166F122E00A614CC /* FSStore.m */; };
 		74B305EB166F124C00A614CC /* FSBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B305EA166F124C00A614CC /* FSBrand.m */; };
 		74B305EE166F128400A614CC /* FSCoupon.m in Sources */ = {isa = PBXBuildFile; fileRef = 74B305ED166F128300A614CC /* FSCoupon.m */; };
@@ -503,6 +504,8 @@
 		740910B61695A9FC0018D692 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		740910B71695AA240018D692 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		740910B81695AA5E0018D692 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Language.strings; sourceTree = "<group>"; };
+		7414A1F8169AF57300D2549F /* refresh-spinner-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-spinner-dark.png"; sourceTree = "<group>"; };
+		7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-spinner-dark@2x.png"; sourceTree = "<group>"; };
 		741571C716684309006A7B58 /* FSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSettingViewController.h; sourceTree = "<group>"; };
 		741571C816684309006A7B58 /* FSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSettingViewController.m; sourceTree = "<group>"; };
 		741571C916684309006A7B58 /* FSSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSSettingViewController.xib; sourceTree = "<group>"; };
@@ -666,7 +669,6 @@
 		74AD94371682E3F9000F7BBF /* head_icon_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = head_icon_bg.png; sourceTree = "<group>"; };
 		74AD94381682E3F9000F7BBF /* like_header_top_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like_header_top_bg.png; sourceTree = "<group>"; };
 		74AD94391682E3F9000F7BBF /* like_header_top_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "like_header_top_bg@2x.png"; sourceTree = "<group>"; };
-		74AD94411682EC85000F7BBF /* Hiragino Sans GB W3.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Hiragino Sans GB W3.otf"; sourceTree = "<group>"; };
 		74B305E6166F122D00A614CC /* FSStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSStore.h; path = Model/FSStore.h; sourceTree = "<group>"; };
 		74B305E7166F122E00A614CC /* FSStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSStore.m; path = Model/FSStore.m; sourceTree = "<group>"; };
 		74B305E9166F124B00A614CC /* FSBrand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSBrand.h; path = Model/FSBrand.h; sourceTree = "<group>"; };
@@ -1530,7 +1532,6 @@
 		74AD94431682EC91000F7BBF /* font */ = {
 			isa = PBXGroup;
 			children = (
-				74AD94411682EC85000F7BBF /* Hiragino Sans GB W3.otf */,
 			);
 			name = font;
 			sourceTree = "<group>";
@@ -1665,6 +1666,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				7414A1F8169AF57300D2549F /* refresh-spinner-dark.png */,
+				7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */,
 				74C019231699808800576942 /* pro_tag_bg.png */,
 				74C019241699808800576942 /* pro_tag_bg@2x.png */,
 				74C0191F16995E6500576942 /* qq_login_btn.png */,
@@ -2380,7 +2383,6 @@
 			files = (
 				749E2EFC168B2D8800581D0E /* Localizable.strings in Resources */,
 				749E2EFB168B2D7F00581D0E /* MainStoryboard.storyboard in Resources */,
-				74AD944416830644000F7BBF /* Hiragino Sans GB W3.otf in Resources */,
 				74BAC5471651F37900D7F866 /* blueArrow.png in Resources */,
 				74BAC6131652067200D7F866 /* SinaWeibo.bundle in Resources */,
 				74BAC61C16520AF100D7F866 /* FSLoginView.xib in Resources */,
@@ -2606,6 +2608,8 @@
 				74C0192216995E6500576942 /* qq_login_btn@2x.png in Resources */,
 				74C019251699808900576942 /* pro_tag_bg.png in Resources */,
 				74C019261699808900576942 /* pro_tag_bg@2x.png in Resources */,
+				7414A1FA169AF57300D2549F /* refresh-spinner-dark.png in Resources */,
+				7414A1FB169AF57300D2549F /* refresh-spinner-dark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2915,8 +2919,8 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "26BF787A-C776-41E6-A80C-E8EA30760AF2";
+				PROVISIONING_PROFILE = "B831842B-C745-48F6-83F5-D1F4A1EF7743";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "B831842B-C745-48F6-83F5-D1F4A1EF7743";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

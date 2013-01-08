@@ -13,10 +13,11 @@
 #import "FSProDetailViewController.h"
 #import "FSFavorProCell.h"
 #import "SpringboardLayout.h"
+#import "FSRefreshableViewController.h"
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
-@interface FSMeViewController : UIViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate>
+@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate>
 
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;

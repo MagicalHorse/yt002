@@ -16,6 +16,6 @@
 @property(nonatomic,strong) NSString *accessToken;
 @property(nonatomic,strong) NSString *nickie;
 @property(nonatomic,strong) NSNumber *thirdPartySourceType;
-
+@property(nonatomic,strong) NSString* thumnail;
 
 @end

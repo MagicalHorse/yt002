@@ -13,6 +13,8 @@
 @interface FSRefreshableViewController : UIViewController<EGORefreshTableHeaderDelegate,UIScrollViewDelegate>
 
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action ;
+-(void) beginLoadMoreLayout:(UIScrollView *)container;
+-(void) endLoadMore:(UIScrollView *)container;
 
 @property(nonatomic) BOOL isInRefresh;
 @end

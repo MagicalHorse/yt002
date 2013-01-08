@@ -292,7 +292,7 @@ static BOOL G_LOGOUT = NO;
         
         if ([self isAuthorizeExpired]) {  
             //      授权过期去刷授权 
-            code = [self refreshAccessToken:WiressSDKDemoAppKey
+            code = [self refreshAccessToken:QQ_WEIBO_APP_KEY
                                  grant_type:REFRESH_TOKEN 
                            andRefresh_token:self.refreshToken];
             if (code != nil) {
@@ -333,7 +333,7 @@ static BOOL G_LOGOUT = NO;
             }
             TCWBRequest *request = [TCWBRequest requestWithURL:url
                                                    AccessToken:accessToken 
-                                                        appkey:WiressSDKDemoAppKey
+                                                        appkey:QQ_WEIBO_APP_KEY
                                                         openId:openId 
                                                       clientip:ip_iphone
                                                  oauth_version:@"2.a" 

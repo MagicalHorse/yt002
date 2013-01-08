@@ -585,7 +585,7 @@
 }
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(320, 480);
+    CGSize newSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HIGH);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size

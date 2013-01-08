@@ -109,7 +109,7 @@
         targetWidth = cropSize.width;
         targetHeight = cropSize.width /aspect;
     }
-    CGSize itemSize = CGSizeMake(targetWidth, targetHeight);
+    CGSize itemSize = CGSizeMake((int)targetWidth, (int)targetHeight);
     UIGraphicsBeginImageContext(itemSize);
     CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
     [source drawInRect:imageRect];
@@ -136,8 +136,10 @@
     if ([isLazyInt boolValue])
     {
         UIImage *cropImage = nil;
+        
         if (image)
             cropImage = [self cropImageIfNeed:image];
+         
         [self setImage:cropImage];//cropImage;
         [self performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:FALSE];
         

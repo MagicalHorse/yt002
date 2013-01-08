@@ -156,7 +156,7 @@
                 _refreshLatestDate = [[NSDate alloc] init];
             else
             {
-                if (result.totalPageCount <= _prodPageIndex+1)
+                if (result.totalPageCount < _prodPageIndex+1)
                     _noMoreResult = TRUE;
             }
             [self fillProdInMemory:result.prodItems isInsert:self.isInRefresh];
@@ -175,7 +175,7 @@
                     _refreshLatestDate = [[NSDate alloc] init];
                 else
                 {
-                    if (result.totalPageCount <= _prodPageIndex+1)
+                    if (result.totalPageCount < _prodPageIndex+1)
                         _noMoreResult = TRUE;
                 }
                 [self fillFavorInMemory:result.items isInsert:self.isInRefresh];
@@ -292,7 +292,7 @@
         request.previousLatestDate = _firstLoadDate;
     }
     request.nextPage = page;
-    request.pageSize = PROD_PAGE_SIZE;
+    request.pageSize = COMMON_PAGE_SIZE;
     request.drUserId = [NSNumber numberWithInt:_userId];
         return request;
     } else
@@ -303,7 +303,7 @@
         request.routeResourcePath = RK_REQUEST_FAVOR_LIST;
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.pageSize = [NSNumber numberWithInt:20] ;
+        request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE] ;
         if (isRefresh)
             request.nextPage = @1;
         else
@@ -417,6 +417,12 @@
         else
         {
             blockSelf->_daren.isLiked = !isRemove;
+            if (isRemove)
+            {
+                blockSelf->_daren.fansTotal--;
+            } else
+                blockSelf->_daren.fansTotal++;
+            [blockSelf->_btnFans setTitle:[NSString stringWithFormat:@"%d",blockSelf->_daren.fansTotal] forState:UIControlStateNormal];
         }
         self.navigationItem.rightBarButtonItem.enabled = true;
         
@@ -445,9 +451,9 @@
     if (!isRefresh)
     {
         _prodPageIndex++;
-        nextPage = _prodPageIndex +1;
+        nextPage = _prodPageIndex;
     }
-    FSEntityRequestBase *request = [self createListRequest:nextPage isRefresh:TRUE];
+    FSEntityRequestBase *request = [self createListRequest:nextPage isRefresh:isRefresh];
     if ([self isDR])
     {
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
@@ -459,7 +465,7 @@
                 _refreshLatestDate = [[NSDate alloc] init];
             else
             {
-                if (result.totalPageCount <= _prodPageIndex+1)
+                if (result.totalPageCount < _prodPageIndex+1)
                     _noMoreResult = TRUE;
             }
             [self fillProdInMemory:result.prodItems isInsert:isRefresh];
@@ -480,7 +486,7 @@
                     _refreshLatestDate = [[NSDate alloc] init];
                 else
                 {
-                    if (result.totalPageCount <= _prodPageIndex+1)
+                    if (result.totalPageCount < _prodPageIndex+1)
                         _noMoreResult = TRUE;
                 }
                 [self fillFavorInMemory:result.items isInsert:isRefresh];
@@ -497,15 +503,11 @@
 
 -(void)loadMore
 {
-    if (!moreIndicator)
-        moreIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    moreIndicator.center = CGPointMake(_itemsView.frame.size.width/2, _itemsView.contentSize.height);
-    [moreIndicator startAnimating];
-    [_itemsView addSubview:moreIndicator];
+    [self beginLoadMoreLayout:_itemsView];
     _isInLoadingMore = TRUE;
     
     [self refreshContent:FALSE withCallback:^{
-        [moreIndicator removeFromSuperview];
+        [self endLoadMore:_itemsView];
         _isInLoadingMore = FALSE;
     }];
     

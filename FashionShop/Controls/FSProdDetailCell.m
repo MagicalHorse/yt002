@@ -19,7 +19,10 @@
     }
     return self;
 }
-
+-(void)prepareForReuse
+{
+    _imgPic.image = nil;
+}
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;

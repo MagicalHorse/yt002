@@ -136,7 +136,7 @@
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
     request.userToken =[FSModelManager sharedModelManager].loginToken;
-    request.pageSize = [NSNumber numberWithInt:20];
+    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
     request.pageIndex =[NSNumber numberWithInt:index];
     request.sort = @0;
     request.routeResourcePath = RK_REQUEST_COUPON_LIST;

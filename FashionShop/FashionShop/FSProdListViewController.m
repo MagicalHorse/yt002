@@ -28,7 +28,7 @@
 #define ITEM_CELL_WIDTH 100
 #define DEFAULT_TAG_WIDTH 50
 
-#define PROD_PAGE_SIZE 20
+#define PROD_PAGE_SIZE 10
 
 @interface FSProdListViewController ()
 {
@@ -113,21 +113,14 @@
     {
         [self endPrepareData];
     }
-    
-    
-
-    
+   
 }
 -(void)endPrepareData
 {
     if (!_tags ||
         _tags.count<1)
         return;
-    
-    _cvTags.delegate = self;
-    _cvTags.dataSource = self;
-    _cvContent.delegate = self;
-    _cvContent.dataSource = self;
+
 }
 -(void) zeroMemoryBlock
 {
@@ -162,7 +155,17 @@
     _cvTags.backgroundColor = [UIColor clearColor];
     _tagContainer.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _tagContainer.contentMode = UIViewContentModeCenter;
-    
+    _cvTags.delegate = self;
+    _cvTags.dataSource = self;
+    [self reCreateContentView];
+}
+-(void)reCreateContentView
+{
+    if (_cvContent)
+    {
+        [_cvContent removeFromSuperview];
+        _cvContent = nil;
+    }
     SpringboardLayout *clayout = [[SpringboardLayout alloc] init];
     clayout.itemWidth = ITEM_CELL_WIDTH;
     clayout.columnCount = 3;
@@ -177,20 +180,23 @@
         [self refreshContent:TRUE withCallback:^(){
             action();
         }];
-
+        
     }];
     
+
+    _cvContent.delegate = self;
+    _cvContent.dataSource = self;
+
 }
 
-
--(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
+-(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted needReload:(BOOL)shouldReload
 {
-    
     if (!prods)
         return;
+    NSMutableArray *indexPathArray = [@[] mutableCopy];
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_prods indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-            if ([[(FSProdItemEntity *)obj1 valueForKey:@"id"] isEqualToValue:[(FSProdItemEntity *)obj valueForKey:@"id"]])
+            if ([[(FSProdItemEntity *)obj1 valueForKey:@"id"] intValue] ==[[(FSProdItemEntity *)obj valueForKey:@"id"] intValue])
             {
                 return TRUE;
                 *stop1 = TRUE;
@@ -202,19 +208,28 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
+                if (!shouldReload)
+                    [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
             } else
             {
                 [_prods insertObject:obj atIndex:0];
+                if (!shouldReload)
+                [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
-        
-        
-    }
-     }];
-    
-    [_cvContent reloadData];
-    
-    
+            
+            
+        }
+    }];
+    if (shouldReload)
+      [_cvContent reloadData];
+ 
 }
+
+-(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
+{    
+    [self fillProdInMemory:prods isInsert:isinserted needReload:FALSE];
+}
+
 
 -(void)beginSwitchTag:(FSCoreTag *)tag
 {
@@ -223,16 +238,19 @@
     _prodPageIndex = 0;
     _currentTag = tag;
     FSProListRequest *request =
-            [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
+    [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
+    __block FSProdListViewController *blockSelf = self;
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:_cvContent];
         if (resp.isSuccess)
         {
             FSBothItems *result = resp.responseData;
-            if (result.totalPageCount <= _prodPageIndex+1)
-                _noMoreResult = TRUE;
-            [_prods removeAllObjects];
-            [self fillProdInMemory:result.prodItems isInsert:FALSE];
+            if (result.totalPageCount <= blockSelf->_prodPageIndex+1)
+                blockSelf->_noMoreResult = TRUE;
+            [blockSelf->_prods removeAllObjects];
+            
+            [blockSelf fillProdInMemory:result.prodItems isInsert:FALSE needReload:TRUE];
+            [blockSelf->_cvContent setContentOffset:CGPointZero];
         }
         else
         {
@@ -271,24 +289,25 @@
         _prodPageIndex++;
         nextPage = _prodPageIndex +1;
     }
-    FSProListRequest *request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:TRUE];
+    FSProListRequest *request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:isRefresh];
+    __block FSProdListViewController *blockSelf = self;
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         callback();
         if (resp.isSuccess)
         {
             FSBothItems *result = resp.responseData;
             if (isRefresh)
-                _refreshLatestDate = [[NSDate alloc] init];
+                blockSelf->_refreshLatestDate = [[NSDate alloc] init];
             else
             {
-                if (result.totalPageCount <= _prodPageIndex+1)
-                    _noMoreResult = TRUE;
+                if (result.totalPageCount <= blockSelf->_prodPageIndex+1)
+                   blockSelf-> _noMoreResult = TRUE;
             }
-            [self fillProdInMemory:result.prodItems isInsert:isRefresh];
+            [blockSelf fillProdInMemory:result.prodItems isInsert:isRefresh];
         }
         else
         {
-            [self reportError:resp.errorDescrip];
+            [blockSelf reportError:resp.errorDescrip];
         }
     }];
 
@@ -296,18 +315,14 @@
 
 -(void)loadMore
 {
-    if (!moreIndicator)
-        moreIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    moreIndicator.center = CGPointMake(_cvContent.frame.size.width/2, _cvContent.contentSize.height);
-    [moreIndicator startAnimating];
-    [_cvContent addSubview:moreIndicator];
-    
+
+    [self beginLoadMoreLayout:_cvContent];
+    __block FSProdListViewController *blockSelf = self;
     [self refreshContent:FALSE withCallback:^{
-        [moreIndicator removeFromSuperview];
+        [blockSelf endLoadMore:_cvContent];
     }];
     
 }
-
 
 - (void)loadImagesForOnscreenRows
 {
@@ -330,6 +345,7 @@
     
 	[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
     [self loadImagesForOnscreenRows];
+
     if (!_noMoreResult &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
@@ -419,10 +435,12 @@
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     if (collectionView == _cvContent)
     {
         [(FSProdDetailCell *)cell willRemoveFromView];
     }
+     
 }
 -(CGSize)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -434,7 +452,7 @@
         _actualTagWidth+=width+5;
         return CGSizeMake(width, MAX(actualSize.height, 34));
     }
-    return  CGSizeZero;
+    return  CGSizeMake(ITEM_CELL_WIDTH, ITEM_CELL_WIDTH);
 }
 
 - (CGFloat)collectionView:(PSUICollectionView *)collectionView
@@ -443,7 +461,7 @@
 {
     FSProdItemEntity * data = [_prods objectAtIndex:indexPath.row];
     FSResource * resource = data.resource&&data.resource.count>0?[data.resource objectAtIndex:0]:nil;
-    float totalHeight = 0.0f;
+    float totalHeight = 0.1f;
     if (resource)
     {
         int cellWidth = ITEM_CELL_WIDTH;

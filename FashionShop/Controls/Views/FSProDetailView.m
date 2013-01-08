@@ -74,9 +74,11 @@
     origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+yOff;
     _lblDescrip.frame = origFrame;
 
-    FSResource *imgObj = [_data.resource lastObject];
-    if (imgObj)
+
+    if (_data.resource &&
+        _data.resource.count>0)
     {
+        FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(self.frame.size.width, 277 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }

@@ -17,7 +17,7 @@
 #import "SplashViewController.h"
 
 @interface FSAppDelegate(){
-
+    NSString *localToken;
 }
 
 @end
@@ -92,17 +92,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:16],UITextAttributeTextColor:[UIColor colorWithRed:239 green:239 blue:239]}];
         [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
 }
--(void) testFontName
-{
-    NSMutableString *str = [NSMutableString stringWithCapacity:1000];
-   {
-        for (NSString *fontName in [UIFont fontNamesForFamilyName:@"Hiragino Sans GB"]) {
-            [str appendFormat:@"    %@\n", fontName];
-        }
-        [str appendString:@"\n"];
-    }
-    NSLog(@"%@", str);
-}
 
 -(void) setupAnalys
 {
@@ -144,11 +133,7 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    
-	NSString *token = [deviceToken description];
-	
-	DLog(@"deviceToken length: %d", token.length);
-	
+	NSString * token = [deviceToken description];
 	if (token.length > 0 )
 	{
 		token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
@@ -161,19 +146,30 @@ void uncaughtExceptionHandler(NSException *exception)
 	{
 		return;
 	}
-	
-	DLog(@"My token is: %@", token);
-	
 	if (token.length == 64)
 	{
-        [self registerDevicePushNotification:token];
+        localToken = token;
+        if (locationManager.locationAwared)
+        {
+            [self registerDevicePushNotification:token];
+        } else
+        {
+            [locationManager addObserver:self forKeyPath:@"locationAwared" options:NSKeyValueObservingOptionNew context:nil];
+        }
 	}
 
 }
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"locationAwared"])
+    {
+        [self registerDevicePushNotification:localToken];
+        [locationManager removeObserver:self forKeyPath:@"locationAwared"];
+    }
+}
 
 - (void)registerDevicePushNotification:(NSString *)token
-{
-    
+{    
 #if defined ENVIRONMENT_DEVELOPMENT
     return;
 #endif

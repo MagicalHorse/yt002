@@ -17,6 +17,7 @@
 #import "FSImageSlideViewController.h"
 
 @class FSProDetailViewController;
+
 @protocol FSProDetailItemSourceProvider <NSObject>
 
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  ;
@@ -24,6 +25,8 @@
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock;
 
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index ;
+@optional
+-(BOOL)proDetailViewShouldPostNotification:(FSProDetailViewController *)view;
 
 @end
 

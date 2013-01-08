@@ -128,7 +128,7 @@
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
     request.userToken = currentUser?currentUser.uToken:[FSModelManager sharedModelManager].loginToken;
-    request.pageSize = [NSNumber numberWithInt:20];
+    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
     request.pageIndex =[NSNumber numberWithInt:index];
     request.sort = @0;
     request.likeType = [NSNumber numberWithInt:_likeType];

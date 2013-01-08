@@ -10,12 +10,15 @@
 #import "EGORefreshTableHeaderView.h"
 
 #define REFRESHINGVIEW_HEIGHT 60
+#define LOADMOREVIEW_HEIGHT 40
 @interface FSRefreshableViewController ()
 {
     EGORefreshTableHeaderView *refreshHeaderView;
     UIRefreshControl *refreshControlView;
+    UIImageView *loadMoreView;
     
     UICallBackWith1Param _action;
+    BOOL _inLoading;
 }
 
 @end
@@ -36,6 +39,43 @@
 {
     [super viewDidLoad];
 
+}
+-(void) beginLoadMoreLayout:(UIScrollView *)container
+{
+    if (_inLoading)
+        return;
+    _inLoading = TRUE;
+    loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2, container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
+    // loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2, 200, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
+    [container.superview addSubview:loadMoreView];
+    [loadMoreView.layer removeAllAnimations];
+    loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
+    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
+    animation.duration = .4;
+    animation.cumulative =YES;
+    animation.repeatCount = 2000;
+    
+    [loadMoreView.layer addAnimation:animation forKey:@"animation"];
+    [loadMoreView startAnimating];
+}
+-(void)internalEndMore
+{
+    [loadMoreView.layer removeAllAnimations];
+    loadMoreView.image = nil;
+    loadMoreView = nil;
+    [loadMoreView removeFromSuperview];
+    _inLoading = FALSE;
+}
+-(void) endLoadMore:(UIScrollView *)container
+{
+    [loadMoreView.layer removeAllAnimations];
+    loadMoreView.image = nil;
+    loadMoreView = nil;
+    [loadMoreView removeFromSuperview];
+    _inLoading = FALSE;
+    
 }
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action 
 {
@@ -96,6 +136,9 @@
             _isInRefreshing = FALSE;
             [refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:view.superview];
         }];
+    } else
+    {
+        [refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:view.superview];
     }
 }
 

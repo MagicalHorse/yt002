@@ -346,6 +346,15 @@
                 [proItem setValue:[NSNumber numberWithBool:FALSE] forKey:@"isFavored"];
             }
             [view setData:proItem];
+            if (favored &&
+                [blockSelf.dataProviderInContext respondsToSelector:@selector(proDetailViewShouldPostNotification:)])
+            {
+                BOOL shouldPostMesg = [blockSelf.dataProviderInContext proDetailViewShouldPostNotification:blockSelf];
+                if (shouldPostMesg)
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:LN_FAVOR_UPDATED object:[blockSelf.navContext objectAtIndex:blockSelf.currentPageIndex] ];
+                }
+            }
         } else
         {
            [blockSelf updateFavorButtonStatus:button canFavored:!favored];

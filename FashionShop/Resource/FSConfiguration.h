@@ -19,15 +19,15 @@
 #define REST_API_CLIENT_VERSION @"1.0"
 #define REST_API_URL    @"http://10.32.11.65:9550/api"
 
-#define SINA_WEIBO_APP_KEY @"4279386231"
-#define SINA_WEIBO_APP_SECRET_KEY @"f16607fcbc8a5e0c4a9910895224cff1"
-#define SINA_WEIBO_APP_REDIRECT_URI @"http://pa.yintai.com/"
+#define SINA_WEIBO_APP_KEY @"1594791248"
+#define SINA_WEIBO_APP_SECRET_KEY @"7ef3ddef06d52a937a0fcc3fc44d19f4"
+#define SINA_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
 
-#define QQ_WEIBO_APP_KEY @"801278795"
-#define QQ_WEIBO_APP_SECRET_KEY @"39fdbd4e575c5d3a7b0dd15d027e95bd"
-#define QQ_WEIBO_APP_REDIRECT_URI @"http://www.xihuan.us"
-#define WEIXIN_API_APP_KEY @"wx3db795f6fb81fb4c"
+#define QQ_WEIBO_APP_KEY @"801298995"
+#define QQ_WEIBO_APP_SECRET_KEY @"dbab88f4d3e0b27c00b15f52d1a5fc61"
+#define QQ_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
+#define WEIXIN_API_APP_KEY @"wx730465bd3f0845af"
 
 #define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
 
@@ -35,6 +35,8 @@
 
 //notification
 #define LN_USER_UPDATED @"LN_USER_UPDATED"
+#define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
+#define COMMON_PAGE_SIZE 10
 
 //HeQingshan
 #define NAV_HIGH        44

@@ -86,7 +86,7 @@
     [super viewDidLoad];
    
     _dataSourceProvider = [@{} mutableCopy];
-    
+    [self ensureDataContext];
     __block FSMeViewController *blockSelf = self;
     [_dataSourceProvider setValue:^(FSUserLoginRequest *request){
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
@@ -160,8 +160,10 @@
             else
             {
                 FSPagedFavor *innerResp = response.responseData;
-                if (innerResp.totalPageCount<=blockSelf->_favorPageIndex+1)
+                if (innerResp.totalPageCount<blockSelf->_favorPageIndex+1)
                     blockSelf->_noMoreFavor = TRUE;
+                else
+                    blockSelf->_noMoreFavor = FALSE;
                 [blockSelf fillFavorList:innerResp.items isInsert:blockSelf->_isInRefreshing];
             }
             if (uicallback)
@@ -184,10 +186,7 @@
     [self switchView];
        
 }
--(void)viewDidAppear:(BOOL)animated
-{
-    //[self switchView];
-}
+
 -(void) switchView
 {
     if (_isFirstLoad)
@@ -217,9 +216,12 @@
     }
 
 }
+#pragma KVO & Notification
 -(void)registerLocalNotification
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didCustomerChanged:) name:LN_USER_UPDATED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
+
 }
 -(void)unregisterLocalNotification
 {
@@ -233,7 +235,16 @@
 {
     [_userProfile removeObserver:self forKeyPath:@"nickie"];
 }
-
+-(void)didFavorRemoved:(id)favorValue
+{
+    FSFavor *favor =[favorValue valueForKey:@"object"];
+    if ([_likePros containsObject:favor])
+    {
+        int index = [_likePros indexOfObject:favor];
+        [_likePros removeObjectAtIndex:index];
+        [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+    }
+}
 -(void)didCustomerChanged:(id)user
 {
     FSUser *newUser = [user valueForKey:@"object"];
@@ -330,7 +341,7 @@
 - (IBAction)doLoginQQ:(id)sender {
     if (!_qq)
     {
-        _qq = [[TCWBEngine alloc] initWithAppKey:WiressSDKDemoAppKey andSecret:WiressSDKDemoAppSecret andRedirectUrl:@"http://www.ying7wang7.com"];
+        _qq = [[TCWBEngine alloc] initWithAppKey:QQ_WEIBO_APP_KEY andSecret:QQ_WEIBO_APP_SECRET_KEY andRedirectUrl:QQ_WEIBO_APP_REDIRECT_URI];
         _qq.rootViewController = self;
         
     }
@@ -356,10 +367,23 @@
     [self registerKVO];
     
 }
-
+-(void) ensureDataContext
+{
+    _likePros = nil;
+    _isLogined = FALSE;
+    _isFirstLoad=FALSE;
+    isDeletionModeActive=FALSE;
+    _isInLoading=FALSE;
+    _isInRefreshing=FALSE;
+    _isInPhotoing = FALSE;
+    _favorPageIndex=0;
+    _noMoreFavor=FALSE;
+    
+}
 -(void) bindUserProfile
 {
     self.navigationItem.title = NSLocalizedString(@"Homepage title", nil);
+    _btnSuggest.layer.opacity = _userProfile.userLevelId==FSDARENUser?1:0;
     _lblNickie.text = _userProfile.nickie;
     _lblNickie.font = ME_FONT(18);
     [_lblNickie sizeToFit];
@@ -426,6 +450,7 @@
 {
     if (showProgress)
         [self beginLoading:_likeView];
+    _favorPageIndex = pageIndex;
     FSFavorRequest *request = [self createRequest:pageIndex];
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:LOGIN_GET_USER_LIKE])(request,^{
         if (showProgress)
@@ -444,20 +469,17 @@
     request.routeResourcePath = RK_REQUEST_FAVOR_LIST;
     request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    request.pageSize = [NSNumber numberWithInt:20] ;
+    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE] ;
     request.nextPage =[NSNumber numberWithInt:page];
     return request;
 }
 
 -(void)loadMore
 {
-    if (!moreIndicator)
-        moreIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    moreIndicator.center = CGPointMake(self.view.frame.size.width/2, self.view.bounds.size.height-44);
-    [moreIndicator startAnimating];
-    [self.view addSubview:moreIndicator];
+    [self beginLoadMoreLayout:_likeView];
+    __block FSMeViewController *blockSelf = self;
     [self loadILike:FALSE nextPage:++_favorPageIndex withCallback:^{
-        [moreIndicator removeFromSuperview];
+        [blockSelf endLoadMore:blockSelf->_likeView];
         _isInLoading = FALSE;
         
     }];
@@ -489,6 +511,8 @@
     {
         _likePros = [@[] mutableCopy];
     }
+    if (isInsert)
+        [_likePros removeAllObjects];
     if (list)
     {
         [list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -502,14 +526,15 @@
             }];
             if (index== NSNotFound)
             {
-                if (isInsert)
-                    [_likePros insertObject:obj atIndex:0];
-                else
-                    [_likePros addObject:obj];
-                
+                [_likePros addObject:obj];
+                if (!isInsert)
+                {
+                    [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
+                }
             }
         }];
-        [_likeView reloadData];
+        if (isInsert)
+            [_likeView reloadData];
         if (_likePros.count<1)
         {
             [self showNoResult:_likeView withText:NSLocalizedString(@"no likes added", nil)];
@@ -637,7 +662,7 @@
 }
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(50, 50);
+    CGSize newSize = CGSizeMake(50, 50*image.size.height/image.size.width);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size
@@ -689,11 +714,8 @@
             [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
         }
         
-
-    
     return cell;
 }
-
 
 #pragma mark - PSUICollectionViewDelegate
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -704,7 +726,7 @@
         return;
     }
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    detailView.navContext = _likePros;
+    detailView.navContext = [_likePros mutableCopy];
     detailView.indexInContext = indexPath.row* [self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
     detailView.sourceType = [(FSFavor *)[_likePros objectAtIndex:detailView.indexInContext] sourceType];
     detailView.dataProviderInContext = self;
@@ -717,8 +739,6 @@
     FSFavorProCell *hideCell = (FSFavorProCell *)cell;
     [hideCell willRemoveFromView];
 }
-
-
 
 -(void)didRemoveClick:(UIButton *)sender
 {
@@ -944,6 +964,10 @@
     FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
     return favorCurrent.sourceType;
 }
+-(BOOL)proDetailViewShouldPostNotification:(FSProDetailViewController *)view
+{
+    return YES;
+}
 
 #pragma FSThumbView Delegate
 -(void)didTapThumView:(id)sender
@@ -961,7 +985,8 @@
 
 -(void) onQQLoginFail:(NSError *)error
 {
-   // [self reportError:error.description];
+    if (error)
+    [self reportError:NSLocalizedString(@"login failed", nil)];
 }
 
 
@@ -973,6 +998,7 @@
     request.thirdPartySourceType = @2;
     request.thirdPartyUid = [homeDic valueForKeyPath:@"data.openid"];
     request.nickie = [homeDic valueForKeyPath:@"data.nick"];
+    request.thumnail = [homeDic valueForKey:@"data.head"];
     ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
 
 }
@@ -1032,6 +1058,8 @@
     {
         _userProfile = nil;
     }
+    [self reportError:NSLocalizedString(@"login failed", nil)];
+    [self removeAuthData];
     
 }
 
@@ -1049,6 +1077,7 @@
         request.accessToken = _weibo.accessToken;
         request.thirdPartySourceType = @1;
         request.thirdPartyUid = _weibo.userID;
+        request.thumnail = [weiboUserProfile objectForKey:@"profile_image_url"];
         ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
         
     }
@@ -1061,6 +1090,8 @@
 {
     if (flag)
     {
+        [self removeAuthData];
+        [self ensureDataContext];
         [self displayUserLogin];
     }
 }
@@ -1070,9 +1101,6 @@
     [super didReceiveMemoryWarning];
     
 }
-
-
-
 
 - (IBAction)doShowLikes:(id)sender {
     [self filterAccount:0];

@@ -49,7 +49,7 @@ static FSModelManager *_modelManager;
     if (self)
     {
         _asyncQueue = [[NSOperationQueue alloc] init];
-        [_asyncQueue setMaxConcurrentOperationCount:2];
+        [_asyncQueue setMaxConcurrentOperationCount:1];
         [self initModelManager];
     }
     return self;
@@ -67,7 +67,6 @@ static FSModelManager *_modelManager;
     {
         _modelManager = [[FSModelManager alloc] init];
         [_modelManager initConfig];
-        //[[FSModelManager sharedModelManager] removeWeiboAuthCache];
       
     }
     return _modelManager;
@@ -183,6 +182,8 @@ static FSModelManager *_modelManager;
 -(void)removeWeiboAuthCache
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SinaWeiboAuthData"];
+    if (_weibo)
+        [_weibo logOut];
 
 }
 

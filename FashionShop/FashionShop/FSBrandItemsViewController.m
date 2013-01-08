@@ -142,18 +142,15 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
+                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
             } else
             {
                 [_prods insertObject:obj atIndex:0];
+                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
-            
             
         }
     }];
-    
-    [_brandContent reloadData];
-    
-    
 }
 
 
@@ -176,7 +173,7 @@
     }
 
     request.nextPage = page;
-    request.pageSize = PROD_PAGE_SIZE;
+    request.pageSize = COMMON_PAGE_SIZE;
     return request;
 }
 -(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
@@ -187,7 +184,7 @@
         _prodPageIndex++;
         nextPage = _prodPageIndex +1;
     }
-    FSProListRequest *request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:TRUE];
+    FSProListRequest *request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:isRefresh];
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         callback();
         if (resp.isSuccess)
@@ -212,14 +209,10 @@
 
 -(void)loadMore
 {
-    if (!moreIndicator)
-        moreIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    moreIndicator.center = CGPointMake(_brandContent.frame.size.width/2, _brandContent.contentSize.height);
-    [moreIndicator startAnimating];
-    [_brandContent addSubview:moreIndicator];
-    
+    [self beginLoadMoreLayout:_brandContent];
+    __block FSBrandItemsViewController *blockSelf = self;
     [self refreshContent:FALSE withCallback:^{
-        [moreIndicator removeFromSuperview];
+         [blockSelf endLoadMore:_brandContent];
     }];
     
 }

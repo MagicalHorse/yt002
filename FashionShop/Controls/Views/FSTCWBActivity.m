@@ -53,9 +53,8 @@
     // post image status
     if (_qq==nil)
     {
-       // _qq = [[TCWBEngine alloc] initWithAppKey:QQ_WEIBO_APP_KEY andSecret:QQ_WEIBO_APP_SECRET_KEY andRedirectUrl:QQ_WEIBO_APP_REDIRECT_URI];
-        _qq = [[TCWBEngine alloc] initWithAppKey:WiressSDKDemoAppKey andSecret:WiressSDKDemoAppSecret andRedirectUrl:@"http://www.ying7wang7.com"];
-        
+        _qq = [[TCWBEngine alloc] initWithAppKey:QQ_WEIBO_APP_KEY andSecret:QQ_WEIBO_APP_SECRET_KEY andRedirectUrl:QQ_WEIBO_APP_REDIRECT_URI];
+
     }
     return [_qq logInWithDelegateReturnView:self onSuccess:@selector(onQQLoginSuccess) onFailure:@selector(onQQLoginFail:)];
     

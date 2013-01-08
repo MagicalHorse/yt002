@@ -51,7 +51,8 @@
 
 -(BOOL)isExpired
 {
-    if (!endDate || endDate <[[NSDate alloc] init])
+    if (!endDate ||
+        [endDate compare:[[NSDate alloc] init]]==NSOrderedAscending)
     {
         return YES;
     }

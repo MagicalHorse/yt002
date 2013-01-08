@@ -57,7 +57,9 @@
 {
     if (!container)
         container = self.view;
+    /*
     UIActivityIndicatorView *refreshView =(UIActivityIndicatorView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
+    
     if(!refreshView)
     {
         refreshView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -68,17 +70,37 @@
     [refreshView startAnimating];
     [container addSubview:refreshView];
     [container bringSubviewToFront:refreshView];
+     */
+    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
+    if(!loadMoreView)
+    {
+        loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-20,container.frame.origin.y+50, 40, 40)];
+        loadMoreView.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
+    }
+    [container addSubview:loadMoreView];
+    [loadMoreView.layer removeAllAnimations];
+    loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
+    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
+    animation.duration = .4;
+    animation.cumulative =YES;
+    animation.repeatCount = 2000;    
+    [loadMoreView.layer addAnimation:animation forKey:@"animation"];
+    [loadMoreView startAnimating];
+
 
 }
 -(void) endLoading:(UIView *)container
 {
     if (!container)
         container = self.view;
-    UIActivityIndicatorView *refreshView =(UIActivityIndicatorView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
-    if (refreshView)
+    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
+    if (loadMoreView)
     {
-        [refreshView stopAnimating];
-        [refreshView removeFromSuperview];
+        [loadMoreView.layer removeAllAnimations];
+        loadMoreView.image = nil;
+        [loadMoreView removeFromSuperview];
     }
  
 }

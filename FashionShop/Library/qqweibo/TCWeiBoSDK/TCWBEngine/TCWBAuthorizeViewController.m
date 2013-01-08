@@ -113,10 +113,11 @@
     }
     else {
         if (self.err == nil) {
-            self.err = [NSError errorWithDomain:TCWBSDKErrorDomain 
+            /*self.err = [NSError errorWithDomain:TCWBSDKErrorDomain
                                            code:TCWBErrorCodeSDK 
                                        userInfo:[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", TCWBSDKErrorCodeAuthorizeError] forKey:TCWBSDKErrorCodeKey]
                         ];
+             */
         }
         if([delegate respondsToSelector:@selector(authorize:didFailuredWithError:)]){
             [delegate authorize:self didFailuredWithError:self.err];

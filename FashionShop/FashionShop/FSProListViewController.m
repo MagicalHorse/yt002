@@ -50,9 +50,6 @@ typedef enum {
 
 @interface FSProListViewController ()
 {
-    
-    UIRefreshControl *_refreshControl;
-    EGORefreshTableHeaderView *refreshView;
     FSProSortBy _currentSearchIndex;
     NSMutableDictionary *_dataSourceProvider;
     NSMutableDictionary *_dataSourcePro;
@@ -73,6 +70,7 @@ typedef enum {
     
     bool _noMoreNearest;
     bool _noMoreNewest;
+    bool _inLoading;
     
   
 }
@@ -109,13 +107,16 @@ typedef enum {
     [_dataSourcePro setObject:[@[] mutableCopy] forKey:PRO_LIST_FILTER_NEWEST];
     [_dataSourcePro setObject:[@[] mutableCopy] forKey:PRO_LIST_FILTER_NEAREST];
     __block FSProListViewController *blockSelf = self;
-    _currentSearchIndex=SortByNone;
+    _currentSearchIndex=SortByDistance;
     
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
         
         [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
             if (blockSelf->_currentSearchIndex != SortByDistance)
+            {
+                uicallback();
                 return;
+            }
             if (!respData.isSuccess)
             {
                 [blockSelf reportError:respData.errorDescrip];
@@ -154,7 +155,10 @@ typedef enum {
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
         [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
             if (blockSelf->_currentSearchIndex != SortByDate)
+            {
+                uicallback();
                 return;
+            }
             if (!respData.isSuccess)
             {
                 [blockSelf reportError:respData.errorDescrip];
@@ -191,6 +195,7 @@ typedef enum {
     } forKey:PRO_LIST_FILTER_NEWEST];
     [_contentView registerNib:[UINib nibWithNibName:@"FSProNearDetailCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSProNearestHeaderTableCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_HEADER_CELL];
+
     [self prepareLayout];
     [self setFilterType];
     [self initContentView];
@@ -200,7 +205,6 @@ typedef enum {
 -(void) prepareLayout
 {
     self.navigationItem.title = NSLocalizedString(@"Promotions", nil);
-    [self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:[UIColor colorWithRed:239 green:239 blue:239]}];
     
 
 }
@@ -213,10 +217,13 @@ typedef enum {
     _segFilters.selectedSegmentIndex = 0;
 }
 
-
-
 -(void) initContentView{
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
+        if (_inLoading)
+        {
+            action();
+            return;
+        }
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.requestType = 0;
@@ -225,15 +232,29 @@ typedef enum {
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.previousLatestDate = _currentSearchIndex == 0?_nearLatestDate:_newLatestDate;
         _state = BeginLoadingLatest;
+        _inLoading = TRUE;
         block(request,^(){
             action();
             _state = EndLoadingLatest;
-            
+            _inLoading = FALSE;
         });
 
     }];
     _state = NormalList;
     //load data first time;
+    [self beginLoading:_contentView];
+    if ([FSLocationManager sharedLocationManager].locationAwared)
+    {
+        [self loadFirstTime];
+    } else
+    {
+        [self registerKVO];
+    }
+        
+}
+
+-(void)loadFirstTime
+{
     _currentSearchIndex = SortByDistance;
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
@@ -244,17 +265,39 @@ typedef enum {
     request.previousLatestDate = _nearFirstLoadDate;
     request.nextPage = 1;
     request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
-    [self beginLoading:_contentView];
+    request.requestType = 1;
+    
     _state = BeginLoadingMore;
+    _inLoading = TRUE;
     block(request,^(){
         _state = EndLoadingMore;
         [self endLoading:_contentView];
-        
+        _inLoading = FALSE;
     });
-    
+ 
 }
 
-
+-(void)registerKVO
+{
+    if ([FSLocationManager sharedLocationManager].locationAwared)
+    {
+        [self loadFirstTime];
+        return;
+    }
+    [[FSLocationManager sharedLocationManager] addObserver:self forKeyPath:@"locationAwared" options:NSKeyValueObservingOptionNew context:nil];
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (![NSThread isMainThread]) {
+		[self performSelectorOnMainThread:@selector(reloadSortbyDistance:) withObject:keyPath waitUntilDone:NO];
+	} else {
+		[self reloadSortbyDistance:keyPath];
+	}
+}
+-(void)reloadSortbyDistance:(NSString *)keyPath
+{
+    [self loadFirstTime];
+    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
+}
 -(void) renewLastUpdateTime
 {
     if (_currentSearchIndex == 0)
@@ -283,8 +326,6 @@ typedef enum {
 {
     [_contentView reloadData];
 }
-
-
 -(void)filterSearch:(UISegmentedControl *) segmentedControl
 {
     int index = segmentedControl.selectedSegmentIndex;
@@ -297,6 +338,8 @@ typedef enum {
     NSMutableArray *source = [_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (source == nil || source.count<=0)
     {
+        if (_inLoading)
+            return;
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.nextPage = 1;
@@ -309,12 +352,16 @@ typedef enum {
         request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
         [self beginLoading:_contentView];
         _state = BeginLoadingMore;
+        _inLoading = TRUE;
         block(request,^(){
             _state = EndLoadingMore;
+            _inLoading = FALSE;
             [self endLoading:_contentView];
+            [_contentView setContentOffset:CGPointZero];
         });
     } else{
         [self reloadTableView];
+        [_contentView setContentOffset:CGPointZero];
     }
 }
 
@@ -323,41 +370,42 @@ typedef enum {
     NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (pros.items==nil || pros.items.count<=0)
         return;
-    
-    [pros.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        int index = [tmpPros indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-            if ([[(FSProItemEntity *)obj1 valueForKey:@"id"] isEqualToValue:[(FSProItemEntity *)obj valueForKey:@"id"]])
+    @synchronized(tmpPros)
+    {
+        [pros.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            int index = [tmpPros indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
+                if ([[(FSProItemEntity *)obj1 valueForKey:@"id"] isEqualToValue:[(FSProItemEntity *)obj valueForKey:@"id"]])
+                {
+                    return TRUE;
+                    *stop1 = TRUE;
+                }
+                return FALSE;
+            }];
+            if (index==NSNotFound)
             {
-                return TRUE;
-                *stop1 = TRUE;
+                if (inserted)
+                {
+                    [tmpPros insertObject:obj atIndex:0];
+                }
+                else
+                {
+                    [tmpPros addObject:obj];
+                }
+                switch (_currentSearchIndex) {
+                    case 0:
+                        [self mergeByStore:obj isInserted:inserted];
+                        break;
+                    case 1:
+                        [self mergeByDate:obj isInserted:inserted];
+                        break;
+                    case 2:
+                        break;
+                    default:
+                        break;
+                }
             }
-            return FALSE;
         }];
-        if (index==NSNotFound)
-        {
-            if (inserted)
-            {
-                [tmpPros insertObject:obj atIndex:0];
-            }
-            else
-            {
-                [tmpPros addObject:obj];
-            }
-            switch (_currentSearchIndex) {
-                case 0:
-                    [self mergeByStore:obj isInserted:inserted];
-                    break;
-                case 1:
-                    [self mergeByDate:obj isInserted:inserted];
-                    break;
-                case 2:
-                    break;
-                default:
-                    break;
-            }
-        }
-    }];
-    
+    }
     
 }
 -(void) mergeByDate:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
@@ -398,7 +446,7 @@ typedef enum {
 -(void) mergeByStore:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
 {
     int storeIndex = [_storeSource indexOfObjectPassingTest:^BOOL(id obj2, NSUInteger idx, BOOL *stop) {
-        if ([[(FSStore *)obj2 valueForKey:@"id"] isEqualToValue:[[obj store]valueForKey:@"id"]])
+        if ([[(FSStore *)obj2 valueForKey:@"id"] isEqualToValue:[[obj store] valueForKey:@"id"]])
         {
             *stop = TRUE;
             return TRUE;
@@ -438,25 +486,10 @@ typedef enum {
     // Dispose of any resources that can be recreated.
 }
 
--(void) loadLatest{
-    DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
-    FSProListRequest *request = [[FSProListRequest alloc] init];
-    request.requestType = 0;
-    request.filterType = _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
-    request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    request.previousLatestDate = _currentSearchIndex == 0?_nearLatestDate:_newLatestDate;
-    _state = BeginLoadingLatest;
-    block(request,^(){
-        [_refreshControl endRefreshing];
-        _state = EndLoadingLatest;
-        
-    });
-    
-}
 
 -(void)loadMore{
-    
+    if (_inLoading)
+        return;
     UIActivityIndicatorView *loadMore = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     
     _contentView.tableFooterView = loadMore;
@@ -471,9 +504,11 @@ typedef enum {
     request.previousLatestDate =_currentSearchIndex==0?_nearFirstLoadDate:_newFirstLoadDate;
     request.nextPage = (_currentSearchIndex==0?_nearestPageIndex:_newestPageIndex)+1;
     _state = BeginLoadingMore;
+    _inLoading = TRUE;
     block(request,^(){
         _contentView.tableFooterView = nil;
         _state = EndLoadingMore;
+        _inLoading = FALSE;
     });
     
 }
@@ -559,7 +594,7 @@ typedef enum {
         case SortByDistance:
         {
             FSProNearDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL];
-            int storeId = [[_storeSource objectAtIndex:indexPath.section] id];
+            int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
           
             FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
@@ -623,14 +658,22 @@ typedef enum {
 {
     
     FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    detailViewController.navContext = [_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
-    detailViewController.dataProviderInContext = self;
-    int rows = 0;
-    for(int i=0;i<indexPath.section;i++)
+    NSMutableArray *rows = NULL;
+    if (_currentSearchIndex==SortByDistance)
     {
-        rows+= [self tableView:tableView numberOfRowsInSection:i];
+        int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
+        rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
+    } else
+    {
+        NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
+        NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
+        [mdf setDateFormat:@"yyyy-MM-dd"];
+       rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+
     }
-    detailViewController.indexInContext = rows+indexPath.row;
+    detailViewController.navContext = rows;
+    detailViewController.dataProviderInContext = self;
+    detailViewController.indexInContext = indexPath.row;
     detailViewController.sourceType = FSSourcePromotion;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
@@ -653,8 +696,6 @@ typedef enum {
         [self loadMore];
         
     }
-    
-  
 }
 
 #pragma FSProDetailItemSourceProvider
@@ -675,6 +716,10 @@ typedef enum {
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
+}
+-(void)dealloc
+{
+    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 }
 
 - (void)viewDidUnload {

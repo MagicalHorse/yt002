@@ -83,9 +83,11 @@
     origFrame.size.width = fitSize.width;
     origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff;
     _lblDescrip.frame = origFrame;
-    FSResource *imgObj = [_data.resource lastObject];
-    if (imgObj)
+  
+    if (_data.resource &&
+        _data.resource.count>0)
     {
+        FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(310, 300 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }

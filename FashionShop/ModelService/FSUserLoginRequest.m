@@ -13,6 +13,7 @@
 @synthesize thirdPartySourceType,thirdPartyUid;
 @synthesize accessToken;
 @synthesize nickie;
+@synthesize thumnail;
 
 -(NSString *)routeResourcePath{
     return @"/customer/outsitelogin";
@@ -30,6 +31,7 @@
     [map mapKeyPath:@"outsiteuid" toAttribute:@"request.thirdPartyUid"];
     [map mapKeyPath:@"outsitenickname" toAttribute:@"request.nickie"];
     [map mapKeyPath:@"outsitetype" toAttribute:@"request.thirdPartySourceType"];
+    [map mapKeyPath:@"thumnailurl" toAttribute:@"request.thumnail"];
 }
 
 @end

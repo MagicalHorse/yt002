@@ -17,13 +17,14 @@ static FSLocationManager *_locationManager;
 @end
 
 @implementation FSLocationManager
-@synthesize currentCoord=_currentCoord, city=_city;
+@synthesize currentCoord=_currentCoord;
 
 - (void) initLocationManager{
     // if location services are restricted do nothing
     if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
         [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)
     {
+        self.locationAwared = TRUE;
         if (_locationDelegate)
         {
             
@@ -45,17 +46,15 @@ static FSLocationManager *_locationManager;
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
+     [_innerLocation stopUpdatingLocation];
     // if the location is older than 30s ignore
     if (fabs([newLocation.timestamp timeIntervalSinceDate:[NSDate date]]) > 30)
     {
         return;
     }
-
     _currentCoord = [newLocation coordinate];
-    [self getCity];
-    
-    [_innerLocation stopUpdatingLocation];
-    
+    self.locationAwared = TRUE;
+   
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
@@ -68,40 +67,8 @@ static FSLocationManager *_locationManager;
     
     // since we got an error, set selected location to invalid location
     _currentCoord = kCLLocationCoordinate2DInvalid;
+    self.locationAwared = TRUE;
     
-}
--(void)cityAware:(NSArray *)placeMarks{
-    if (placeMarks.count>0)
-    {
-        CLPlacemark *place = [placeMarks objectAtIndex:0];
-        _city =place.administrativeArea;
-        if (_locationDelegate)
-        {
-        
-            [_locationDelegate performSelector:@selector(didLocationAwared:) withObject:self];
-        }
-    
-    } else{
-        if (_locationDelegate)
-        {
-            
-            [_locationDelegate performSelector:@selector(didLocationFailAwared:) withObject:self];
-        }
-
-    }
-}
-
-- (void)getCity{
-
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-
-    CLLocation *location = [[CLLocation alloc] initWithLatitude:_currentCoord.latitude longitude:_currentCoord.longitude];
-    
-    __block FSLocationManager *blockManager = self;
-    
-    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-        [blockManager cityAware:placemarks];
-    }];
 }
 
 + (FSLocationManager *)sharedLocationManager{
