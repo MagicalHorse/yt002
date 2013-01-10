@@ -16,6 +16,7 @@
 #define RK_REQUEST_DAREN_DETAIL @"/customer/show"
 #define RK_REQUEST_LIKE_DO @"/like/create"
 #define RK_REQUEST_LIKE_REMOVE @"/like/destroy"
+#define RK_REQUEST_PRO_BOTH_LIST @"/items/list"
 
 @interface FSCommonUserRequest : FSEntityRequestBase
 

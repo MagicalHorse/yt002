@@ -49,9 +49,7 @@
 -(void) setOwnerUser:(FSUser *)ownerUser
 {
     _owner = ownerUser;
-    _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
-    [_imgButton setBackgroundImage:[UIImage imageNamed:@"head_icon_bg.png"] forState:UIControlStateNormal];
-    [self addSubview:_imgButton];
+    [self ensureImageButton];
     if (_owner &&
         _owner.thumnailUrl)
     {
@@ -60,7 +58,6 @@
         
         if (_owner.userLevelId == FSDARENUser)
         {
-            [_imgButton setUserInteractionEnabled:FALSE];
             [self indicatorViewUpdate:@"daren_icon.png"];
             [self addSubview:_drImage];
         }
@@ -68,10 +65,19 @@
     [self setNeedsLayout];
  
 }
+-(void)ensureImageButton
+{
+    if (_imgButton)
+        return;
+    _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
+    [_imgButton setBackgroundImage:[UIImage imageNamed:@"default_thum_icon.png"] forState:UIControlStateNormal];
+    [self addSubview:_imgButton];
+}
 -(void)setDelegate:(id<FSThumViewDelegate>)delegate
 {
     if (delegate)
     {
+        [self ensureImageButton];
         [_imgButton setUserInteractionEnabled:TRUE];
         [_imgButton addTarget:self action:@selector(doTapThumb:) forControlEvents:UIControlEventTouchUpInside];
         _delegate = delegate;

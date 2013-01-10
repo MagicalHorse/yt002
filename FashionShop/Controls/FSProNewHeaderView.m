@@ -43,7 +43,7 @@
     NSString *title = isToday?NSLocalizedString(@"Today's new activities", nil):
     isGoing?NSLocalizedString(@"ing activities", nil):NSLocalizedString(@"coming activities", nil);
     _lblTitle.text = title;
-    _lblTitle.font = [UIFont systemFontOfSize:PRO_LIST_NEW_HEADER_FONTSZ];
+    _lblTitle.font = [UIFont systemFontOfSize:PRO_LIST_NEAR_HEADER_FONTSZ];
     NSString *imagename = isToday?@"today_new_head_icon.png":@"underway_head_icon.png";
     _imgWhen.image = [UIImage imageNamed:imagename];
 }

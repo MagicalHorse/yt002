@@ -31,6 +31,7 @@
 -(BOOL) isLogined;
 
 -(NSString *)loginToken;
+-(NSNumber *) localLoginUid;
 
 -(SinaWeibo *)instantiateWeiboClient:(id<SinaWeiboDelegate>)delegate;
 

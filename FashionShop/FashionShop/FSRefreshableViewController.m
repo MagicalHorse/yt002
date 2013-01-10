@@ -45,8 +45,7 @@
     if (_inLoading)
         return;
     _inLoading = TRUE;
-    loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2, container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
-    // loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2, 200, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
+    loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
     [container.superview addSubview:loadMoreView];
     [loadMoreView.layer removeAllAnimations];
     loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
@@ -56,9 +55,10 @@
     animation.duration = .4;
     animation.cumulative =YES;
     animation.repeatCount = 2000;
-    
     [loadMoreView.layer addAnimation:animation forKey:@"animation"];
     [loadMoreView startAnimating];
+    [container.superview setNeedsLayout];
+    [container.superview setNeedsDisplay];
 }
 -(void)internalEndMore
 {
@@ -79,6 +79,7 @@
 }
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action 
 {
+    /*
     if ([UIRefreshControl class] &&[container isKindOfClass:[UITableView class]])
     {
         refreshControlView = [[UIRefreshControl alloc] init];
@@ -87,6 +88,7 @@
         [container addSubview:refreshControlView];
     }
     else
+     */
     {
         refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,  -REFRESHINGVIEW_HEIGHT, container.frame.size.width,REFRESHINGVIEW_HEIGHT)];
         refreshHeaderView.backgroundColor = [UIColor whiteColor];

@@ -42,8 +42,6 @@
 
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map
 {
-    NSString *pidkey = pType== FSSourceProduct?@"productid":@"promotionid";
-    [map mapKeyPath:pidkey toAttribute:@"request.id"];
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];
     [map mapKeyPath:@"lat" toAttribute:@"request.lantit"];
 
@@ -53,7 +51,13 @@
     [map mapKeyPath:@"startdate" toAttribute:@"request.startdate"];
     [map mapKeyPath:@"enddate" toAttribute:@"request.enddate"];
     [map mapKeyPath:@"storeid" toAttribute:@"request.brandId"];
-    
+    if (pType==FSSourceProduct)
+    {
+       [map mapKeyPath:@"productid" toAttribute:@"request.id"];
+    } else if(pType ==FSSourcePromotion)
+    {
+        [map mapKeyPath:@"promotionid" toAttribute:@"request.id"];
+    }
 }
 
 

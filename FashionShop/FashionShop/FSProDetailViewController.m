@@ -46,6 +46,7 @@
 {
     MBProgressHUD *statusReport;
     id proItem;
+    int currentPageIndex;
 }
 
 @end
@@ -91,6 +92,7 @@
     UIBarButtonItem *baritemShare = [self createPlainBarButtonItem:@"share_icon.png" target:self action:@selector(doShare:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [self.navigationItem setRightBarButtonItem:baritemShare];
+    currentPageIndex = -1;
     [self.paginatorView reloadData];
     self.currentPageIndex = indexInContext;
     
@@ -98,7 +100,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
-    [self resetScrollViewSize:self.paginatorView.currentPage];
+    //[self resetScrollViewSize:self.paginatorView.currentPage];
 }
 
 -(id)itemSource
@@ -114,125 +116,42 @@
 
 - (SYPageView *)paginatorView:(SYPaginatorView *)paginatorView viewForPageAtIndex:(NSInteger)pageIndex {
     NSString *identifier = NSStringFromClass([FSProDetailView class]);
-    __block FSSourceType source = [dataProviderInContext proDetailViewSourceTypeFromContext:self forIndex:pageIndex];
+    FSSourceType source = [dataProviderInContext proDetailViewSourceTypeFromContext:self forIndex:pageIndex];
 	if (source == FSSourceProduct)
         identifier = NSStringFromClass([FSProdDetailView class]);
-	__block id view = [paginatorView dequeueReusablePageWithIdentifier:identifier];
+	FSDetailBaseView * view = [paginatorView dequeueReusablePageWithIdentifier:identifier];
 	if (!view) {
         if (source == FSSourcePromotion)
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProDetailView" owner:self options:nil] lastObject];
         else
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProdDetailView" owner:self options:nil] lastObject];
     }
-    __block FSProDetailViewController *blockSelf = self;
-    [(FSDetailBaseView *)view setPType:source];
-    
-    [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
-        
-        [view setData:input];
-        if ([view respondsToSelector:@selector(imgThumb)])
-        {
-            [(FSThumView *)[view imgThumb] setDelegate:self];
-        }
-        if ([view respondsToSelector:@selector(imgView)])
-        {
-            UIImageView *prodImage = (UIImageView *)[view imgView];
-            [prodImage setUserInteractionEnabled:TRUE];
-            UITapGestureRecognizer *imgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapProImage:)];
-            [prodImage addGestureRecognizer:imgTap];
-        }
-        if ([view respondsToSelector:@selector(btnTag)])
-        {
-            UIButton *tagButton = (UIButton *)[view btnTag];
-            [tagButton addTarget:self action:@selector(goTag:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        [[view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
-        
-        [view svContent].delegate = self;
-        [view tbComment].delegate = self;
-        [view tbComment].dataSource = self;
-        [view tbComment].scrollEnabled = FALSE;
-        [view svContent].scrollEnabled = TRUE;
-        if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)])
-        {
-            BOOL needRefresh = [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex];
-            if (needRefresh)
-            {
-                FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
-                drequest.uToken = [FSModelManager sharedModelManager].loginToken;
-                drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-                drequest.id = [[(FSDetailBaseView *)view data] valueForKey:@"id"];
-                drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-                drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-                drequest.pType= source;
-                Class respClass;
-                if (drequest.pType == FSSourceProduct)
-                {
-                    drequest.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-                    respClass = [FSProdItemEntity class];
-                }
-                else
-                {
-                    drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-                    respClass = [FSProItemEntity class];
-                    
-                }
-                [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
-                    if (resp.isSuccess)
-                    {
-                        //refresh interaction here
-                        [view updateInteraction:resp.responseData];
-                        if ([view respondsToSelector:@selector(btnFavor)])
-                        {
-                            UIBarButtonItem *favorButton = [view btnFavor];
-                            [blockSelf updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
-                        }
+    [view setPType:source];
 
-                    }
-                    
-                }];
-                
-            }
-            
-        }
-        else
-        {
-            if ([view respondsToSelector:@selector(btnFavor)])
-            {
-                UIBarButtonItem *favorButton = [view btnFavor];
-                [blockSelf updateFavorButtonStatus:favorButton canFavored:![(FSProdItemEntity *)[view data] isFavored]];
-            }
-
-        }
-            FSCommonCommentRequest * request=[[FSCommonCommentRequest alloc] init];
-            request.routeResourcePath = RK_REQUEST_COMMENT_LIST;
-            request.sourceid = [[(FSDetailBaseView *)view data] valueForKey:@"id"];
-            request.sourceType =[NSNumber numberWithInt:source];//promotion
-            request.nextPage = @1;
-            request.pageSize = @100;
-            request.refreshTime = [[NSDate alloc] init];
-            request.rootKeyPath = @"data.comments";
-            [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-                if (resp.isSuccess)
-                {
-                    [[(FSDetailBaseView *)view data] setComments:resp.responseData];
-                    if (blockSelf)
-                        [[view tbComment] reloadData];
-                   
-                }
-                else
-                {
-                    NSLog(@"comment list failed");
-                }
-                
-            }];
-       
-                
-    } errorCallback:^{
-        [self onButtonCancel];
-    }];
+    if ([view respondsToSelector:@selector(imgThumb)])
+    {
+        [(FSThumView *)[(id)view imgThumb] setDelegate:self];
+    }
+    if ([view respondsToSelector:@selector(imgView)])
+    {
+        UIImageView *prodImage = (UIImageView *)[(id)view imgView];
+        [prodImage setUserInteractionEnabled:TRUE];
+        UITapGestureRecognizer *imgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapProImage:)];
+        [prodImage addGestureRecognizer:imgTap];
+    }
+    if ([view respondsToSelector:@selector(btnTag)])
+    {
+        UIButton *tagButton = (UIButton *)[(id)view btnTag];
+        [tagButton addTarget:self action:@selector(goTag:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    [[(id)view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
     
-    
+    [(id)view svContent].delegate = self;
+    [(id)view tbComment].delegate = self;
+    [(id)view tbComment].dataSource = self;
+    [(id)view tbComment].scrollEnabled = FALSE;
+    [(id)view svContent].scrollEnabled = TRUE;
+    view.showViewMask = TRUE;
 	return view;
 }
 
@@ -244,14 +163,101 @@
 
 - (void)paginatorView:(SYPaginatorView *)paginatorView didScrollToPageAtIndex:(NSInteger)pageIndex
 {
-    FSDetailBaseView *view = paginatorView.currentPage;
-    _sourceType = view.pType;
-    [self.navigationItem setTitle:[view.data valueForKey:@"title"]] ;
-    [self hideCommentInputView:nil];
+    if (currentPageIndex== pageIndex)
+        return;
+    currentPageIndex= pageIndex;
+    __block FSDetailBaseView * blockViewForRefresh = paginatorView.currentPage;
+    __block FSProDetailViewController *blockSelf = self;
+    _sourceType = blockViewForRefresh.pType;
    
+    if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)] &&
+        [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex]==TRUE)
+    {
+        NSNumber * itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
+        FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+        drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+        drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+        drequest.id = itemId;
+        drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        drequest.pType= blockViewForRefresh.pType;
+        Class respClass;
+        if (drequest.pType == FSSourceProduct)
+        {
+            drequest.routeResourcePath = RK_REQUEST_PROD_DETAIL;
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+            respClass = [FSProItemEntity class];
+            
+        }
+        [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
+            if (resp.isSuccess)
+            {
+                [blockViewForRefresh setData:resp.responseData];
+                NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
+                if (blockSelf->_sourceType==FSSourcePromotion)
+                    navTitle = NSLocalizedString(@"promotion detail", nil);
+                [blockSelf.navigationItem setTitle:navTitle] ;
+                blockViewForRefresh.showViewMask= FALSE;
+                [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+            } else
+            {
+                [self onButtonCancel];
+            }
+            
+        }];
 
+    } else
+    {
+        [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
+            [blockViewForRefresh setData:input];
+            blockViewForRefresh.showViewMask= FALSE;
+            NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
+            if (blockSelf->_sourceType==FSSourcePromotion)
+                navTitle = NSLocalizedString(@"promotion detail", nil);
+            [blockSelf.navigationItem setTitle:navTitle] ;
+            [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+            
+        } errorCallback:^{
+            [self onButtonCancel];
+        }];
+ 
+    }
+  [self hideCommentInputView:nil];
 }
 
+-(void)delayLoadComments:(NSNumber *)proId
+{
+    __block FSDetailBaseView * blockViewForRefresh = self.paginatorView.currentPage;
+    if (!blockViewForRefresh)
+        return;
+    FSCommonCommentRequest * request=[[FSCommonCommentRequest alloc] init];
+    request.routeResourcePath = RK_REQUEST_COMMENT_LIST;
+    request.sourceid = proId;
+    request.sourceType =[NSNumber numberWithInt:blockViewForRefresh.pType];//promotion
+    request.nextPage = @1;
+    request.pageSize = @100;
+    request.refreshTime = [[NSDate alloc] init];
+    request.rootKeyPath = @"data.comments";
+    [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        if (resp.isSuccess)
+        {
+            [[blockViewForRefresh data] setComments:resp.responseData];
+            if (blockViewForRefresh)
+                [[(id)blockViewForRefresh tbComment] reloadData];
+            
+        }
+        else
+        {
+            NSLog(@"comment list failed");
+        }
+        
+    }];
+
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -293,8 +299,14 @@
         else
         {
             FSCoupon *coupon = respData.responseData;
-            //FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
-            
+            FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
+            if ([view.data isKindOfClass:[FSProdItemEntity class]])
+            {
+                ((FSProdItemEntity *)view.data).couponTotal ++;
+            } else if ([view.data isKindOfClass:[FSProItemEntity class]])
+            {
+                 ((FSProItemEntity *)view.data).couponTotal ++;
+            }
             //add pass to passbook
             if (coupon.pass &&
                 [PKPass class])
@@ -308,8 +320,7 @@
                     [self presentViewController:passController animated:TRUE completion:nil];
                 }
             }
-            [blockSelf updateProgress:NSLocalizedString(@"coupon added to account",nil)];
-            [blockSelf updateProgressThenEnd:NSLocalizedString(@"coupon use instruction",nil) withDuration:3];
+            [blockSelf updateProgressThenEnd:NSLocalizedString(@"coupon use instruction",nil) withDuration:2];
         }
 
     }];
@@ -327,38 +338,49 @@
     {
         request.routeResourcePath = _sourceType==FSSourceProduct?RK_REQUEST_FAVOR_PROD_REMOVE:RK_REQUEST_FAVOR_PRO_REMOVE;
     }
-    [self updateFavorButtonStatus:button canFavored:favored];
+    FSDetailBaseView *view = self.paginatorView.currentPage;
+    if ([view.data isKindOfClass:[FSProdItemEntity class]])
+    {
+        ((FSProdItemEntity *)view.data).isFavored = !favored;
+    } else if ([view.data isKindOfClass:[FSProItemEntity class]])
+    {
+        ((FSProItemEntity *)view.data).isFavored = !favored;
+    }
+
     button.enabled = false;
     __block FSProDetailViewController *blockSelf = self;
     
     [request send:[self convertSourceTypeToClass:_sourceType] withRequest:request completeCallBack:^(FSEntityBase *respData){
         if (respData.isSuccess)
         {
-            proItem =  respData.responseData;
             
             FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
-            if (!favored)
+            if ([view.data isKindOfClass:[FSProdItemEntity class]])
             {
-                [proItem setValue:[NSNumber numberWithBool:TRUE] forKey:@"isFavored"];
-
-            } else
+                ((FSProdItemEntity *)view.data).isFavored = !favored;
+                if (favored)
+                    ((FSProdItemEntity *)view.data).favorTotal --;
+                else
+                    ((FSProdItemEntity *)view.data).favorTotal ++;
+            } else if ([view.data isKindOfClass:[FSProItemEntity class]])
             {
-                [proItem setValue:[NSNumber numberWithBool:FALSE] forKey:@"isFavored"];
+                ((FSProItemEntity *)view.data).isFavored = !favored;
+                if (favored)
+                    ((FSProItemEntity *)view.data).favorTotal --;
+                else
+                    ((FSProItemEntity *)view.data).favorTotal ++;
             }
-            [view setData:proItem];
+
             if (favored &&
                 [blockSelf.dataProviderInContext respondsToSelector:@selector(proDetailViewShouldPostNotification:)])
             {
                 BOOL shouldPostMesg = [blockSelf.dataProviderInContext proDetailViewShouldPostNotification:blockSelf];
                 if (shouldPostMesg)
                 {
-                    [[NSNotificationCenter defaultCenter] postNotificationName:LN_FAVOR_UPDATED object:[blockSelf.navContext objectAtIndex:blockSelf.currentPageIndex] ];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:LN_FAVOR_UPDATED object:[blockSelf.navContext objectAtIndex:blockSelf.paginatorView.currentPageIndex] ];
                 }
             }
-        } else
-        {
-           [blockSelf updateFavorButtonStatus:button canFavored:!favored];
-        }
+        } 
         button.enabled = TRUE;
     }];
     
@@ -410,7 +432,7 @@
                 }
                 else
                 {
-                    [self startProgress:NSLocalizedString(@"FS_PRODETAIL_GETCOUPONING", nil) withExeBlock:^(dispatch_block_t callback){
+                    [self startProgress:NSLocalizedString(@"coupon use instruction", nil) withExeBlock:^(dispatch_block_t callback){
                         [self internalGetCoupon:callback];
                     } completeCallbck:^{
                         [self endProgress];
@@ -423,7 +445,7 @@
     }
     else
     {
-        [self startProgress:NSLocalizedString(@"FS_PRODETAIL_GETCOUPONING", nil) withExeBlock:^(dispatch_block_t callback){
+        [self startProgress:NSLocalizedString(@"coupon use instruction", nil) withExeBlock:^(dispatch_block_t callback){
             [self internalGetCoupon:callback];
         } completeCallbck:^{
             [self endProgress];
@@ -690,7 +712,10 @@
         }
         else
         {
-            [[[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments] insertObject:respData.responseData atIndex:0];
+            NSMutableArray *oldComments = [[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments];
+            if (!oldComments)
+                oldComments = [@[] mutableCopy];
+            [oldComments insertObject:respData.responseData atIndex:0];
             [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
             [blockSelf hideCommentInputView:self];
             [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
@@ -779,7 +804,11 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return PRO_DETAIL_COMMENT_CELL_HEIGHT;
+    FSProCommentCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    CGFloat totalHeight = 31; //yoffset
+    totalHeight += [cell.lblComment sizeThatFits:cell.lblComment.frame.size].height;
+    
+    return MAX(PRO_DETAIL_COMMENT_CELL_HEIGHT,totalHeight+10);
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

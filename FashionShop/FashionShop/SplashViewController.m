@@ -6,7 +6,7 @@
 //  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#define PAGES 3
+#define PAGES 4
 
 #import "SplashViewController.h"
 #import "FSAppDelegate.h"
@@ -81,9 +81,9 @@
         m_entryButton.backgroundColor = [UIColor clearColor];
         
         if (APP_HIGH > 480) {
-            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+85, 400-145, 150, 54);
+            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+65, 400-205, 190, 54);
         } else {
-            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+85, 380-145, 150, 54);
+            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+65, 380-205, 190, 54);
         }
 		[m_entryButton addTarget:self action:@selector(entry) forControlEvents:UIControlEventTouchUpInside];
 		[m_pagesView addSubview:m_entryButton];

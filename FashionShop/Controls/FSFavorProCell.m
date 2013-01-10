@@ -18,10 +18,6 @@
     UIImage *deleteButtonImg;
     BOOL isInRemove;
 }
-@property (strong, nonatomic) IBOutlet UILabel *lblTitle;
-@property (strong, nonatomic) IBOutlet UILabel *lblDuration;
-@property (strong, nonatomic) IBOutlet UILabel *lblStore;
-
 
 - (IBAction)doRemoveItem:(id)sender;
 
@@ -29,7 +25,6 @@
 
 @implementation FSFavorProCell
 @synthesize data = _data;
-@synthesize lblDuration=_lblDuration,lblTitle=_lblTitle,lblStore=_lblStore;
 @synthesize deleteButton;
 
 - (id)initWithFrame:(CGRect)frame
@@ -67,11 +62,9 @@
 }
 
 
--(void) setData:(FSFavor *)dataSource{
+-(void) setData:(id)dataSource{
     if (dataSource){
         _data = dataSource;
-        _lblTitle.text = [NSString stringWithFormat:@"%@",_data.sourceName];
-        _lblStore.text = _data.store.name;
     }
 }
 
@@ -96,14 +89,16 @@
 
 - (void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop
 {
-    if (!self.imgResource.image)
+    if (!self.imgResource.image &&
+        [_data respondsToSelector:@selector(resources)])
     {
-        if (_data.resources && _data.resources.count>0)
+        if ([_data resources] && [_data resources].count>0)
         {
-            NSURL *url = [(FSResource *)_data.resources[0] absoluteUrl];
+            FSResource *resource = [[_data resources] objectAtIndex:0];
+            NSURL *url = [resource absoluteUrl];
             if (url)
             {
-                [self.imgResource setImageUrl:url resizeWidth:crop];
+                [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor)];
             }
         }
        

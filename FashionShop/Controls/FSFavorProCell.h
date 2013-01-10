@@ -16,7 +16,7 @@
 
 @property (assign, nonatomic) IBOutlet UIImageView *imgResource;
 
-@property (strong,nonatomic) FSFavor *data;
+@property (strong,nonatomic) id data;
 @property (strong,nonatomic) UIButton *deleteButton;
 
 

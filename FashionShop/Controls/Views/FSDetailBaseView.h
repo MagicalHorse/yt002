@@ -13,6 +13,7 @@
 
 @property(nonatomic,strong) id data;
 @property(nonatomic) FSSourceType pType;
+@property(nonatomic) BOOL showViewMask;
 
 -(void)resetScrollViewSize;
 -(void) updateInteraction:(id)updatedEntity;

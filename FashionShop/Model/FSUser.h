@@ -38,7 +38,7 @@
 +(FSUser *) localProfile;
 
 +(NSString *) localLoginToken;
-
++(NSNumber *) localLoginUid;
 
 +(NSString *) localDeviceToken;
 

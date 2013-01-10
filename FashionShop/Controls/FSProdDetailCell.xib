@@ -48,6 +48,7 @@
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="419431860"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<int key="IBUIContentMode">1</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
@@ -205,7 +206,7 @@
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
 					<string key="className">FSProdDetailCell</string>
-					<string key="superclassName">PSUICollectionViewCell_</string>
+					<string key="superclassName">PSUICollectionViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="btnPrice">UIButton</string>
 						<string key="imgPic">UIImageView</string>

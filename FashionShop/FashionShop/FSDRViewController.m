@@ -65,6 +65,16 @@
 
 -(void)prepareData
 {
+    UIBarButtonItem *baritemSet= nil;
+    if (!_daren.isLiked)
+        baritemSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
+    else
+    {
+            baritemSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
+    }
+    [self.navigationItem setRightBarButtonItem:baritemSet];
+    [self replaceBackItem];
+
     [self prepareEnterView:self.view];
     FSCommonUserRequest *request = [self createDRRequest];
     [self beginLoading:self.view];
@@ -114,13 +124,10 @@
 
 -(void) presentData:(BOOL)isUpdateCollection
 {
-    UIBarButtonItem *baritemSet= nil;
-    if (!_daren.isLiked)
-        baritemSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
-    else
-        baritemSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
-    [self.navigationItem setRightBarButtonItem:baritemSet];
-    [self replaceBackItem];
+    if ([_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
+    {
+        self.navigationItem.rightBarButtonItem.enabled = FALSE;
+    }
     _thumLogo.ownerUser = _daren;
     _lblNickie.text = _daren.nickie;
     _lblNickie.font = ME_FONT(18);
@@ -277,23 +284,23 @@
 {
     if (_daren.userLevelId == FSDARENUser)
     {
-    FSProListRequest *request = [[FSProListRequest alloc] init];
-    request.routeResourcePath = RK_REQUEST_PROD_DR_LIST;
-    request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    if(isRefresh)
-    {
-        request.requestType = 0;
-        request.previousLatestDate = _refreshLatestDate;
-    }
-    else
-    {
-        request.requestType = 1;
-        request.previousLatestDate = _firstLoadDate;
-    }
-    request.nextPage = page;
-    request.pageSize = COMMON_PAGE_SIZE;
-    request.drUserId = [NSNumber numberWithInt:_userId];
+        FSProListRequest *request = [[FSProListRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_PROD_DR_LIST;
+        request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        if(isRefresh)
+        {
+            request.requestType = 0;
+            request.previousLatestDate = _refreshLatestDate;
+        }
+        else
+        {
+            request.requestType = 1;
+            request.previousLatestDate = _firstLoadDate;
+        }
+        request.nextPage = page;
+        request.pageSize = COMMON_PAGE_SIZE;
+        request.drUserId = [NSNumber numberWithInt:_userId];
         return request;
     } else
     {
@@ -310,7 +317,7 @@
             request.nextPage =[NSNumber numberWithInt:page];
         request.userid = [NSNumber numberWithInt:_userId];
         return request;
-
+        
     }
  
 }

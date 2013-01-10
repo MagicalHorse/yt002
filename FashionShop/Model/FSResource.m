@@ -48,8 +48,8 @@
 {
     if (relativePath && domain)
     {
-        NSString *relative = [self composeRelativeFromWidth:120];
-    
+        NSString *relative = [self composeRelativeFromWidth:120*RetinaFactor];
+        
         return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
     }
     else
@@ -59,7 +59,7 @@
 {
     if (relativePath && domain)
     {
-        NSString *relative = [self composeRelativeFromWidth:320];
+        NSString *relative = [self composeRelativeFromWidth:320*RetinaFactor];
         
         return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
     }

@@ -14,6 +14,7 @@
 
 #define LOCAL_STORE_USER_KEY @"useraccountprofile"
 #define LOCAL_STORE_USER_LOGIN_TOKEN @"userlogintoken"
+#define LOCAL_STORE_USER_LOGIN_UID @"userloginid"
 #define LOCAL_STORE_DEVICE_TOKEN @"useraccountdevicetoken"
 
 @implementation FSUser
@@ -57,6 +58,7 @@
 {
     [[FSLocalPersist sharedPersist] removeObjectInMemory:LOCAL_STORE_USER_KEY];
     [[FSLocalPersist sharedPersist] removeObjectInDisk:LOCAL_STORE_USER_LOGIN_TOKEN];
+     [[FSLocalPersist sharedPersist] removeObjectInDisk:LOCAL_STORE_USER_LOGIN_UID];
     [[FSModelManager sharedModelManager] removeWeiboAuthCache];
     
 }
@@ -70,6 +72,10 @@
 +(NSString *) localLoginToken
 {
     return [[FSLocalPersist sharedPersist] objectInDisk:LOCAL_STORE_USER_LOGIN_TOKEN];
+}
++(NSNumber *) localLoginUid
+{
+    return [[FSLocalPersist sharedPersist] objectInDisk:LOCAL_STORE_USER_LOGIN_UID];
 }
 
 
@@ -90,6 +96,7 @@
 {
     [[FSLocalPersist sharedPersist] setObjectInMemory:self toKey:LOCAL_STORE_USER_KEY];
     [[FSLocalPersist sharedPersist] setObjectInDisk:self.uToken toKey:LOCAL_STORE_USER_LOGIN_TOKEN];
+    [[FSLocalPersist sharedPersist] setObjectInDisk:self.uid toKey:LOCAL_STORE_USER_LOGIN_UID];
 
 }
 

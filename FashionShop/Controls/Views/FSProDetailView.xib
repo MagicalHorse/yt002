@@ -43,7 +43,7 @@
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="452384983">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">287</int>
+						<int key="NSvFlags">279</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUILabel" id="441918326">
 								<reference key="NSNextResponder" ref="452384983"/>
@@ -107,7 +107,7 @@
 							</object>
 							<object class="IBUIScrollView" id="74980798">
 								<reference key="NSNextResponder" ref="452384983"/>
-								<int key="NSvFlags">292</int>
+								<int key="NSvFlags">278</int>
 								<array class="NSMutableArray" key="NSSubviews">
 									<object class="IBUIImageView" id="97602784">
 										<reference key="NSNextResponder" ref="74980798"/>
@@ -258,8 +258,8 @@
 									</object>
 									<object class="IBUITableView" id="653673848">
 										<reference key="NSNextResponder" ref="74980798"/>
-										<int key="NSvFlags">266</int>
-										<string key="NSFrame">{{0, 328}, {319, 273}}</string>
+										<int key="NSvFlags">290</int>
+										<string key="NSFrame">{{0, 350}, {319, 273}}</string>
 										<reference key="NSSuperview" ref="74980798"/>
 										<reference key="NSNextKeyView" ref="214290843"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -312,7 +312,7 @@
 								<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
 							</object>
 						</array>
-						<string key="NSFrame">{{0, 2}, {320, 414}}</string>
+						<string key="NSFrameSize">{320, 414}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSNextKeyView" ref="441918326"/>
 						<reference key="IBUIBackgroundColor" ref="188616569"/>

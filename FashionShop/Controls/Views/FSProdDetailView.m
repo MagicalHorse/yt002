@@ -41,14 +41,18 @@
 
 -(void) prepareForReuse
 {
+    [self unregisterKVO];
     _imgThumb = nil;
     _data = nil;
     _btnBrand = nil;
+
 }
 -(void)setData:(id)data
 {
-    self.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
+    [self unregisterKVO];
     _data = data;
+    [self registerKVO];
+    self.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _imgThumb.ownerUser = _data.fromUser;
     _lblNickie.text = _data.fromUser.nickie;
     _lblNickie.font = ME_FONT(18);
@@ -73,7 +77,7 @@
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
       [self bringSubviewToFront:_lblFavorCount];
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
-    _lblDescrip.font = ME_FONT(12);
+    _lblDescrip.font = ME_FONT(13);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 0;
     origFrame = _lblDescrip.frame;
@@ -91,6 +95,11 @@
         CGSize cropSize = CGSizeMake(310, 300 );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
+    UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
+    imgBG.userInteractionEnabled = FALSE;
+    imgBG.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"prod_detail_bg"]];
+    [_imgView.superview addSubview:imgBG];
+    [_imgView.superview sendSubviewToBack:imgBG];
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
     if (distanceString.length>0)
     {
@@ -120,22 +129,85 @@
     superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
     _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
-    commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+yOff;
+    commentFrame.origin.y = superFrame.origin.y+superFrame.size.height;
     _tbComment.frame = commentFrame;
+    [self updateInteraction];
+}
+-(void)registerKVO
+{
+    if (_data)
+    {
+        [_data addObserver:self forKeyPath:@"couponTotal" options:NSKeyValueObservingOptionNew context:nil];
+        [_data addObserver:self forKeyPath:@"favorTotal" options:NSKeyValueObservingOptionNew context:nil];
+        [_data addObserver:self forKeyPath:@"isFavored" options:NSKeyValueObservingOptionNew context:nil];
+    }
+}
+-(void)unregisterKVO
+{
+    if (_data)
+    {
+        [_data removeObserver:self forKeyPath:@"couponTotal"];
+        [_data removeObserver:self forKeyPath:@"favorTotal"];
+        [_data removeObserver:self forKeyPath:@"isFavored"];
+    }
 }
 
--(void)updateInteraction:(id)updatedEntity
+-(void)updateChangeInteraction:(NSArray *)info
 {
-    _data.isFavored = [(FSProdItemEntity *)updatedEntity isFavored];
-    _data.isCouponed = [(FSProdItemEntity *)updatedEntity isCouponed];
-    
+    NSString *key = info[0];
+    if ([key isEqualToString:@"couponTotal"])
+    {
+        _lblCoupons.text = [NSString stringWithFormat:@"%d",_data.couponTotal];
+    } else if([key isEqualToString:@"favorTotal"])
+    {
+        _lblFavorCount.text = [NSString stringWithFormat:@"%d",_data.favorTotal];
+    } else if ([key isEqualToString:@"isFavored"])
+    {
+        [self updateInteraction];
+    }
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	if (![NSThread isMainThread]) {
+        
+		[self performSelectorOnMainThread:@selector(updateChangeInteraction:) withObject:@[keyPath,object] waitUntilDone:NO];
+	} else {
+		[self updateChangeInteraction:@[keyPath,object]];
+	}
+}
+
+-(void)dealloc
+{
+    [self unregisterKVO];
+}
+-(void)updateInteraction
+{
+    NSString *name = !_data.isFavored?@"bottom_nav_like_icon":@"bottom_nav_notlike_icon";
+    UIImage *sheepImage = [UIImage imageNamed:name];
+    if (!_btnFavor.customView)
+    {
+        UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        //[sheepButton addTarget:targ action:action forControlEvents:UIControlEventTouchUpInside];
+        [sheepButton setShowsTouchWhenHighlighted:YES];
+        [sheepButton addTarget:_tbComment.delegate
+                            action:@selector(doFavor:)
+              forControlEvents:UIControlEventTouchUpInside];
+        _btnFavor.customView = sheepButton;
+    }
+    UIButton *sheepButton = _btnFavor.customView;
+    [sheepButton setImage:sheepImage forState:UIControlStateNormal];
+    [sheepButton sizeToFit];
 }
 
 -(void) resetScrollViewSize
 {
     UITableView *table = self.tbComment;
     CGRect origiFrame = table.frame;
-    origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
+    CGFloat totalHeight = 0;
+    int commentCount = _data.comments.count;
+    while (--commentCount >=0) {
+        totalHeight+= [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:0]];
+    }
+    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;

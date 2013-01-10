@@ -18,11 +18,14 @@
 #import "FSBothItems.h"
 #import "FSFavorProCell.h"
 #import "FSCoupon.h"
+#import "FSPagedItem.h"
+#import "FSItemBase.h"
 #import "FSCouponViewController.h"
 #import "FSPointViewController.h"
 #import "FSLikeViewController.h"
 #import "FSCommonUserRequest.h"
 #import "FSThumnailRequest.h"
+#import "FSCommonUserRequest.h"
 #import "FSProPostMainViewController.h"
 #import "FSCommonProRequest.h"
 #import "FSLoadMoreRefreshFooter.h"
@@ -39,6 +42,7 @@
 #define LOGIN_FROM_3RDPARTY_ACTION @"LOGIN_FROM_3RDPARTY"
 #define LOGIN_GET_USER_PROFILE @"LOGIN_GET_USERPROFILE"
 #define LOGIN_GET_USER_LIKE @"LOGIN_GET_USERLIKEPRO"
+#define LOGIN_GET_USER_SHARE @"LOGIN_GET_USERSHARE"
 #define I_LIKE_COLUMNS 3;
 #define ITEM_CELL_WIDTH 100;
 #define LOADINGVIEW_HEIGHT 44
@@ -149,8 +153,8 @@
 
             if (!response.isSuccess)
             {
-                [FSUser removeUserProfile];
-                [blockSelf displayUserLogin];
+                //[FSUser removeUserProfile];
+                //[blockSelf displayUserLogin];
                 
                 if (blockSelf->completeCallBack!=nil)
                 {
@@ -174,6 +178,33 @@
         
         
     } forKey:LOGIN_GET_USER_LIKE];
+    [_dataSourceProvider setValue:^(FSFavorRequest *request,dispatch_block_t uicallback){
+        [request send:[FSPagedItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
+            
+            if (!response.isSuccess)
+            {
+                if (blockSelf->completeCallBack!=nil)
+                {
+                    blockSelf->completeCallBack(false);
+                }
+            }
+            else
+            {
+                FSPagedItem *innerResp = response.responseData;
+                if (innerResp.totalPageCount<blockSelf->_favorPageIndex+1)
+                    blockSelf->_noMoreFavor = TRUE;
+                else
+                    blockSelf->_noMoreFavor = FALSE;
+                [blockSelf fillItemslist:innerResp.items isInsert:blockSelf->_isInRefreshing];
+            }
+            if (uicallback)
+                uicallback();
+            
+            
+        }];
+        
+        
+    } forKey:LOGIN_GET_USER_SHARE];
     
     NSArray *views =[[NSBundle mainBundle] loadNibNamed:@"FSLoginView" owner:self options:nil];
     _loginView = [views objectAtIndex:0];
@@ -211,7 +242,6 @@
             [self displayUserProfile];
 
         }
-        [self registerLocalNotification];
         
     }
 
@@ -220,7 +250,13 @@
 -(void)registerLocalNotification
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didCustomerChanged:) name:LN_USER_UPDATED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
+    if (_userProfile.userLevelId==FSDARENUser)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didItemPublished:) name:LN_ITEM_UPDATED object:nil];
+    } else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
+    }
 
 }
 -(void)unregisterLocalNotification
@@ -238,12 +274,23 @@
 -(void)didFavorRemoved:(id)favorValue
 {
     FSFavor *favor =[favorValue valueForKey:@"object"];
-    if ([_likePros containsObject:favor])
-    {
-        int index = [_likePros indexOfObject:favor];
-        [_likePros removeObjectAtIndex:index];
-        [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
-    }
+    int index = [_likePros indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if ([[(FSFavor *)obj valueForKey:@"id"] isEqualToValue:[favor valueForKey:@"id"]])
+        {
+            *stop = TRUE;
+            return TRUE;
+        }
+        return FALSE;
+    }];
+    if (index ==NSNotFound)
+        return;
+    [_likePros removeObjectAtIndex:index];
+    [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+    
+}
+-(void)didItemPublished:(id)itemObj
+{
+    [self egoRefreshTableHeaderDidTriggerRefresh:nil];
 }
 -(void)didCustomerChanged:(id)user
 {
@@ -365,6 +412,7 @@
         [_loginView removeFromSuperview];
     }
     [self registerKVO];
+    [self registerLocalNotification];
     
 }
 -(void) ensureDataContext
@@ -378,6 +426,7 @@
     _isInPhotoing = FALSE;
     _favorPageIndex=0;
     _noMoreFavor=FALSE;
+    [self unregisterKVO];
     
 }
 -(void) bindUserProfile
@@ -390,6 +439,8 @@
     CGRect origFrame = _imgLevel.frame;
     origFrame.origin.x = _lblNickie.frame.origin.x+_lblNickie.frame.size.width+4;
     _imgLevel.frame = origFrame;
+    if (_userProfile.userLevelId!=FSDARENUser)
+        [_imgLevel removeFromSuperview];
     _thumbImg.ownerUser = _userProfile;
     _thumbImg.showCamera = true;
     _thumbImg.delegate = self;
@@ -410,6 +461,7 @@
     
     _vLikeHeader.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _lblLikeHeader.font = ME_FONT(12);
+    _lblLikeHeader.text = NSLocalizedString(_userProfile.userLevelId==FSDARENUser?@"i shared":@"User_Profile_Like", nil);
     
     SpringboardLayout *layout = [[SpringboardLayout alloc] init];
     layout.itemWidth = ITEM_CELL_WIDTH;
@@ -426,6 +478,7 @@
     refreshHeaderView.delegate = self;
 
     [_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
+
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateDeletionMode:)];
     longPress.delegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(endDeletionMode:)];
@@ -451,8 +504,9 @@
     if (showProgress)
         [self beginLoading:_likeView];
     _favorPageIndex = pageIndex;
-    FSFavorRequest *request = [self createRequest:pageIndex];
-    ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:LOGIN_GET_USER_LIKE])(request,^{
+    FSEntityRequestBase *request = [self createRequest:pageIndex];
+    NSString *blockKey = _userProfile.userLevelId==FSDARENUser?LOGIN_GET_USER_SHARE:LOGIN_GET_USER_LIKE;
+    ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
         if (showProgress)
             [self endLoading:_likeView];
         if (callback)
@@ -461,17 +515,29 @@
  
 }
 
--(FSFavorRequest *)createRequest:(int)page
+-(FSEntityRequestBase *)createRequest:(int)page
 {
-    FSFavorRequest *request = [[FSFavorRequest alloc] init];
-    request.userToken = _userProfile.uToken;
-    request.productType = FSSourceAll;
-    request.routeResourcePath = RK_REQUEST_FAVOR_LIST;
-    request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE] ;
-    request.nextPage =[NSNumber numberWithInt:page];
-    return request;
+    if (_userProfile.userLevelId == FSDARENUser)
+    {
+        FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
+        request.userToken = _userProfile.uToken;
+        request.routeResourcePath = RK_REQUEST_PRO_BOTH_LIST;
+        request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE] ;
+        request.pageIndex =[NSNumber numberWithInt:page];
+        return request;
+        
+    } else
+    {
+        FSFavorRequest *request = [[FSFavorRequest alloc] init];
+        request.userToken = _userProfile.uToken;
+        request.productType = FSSourceAll;
+        request.routeResourcePath = RK_REQUEST_FAVOR_LIST;
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE] ;
+        request.nextPage =[NSNumber numberWithInt:page];
+        return request;
+    }
 }
 
 -(void)loadMore
@@ -541,6 +607,45 @@
         }
         
     }
+}
+-(void)fillItemslist:(NSArray *)list isInsert:(BOOL)isInsert
+{
+    if (!_likePros)
+    {
+        _likePros = [@[] mutableCopy];
+    }
+    if (isInsert)
+        [_likePros removeAllObjects];
+    if (list)
+    {
+        [list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            int index = [_likePros indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
+                if ([(FSItemBase *)obj1 sourceId] ==[(FSItemBase *)obj sourceId] &&
+                    [(FSItemBase *)obj1 sourceType]==[(FSItemBase *)obj sourceType])
+                {
+                    return TRUE;
+                    *stop1 = TRUE;
+                }
+                return FALSE;
+            }];
+            if (index== NSNotFound)
+            {
+                [_likePros addObject:obj];
+                if (!isInsert)
+                {
+                    [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
+                }
+            }
+        }];
+        if (isInsert)
+            [_likeView reloadData];
+        if (_likePros.count<1)
+        {
+            [self showNoResult:_likeView withText:NSLocalizedString(@"no shared item", nil)];
+        }
+        
+    }
+
 }
 
 -(void)filterAccount:(int)index
@@ -701,7 +806,7 @@
     if (index>=totalCount)
         return nil;
     PSUICollectionViewCell *cell = nil;
-    FSFavor *item = [_likePros objectAtIndex:index];
+    id item = [_likePros objectAtIndex:index];
         cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSFavorProCell" forIndexPath:indexPath];
         [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
         ((FSFavorProCell *)cell).data = item;;
@@ -726,9 +831,9 @@
         return;
     }
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    detailView.navContext = [_likePros mutableCopy];
+    detailView.navContext = [_likePros copy];
     detailView.indexInContext = indexPath.row* [self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
-    detailView.sourceType = [(FSFavor *)[_likePros objectAtIndex:detailView.indexInContext] sourceType];
+    detailView.sourceType = [[[_likePros objectAtIndex:detailView.indexInContext] valueForKey:@"sourceType"] intValue];
     detailView.dataProviderInContext = self;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
     [self presentViewController:navControl animated:true completion:nil];
@@ -745,12 +850,26 @@
     FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
     if (cell)
     {
-        FSFavorRequest *removeRequest = [[FSFavorRequest alloc] init];
-        removeRequest.userToken = _userProfile.uToken;
-        removeRequest.id = [NSNumber numberWithInt:[(FSFavorProCell *)cell data].id];
-        removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+        FSEntityRequestBase *request = nil;
+        if (_userProfile.userLevelId == FSDARENUser) {
+            FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
+            removeRequest.uToken = _userProfile.uToken;
+            removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
+           
+            removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
+            removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
+            request = removeRequest;
+            
+        } else
+        {
+           FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
+            removeRequest.userToken = _userProfile.uToken;
+            removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
+            removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+            request = removeRequest;
+        }
         [self beginLoading:cell];
-        [removeRequest send:[FSModelBase class] withRequest:removeRequest completeCallBack:^(FSEntityBase * resp){
+        [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
             [self endLoading:cell];
             if (!resp.isSuccess)
             {
@@ -763,6 +882,7 @@
                 
             }
         }];
+        
     }
 }
 
@@ -907,8 +1027,8 @@
                    layout:(SpringboardLayout *)collectionViewLayout
  heightForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSFavor * data = [_likePros objectAtIndex:indexPath.row];
-    FSResource * resource = data.resources&&data.resources.count>0?[data.resources objectAtIndex:0]:nil;
+    id data = [_likePros objectAtIndex:indexPath.row];
+    FSResource * resource = [data resources]&&[data resources].count>0?[[data resources] objectAtIndex:0]:nil;
     float totalHeight = 40.0f;
     if (resource)
     {
@@ -924,27 +1044,53 @@
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 
 {
-    __block FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
     FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
-    request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-    request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
-    request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    request.uToken = [FSModelManager sharedModelManager].loginToken;
     Class respClass;
-    
-    if (favorCurrent.sourceType == FSSourceProduct)
+    if (_userProfile.userLevelId == FSDARENUser)
     {
-        request.pType = FSSourceProduct;
-        request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-        respClass = [FSProdItemEntity class];
-    }
-    else
-    {
-        request.pType = FSSourcePromotion;
-        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-        respClass = [FSProItemEntity class];
+        FSItemBase *itemCurrent = [view.navContext objectAtIndex:index];
+        request.id = [NSNumber numberWithInt:itemCurrent.sourceId];
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.uToken = [FSModelManager sharedModelManager].loginToken;
         
+        if (itemCurrent.sourceType == FSSourceProduct)
+        {
+            request.pType = FSSourceProduct;
+            request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            request.pType = FSSourcePromotion;
+            request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+            respClass = [FSProItemEntity class];
+            
+        }
+        
+    } else
+    {
+        FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
+        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+        request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.uToken = [FSModelManager sharedModelManager].loginToken;
+        
+        
+        if (favorCurrent.sourceType == FSSourceProduct)
+        {
+            request.pType = FSSourceProduct;
+            request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            request.pType = FSSourcePromotion;
+            request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
+            respClass = [FSProItemEntity class];
+            
+        }
     }
     [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
         if (!resp.isSuccess)
@@ -957,7 +1103,6 @@
             block(resp.responseData);
         }
     }];
-
 }
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {

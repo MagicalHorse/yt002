@@ -10,6 +10,7 @@
 #import "FSImageCollectionCell.h"
 #define I_LIKE_COLUMNS 3;
 #define ITEM_CELL_WIDTH 100;
+#define IMAGE_MODAL_IDENTIFIER 2000
 @interface FSImageUploadCell()
 {
     PSUICollectionView *imageView;
@@ -125,6 +126,14 @@
     }
     
 }
+-(void)didHideModalImage
+{
+    UIView *modalView = [theApp.window viewWithTag:IMAGE_MODAL_IDENTIFIER];
+    if (modalView)
+    {
+        [modalView removeFromSuperview];
+        modalView = nil;}
+}
 #pragma mark - spring board layout delegate
 
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout
@@ -141,6 +150,19 @@
     int cellWidth = ITEM_CELL_WIDTH;
     return (cellWidth * data.size.height)/(data.size.width);
    
+}
+-(void)collectionView:(PSTCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIView *modalImageView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:modalImageView.frame];
+    imageView.image = [_images objectAtIndex:indexPath.row];
+    imageView.userInteractionEnabled = FALSE;
+    [modalImageView addSubview:imageView];
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didHideModalImage)];
+    [modalImageView addGestureRecognizer:tapGesture];
+    modalImageView.tag = IMAGE_MODAL_IDENTIFIER;
+    [theApp.window addSubview:modalImageView];
+    [theApp.window bringSubviewToFront:modalImageView];
 }
 
 @end

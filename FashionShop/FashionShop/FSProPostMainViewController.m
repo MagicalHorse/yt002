@@ -196,10 +196,10 @@
         [self internalDoSave:callback];
     } completeCallbck:^{
         [self endProgress];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
     }];
 
 }
-
 
 -(void) setProgress:(PostProgressStep)step withObject:(id)value
 {
@@ -263,9 +263,7 @@
         default:
             break;
     }
-    _pvIndicator.progress = [self uploadPercent];
-    [_pvIndicator setNeedsDisplay];
-    if (_pvIndicator.progress>=1)
+    if ([self uploadPercent]>=1)
     {
         UIBarButtonItem *rightButton = self.navigationItem.rightBarButtonItem;
         [rightButton setEnabled:true];
@@ -281,7 +279,7 @@
     int finishedFields = 0;
     int totalFields = _totalFields;
     _proRequest.imgs &&_proRequest.imgs.count>0 && (_mustFields&ImageField)?finishedFields++:finishedFields;
-    _proRequest.descrip && (_mustFields&TitleField)?finishedFields++:finishedFields;
+    _proRequest.title && (_mustFields&TitleField)?finishedFields++:finishedFields;
     _proRequest.startdate &&(_mustFields & DurationField)?finishedFields++:finishedFields;
     _proRequest.enddate&&(_mustFields &DurationField)?finishedFields++:finishedFields;
     _proRequest.brandId&&(_mustFields &TagField)?finishedFields++:finishedFields;
@@ -585,7 +583,15 @@
 }
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(SCREEN_WIDTH, SCREEN_HIGH);
+    NSLog(@"image.size:%@", NSStringFromCGSize(image.size));
+    CGSize newSize;
+    if (isRetina) {
+        newSize = CGSizeMake(image.size.width/2, image.size.height/2);
+    }
+    else {
+        newSize = image.size;
+    }
+    NSLog(@"newSize:%@", NSStringFromCGSize(newSize));
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size

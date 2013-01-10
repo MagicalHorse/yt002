@@ -36,6 +36,7 @@
 //notification
 #define LN_USER_UPDATED @"LN_USER_UPDATED"
 #define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
+#define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
 #define COMMON_PAGE_SIZE 10
 
 //HeQingshan
@@ -50,7 +51,12 @@
 #define BODY_HIGH       APP_HIGH - NAV_HIGH - TAB_HIGH
 #define theApp          ((FSAppDelegate *) [[UIApplication sharedApplication] delegate])
 #define STATUSBAR_HIGH  ([UIApplication sharedApplication].statusBarHidden?0:20)
-
+//当前设备是否支持高清
+#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+//是否高清，放大系数
+#define RetinaFactor (isRetina?2:1)
+// 是否iPad
+#define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
 #define RGBACOLOR(r,g,b,a)       [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 #define RGBCOLOR(r,g,b)          [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]

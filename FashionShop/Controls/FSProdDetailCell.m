@@ -50,7 +50,7 @@
             NSURL *url = [(FSResource *)_data.resource[0] absoluteUrl];
             if (url)
             {
-                [_imgPic setImageUrl:url resizeWidth:crop];
+                [_imgPic setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor)];
             }
         }
         

@@ -68,9 +68,12 @@
 						<int key="IBUISystemItemIdentifier">5</int>
 					</object>
 					<object class="IBUIBarButtonItem" id="804649154">
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">camera_gala_icon.png</string>
+						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<reference key="IBUIToolbar" ref="44244137"/>
-						<int key="IBUISystemItemIdentifier">9</int>
 					</object>
 				</array>
 			</object>
@@ -213,10 +216,10 @@
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
-		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">goback_icon.png</string>
-			<string key="NS.object.0">{24, 24}</string>
-		</object>
+		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
+			<string key="camera_gala_icon.png">{24, 23}</string>
+			<string key="goback_icon.png">{24, 24}</string>
+		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">1929</string>
 	</data>
 </archive>

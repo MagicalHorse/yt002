@@ -61,6 +61,7 @@
     [_txtTitle setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtTitle.layer.borderWidth = 1;
     _txtTitle.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+    _txtTitle.placeholder =NSLocalizedString(@"only 40 chars allowed", nil);
     [_txtDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtDesc.layer.borderWidth = 2;
     _txtDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
@@ -90,12 +91,6 @@
         _txtTitle.text.length<40))
     {
         [self reportError:NSLocalizedString(@"PRO_POST_TITLE_LENGTH_ERROR", nil)];
-        return FALSE;
-    }
-    if (!(_txtDesc.text.length>0 &&
-        _txtDesc.text.length<100))
-    {
-        [self reportError:NSLocalizedString(@"PRO_POST_DESC_LENGTH_ERROR", nil)];
         return FALSE;
     }
     return YES;
@@ -138,9 +133,7 @@
         if ([delegate respondsToSelector:@selector(titleViewControllerSetTitle:)])
         {
             [delegate titleViewControllerSetTitle:self];
-        }//[delegate proPostStep:PostStep2Finished didCompleteWithObject:@[_txtTitle.text,_txtDesc.text]];
-        //[self.navigationController popViewControllerAnimated:TRUE];
-        
+        } 
     }
 
 }

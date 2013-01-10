@@ -55,7 +55,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	_paginator.frame =self.view.bounds;
+	_paginator.frame =self.view.frame;
     [self.view addSubview:_paginator];
 }
 
@@ -64,7 +64,7 @@
 
 - (void)_initialize {
 	_paginator = [[SYPaginatorView alloc] initWithFrame:CGRectZero];
-	_paginator.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	_paginator.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
 	_paginator.dataSource = self;
 	_paginator.delegate = self;
 }

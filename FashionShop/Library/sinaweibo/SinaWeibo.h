@@ -67,6 +67,8 @@
 // isLoggedIn && isAuthorizeExpired
 - (BOOL)isAuthValid;
 
+-(void) removeAuthData;
+
 - (SinaWeiboRequest*)requestWithURL:(NSString *)url
                              params:(NSMutableDictionary *)params
                          httpMethod:(NSString *)httpMethod

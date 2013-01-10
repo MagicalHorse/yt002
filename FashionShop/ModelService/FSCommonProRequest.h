@@ -14,6 +14,8 @@
 #define RK_REQUEST_PRO_DETAIL @"/promotion/detail"
 #define RK_REQUEST_PROD_UPLOAD @"/product/create"
 #define RK_REQUEST_PROD_DETAIL @"/product/detail"
+#define RK_REQUEST_PROD_REMOVE @"/product/destroy"
+#define RK_REQUEST_PRO_REMOVE @"/promotion/destroy"
 
 @interface FSCommonProRequest : FSEntityRequestBase<RKRequestDelegate>
 
@@ -35,6 +37,7 @@
 @property(nonatomic,strong) NSNumber *price;
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
+
 
 - (void)upload:(dispatch_block_t)blockcomplete error:(dispatch_block_t)blockerror;
 @end

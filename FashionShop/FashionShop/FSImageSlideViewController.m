@@ -67,8 +67,8 @@
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
                                                                                     action:@selector(handleTap:)];
         [imageView addGestureRecognizer:singleTap];
-            imageView.frame = CGRectOffset(imageView.frame, _svContent.frame.size.width * i, 0);
-        
+         //   imageView.frame = CGRectOffset(imageView.frame, _svContent.frame.size.width * i, 0);
+        imageView.frame = CGRectOffset(imageView.frame, _svContent.frame.size.width * i, STATUSBAR_HIGH);
         [_imageContains addObject:imageView];
         [_svContent addSubview:imageView];
     }
@@ -119,20 +119,17 @@
     CGFloat targetOffset = [self offsetForPage:curPage] - roundf(_pageGapWidth / 2.0f);
         if (_svContent.contentOffset.x != targetOffset) {
             [_svContent setContentOffset:CGPointMake(targetOffset, 0.0f) animated:TRUE];
-            
         }
 
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)aScrollView {
-    
-    int x = aScrollView.contentOffset.x;
-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    int x = scrollView.contentOffset.x;
     CGFloat pageWidth = _svContent.frame.size.width;
-    int nextPage = floor((_svContent.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
+    int nextPage =floor((_svContent.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     [self setCurrentPage:nextPage];
+    
 }
-
 -(void)setShowBar:(BOOL)show
 {
     if (show)

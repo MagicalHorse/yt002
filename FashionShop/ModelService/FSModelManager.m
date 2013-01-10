@@ -107,6 +107,10 @@ static FSModelManager *_modelManager;
 {
     return [FSUser localLoginToken];
 }
+-(NSNumber *) localLoginUid
+{
+    return [FSUser localLoginUid];
+}
 -(void) forceReloadTags
 {
     [self enqueueBackgroundBlock:^{
@@ -183,7 +187,7 @@ static FSModelManager *_modelManager;
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"SinaWeiboAuthData"];
     if (_weibo)
-        [_weibo logOut];
+        [_weibo removeAuthData];
 
 }
 

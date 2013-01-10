@@ -29,10 +29,22 @@
     {
         emptyView = [[UIView alloc] initWithFrame:container.frame];
         emptyView.backgroundColor = [UIColor whiteColor];
-        UIActivityIndicatorView *refreshView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        refreshView.frame = CGRectMake(emptyView.frame.size.width/2-30,emptyView.frame.origin.y+50, 50, 50);
-        [emptyView addSubview:refreshView];
-        [refreshView startAnimating];
+        UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_ENTER_VIEW];
+        if(!loadMoreView)
+        {
+            loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-20,container.frame.origin.y+50, 40, 40)];
+        }
+        [emptyView addSubview:loadMoreView];
+        [loadMoreView.layer removeAllAnimations];
+        loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
+        animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
+        animation.duration = .4;
+        animation.cumulative =YES;
+        animation.repeatCount = 2000;
+        [loadMoreView.layer addAnimation:animation forKey:@"animation"];
+        [loadMoreView startAnimating];
 
         emptyView.tag = UIVIEWCONTROLLER_CAT_ENTER_VIEW;
     }
@@ -48,29 +60,24 @@
     UIView *emptyView =(UIView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_ENTER_VIEW];
     if (emptyView)
     {
+        if (emptyView.subviews.count>0)
+        {
+            UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
+            if (loadMoreView)
+            {
+                [loadMoreView.layer removeAllAnimations];
+                loadMoreView.image = nil;
+                [loadMoreView removeFromSuperview];
+            }
+        }
         [emptyView removeFromSuperview];
     }
-
 }
 
 -(void) beginLoading:(UIView *)container
 {
     if (!container)
         container = self.view;
-    /*
-    UIActivityIndicatorView *refreshView =(UIActivityIndicatorView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
-    
-    if(!refreshView)
-    {
-        refreshView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-      //  refreshView.center = self.view.center;
-        refreshView.frame = CGRectMake(self.view.frame.size.width/2-30,self.view.frame.origin.y+50, 50, 50);
-        refreshView.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
-    }
-    [refreshView startAnimating];
-    [container addSubview:refreshView];
-    [container bringSubviewToFront:refreshView];
-     */
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
     if(!loadMoreView)
     {
