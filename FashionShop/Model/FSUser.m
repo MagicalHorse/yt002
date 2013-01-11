@@ -47,9 +47,7 @@
 +(RKObjectMapping *) getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"likecount",@"likeTotal",@"likedcount",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",nil];
-   // RKObjectMapping *couponRelationMap = [FSCoupon getRelationDataMap];
-   // [relationMap mapKeyPath:@"coupons" toRelationship:@"coupons" withMapping:couponRelationMap];
+    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",nil];
     return relationMap;
 }
 

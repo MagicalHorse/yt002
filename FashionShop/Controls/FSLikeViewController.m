@@ -6,32 +6,27 @@
 //  Copyright (c) 2012 Fashion. All rights reserved.
 //
 
-#import "FSCouponViewController.h"
+#import "FSLikeViewController.h"
 #import "UIViewController+Loading.h"
-#import "FSCouponDetailCell.h"
-#import "FSCouponProDetailCell.h"
+#import "FSLikeDetailCell.h"
 #import "FSCommonUserRequest.h"
-#import "FSPagedCoupon.h"
+#import "FSPagedLike.h"
 #import "FSModelManager.h"
-#import "FSCommonProRequest.h"
-#import "FSLocationManager.h"
-
 #import "FSDRViewController.h"
 
-@interface FSCouponViewController ()
+@interface FSLikeViewController ()
 {
     NSMutableArray *_likes;
     int _currentPage;
     BOOL _noMore;
     BOOL _inLoading;
-
+    UIRefreshControl *_refreshControl;
 }
 
 @end
 
-#define USER_COUPON_TABLE_CELL @"usercoupontablecell"
-#define USER_COUPON_PRO_TABLE_CELL @"usercouponprotablecell"
-@implementation FSCouponViewController
+#define USER_LIKE_TABLE_CELL @"userliketablecell"
+@implementation FSLikeViewController
 @synthesize currentUser;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -46,13 +41,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
-    [self.navigationItem setLeftBarButtonItem:baritemCancel];
-    [_contentView registerNib:[UINib nibWithNibName:@"FSCouponDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_TABLE_CELL];
-    [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
+    [_contentView registerNib:[UINib nibWithNibName:@"FSLikeDetailCell" bundle:Nil] forCellReuseIdentifier:USER_LIKE_TABLE_CELL];
     [self prepareData];
     [self preparePresent];
     
+    //添加返回按钮
+    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
+    [self.navigationItem setLeftBarButtonItem:baritemCancel];
+}
+
+- (IBAction)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) prepareData
@@ -62,14 +61,25 @@
         [self beginLoading:_contentView];
         _currentPage = 1;
         FSCommonUserRequest *request = [self createRequest:_currentPage];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedLike class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:_contentView];
             if (resp.isSuccess)
             {
-                FSPagedCoupon *innerResp = resp.responseData;
+                FSPagedLike *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=_currentPage)
                     _noMore = true;
                 [self mergeLike:innerResp isInsert:false];
+                
+                //刷新Me的主页显示数量
+                FSUser *localUser = (FSUser *)[FSUser localProfile];
+                if ([currentUser.uid isEqualToNumber:localUser.uid]) {
+                    if (self.likeType == 0) {
+                        localUser.likeTotal = innerResp.totalCount;
+                    }
+                    else if(self.likeType == 1) {
+                        localUser.fansTotal = innerResp.totalCount;
+                    }
+                }
             }
             else
             {
@@ -80,14 +90,13 @@
 }
 -(void) preparePresent
 {
-    self.navigationItem.title = NSLocalizedString(@"Promotion codes", nil);
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
         FSCommonUserRequest *request = [self createRequest:1];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
+        [request send:[FSPagedLike class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
             action();
             if (resp.isSuccess)
             {
-                FSPagedCoupon *innerResp = resp.responseData;
+                FSPagedLike *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=_currentPage)
                     _noMore = true;
                 [self mergeLike:innerResp isInsert:true];
@@ -97,16 +106,12 @@
                 [self reportError:resp.errorDescrip];
             }
         }];
-
     }];
     _contentView.dataSource = self;
     _contentView.delegate =self;
 }
-- (IBAction)onButtonBack:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
--(void) mergeLike:(FSPagedCoupon *)response isInsert:(BOOL)isinsert
+-(void) mergeLike:(FSPagedLike *)response isInsert:(BOOL)isinsert
 {
     if (!_likes)
     {
@@ -116,7 +121,7 @@
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likes indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([[(FSCoupon *)obj1 valueForKey:@"id"] isEqualToValue:[(FSCoupon *)obj valueForKey:@"id" ]])
+                if ([[(FSUser *)obj1 valueForKey:@"uid"] isEqualToValue:[(FSUser *)obj valueForKey:@"uid"]])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -130,7 +135,7 @@
                 else
                     [_likes addObject:obj];
             }
-            
+
         }];
         [_contentView reloadData];
     }
@@ -140,16 +145,19 @@
 -(FSCommonUserRequest *)createRequest:(int)index
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
-    request.userToken =[FSModelManager sharedModelManager].loginToken;
+    request.userToken = currentUser?currentUser.uToken:[FSModelManager sharedModelManager].loginToken;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
     request.pageIndex =[NSNumber numberWithInt:index];
     request.sort = @0;
-    request.routeResourcePath = RK_REQUEST_COUPON_LIST;
+    request.likeType = [NSNumber numberWithInt:_likeType];
+    request.routeResourcePath = RK_REQUEST_LIKE_LIST;
+    if (_searchById)
+        request.userId = currentUser.uid;
     return request;
 }
 -(void) presentData
 {
-    
+  
     [_contentView reloadData];
 }
 
@@ -170,17 +178,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSCoupon *coupon = [_likes objectAtIndex:indexPath.row];
-    UITableViewCell *detailCell = nil;
-    if (coupon.producttype == FSSourceProduct)
-    {
-        detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_COUPON_TABLE_CELL];
-        [(FSCouponDetailCell *)detailCell setData:coupon];
-    } else
-    {
-        detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_COUPON_PRO_TABLE_CELL];
-        [(FSCouponProDetailCell *)detailCell setData:coupon];
-    }
+    
+    FSLikeDetailCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_LIKE_TABLE_CELL];
+    detailCell.data = [_likes objectAtIndex:indexPath.row];
     return detailCell;
     
 }
@@ -188,8 +188,9 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 75;
 }
+
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -204,26 +205,21 @@
     
 }
 
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    detailView.navContext = _likes;
-    detailView.indexInContext = indexPath.row* [self numberOfSectionsInTableView:tableView] + indexPath.section;
-    detailView.sourceType = [(FSCoupon *)[_likes objectAtIndex:detailView.indexInContext] producttype];
-    detailView.dataProviderInContext = self;
-    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
-    [self presentViewController:navControl animated:true completion:nil];
-      [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+    NSNumber *userId = [(FSUser *)[_likes objectAtIndex:indexPath.row] uid] ;
+    FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
+    dr.userId = [userId intValue];
+    [self.navigationController pushViewController:dr animated:TRUE];
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 
 {
-    [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
     if(!_inLoading &&
        (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
        &&scrollView.contentOffset.y>0
@@ -232,11 +228,11 @@
     {
         _inLoading = TRUE;
         FSCommonUserRequest *request = [self createRequest:_currentPage+1];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedLike class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
             if (resp.isSuccess)
             {
-                FSPagedCoupon *innerResp = resp.responseData;
+                FSPagedLike *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=_currentPage+1)
                     _noMore = true;
                 _currentPage ++;
@@ -252,51 +248,6 @@
     }
     
     
-}
-
-
-#pragma FSProDetailItemSourceProvider
--(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
-
-{
-    __block FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
-    FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
-    request.uToken = [FSModelManager sharedModelManager].loginToken;
-    request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-    request.id = [NSNumber numberWithInt:favorCurrent.productid];
-    request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    Class respClass;
-    if (favorCurrent.producttype == FSSourceProduct)
-    {
-        request.pType = FSSourceProduct;
-        request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-        respClass = [FSProdItemEntity class];
-    }
-    else
-    {
-        request.pType = FSSourcePromotion;
-        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-        respClass = [FSProItemEntity class];
-        
-    }
-    [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        if (!resp.isSuccess)
-        {
-            [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-            errorBlock();
-        }
-        else
-        {
-            block(resp.responseData);
-        }
-    }];
-    
-}
--(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
-{
-    FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
-    return favorCurrent.producttype;
 }
 
 - (void)didReceiveMemoryWarning

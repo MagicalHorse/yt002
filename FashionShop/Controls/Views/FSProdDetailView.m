@@ -55,7 +55,7 @@
     self.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _imgThumb.ownerUser = _data.fromUser;
     _lblNickie.text = _data.fromUser.nickie;
-    _lblNickie.font = ME_FONT(18);
+    _lblNickie.font = ME_FONT(15);
     _lblNickie.textColor =[UIColor blackColor];
     [_lblNickie sizeToFit];
     [_btnBrand setTitleColor:[UIColor colorWithRed:51 green:51 blue:51] forState:UIControlStateNormal];

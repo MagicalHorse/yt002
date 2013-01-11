@@ -39,6 +39,9 @@
 }
 -(void)prepareLayout
 {
+    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
+    [self.navigationItem setLeftBarButtonItem:baritemCancel];
+    self.title = _store.name;
     int xOff = 10;
 
     int yOff = 10;
@@ -59,13 +62,20 @@
     [locImgView setImage:locImg];
     [self.view addSubview:locImgView];
     
-    UILabel *lblAddress = [[UILabel alloc] initWithFrame:CGRectMake(locImgView.frame.origin.x+locImgView.frame.size.width+2, locImgView.frame.origin.y, 320-xOff*2, locImgView.frame.size.height)];
-    lblAddress.text = [NSString stringWithFormat:NSLocalizedString(@"address: %@", nil),_store.address];
+    int addressStartX = locImgView.frame.origin.x+locImgView.frame.size.width+2;
+    NSString *addText = [NSString stringWithFormat:NSLocalizedString(@"address: %@", nil),_store.address];
+    int addWidth = SCREEN_WIDTH-xOff-addressStartX;
+    UILabel *lblAddress = [[UILabel alloc] initWithFrame:CGRectMake(addressStartX, locImgView.frame.origin.y+2, SCREEN_WIDTH-xOff-addressStartX, 0)];
+    lblAddress.text = addText;
     lblAddress.font = ME_FONT(12);
+    lblAddress.adjustsFontSizeToFitWidth = YES;
+    lblAddress.numberOfLines = 0;
+    int height = [addText sizeWithFont:lblAddress.font constrainedToSize:CGSizeMake(addWidth, 1000) lineBreakMode:UILineBreakModeCharacterWrap].height;
+    lblAddress.frame = CGRectMake(addressStartX, locImgView.frame.origin.y, addWidth, height);
+    lblAddress.lineBreakMode = UILineBreakModeCharacterWrap;
     lblAddress.textColor =[UIColor colorWithRed:102 green:102 blue:102];
-    [lblAddress sizeToFit];
     [self.view addSubview:lblAddress];
-    curYOff=locImgView.frame.size.height+locImgView.frame.origin.y;
+    curYOff=lblAddress.frame.size.height+lblAddress.frame.origin.y;
     
     UIImage *phoneImg = [UIImage imageNamed:@"phone_icon"];
     UIImageView *phImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff2, phoneImg.size.width, phoneImg.size.height)];
@@ -114,6 +124,9 @@
                                         timeoutInterval:60.0];
     [_mapView loadRequest:request];
    
+}
+- (IBAction)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 -(NSString *)generateMapUrl
 {

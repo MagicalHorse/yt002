@@ -52,10 +52,12 @@
     [_lblCode sizeToFit];
     _lblCode.backgroundColor = [UIColor grayColor];
     _lblTitle.text = _data.productname;
-    _lblTitle.font = [UIFont fontWithName:@"HiraginoSansGB-W6" size:14];
-;
     _lblTitle.textColor = [UIColor colorWithRed:0 green:0 blue:0];
-    [_lblTitle sizeToFit];
+    _lblTitle.font = [UIFont systemFontOfSize:14];
+    _lblTitle.numberOfLines = 0;
+    _lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
+    _lblTitle.adjustsFontSizeToFitWidth = YES;
+    _lblTitle.minimumFontSize = 12;
     _lblStore.text = [NSString stringWithFormat:NSLocalizedString(@"User_Coupon_store%a", nil),_data.product.store.name];
     _lblStore.font = ME_FONT(12);
     _lblStore.textColor = [UIColor colorWithRed:102 green:102 blue:102];
@@ -74,7 +76,7 @@
         dateString = [NSString stringWithFormat:NSLocalizedString(@"coupon will expired:%@", nil),[df stringFromDate:_data.endDate]];
     }
     _lblDuration.text = dateString;
-    _lblDuration.font =ME_FONT(9);
+    _lblDuration.font =ME_FONT(10);
     _lblDuration.textColor = [UIColor colorWithRed:153 green:153 blue:153];
     [_lblDuration sizeToFit];
 

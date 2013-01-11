@@ -44,7 +44,8 @@
         return;
     }
     _data = data;
-    _lblReason.text = [NSString stringWithFormat:NSLocalizedString(@"%@ got:%dpoints",nil),_data.getReason,_data.amount];
+    _lblReason.text = _data.title;
+   // _lblReason.text = [NSString stringWithFormat:NSLocalizedString(@"%@ got:%dpoints",nil),_data.getReason,_data.amount];
     _lblReason.font = ME_FONT(14);
     _lblReason.textColor = [UIColor colorWithRed:51 green:51 blue:51];
     CGSize newSize = [_lblReason.text sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(200, 100) lineBreakMode:NSLineBreakByWordWrapping];

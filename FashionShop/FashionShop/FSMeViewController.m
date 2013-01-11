@@ -266,10 +266,18 @@
 -(void)registerKVO
 {
     [_userProfile addObserver:self forKeyPath:@"nickie" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"pointsTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"couponsTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"likeTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"fansTotal" options:NSKeyValueObservingOptionNew context:NULL];
 }
 -(void)unregisterKVO
 {
     [_userProfile removeObserver:self forKeyPath:@"nickie"];
+    [_userProfile removeObserver:self forKeyPath:@"pointsTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"couponsTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"likeTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"fansTotal"];
 }
 -(void)didFavorRemoved:(id)favorValue
 {
@@ -315,6 +323,24 @@
     if([keyPath isEqualToString:@"nickie"])
     {
         _lblNickie.text = _userProfile.nickie;
+        [_lblNickie sizeToFit];
+        
+        //更新达人标志位置
+        CGRect origFrame = _imgLevel.frame;
+        origFrame.origin.x = _lblNickie.frame.origin.x+_lblNickie.frame.size.width+4;
+        _imgLevel.frame = origFrame;
+    }
+    else if ([keyPath isEqualToString:@"pointsTotal"]) {
+        [_btnPoints setTitle:[NSString stringWithFormat:@"%d",_userProfile.pointsTotal] forState:UIControlStateNormal];
+    }
+    else if ([keyPath isEqualToString:@"couponsTotal"]) {
+        [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
+    }
+    else if ([keyPath isEqualToString:@"likeTotal"]) {//我关注的
+        [_btnLike setTitle:[NSString stringWithFormat:@"%d", _userProfile.likeTotal] forState:UIControlStateNormal];
+    }
+    else if ([keyPath isEqualToString:@"fansTotal"]) {//粉丝
+        [_btnFans setTitle:[NSString stringWithFormat:@"%d",_userProfile.fansTotal] forState:UIControlStateNormal];
     }
 }
 -(void) displayUserLogin
@@ -564,7 +590,9 @@
             _camera.allowsEditing = false;
             _isInPhotoing = true;
             [self decorateOverlayToCamera:_camera];
-            [self presentViewController:_camera animated:YES completion:nil];
+            [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
+                [self presentViewController:_camera animated:YES completion:nil];
+            }];
             
         }
     

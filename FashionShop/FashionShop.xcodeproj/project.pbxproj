@@ -256,8 +256,6 @@
 		74C0093B169EE30400DA759A /* Splash4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C00933169EE30400DA759A /* Splash4.jpg */; };
 		74C0093C169EE30400DA759A /* Splash4@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 74C00934169EE30400DA759A /* Splash4@2x.jpg */; };
 		74C0093E169EE31900DA759A /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C0093D169EE31900DA759A /* SplashViewController.m */; };
-		74C00941169EE54C00DA759A /* prod_detail_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0093F169EE54C00DA759A /* prod_detail_bg.png */; };
-		74C00942169EE54C00DA759A /* prod_detail_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C00940169EE54C00DA759A /* prod_detail_bg@2x.png */; };
 		74C018F41699105F00576942 /* FSSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C018F21699105F00576942 /* FSSearchViewController.m */; };
 		74C018F51699105F00576942 /* FSSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C018F31699105F00576942 /* FSSearchViewController.xib */; };
 		74C0190416992E9B00576942 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C0190116992E9B00576942 /* Default.png */; };
@@ -414,6 +412,8 @@
 		74CD91F91643B0FE00970F55 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74CD91F81643B0FE00970F55 /* SystemConfiguration.framework */; };
 		74CD91FB1643B12A00970F55 /* libz.1.1.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 74CD91FA1643B12A00970F55 /* libz.1.1.3.dylib */; };
 		74CD91FD1643B15800970F55 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 74CD91FC1643B15700970F55 /* MobileCoreServices.framework */; };
+		74D0E4A6169FBC9F0098DF46 /* prod_detail_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D0E4A4169FBC9F0098DF46 /* prod_detail_bg.png */; };
+		74D0E4A7169FBC9F0098DF46 /* prod_detail_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74D0E4A5169FBC9F0098DF46 /* prod_detail_bg@2x.png */; };
 		74D2B572165B58C700E3D13D /* FSCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D2B571165B58C700E3D13D /* FSCity.m */; };
 		74D2B575165B60B000E3D13D /* FSConfigListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D2B574165B60AF00E3D13D /* FSConfigListRequest.m */; };
 		74D2B57D165B6B9200E3D13D /* FSProDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74D2B57B165B6B9200E3D13D /* FSProDetailViewController.m */; };
@@ -902,8 +902,6 @@
 		74C00933169EE30400DA759A /* Splash4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Splash4.jpg; sourceTree = "<group>"; };
 		74C00934169EE30400DA759A /* Splash4@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash4@2x.jpg"; sourceTree = "<group>"; };
 		74C0093D169EE31900DA759A /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
-		74C0093F169EE54C00DA759A /* prod_detail_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prod_detail_bg.png; sourceTree = "<group>"; };
-		74C00940169EE54C00DA759A /* prod_detail_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prod_detail_bg@2x.png"; sourceTree = "<group>"; };
 		74C00943169EEE7D00DA759A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Language.strings; sourceTree = "<group>"; };
 		74C00944169EEE7E00DA759A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		74C00945169EEE7E00DA759A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
@@ -1131,6 +1129,8 @@
 		74CD91F81643B0FE00970F55 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		74CD91FA1643B12A00970F55 /* libz.1.1.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.1.3.dylib; path = usr/lib/libz.1.1.3.dylib; sourceTree = SDKROOT; };
 		74CD91FC1643B15700970F55 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		74D0E4A4169FBC9F0098DF46 /* prod_detail_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prod_detail_bg.png; sourceTree = "<group>"; };
+		74D0E4A5169FBC9F0098DF46 /* prod_detail_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prod_detail_bg@2x.png"; sourceTree = "<group>"; };
 		74D2B570165B58C600E3D13D /* FSCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCity.h; path = Model/FSCity.h; sourceTree = "<group>"; };
 		74D2B571165B58C700E3D13D /* FSCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCity.m; path = Model/FSCity.m; sourceTree = "<group>"; };
 		74D2B573165B60AF00E3D13D /* FSConfigListRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSConfigListRequest.h; path = ModelService/FSConfigListRequest.h; sourceTree = "<group>"; };
@@ -1692,8 +1692,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
-				74C0093F169EE54C00DA759A /* prod_detail_bg.png */,
-				74C00940169EE54C00DA759A /* prod_detail_bg@2x.png */,
+				74D0E4A4169FBC9F0098DF46 /* prod_detail_bg.png */,
+				74D0E4A5169FBC9F0098DF46 /* prod_detail_bg@2x.png */,
 				74C0092D169EE30400DA759A /* Splash1.jpg */,
 				74C0092E169EE30400DA759A /* Splash1@2x.jpg */,
 				74C0092F169EE30400DA759A /* Splash2.jpg */,
@@ -2650,8 +2650,8 @@
 				74C0093A169EE30400DA759A /* Splash3@2x.jpg in Resources */,
 				74C0093B169EE30400DA759A /* Splash4.jpg in Resources */,
 				74C0093C169EE30400DA759A /* Splash4@2x.jpg in Resources */,
-				74C00941169EE54C00DA759A /* prod_detail_bg.png in Resources */,
-				74C00942169EE54C00DA759A /* prod_detail_bg@2x.png in Resources */,
+				74D0E4A6169FBC9F0098DF46 /* prod_detail_bg.png in Resources */,
+				74D0E4A7169FBC9F0098DF46 /* prod_detail_bg@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

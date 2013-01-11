@@ -41,6 +41,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
+    [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointDetailCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_TABLE_CELL];
     [self prepareData];
     [self preparePresent];
@@ -145,6 +147,9 @@
 {
     
     [_contentView reloadData];
+}
+- (IBAction)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

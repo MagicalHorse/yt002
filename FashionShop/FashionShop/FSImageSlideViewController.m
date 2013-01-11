@@ -63,9 +63,9 @@
     for (int i = 0; i < [_source numberOfImagesInSlides:self]; i++) {
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:_svContent.frame];
         imageView.userInteractionEnabled = YES;
-        
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self
-                                                                                    action:@selector(handleTap:)];
+            action:@selector(handleTap:)];
         [imageView addGestureRecognizer:singleTap];
          //   imageView.frame = CGRectOffset(imageView.frame, _svContent.frame.size.width * i, 0);
         imageView.frame = CGRectOffset(imageView.frame, _svContent.frame.size.width * i, STATUSBAR_HIGH);

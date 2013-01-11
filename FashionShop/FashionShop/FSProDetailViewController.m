@@ -307,6 +307,8 @@
             {
                  ((FSProItemEntity *)view.data).couponTotal ++;
             }
+            FSUser *localUser = (FSUser *)[FSUser localProfile];
+            localUser.couponsTotal ++;
             //add pass to passbook
             if (coupon.pass &&
                 [PKPass class])

@@ -43,7 +43,7 @@
     _data = data;
     [self registerKVO];
     _lblTitle.text = _data.title;
-    _lblTitle.font = ME_FONT(18);
+    _lblTitle.font = ME_FONT(15);
     
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
     [formater setDateFormat:@"yyyy/MM/dd"];
@@ -81,7 +81,7 @@
         _data.resource.count>0)
     {
         FSResource *imgObj = _data.resource[0];
-        CGSize cropSize = CGSizeMake(self.frame.size.width, 277 );
+        CGSize cropSize = CGSizeMake(self.frame.size.width, _imgView.frame.size.height );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
     }
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];

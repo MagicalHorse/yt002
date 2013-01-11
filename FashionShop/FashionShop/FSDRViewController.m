@@ -124,7 +124,8 @@
 
 -(void) presentData:(BOOL)isUpdateCollection
 {
-    if ([_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
+    if ([FSModelManager sharedModelManager].localLoginUid &&
+        [_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
     {
         self.navigationItem.rightBarButtonItem.enabled = FALSE;
     }
@@ -424,11 +425,16 @@
         else
         {
             blockSelf->_daren.isLiked = !isRemove;
+            FSUser *localUser = (FSUser *)[FSUser localProfile];
+            NSLog(@"localUser.likeTotal:%d", localUser.likeTotal);
             if (isRemove)
             {
                 blockSelf->_daren.fansTotal--;
-            } else
+                localUser.likeTotal --;
+            } else {
                 blockSelf->_daren.fansTotal++;
+                localUser.likeTotal ++;
+            }
             [blockSelf->_btnFans setTitle:[NSString stringWithFormat:@"%d",blockSelf->_daren.fansTotal] forState:UIControlStateNormal];
         }
         self.navigationItem.rightBarButtonItem.enabled = true;
