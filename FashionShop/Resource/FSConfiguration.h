@@ -17,8 +17,7 @@
 
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 #define REST_API_CLIENT_VERSION @"1.0"
-#define REST_API_URL    @"http://10.32.11.65:9550/api"
-
+#define REST_API_URL   @"http://itoo.yintai.com/api" //@"http://10.32.11.65:9550/api" ////
 #define SINA_WEIBO_APP_KEY @"1594791248"
 #define SINA_WEIBO_APP_SECRET_KEY @"7ef3ddef06d52a937a0fcc3fc44d19f4"
 #define SINA_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"

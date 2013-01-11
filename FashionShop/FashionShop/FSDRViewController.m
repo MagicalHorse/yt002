@@ -65,16 +65,7 @@
 
 -(void)prepareData
 {
-    UIBarButtonItem *baritemSet= nil;
-    if (!_daren.isLiked)
-        baritemSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
-    else
-    {
-            baritemSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
-    }
-    [self.navigationItem setRightBarButtonItem:baritemSet];
     [self replaceBackItem];
-
     [self prepareEnterView:self.view];
     FSCommonUserRequest *request = [self createDRRequest];
     [self beginLoading:self.view];
@@ -124,6 +115,14 @@
 
 -(void) presentData:(BOOL)isUpdateCollection
 {
+    UIBarButtonItem *baritemSet= nil;
+    if (!_daren.isLiked)
+        baritemSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
+    else
+    {
+        baritemSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
+    }
+    [self.navigationItem setRightBarButtonItem:baritemSet];
     if ([FSModelManager sharedModelManager].localLoginUid &&
         [_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
     {

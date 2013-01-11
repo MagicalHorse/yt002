@@ -157,6 +157,7 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:modalImageView.frame];
     imageView.image = [_images objectAtIndex:indexPath.row];
     imageView.userInteractionEnabled = FALSE;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
     [modalImageView addSubview:imageView];
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didHideModalImage)];
     [modalImageView addGestureRecognizer:tapGesture];

@@ -41,6 +41,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
+    [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [_contentView registerNib:[UINib nibWithNibName:@"FSLikeDetailCell" bundle:Nil] forCellReuseIdentifier:USER_LIKE_TABLE_CELL];
     [self prepareData];
     [self preparePresent];
@@ -143,7 +145,9 @@
     [_contentView reloadData];
 }
 
-
+- (IBAction)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -92,8 +92,16 @@
         _data.resource.count>0)
     {
         FSResource *imgObj = _data.resource[0];
-        CGSize cropSize = CGSizeMake(310, 300 );
+        CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
+        if (_data.resource.count>0)
+        {
+            UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
+            UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
+            moreImages.image = moreInd;
+            [_imgView.superview addSubview:moreImages];
+            [_imgView.superview bringSubviewToFront:moreImages];
+        }
     }
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
     imgBG.userInteractionEnabled = FALSE;

@@ -159,7 +159,7 @@
 {
     
     [view resetScrollViewSize];
-   }
+}
 
 - (void)paginatorView:(SYPaginatorView *)paginatorView didScrollToPageAtIndex:(NSInteger)pageIndex
 {

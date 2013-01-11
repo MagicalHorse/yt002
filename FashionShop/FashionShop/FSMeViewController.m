@@ -632,6 +632,9 @@
         if (_likePros.count<1)
         {
             [self showNoResult:_likeView withText:NSLocalizedString(@"no likes added", nil)];
+        } else
+        {
+            [self hideNoResult:_likeView];
         }
         
     }
@@ -670,6 +673,9 @@
         if (_likePros.count<1)
         {
             [self showNoResult:_likeView withText:NSLocalizedString(@"no shared item", nil)];
+        } else
+        {
+            [self hideNoResult:_likeView];
         }
         
     }
