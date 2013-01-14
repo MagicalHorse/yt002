@@ -43,13 +43,23 @@ static FSLocationManager *_locationManager;
     
     [_innerLocation startUpdatingLocation];
 }
-
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    [_innerLocation stopUpdatingLocation];
+    if (locations &&
+        locations.count>0)
+    {
+        _currentCoord = [locations[0] coordinate];
+    }
+    self.locationAwared = TRUE;
+}
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
      [_innerLocation stopUpdatingLocation];
     // if the location is older than 30s ignore
     if (fabs([newLocation.timestamp timeIntervalSinceDate:[NSDate date]]) > 30)
     {
+        self.locationAwared = TRUE;
         return;
     }
     _currentCoord = [newLocation coordinate];

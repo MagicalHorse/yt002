@@ -128,22 +128,16 @@ typedef enum {
                 FSProItems *response = (FSProItems *) respData.responseData;
                 if (blockSelf->_state == BeginLoadingMore)
                 {
-                    if (blockSelf->_nearestPageIndex+1>=response.totalPageCount)
-                    {
-                        blockSelf->_noMoreNearest = true;
-                        
-                    }
                     blockSelf->_nearestPageIndex++;
-                    if(!blockSelf->_nearLatestDate)
-                        [blockSelf renewLastUpdateTime];
                     [blockSelf fillFetchResultInMemory:response];
                     
                     
                 } else if(blockSelf->_state == BeginLoadingLatest){
-                    
+                    blockSelf->_nearestPageIndex = 1;
                     [blockSelf renewLastUpdateTime];
                     [blockSelf fillFetchResultInMemory:response isInsert:true];
                 }
+                blockSelf->_noMoreNearest = blockSelf->_nearestPageIndex+1>response.totalPageCount;
                 [blockSelf reloadTableView];
             }
             if (uicallback)
@@ -170,22 +164,18 @@ typedef enum {
                 FSProItems *response = (FSProItems *)respData.responseData;
                 if (blockSelf->_state == BeginLoadingMore)
                 {
-                    if (blockSelf->_newestPageIndex+1>=response.totalPageCount)
-                    {
-                        blockSelf->_noMoreNewest = true;
-                        
-                    }
+                    
                     blockSelf->_newestPageIndex++;
-                    if(!blockSelf->_newLatestDate)
-                        [blockSelf renewLastUpdateTime];
                     [blockSelf fillFetchResultInMemory:response];
                     
-                    
                 } else if(blockSelf->_state == BeginLoadingLatest){
-                    
+                    blockSelf->_newestPageIndex =1;
                     [blockSelf renewLastUpdateTime];
+                    
                     [blockSelf fillFetchResultInMemory:response isInsert:true];
                 }
+                blockSelf->_noMoreNewest = blockSelf->_newestPageIndex+1>response.totalPageCount;
+               
                 [blockSelf reloadTableView];
             }
             if (uicallback)
@@ -227,11 +217,13 @@ typedef enum {
         }
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
-        request.requestType = 0;
+        request.requestType = 1;
         request.filterType = _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
         request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.previousLatestDate = _currentSearchIndex == 0?_nearLatestDate:_newLatestDate;
+        request.previousLatestDate = [[NSDate alloc] init];
+        request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
+        request.nextPage = 1;
         _state = BeginLoadingLatest;
         _inLoading = TRUE;
         block(request,^(){
@@ -288,6 +280,7 @@ typedef enum {
     [[FSLocationManager sharedLocationManager] addObserver:self forKeyPath:@"locationAwared" options:NSKeyValueObservingOptionNew context:nil];
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 	if (![NSThread isMainThread]) {
 		[self performSelectorOnMainThread:@selector(reloadSortbyDistance:) withObject:keyPath waitUntilDone:NO];
 	} else {
@@ -297,7 +290,6 @@ typedef enum {
 -(void)reloadSortbyDistance:(NSString *)keyPath
 {
     [self loadFirstTime];
-    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 }
 -(void) renewLastUpdateTime
 {
@@ -330,7 +322,8 @@ typedef enum {
 -(void)filterSearch:(UISegmentedControl *) segmentedControl
 {
     int index = segmentedControl.selectedSegmentIndex;
-    if(_currentSearchIndex==index)
+    if(_currentSearchIndex==index ||
+       _inLoading)
     {
         return;
     }
@@ -339,8 +332,7 @@ typedef enum {
     NSMutableArray *source = [_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (source == nil || source.count<=0)
     {
-        if (_inLoading)
-            return;
+
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.nextPage = 1;
@@ -371,6 +363,19 @@ typedef enum {
     NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (pros.items==nil || pros.items.count<=0)
         return;
+    if (inserted)
+    {
+        [tmpPros removeAllObjects];
+        if (_currentSearchIndex==0)
+        {
+            [_storeIndexSource removeAllObjects];
+            [_storeSource removeAllObjects];
+        } else
+        {
+            [_dateIndexedSource removeAllObjects];
+            [_dateSource removeAllObjects];
+        }
+    }
     @synchronized(tmpPros)
     {
         [pros.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
