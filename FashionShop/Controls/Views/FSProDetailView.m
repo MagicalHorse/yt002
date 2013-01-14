@@ -93,6 +93,7 @@
        [_btnStore setTitle:_data.store.name forState:UIControlStateNormal];  
     }
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
+    [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
     _btnStore.titleLabel.font = ME_FONT(14);
     
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];

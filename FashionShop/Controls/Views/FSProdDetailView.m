@@ -118,6 +118,7 @@
     }
     _btnStore.titleLabel.font = ME_FONT(14);
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
+    [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
     _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff, storesize.width, storesize.height);
     if (_data.price &&

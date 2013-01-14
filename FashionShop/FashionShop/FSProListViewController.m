@@ -24,6 +24,7 @@
 #import "NSDate+Locale.h"
 #import "UIColor+RGB.h"
 #import "FSConfiguration.h"
+#import "FSStoreDetailViewController.h"
 
 #import "EGORefreshTableHeaderView.h"
 
@@ -513,6 +514,19 @@ typedef enum {
     
 }
 
+-(void)clickToStore:(UITapGestureRecognizer*)gesture
+{
+    id view = gesture.view;
+    if ([view isKindOfClass:[FSProNearestHeaderTableCell class]]) {
+        FSProNearestHeaderTableCell *cell = (FSProNearestHeaderTableCell*)view;
+        if (_storeSource.count >= cell.tag) {
+            FSStore * store = [_storeSource objectAtIndex:cell.tag];
+            FSStoreDetailViewController *storeController = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
+            storeController.store = store;
+            [self.navigationController pushViewController:storeController animated:YES];
+        }
+    }
+}
 
 #pragma mark - Table view data source
 
@@ -563,8 +577,15 @@ typedef enum {
         case SortByDistance:
         {
             FSProNearestHeaderTableCell *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNearestHeaderTableCell" owner:self options:nil] lastObject];
+            header.tag = section;
             FSStore * store = [_storeSource objectAtIndex:section];
-            header.lblTitle.text =[NSString stringWithFormat:NSLocalizedString(@"%@(%@)", nil),store.name,[NSString stringMetersFromDouble:store.distance]];
+            header.lblTitle.text =[NSString stringWithFormat:NSLocalizedString(@"%@", nil),store.name];
+            [header.lblTitle sizeToFit];
+            header.lblDistance.frame = CGRectMake(header.lblTitle.frame.origin.x + header.lblTitle.frame.size.width, header.lblTitle.frame.origin.y + 2, 200, header.frame.size.height);
+            header.lblDistance.text = [NSString stringWithFormat:@"(%@)",[NSString stringMetersFromDouble:store.distance]];
+            [header.lblDistance sizeToFit];
+            UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickToStore:)];
+            [header addGestureRecognizer:tapGesture];
             return header;
             break;
         }
@@ -585,6 +606,21 @@ typedef enum {
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    switch (_currentSearchIndex) {
+        case SortByDistance:
+        {
+            return 40;
+            break;
+        }
+        case SortByDate:
+        {
+            return 60;
+            break;
+            
+        }
+        default:
+            break;
+    }
     return 65;
 }
 

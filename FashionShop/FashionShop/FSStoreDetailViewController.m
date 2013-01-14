@@ -88,7 +88,11 @@
     lblPhone.textColor =[UIColor colorWithRed:102 green:102 blue:102];
     [lblPhone sizeToFit];
     [self.view addSubview:lblPhone];
-
+    UIButton *_btnPhone = [UIButton buttonWithType:UIButtonTypeCustom];
+    _btnPhone.frame = lblPhone.frame;
+    [_btnPhone addTarget:self action:@selector(clickToDial:) forControlEvents:UIControlEventTouchUpInside];
+    _btnPhone.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_btnPhone];
     
     curYOff=phImgView.frame.size.height+phImgView.frame.origin.y;
     
@@ -128,6 +132,13 @@
 - (IBAction)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (void)clickToDial:(id)sender
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", _store.phone]];
+	[[UIApplication sharedApplication] openURL:url];
+}
+
 -(NSString *)generateMapUrl
 {
     NSString *url =  [NSString stringWithFormat:BAIDU_MAP_URL,
