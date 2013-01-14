@@ -46,6 +46,7 @@
     _data = data;
     FSResource *defaultRes = [_data.product.resource lastObject];
     [_imgPro setImageWithURL:defaultRes.absoluteUrl120];
+    _imgPro.contentMode = UIViewContentModeScaleAspectFit;
     _lblCode.text = _data.code;
     _lblCode.font = ME_FONT(14);
     _lblCode.textColor = [UIColor whiteColor];

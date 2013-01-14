@@ -71,6 +71,7 @@
         return;
     _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
     [_imgButton setBackgroundImage:[UIImage imageNamed:@"default_thum_icon.png"] forState:UIControlStateNormal];
+    _imgButton.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:_imgButton];
 }
 -(void)setDelegate:(id<FSThumViewDelegate>)delegate

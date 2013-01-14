@@ -43,15 +43,9 @@
     [self.navigationItem setRightBarButtonItem:baritemShare];
     
     /*
+    //添加键盘显示和消失通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHiding:) name:UIKeyboardWillHideNotification object:nil];
-    // 键盘高度变化通知，ios5.0新增的
-#ifdef __IPHONE_5_0
-    float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 5.0) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShowing:) name:UIKeyboardWillChangeFrameNotification object:nil];
-    }
-#endif
      */
     
     _tbAction.backgroundView = [[UIView alloc]init];
@@ -196,10 +190,8 @@
             _contactField.placeholder = NSLocalizedString(@"Contact place holder", nil);
             _contactField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
             _contactField.delegate = self;
-            _contactField.borderStyle = UITextBorderStyleNone;
+            _contactField.borderStyle = UITextBorderStyleRoundedRect;
             _contactField.returnKeyType = UIReturnKeySend;
-            _contactField.layer.borderWidth = 1;
-            _contactField.layer.borderColor = RGBCOLOR(166, 166, 166).CGColor;
             _contactField.keyboardType = UIKeyboardTypeNumberPad;
             _contactField.font = [UIFont systemFontOfSize:14];
             _contactField.backgroundColor =  [UIColor whiteColor];
@@ -256,11 +248,27 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    
+    [UIView animateWithDuration:0.3 animations:^{
+        if (textView == _contentView) {
+            if (SCREEN_HIGH <= 480 && self.tbAction.contentOffset.y != 48) {
+                self.tbAction.scrollEnabled = NO;
+                [self.tbAction setContentOffset:CGPointMake(0, 48)];
+            }
+        }
+    } completion:^(BOOL finished) {
+    }];
 }
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    
+//    [UIView animateWithDuration:0.3 animations:^{
+//        if (textView == _contentView) {
+//            if (SCREEN_HIGH <= 480) {
+//                self.tbAction.scrollEnabled = YES;
+//                [self.tbAction setContentOffset:CGPointMake(0, 0)];
+//            }
+//        }
+//    } completion:^(BOOL finished) {
+//    }];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -273,11 +281,11 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         if (textField == _contactField) {
-            if (SCREEN_HIGH <= 480) {
+            if (SCREEN_HIGH <= 480 && self.tbAction.contentOffset.y != 48) {
                 self.tbAction.scrollEnabled = NO;
-                [self.tbAction setContentOffset:CGPointMake(0, 45)];
+                [self.tbAction setContentOffset:CGPointMake(0, 48)];
             }
         }
     } completion:^(BOOL finished) {
@@ -286,15 +294,15 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    [UIView animateWithDuration:0.5 animations:^{
-        if (textField == _contactField) {
-            if (SCREEN_HIGH <= 480) {
-                self.tbAction.scrollEnabled = YES;
-                [self.tbAction setContentOffset:CGPointMake(0, 0)];
-            }
-        }
-    } completion:^(BOOL finished) {
-    }];
+//    [UIView animateWithDuration:0.3 animations:^{
+//        if (textField == _contactField) {
+//            if (SCREEN_HIGH <= 480) {
+//                self.tbAction.scrollEnabled = YES;
+//                [self.tbAction setContentOffset:CGPointMake(0, 0)];
+//            }
+//        }
+//    } completion:^(BOOL finished) {
+//    }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -325,12 +333,23 @@
 #pragma mark Responding to keyboard events
 /*
 - (void)keyboardWillShowing:(NSNotification *)notification {
+    //iphone5可直接返回
+    if (SCREEN_HIGH > 480) {
+        return;
+    }
     if (isKeyBourdShown) {
         return;
     }
+    
     NSDictionary *userInfo = [notification userInfo];
     NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
+    
+    CGRect rect1 = self.tbAction.frame;
+    rect1.size.height -= keyboardSize.height - 44;
+    self.tbAction.frame = rect1;
+    
+    return;
     
     [UIView beginAnimations:nil context:UIGraphicsGetCurrentContext()];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
@@ -345,10 +364,18 @@
 }
 
 - (void)keyboardWillHiding:(NSNotification *)notification {
+    if (SCREEN_HIGH > 480) {
+        return;
+    }
     isKeyBourdShown = NO;
     NSDictionary *userInfo = [notification userInfo];
     NSValue *value = [userInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
     CGSize keyboardSize = [value CGRectValue].size;
+    
+    CGRect rect1 = self.tbAction.frame;
+    rect1.size.height += keyboardSize.height - 44;
+    self.tbAction.frame = rect1;
+    return;
     
     [UIView beginAnimations:nil context:UIGraphicsGetCurrentContext()];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];

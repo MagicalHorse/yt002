@@ -30,7 +30,7 @@ static FSModelManager *_modelManager;
 @implementation FSModelManager
 
 - (void) initModelManager{
-    //[RKManagedObjectStore deleteStoreInApplicationDataDirectoryWithFilename:@"FSShop.sqlite"];
+    [RKManagedObjectStore deleteStoreInApplicationDataDirectoryWithFilename:@"FSShop.sqlite"];
     RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
     RKObjectManager *objectManager = [RKObjectManager objectManagerWithBaseURL:baseURL];
     objectManager.client.baseURL = baseURL;
@@ -49,7 +49,7 @@ static FSModelManager *_modelManager;
     if (self)
     {
         _asyncQueue = [[NSOperationQueue alloc] init];
-        [_asyncQueue setMaxConcurrentOperationCount:1];
+        [_asyncQueue setMaxConcurrentOperationCount:2];
         [self initModelManager];
     }
     return self;

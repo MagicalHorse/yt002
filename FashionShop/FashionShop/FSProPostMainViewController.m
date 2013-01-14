@@ -220,6 +220,11 @@
                 [_proRequest.imgs addObject:(UIImage *)value[0]];
             else
                 [_proRequest.imgs removeAllObjects];
+            //disable photo button if more than 3 imags
+            if (_proRequest.imgs.count>=3)
+                _btnPhoto.enabled = FALSE;
+            else
+                _btnPhoto.enabled = TRUE;
             break;
         }
         case PostStep2Finished:
@@ -315,7 +320,7 @@
     }
     else
     {
-        NSLog(@"Camera not exist");
+        [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
         return;
     }
     
@@ -640,4 +645,8 @@
     [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
+- (void)viewDidUnload {
+    [self setBtnPhoto:nil];
+    [super viewDidUnload];
+}
 @end

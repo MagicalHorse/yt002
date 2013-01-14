@@ -119,7 +119,18 @@
     return [textField resignFirstResponder];
 }
 
-
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (textField != _txtPrice) {
+        return YES;
+    }
+    if ([string isEqualToString:@""]) {
+        return YES;
+    }
+    if (textField.text.length > 7) {
+        return NO;
+    }
+    return YES;
+}
 
 - (void)didReceiveMemoryWarning
 {

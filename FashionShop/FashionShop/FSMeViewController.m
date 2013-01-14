@@ -594,6 +594,10 @@
                 [self presentViewController:_camera animated:YES completion:nil];
             }];
             
+        } else
+        {
+        
+            [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
         }
     
     

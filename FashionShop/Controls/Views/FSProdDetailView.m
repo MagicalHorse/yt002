@@ -93,8 +93,8 @@
     {
         FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
-        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:cropSize];
-        if (_data.resource.count>0)
+        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor)];
+        if (_data.resource.count>1)
         {
             UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
             UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
@@ -124,7 +124,7 @@
         [_data.price intValue]>0)
     {
         _btnPrice.alpha =1;
-        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%d",[_data.price intValue]] forState:UIControlStateNormal];
+        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%lld",[_data.price longLongValue]] forState:UIControlStateNormal];
         [_btnPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:14];
         CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
