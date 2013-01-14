@@ -135,7 +135,8 @@ typedef enum {
                 } else if(blockSelf->_state == BeginLoadingLatest){
                     blockSelf->_nearestPageIndex = 1;
                     [blockSelf renewLastUpdateTime];
-                    [blockSelf fillFetchResultInMemory:response isInsert:true];
+                    //[blockSelf fillFetchResultInMemory:response isInsert:true];
+                    [blockSelf fillFetchResultInMemory:response isInsert:false];
                 }
                 blockSelf->_noMoreNearest = blockSelf->_nearestPageIndex+1>response.totalPageCount;
                 [blockSelf reloadTableView];
@@ -172,7 +173,8 @@ typedef enum {
                     blockSelf->_newestPageIndex =1;
                     [blockSelf renewLastUpdateTime];
                     
-                    [blockSelf fillFetchResultInMemory:response isInsert:true];
+                    //[blockSelf fillFetchResultInMemory:response isInsert:true];
+                    [blockSelf fillFetchResultInMemory:response isInsert:false];
                 }
                 blockSelf->_noMoreNewest = blockSelf->_newestPageIndex+1>response.totalPageCount;
                
