@@ -584,7 +584,6 @@
     FSProCommentInputView *commentInput = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     if (!commentInput)
     {
-       
          commentInput = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentInputView" owner:self options:nil] lastObject];
         CGFloat height = PRO_DETAIL_COMMENT_INPUT_HEIGHT;
         commentInput.frame = CGRectMake(0, self.view.frame.size.height-TOOLBAR_HEIGHT-height, self.view.frame.size.width, height);
@@ -823,6 +822,20 @@
 {
     return [textField resignFirstResponder];
 }
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([textView.superview.superview isKindOfClass:[FSProCommentInputView class]]) {
+        if ([text isEqualToString:@""]) {
+            return YES;
+        }
+        if (textView.text.length > 39) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 - (void)viewDidUnload {
     [self set_thumView:nil];
     [super viewDidUnload];

@@ -30,7 +30,7 @@
 
 @end
 
-@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,FSThumViewDelegate,FSImageSlideDataSource>
+@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource>
 - (IBAction)doBack:(id)sender;
 - (IBAction)doComment:(id)sender;
 

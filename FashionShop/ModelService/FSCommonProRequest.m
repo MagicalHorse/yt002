@@ -100,7 +100,7 @@
         [params setValue:price forParam:@"price"];
     int i =0;
     for (UIImage* img in imgs) {
-        [params setData:UIImageJPEGRepresentation(img, 0.2) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
+        [params setData:UIImageJPEGRepresentation(img, 0.5) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
     }
     
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];

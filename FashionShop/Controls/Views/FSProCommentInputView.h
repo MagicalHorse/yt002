@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSKeyboardAvoidingUIView.h"
 
-@interface FSProCommentInputView : FSKeyboardAvoidingUIView
+@interface FSProCommentInputView : FSKeyboardAvoidingUIView<UITextViewDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *txtComment;
 @property (strong, nonatomic) IBOutlet UIButton *btnCancel;
 

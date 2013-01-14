@@ -596,7 +596,6 @@
             
         } else
         {
-        
             [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
         }
     
@@ -805,7 +804,8 @@
 }
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
-    CGSize newSize = CGSizeMake(50, 50*image.size.height/image.size.width);
+    int whSize = 200;
+    CGSize newSize = CGSizeMake(whSize, whSize*image.size.height/image.size.width);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size
@@ -815,7 +815,6 @@
     // End the context
     UIGraphicsEndImageContext();
     [self uploadThumnail:newImage];
-    
 }
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {

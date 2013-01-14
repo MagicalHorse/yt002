@@ -590,15 +590,15 @@
 }
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
-    NSLog(@"image.size:%@", NSStringFromCGSize(image.size));
-    CGSize newSize;
-    if (isRetina) {
-        newSize = CGSizeMake(image.size.width/2, image.size.height/2);
-    }
-    else {
-        newSize = image.size;
-    }
-    NSLog(@"newSize:%@", NSStringFromCGSize(newSize));
+    //NSLog(@"image.size:%@", NSStringFromCGSize(image.size));
+    CGSize newSize = image.size;
+//    if (isRetina) {
+//        newSize = CGSizeMake(image.size.width/2, image.size.height/2);
+//    }
+//    else {
+//        newSize = image.size;
+//    }
+    //NSLog(@"newSize:%@", NSStringFromCGSize(newSize));
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
     // new size

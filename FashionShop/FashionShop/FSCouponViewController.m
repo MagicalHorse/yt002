@@ -70,6 +70,11 @@
                 if (innerResp.totalPageCount<=_currentPage)
                     _noMore = true;
                 [self mergeLike:innerResp isInsert:false];
+                
+                FSUser *localUser = (FSUser*)[FSUser localProfile];
+                if ([localUser.uid isEqualToNumber:currentUser.uid]) {
+                    localUser.couponsTotal = innerResp.totalCount;
+                }
             }
             else
             {

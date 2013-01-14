@@ -12,21 +12,36 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-
-
-
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 #define REST_API_CLIENT_VERSION @"1.0"
-#define REST_API_URL   @"http://10.32.11.65:9550/api" //@"http://itoo.yintai.com/api" ////
-#define SINA_WEIBO_APP_KEY @"1594791248"
-#define SINA_WEIBO_APP_SECRET_KEY @"7ef3ddef06d52a937a0fcc3fc44d19f4"
+
+//测试库
+#define REST_API_URL   @"http://itoo.yintai.com/api"
+//正式库
+//#define REST_API_URL   @"http://10.32.11.65:9550/api"
+
+//测试
+//#define SINA_WEIBO_APP_KEY @"1594791248"
+//#define SINA_WEIBO_APP_SECRET_KEY @"7ef3ddef06d52a937a0fcc3fc44d19f4"
+//正式
+#define SINA_WEIBO_APP_KEY @"2978041275"
+#define SINA_WEIBO_APP_SECRET_KEY @"ea68b2a26ca930c6b51d434decdd2c9b"
 #define SINA_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
-
-#define QQ_WEIBO_APP_KEY @"801298995"
-#define QQ_WEIBO_APP_SECRET_KEY @"dbab88f4d3e0b27c00b15f52d1a5fc61"
+//测试
+//#define QQ_WEIBO_APP_KEY @"801298995"
+//#define QQ_WEIBO_APP_SECRET_KEY @"dbab88f4d3e0b27c00b15f52d1a5fc61"
+//正式
+#define QQ_WEIBO_APP_KEY @"801302732"
+#define QQ_WEIBO_APP_SECRET_KEY @"cd497771f88f6971ad11855088d050fd"
 #define QQ_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
-#define WEIXIN_API_APP_KEY @"wx730465bd3f0845af"
+
+//测试
+//#define WEIXIN_API_APP_KEY @"wx730465bd3f0845af"
+//正式
+#define WEIXIN_API_APP_KEY @"wx413d6a12d10df434"
+
+
 
 #define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
 
