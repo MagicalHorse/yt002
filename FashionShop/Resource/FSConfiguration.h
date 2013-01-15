@@ -66,7 +66,8 @@
 #define theApp          ((FSAppDelegate *) [[UIApplication sharedApplication] delegate])
 #define STATUSBAR_HIGH  ([UIApplication sharedApplication].statusBarHidden?0:20)
 //当前设备是否支持高清
-#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+//#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? ([[UIScreen mainScreen] currentMode].size.width == 640 || [[UIScreen mainScreen] currentMode].size.width == 1536) : NO)
 //是否高清，放大系数
 #define RetinaFactor (isRetina?2:1)
 // 是否iPad

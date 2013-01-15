@@ -621,7 +621,7 @@ typedef enum {
         }
         case SortByDate:
         {
-            return 60;
+            return 55;
             break;
             
         }
