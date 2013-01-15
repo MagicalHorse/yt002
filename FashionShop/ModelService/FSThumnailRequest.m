@@ -19,7 +19,7 @@
 {
     RKParams *params = [RKParams params];
     [params setValue:uToken forParam:@"token"];
-    [params setData:UIImageJPEGRepresentation(image, 0.5) MIMEType:@"image/jpeg" forParam:@"resource.jpeg"];
+    [params setData:UIImageJPEGRepresentation(image, 0.8) MIMEType:@"image/jpeg" forParam:@"resource.jpeg"];
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
     completeBlock = blockcomplete;
     errorBlock = blockerror;
