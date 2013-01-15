@@ -76,7 +76,20 @@ static FSWeixinActivity *singleon;
         
     
 }
-
+-(UIImage *)cropImage:(UIImage *)image {
+    CGSize newSize = CGSizeMake(100, 100*image.size.height/image.size.width);
+   
+    UIGraphicsBeginImageContext(newSize);
+    // Tell the old image to draw in this new context, with the desired
+    // new size
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    // Get the new image from the context
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    // End the context
+    UIGraphicsEndImageContext();
+    return newImage;
+    
+}
 
 #pragma weixin api
 
@@ -87,7 +100,8 @@ static FSWeixinActivity *singleon;
         
         WXMediaMessage *message = [WXMediaMessage message];
         message.title = title;
-        [message setThumbImage:img];
+    
+        [message setThumbImage:[self cropImage:img]];
         
         WXImageObject *ext = [WXImageObject object];
         ext.imageData = UIImagePNGRepresentation(img);

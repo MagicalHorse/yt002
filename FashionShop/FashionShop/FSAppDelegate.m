@@ -101,7 +101,7 @@ void uncaughtExceptionHandler(NSException *exception)
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
     NSString *schema = url.scheme ;
-    if ([schema hasPrefix:@"weixin"])
+    if ([schema hasPrefix:WEIXIN_API_APP_KEY])
     {
         
         return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
