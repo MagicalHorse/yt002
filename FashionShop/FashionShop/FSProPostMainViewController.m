@@ -31,6 +31,7 @@
     BOOL _originalTabbarStatus;
     
     TDDatePickerController* _datePicker;
+    TDDatePickerController* _dateEndPicker;
     FSProPostTitleViewController *_titleSel;
     UIImagePickerController *camera;
     int _dateRowIndex;
@@ -370,10 +371,20 @@
 }
 
 -(void)doSelDuration:(id)sender{
-    if (!_datePicker)
-        _datePicker = [[TDDatePickerController alloc] initWithNibName:@"TDDatePickerController" bundle:nil];
-    _datePicker.delegate = self;
-    [self presentSemiModalViewController:_datePicker];
+    if (_dateRowIndex == 0) {
+        if (!_datePicker) {
+            _datePicker = [[TDDatePickerController alloc] init];
+            _datePicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_datePicker];
+    }
+    else {
+        if (!_dateEndPicker) {
+            _dateEndPicker = [[TDDatePickerController alloc] init];
+            _dateEndPicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_dateEndPicker];
+    }
 }
 
 #pragma FSProPostStepCompleteDelegate
@@ -395,7 +406,7 @@
         case PostStep3Finished:
         {
             NSDateFormatter *formater = [[NSDateFormatter alloc] init];
-            [formater setDateFormat:@"yyyy/MM/dd"];
+            [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             if (_dateRowIndex==0 && _proRequest.startdate)
             {
                 [(NSMutableArray *)[_rows objectForKey:NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil)] replaceObjectAtIndex:0 withObject:[formater stringFromDate:_proRequest.startdate]] ;
@@ -551,6 +562,7 @@
         default:
             break;
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -622,16 +634,14 @@
 #pragma TDDatePickerControllerDelegate
 - (void)datePickerSetDate:(TDDatePickerController *)viewController
 {
-    [self proPostStep:PostStep3Finished didCompleteWithObject:@[_datePicker.datePicker.date]];
-    [self dismissSemiModalViewController:_datePicker];
-
-    
+    [self proPostStep:PostStep3Finished didCompleteWithObject:@[viewController.datePicker.date]];
+    [self dismissSemiModalViewController:viewController];
 }
 
 - (void)datePickerCancel:(TDDatePickerController *)viewController
 {
     [self proPostStep:PostStep3Finished didCompleteWithObject:nil];
-    [self dismissSemiModalViewController:_datePicker];
+    [self dismissSemiModalViewController:viewController];
 }
 
 #pragma titleViewControllerDelegate

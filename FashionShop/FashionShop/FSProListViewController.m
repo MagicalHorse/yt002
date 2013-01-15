@@ -598,7 +598,7 @@ typedef enum {
         }
         case SortByDate:
         {
-            FSProNewHeaderView *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNewHeaderView" owner:self options:nil] lastObject];
+            FSProNewHeaderView_1 *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNewHeaderView" owner:self options:nil] objectAtIndex:1];
             NSDate * date = [_dateSource objectAtIndex:section];
             header.data = date;
             return header;
@@ -613,6 +613,8 @@ typedef enum {
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    return 40;
+    
     switch (_currentSearchIndex) {
         case SortByDistance:
         {
