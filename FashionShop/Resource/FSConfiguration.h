@@ -15,10 +15,19 @@
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 #define REST_API_CLIENT_VERSION @"1.0" 
 
+#if defined ENVIRONMENT_DEV
 //测试库
-//#define REST_API_URL   @"http://10.32.11.65:9550/api"
-//正式库
-#define REST_API_URL   @"http://itoo.yintai.com/api"
+    #define REST_API_URL   @"http://10.32.11.65:9550/api"
+#elif defined ENVIRONMENT_ADHOC
+//adhoc
+    #define REST_API_URL   @"http://itoo.yintai.com:7070/api"
+#elif defined ENVIRONMENT_STORE
+//production
+    #define REST_API_URL   @"http://itoo.yintai.com/api"
+#else
+//测试库
+    #define REST_API_URL   @"http://10.32.11.65:9550/api"
+#endif
 
 //测试
 //#define SINA_WEIBO_APP_KEY @"1594791248"
