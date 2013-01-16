@@ -13,7 +13,7 @@
 #define FashionShop_FSConfiguration_h
 
 #define REST_API_APP_SECRET_KEY @"yintai123456"
-#define REST_API_CLIENT_VERSION @"1.0"
+#define REST_API_CLIENT_VERSION @"1.0" 
 
 //测试库
 //#define REST_API_URL   @"http://10.32.11.65:9550/api"
