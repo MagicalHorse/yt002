@@ -234,6 +234,7 @@
     __block FSDetailBaseView * blockViewForRefresh = self.paginatorView.currentPage;
     if (!blockViewForRefresh)
         return;
+    __block FSProDetailViewController *blockSelf = self;
     FSCommonCommentRequest * request=[[FSCommonCommentRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_COMMENT_LIST;
     request.sourceid = proId;
@@ -246,7 +247,7 @@
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
-            if (blockViewForRefresh)
+            if (blockViewForRefresh && blockSelf)
                 [[(id)blockViewForRefresh tbComment] reloadData];
             
         }
