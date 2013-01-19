@@ -96,6 +96,7 @@ static SDWebImageDecoder *sharedInstance;
 
 + (UIImage *)decodedImageWithImage:(UIImage *)image
 {
+    return nil;
     CGImageRef imageRef = image.CGImage;
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     CGImageAlphaInfo alphaInfo = CGImageGetAlphaInfo(imageRef);

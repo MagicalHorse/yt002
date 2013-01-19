@@ -83,8 +83,6 @@
             _firstTimeLoadDone  = true;
         } else
         {
-            //urge tag reload again
-            [[FSModelManager sharedModelManager] forceReloadTags];
             [self prepareData];
         }
     }
@@ -106,7 +104,9 @@
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
         [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [blockSelf endLoading:_cvTags];
-            [_tags addObjectsFromArray:[FSTag localTags]];
+            if (blockSelf->_tags.count>0)
+                return;
+            [blockSelf->_tags addObjectsFromArray:[FSTag localTags]];
             [blockSelf endPrepareData];
         }];
     } else
@@ -120,6 +120,7 @@
     if (!_tags ||
         _tags.count<1)
         return;
+    [_cvTags reloadData];
 
 }
 -(void) zeroMemoryBlock
@@ -462,7 +463,9 @@
     FSProdItemEntity * data = [_prods objectAtIndex:indexPath.row];
     FSResource * resource = data.resource&&data.resource.count>0?[data.resource objectAtIndex:0]:nil;
     float totalHeight = 0.1f;
-    if (resource)
+    if (resource &&
+        resource.width>0 &&
+        resource.height>0)
     {
         int cellWidth = ITEM_CELL_WIDTH;
         float imgHeight = (cellWidth * resource.height)/(resource.width);

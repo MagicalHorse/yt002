@@ -126,7 +126,22 @@
 
 - (void)webImageManager:(SDWebImageManager *)imageManager didProgressWithPartialImage:(UIImage *)image forURL:(NSURL *)url
 {
-  
+    NSNumber * isLazyInt = objc_getAssociatedObject(self, IMAGE_IS_LAZY_TAG);
+    
+    if ([isLazyInt boolValue])
+    {
+        UIImage *cropImage = image;
+        
+        [self setImage:cropImage];//cropImage;
+        [self performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:FALSE];
+        
+    }
+    else
+    {
+        self.image = image;
+        [self setNeedsLayout];
+    }
+
 }
 
 - (void)webImageManager:(SDWebImageManager *)imageManager didFinishWithImage:(UIImage *)image
@@ -135,11 +150,8 @@
     
     if ([isLazyInt boolValue])
     {
-        UIImage *cropImage = nil;
+        UIImage *cropImage = image;
         
-        if (image)
-            cropImage = [self cropImageIfNeed:image];
-         
         [self setImage:cropImage];//cropImage;
         [self performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:FALSE];
         
