@@ -1067,11 +1067,16 @@
     id data = [_likePros objectAtIndex:indexPath.row];
     FSResource * resource = [data resources]&&[data resources].count>0?[[data resources] objectAtIndex:0]:nil;
     float totalHeight = 40.0f;
-    if (resource)
+    if (resource &&
+        resource.width>0 &&
+        resource.height>0)
     {
         int cellWidth = ITEM_CELL_WIDTH;
         float imgHeight = (cellWidth * resource.height)/(resource.width);
-        totalHeight =imgHeight;
+        totalHeight = imgHeight;
+    }
+    else {
+        totalHeight = CollectionView_Default_Height;
     }
     return totalHeight;
 }

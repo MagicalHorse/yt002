@@ -119,14 +119,14 @@
     
     int xOffset = 10;
     int yOffset = 20;
-    UIButton *btnComment = [UIButton buttonWithType:UIButtonTypeCustom];
-    btnComment.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
-    [btnComment setTitle:NSLocalizedString(@"USER_SETTING_COMMENT", nil) forState:UIControlStateNormal];
-    [btnComment setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
-    [btnComment setTitleColor:[UIColor colorWithRed:38.0/255.0 green:38.0/255.0 blue:38.0/255.0 alpha:1.0f] forState:UIControlStateNormal];
-    [btnComment addTarget:self action:@selector(clickToComment:) forControlEvents:UIControlEventTouchUpInside];
-    btnComment.titleLabel.font = [UIFont systemFontOfSize:16];
-    yOffset += btnComment.frame.size.height + 10;
+//    UIButton *btnComment = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btnComment.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
+//    [btnComment setTitle:NSLocalizedString(@"USER_SETTING_COMMENT", nil) forState:UIControlStateNormal];
+//    [btnComment setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+//    [btnComment setTitleColor:[UIColor colorWithRed:38.0/255.0 green:38.0/255.0 blue:38.0/255.0 alpha:1.0f] forState:UIControlStateNormal];
+//    [btnComment addTarget:self action:@selector(clickToComment:) forControlEvents:UIControlEventTouchUpInside];
+//    btnComment.titleLabel.font = [UIFont systemFontOfSize:16];
+//    yOffset += btnComment.frame.size.height + 10;
     
     UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
     btnClean.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
@@ -145,7 +145,7 @@
     [btnExit addTarget:self action:@selector(clickToExit:) forControlEvents:UIControlEventTouchUpInside];
     btnExit.titleLabel.font = [UIFont systemFontOfSize:16];
     
-    [view addSubview:btnComment];
+    //[view addSubview:btnComment];
     [view addSubview:btnClean];
     [view addSubview:btnExit];
     

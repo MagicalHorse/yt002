@@ -472,7 +472,7 @@
         totalHeight = totalHeight+imgHeight;
     } else
     {
-        totalHeight = 20.0f;
+        totalHeight = CollectionView_Default_Height;
     }
     return totalHeight;
 }

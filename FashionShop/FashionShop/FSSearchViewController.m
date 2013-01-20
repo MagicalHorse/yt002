@@ -323,14 +323,16 @@
     FSProdItemEntity * data = [_prods objectAtIndex:indexPath.row];
     FSResource * resource = data.resource&&data.resource.count>0?[data.resource objectAtIndex:0]:nil;
     float totalHeight = 0.0f;
-    if (resource)
+    if (resource &&
+        resource.width>0 &&
+        resource.height>0)
     {
         int cellWidth = ITEM_CELL_WIDTH;
         float imgHeight = (cellWidth * resource.height)/(resource.width);
         totalHeight = totalHeight+imgHeight;
     } else
     {
-        totalHeight = 20.0f;
+        totalHeight = CollectionView_Default_Height;
     }
     return totalHeight;
 }

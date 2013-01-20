@@ -62,6 +62,8 @@
 #define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
 #define COMMON_PAGE_SIZE 10
 
+#define CollectionView_Default_Height 100.0f
+
 //HeQingshan
 #define NAV_HIGH        44
 #define FIL_HIGH        45
