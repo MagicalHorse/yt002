@@ -72,7 +72,8 @@ void uncaughtExceptionHandler(NSException *exception)
 -(void)entryMain
 {
     //launch story board
-    UITabBarController *root = [[UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil] instantiateInitialViewController];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UITabBarController *root = [storyBoard instantiateInitialViewController];
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     

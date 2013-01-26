@@ -115,9 +115,17 @@
 	NSLog(@"cuurent page :%d", m_pageControl.currentPage);
     
     if (aScrollView.contentSize.width - aScrollView.contentOffset.x < SCREEN_WIDTH - 40) {//滚动到了最末端
-        [UIView animateWithDuration:0.15 animations:nil completion:^(BOOL finished) {
-            [self entry];
-        }];
+        [self entry];//须要放在主线程中执行。否则会在ios5系列系统中出错。
+        /*
+        if ([[[UIDevice currentDevice] systemVersion] hasPrefix:@"5"]) {
+            [self entry];//必须要放在主线程中执行。否则会在ios5系列系统中出错。
+        }
+        else {
+            [[theApp modelManager] enqueueBackgroundBlock:^{
+                [self entry];
+            }];
+        }
+         */
     }
 }
 

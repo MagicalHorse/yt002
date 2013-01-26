@@ -66,8 +66,7 @@
 
 //HeQingshan
 #define NAV_HIGH        44
-#define FIL_HIGH        45
-#define TAB_HIGH        46
+#define TAB_HIGH        49
 #define APP_HIGH        [[UIScreen mainScreen] applicationFrame].size.height
 #define APP_WIDTH       [[UIScreen mainScreen] applicationFrame].size.width
 #define SCREEN_HIGH     [[UIScreen mainScreen] bounds].size.height

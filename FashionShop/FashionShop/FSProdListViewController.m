@@ -172,7 +172,10 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
-    _cvContent = [[PSUICollectionView alloc] initWithFrame:_contentContainer.bounds collectionViewLayout:clayout];
+    CGRect conFrame = _contentContainer.bounds;
+    conFrame.origin.y = 0;
+    conFrame.size.height -= NAV_HIGH + TAB_HIGH;
+    _cvContent = [[PSUICollectionView alloc] initWithFrame:conFrame collectionViewLayout:clayout];
     [_contentContainer addSubview:_cvContent];
     [_cvContent setCollectionViewLayout:clayout];
     _cvContent.backgroundColor = [UIColor whiteColor];

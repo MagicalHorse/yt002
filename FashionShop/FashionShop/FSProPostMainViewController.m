@@ -317,7 +317,6 @@
         [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
             [self presentViewController:camera animated:YES completion:nil];
         }];
-
     }
     else
     {

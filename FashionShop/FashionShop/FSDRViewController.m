@@ -92,7 +92,7 @@
     layout.columnCount = 3;
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     layout.delegate = self;
-
+    
     _itemsView = [[PSUICollectionView alloc] initWithFrame:_itemsContainer.bounds collectionViewLayout:layout];
     _itemsView.backgroundColor = [UIColor whiteColor];
     [_itemsContainer addSubview:_itemsView];
