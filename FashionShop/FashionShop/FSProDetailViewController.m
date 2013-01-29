@@ -490,6 +490,12 @@
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
+- (IBAction)goPromotionPage:(id)sender {
+}
+
+- (IBAction)goActivity:(id)sender {
+}
+
 - (IBAction)goStore:(id)sender {
     FSDetailBaseView * view = self.paginatorView.currentPage;
     FSStore *store = [view.data store];

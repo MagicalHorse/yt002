@@ -38,7 +38,9 @@
 - (IBAction)doShare:(id)sender;
 - (IBAction)showBrand:(id)sender;
 
+- (IBAction)goPromotionPage:(id)sender;
 - (IBAction)goStore:(id)sender;
+
 @property (strong, nonatomic) IBOutlet FSThumView *_thumView;
 
 - (IBAction)doFavor:(id)sender;

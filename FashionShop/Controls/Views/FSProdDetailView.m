@@ -77,20 +77,38 @@
     _lblFavorCount.font = ME_FONT(12);
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
       [self bringSubviewToFront:_lblFavorCount];
+    
+    //添加活动按钮
+    int yOff = 5;
+    if (_data.isFavored) {
+        _btnActivity.hidden = NO;
+        _btnActivity.titleLabel.font = ME_FONT(14);
+        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
+        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateSelected];
+        origFrame = _btnActivity.frame;
+        origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff * 2;
+        _btnActivity.frame = origFrame;
+        yOff += origFrame.origin.y + _btnActivity.frame.size.height + 5;
+    }
+    else {
+        _btnActivity.hidden = YES;
+        yOff += _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y;
+    }
+    
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
-    _lblDescrip.font = ME_FONT(13);
+    _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 0;
     origFrame = _lblDescrip.frame;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
-    int yOff = 4;
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
-    origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff * 2;
-    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
-        origFrame.origin.y -= yOff * 2 + 2;
-    }
+    origFrame.origin.y = yOff;
+//    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
+//        origFrame.origin.y -= yOff * 2 + 2;
+//    }
     _lblDescrip.frame = origFrame;
+    yOff += _lblDescrip.frame.size.height + 5;
   
     if (_data.resource &&
         _data.resource.count>0)
@@ -124,7 +142,8 @@
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff*2, storesize.width, storesize.height);
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, yOff, storesize.width, storesize.height);
+    yOff += _btnStore.frame.size.height + 5;
     if (_data.price &&
         [_data.price intValue]>0)
     {
@@ -139,7 +158,7 @@
         _btnPrice.alpha = 0;
     }
     CGRect superFrame =   _btnStore.superview.frame;
-    superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
+    superFrame.size.height = yOff;//_btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
     _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height;
@@ -213,16 +232,23 @@
     //更新优惠按钮
     if (_data.isFavored) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
-        [_array removeObject:_btnCoupon];
-        [_myToolBar setItems:_array];
+        if (_array.count >= 7) {
+            [_array removeObject:_fixibleItem3];
+            [_array removeObject:_btnCoupon];
+            _fixibleItem1.width = 70;
+            _fixibleItem4.width = 70;
+            [_myToolBar setItems:_array animated:YES];
+        }
     }
     else {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
-        CGRect _rect = _btnCoupon.customView.frame;
-        _rect.origin.x = 200;
-        _btnCoupon.customView.frame = _rect;
-        [_array addObject:_btnCoupon];
-        [_myToolBar setItems:_array];
+        if (_array.count < 7) {
+            [_array insertObject:_fixibleItem3 atIndex:4];
+            [_array insertObject:_btnCoupon atIndex:5];
+            _fixibleItem1.width = 40;
+            _fixibleItem4.width = 40;
+            [_myToolBar setItems:_array animated:YES];
+        }
     }
 }
 

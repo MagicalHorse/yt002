@@ -23,10 +23,16 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *lblCoupons;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
+@property (strong, nonatomic) IBOutlet UIButton *btnActivity;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnFavor;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
+
 @property (strong, nonatomic) IBOutlet UIToolbar *myToolBar;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem1;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem2;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem3;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem4;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
 
