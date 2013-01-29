@@ -38,6 +38,7 @@
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
 
+@property(nonatomic,strong) NSString *pID;
 
 - (void)upload:(dispatch_block_t)blockcomplete error:(dispatch_block_t)blockerror;
 @end

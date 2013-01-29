@@ -13,15 +13,24 @@
 @protocol FSProPostTitleViewControllerDelegate;
 
 @interface FSProPostTitleViewController : TDSemiModalViewController<UITextFieldDelegate,UITextViewDelegate>
-@property (strong, nonatomic) IBOutlet UITextField *txtTitle;
+
 @property (strong, nonatomic) IBOutlet UILabel *lblName;
+@property (strong, nonatomic) IBOutlet UITextField *txtTitle;
+
 @property (strong, nonatomic) IBOutlet UILabel *lblDescName;
+@property (strong, nonatomic) IBOutlet UITextView *txtDesc;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblPrice;
-@property (strong, nonatomic) IBOutlet UITextView *txtDesc;
-- (IBAction)doSave:(id)sender;
 @property (strong, nonatomic) IBOutlet UITextField *txtPrice;
 
+@property (strong, nonatomic) IBOutlet UILabel *lbProDesc;
+@property (strong, nonatomic) IBOutlet UITextField *txtProDesc;
+
+@property (strong, nonatomic) IBOutlet UILabel *lbProTime;
+@property (strong, nonatomic) IBOutlet UITextField *txtProStartTime;
+@property (strong, nonatomic) IBOutlet UITextField *txtProEndTime;
+
+- (IBAction)doSave:(id)sender;
 - (IBAction)doCancel:(id)sender;
 
 @property (strong,nonatomic) id delegate;

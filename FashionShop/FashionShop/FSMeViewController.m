@@ -47,6 +47,17 @@
 #define ITEM_CELL_WIDTH 100;
 #define LOADINGVIEW_HEIGHT 44
 #define REFRESHINGVIEW_HEIGHT 60
+#define Favorite_Delete_Alert_Tag 1010
+#define Actionsheet_Publish_Tag 1020
+#define Actionsheet_Delete_Tag 1021
+
+@interface MyActionSheet : UIActionSheet
+@property (nonatomic, strong) id object;
+@end
+
+@implementation MyActionSheet
+@synthesize object;
+@end
 
 @interface FSMeViewController ()<EGORefreshTableHeaderDelegate>
 {
@@ -373,41 +384,85 @@
 - (IBAction)doSuggest:(id)sender {
     UIActionSheet *suggestSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Publish product", nil),NSLocalizedString(@"Publish promotion", nil),nil];
     suggestSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    suggestSheet.tag = Actionsheet_Publish_Tag;
     [suggestSheet showInView:_btnSuggest];
    
 }
 
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex) {
-        case 0:
-        {
-            FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
-            uploadController.currentUser = _userProfile;
-            [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
-            [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
-            [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
-            uploadController.publishSource = FSSourceProduct;
-            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
-            uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
-            [self presentViewController:navController animated:TRUE completion:nil];
-            break;
+    if (actionSheet.tag == Actionsheet_Publish_Tag) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
+                uploadController.currentUser = _userProfile;
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
+                uploadController.publishSource = FSSourceProduct;
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
+                uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
+                [self presentViewController:navController animated:TRUE completion:nil];
+                break;
+            }
+            case 1:
+            {
+                FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
+                uploadController.currentUser = _userProfile;
+                [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField|BrandField|TagField];
+                [uploadController setMustFields:ImageField|TitleField|DurationField|StoreField];
+                [uploadController setRoute:RK_REQUEST_PRO_UPLOAD];
+                uploadController.publishSource = FSSourcePromotion;
+                uploadController.navigationItem.title = NSLocalizedString(@"Publish promotion", nil);
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
+                [self presentViewController:navController animated:TRUE completion:nil];
+                break;
+            }
+            default:
+                break;
         }
-        case 1:
+    }
+    else if (actionSheet.tag == Actionsheet_Delete_Tag && buttonIndex == 0) {
+        MyActionSheet *sheet = (MyActionSheet*)actionSheet;
+        UIButton *sender = (UIButton*)sheet.object;
+        FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
+        if (cell)
         {
-            FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
-            uploadController.currentUser = _userProfile;
-            [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField|BrandField|TagField];
-            [uploadController setMustFields:ImageField|TitleField|DurationField|StoreField];
-            [uploadController setRoute:RK_REQUEST_PRO_UPLOAD];
-            uploadController.publishSource = FSSourcePromotion;
-            uploadController.navigationItem.title = NSLocalizedString(@"Publish promotion", nil);
-            UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
-            [self presentViewController:navController animated:TRUE completion:nil];
-            break;
+            FSEntityRequestBase *request = nil;
+            if (_userProfile.userLevelId == FSDARENUser) {
+                FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
+                removeRequest.uToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
+                
+                removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
+                removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
+                request = removeRequest;
+                
+            } else
+            {
+                FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
+                removeRequest.userToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
+                removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+                request = removeRequest;
+            }
+            [self beginLoading:cell];
+            [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
+                [self endLoading:cell];
+                if (!resp.isSuccess)
+                {
+                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                }
+                else
+                {
+                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
+                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+                    
+                }
+            }];
+            
         }
-        default:
-            break;
     }
 }
 
@@ -884,43 +939,11 @@
 
 -(void)didRemoveClick:(UIButton *)sender
 {
-    FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
-    if (cell)
-    {
-        FSEntityRequestBase *request = nil;
-        if (_userProfile.userLevelId == FSDARENUser) {
-            FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
-            removeRequest.uToken = _userProfile.uToken;
-            removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
-           
-            removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
-            removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
-            request = removeRequest;
-            
-        } else
-        {
-           FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
-            removeRequest.userToken = _userProfile.uToken;
-            removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
-            removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
-            request = removeRequest;
-        }
-        [self beginLoading:cell];
-        [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
-            [self endLoading:cell];
-            if (!resp.isSuccess)
-            {
-                [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-            }
-            else
-            {
-                [_likePros removeObject:[(FSFavorProCell *)cell data]];
-                [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
-                
-            }
-        }];
-        
-    }
+    MyActionSheet *sheet = [[MyActionSheet alloc] initWithTitle:NSLocalizedString(@"Delete prompt",nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:NSLocalizedString(@"Delete",nil) otherButtonTitles:nil, nil];
+    sheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    sheet.tag = Actionsheet_Delete_Tag;
+    sheet.object = sender;
+    [sheet showInView:sender];
 }
 
 - (void)loadImagesForOnscreenRows
@@ -1316,4 +1339,52 @@
     [self setImgLevel:nil];
     [super viewDidUnload];
 }
+
+#pragma UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag = Favorite_Delete_Alert_Tag && buttonIndex == 1) {
+        /*
+        FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
+        if (cell)
+        {
+            FSEntityRequestBase *request = nil;
+            if (_userProfile.userLevelId == FSDARENUser) {
+                FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
+                removeRequest.uToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
+                
+                removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
+                removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
+                request = removeRequest;
+                
+            } else
+            {
+                FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
+                removeRequest.userToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
+                removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+                request = removeRequest;
+            }
+            [self beginLoading:cell];
+            [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
+                [self endLoading:cell];
+                if (!resp.isSuccess)
+                {
+                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                }
+                else
+                {
+                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
+                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+                    
+                }
+            }];
+            
+        }
+         */
+    }
+}
+
 @end

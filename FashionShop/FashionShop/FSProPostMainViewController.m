@@ -20,6 +20,8 @@
 #import "FSCoreStore.h"
 #import "FSImageUploadCell.h"
 
+#define EXIT_ALERT_TAG 1011
+
 
 @interface FSProPostMainViewController ()
 {
@@ -79,7 +81,6 @@
                     NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil),
-                    NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)
                     ] mutableCopy];
     _sections = [@[] mutableCopy];
@@ -108,12 +109,6 @@
          if (_mustFields & BrandField)
         _totalFields++;
     }
-    if (_availFields & TagField)
-    {
-        [_sections addObject:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
-        if (_mustFields & TagField)
-        _totalFields++;
-    }
     if (_availFields & StoreField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
@@ -126,7 +121,6 @@
             NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil):
                     [@[NSLocalizedString(@"PRO_POST_DURATION_STARTTEXT", Nil),NSLocalizedString(@"PRO_POST_DURATION_ENDTEXT", Nil)] mutableCopy],
             NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil):NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", Nil),
-            NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
             NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil):NSLocalizedString(@"PRO_POST_STORE_NOTEXT", Nil),
             } mutableCopy];
     _rowDone = [@{} mutableCopy];
@@ -149,7 +143,9 @@
 
 -(void)onButtonCancel
 {
-    [self dismissViewControllerAnimated:TRUE completion:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt",nil) message:NSLocalizedString(@"Exit Upload", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+    alert.tag = EXIT_ALERT_TAG;
+    [alert show];
 }
 
 -(void) bindControl
@@ -177,12 +173,15 @@
 {
     __block FSProPostMainViewController *blockSelf = self;
     [_proRequest upload:^{
-
+        //如果是上传活动成功，则返回活动id，在客户端显示
+        if (self.publishSource == FSSourcePromotion) {
+            UIAlertView *_alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:[NSString stringWithFormat:NSLocalizedString(@"Take_Care_Invoice:%@", nil), _proRequest.pID] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [_alert show];
+        }
         [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
         if (cleanup)
             cleanup();
         [blockSelf clearData];
-
     } error:^{
 
         [blockSelf updateProgress:NSLocalizedString(@"upload failed!", nil)];
@@ -550,11 +549,6 @@
         }
         case 40:
         {
-            [self doSelTag:nil];
-            break;
-        }
-        case 50:
-        {
             [self doSelStore:nil];
             break;
         }
@@ -649,5 +643,14 @@
 - (void)viewDidUnload {
     [self setBtnPhoto:nil];
     [super viewDidUnload];
+}
+
+#pragma UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == EXIT_ALERT_TAG && buttonIndex == 1) {
+        [self dismissViewControllerAnimated:TRUE completion:nil];
+    }
 }
 @end

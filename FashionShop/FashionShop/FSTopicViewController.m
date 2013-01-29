@@ -12,6 +12,13 @@
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
 @interface FSTopicViewController ()
+{
+    NSMutableArray *_topicList;
+    int _currentPage;
+    BOOL _noMore;
+    BOOL _inLoading;
+    UIRefreshControl *_refreshControl;
+}
 
 @end
 
@@ -33,6 +40,55 @@
     
     [self.tbAction registerNib:[UINib nibWithNibName:@"FSTopicListCell" bundle:nil] forCellReuseIdentifier:TOPIC_LIST_CELL];
     self.tbAction.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tbAction.backgroundColor = [UIColor lightGrayColor];
+    
+    [self prepareData];
+    [self preparePresent];
+}
+
+-(void) prepareData
+{
+    if (!_topicList)
+    {
+//        [self beginLoading:tbAction];
+        _currentPage = 1;
+//        FSCommonUserRequest *request = [self createRequest:_currentPage];
+//        [request send:[FSPagedLike class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+//            [self endLoading:_contentView];
+//            if (resp.isSuccess)
+//            {
+//                FSPagedLike *innerResp = resp.responseData;
+//                if (innerResp.totalPageCount<=_currentPage)
+//                    _noMore = true;
+//                [self mergeLike:innerResp isInsert:false];
+//            }
+//            else
+//            {
+//                [self reportError:resp.errorDescrip];
+//            }
+//        }];
+    }
+}
+
+-(void) preparePresent
+{
+    [self prepareRefreshLayout:tbAction withRefreshAction:^(dispatch_block_t action) {
+//        FSCommonUserRequest *request = [self createRequest:1];
+//        [request send:[FSPagedLike class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
+//            action();
+//            if (resp.isSuccess)
+//            {
+//                FSPagedLike *innerResp = resp.responseData;
+//                if (innerResp.totalPageCount<=_currentPage)
+//                    _noMore = true;
+//                [self mergeLike:innerResp isInsert:true];
+//            }
+//            else
+//            {
+//                [self reportError:resp.errorDescrip];
+//            }
+//        }];
+    }];
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,7 +101,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 180;
+    return 201;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

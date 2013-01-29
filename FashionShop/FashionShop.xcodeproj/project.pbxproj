@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0203213B16B64658007E0E9A /* bottom_nav_topic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */; };
+		0203213C16B64658007E0E9A /* bottom_nav_topic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */; };
+		02F6158716B3DBC0001F93ED /* FSTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6158616B3DBC0001F93ED /* FSTopicViewController.m */; };
+		02F6158C16B3DBD4001F93ED /* topic1.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158816B3DBD4001F93ED /* topic1.png */; };
+		02F6158D16B3DBD4001F93ED /* topic2.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158916B3DBD4001F93ED /* topic2.png */; };
+		02F6158E16B3DBD4001F93ED /* topic3.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158A16B3DBD4001F93ED /* topic3.png */; };
+		02F6158F16B3DBD4001F93ED /* topic4.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158B16B3DBD4001F93ED /* topic4.png */; };
+		02F6159316B3DC57001F93ED /* FSTopicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6159116B3DC57001F93ED /* FSTopicListCell.m */; };
+		02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02F6159216B3DC57001F93ED /* FSTopicListCell.xib */; };
 		7414A1FA169AF57300D2549F /* refresh-spinner-dark.png in Resources */ = {isa = PBXBuildFile; fileRef = 7414A1F8169AF57300D2549F /* refresh-spinner-dark.png */; };
 		7414A1FB169AF57300D2549F /* refresh-spinner-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */; };
 		741571CA16684309006A7B58 /* FSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741571C816684309006A7B58 /* FSSettingViewController.m */; };
@@ -515,6 +524,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom_nav_topic_icon.png; sourceTree = "<group>"; };
+		0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_nav_topic_icon@2x.png"; sourceTree = "<group>"; };
+		02F6158516B3DBC0001F93ED /* FSTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTopicViewController.h; sourceTree = "<group>"; };
+		02F6158616B3DBC0001F93ED /* FSTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTopicViewController.m; sourceTree = "<group>"; };
+		02F6158816B3DBD4001F93ED /* topic1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic1.png; sourceTree = "<group>"; };
+		02F6158916B3DBD4001F93ED /* topic2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic2.png; sourceTree = "<group>"; };
+		02F6158A16B3DBD4001F93ED /* topic3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic3.png; sourceTree = "<group>"; };
+		02F6158B16B3DBD4001F93ED /* topic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic4.png; sourceTree = "<group>"; };
+		02F6159016B3DC57001F93ED /* FSTopicListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSTopicListCell.h; path = Controls/FSTopicListCell.h; sourceTree = "<group>"; };
+		02F6159116B3DC57001F93ED /* FSTopicListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSTopicListCell.m; path = Controls/FSTopicListCell.m; sourceTree = "<group>"; };
+		02F6159216B3DC57001F93ED /* FSTopicListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSTopicListCell.xib; path = Controls/FSTopicListCell.xib; sourceTree = "<group>"; };
 		7414A1F8169AF57300D2549F /* refresh-spinner-dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-spinner-dark.png"; sourceTree = "<group>"; };
 		7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-spinner-dark@2x.png"; sourceTree = "<group>"; };
 		741571C716684309006A7B58 /* FSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSettingViewController.h; sourceTree = "<group>"; };
@@ -1375,6 +1395,9 @@
 				742FF91D1693E809005B9BD9 /* FSImageCollectionCell.h */,
 				742FF91E1693E809005B9BD9 /* FSImageCollectionCell.m */,
 				74C4FC7816969D110055D90C /* FSImageUploadCell.xib */,
+				02F6159016B3DC57001F93ED /* FSTopicListCell.h */,
+				02F6159116B3DC57001F93ED /* FSTopicListCell.m */,
+				02F6159216B3DC57001F93ED /* FSTopicListCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -1701,6 +1724,12 @@
 			isa = PBXGroup;
 			children = (
 				74DC99F316A56E7900580415 /* promotion_header_icon.png */,
+				0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */,
+				0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */,
+				02F6158816B3DBD4001F93ED /* topic1.png */,
+				02F6158916B3DBD4001F93ED /* topic2.png */,
+				02F6158A16B3DBD4001F93ED /* topic3.png */,
+				02F6158B16B3DBD4001F93ED /* topic4.png */,
 				74DC99F416A56E7900580415 /* promotion_header_icon@2x.png */,
 				74793A1B16A0352E00AEF5B9 /* more_img_icon.png */,
 				74793A1C16A0352E00AEF5B9 /* more_img_icon@2x.png */,
@@ -2238,6 +2267,8 @@
 				74B773CD1665A2DE000F4389 /* User */,
 				74CD91AE1643A78600970F55 /* MainStoryboard.storyboard */,
 				7439F1471657372C00490E7A /* FSProListViewController.m */,
+				02F6158516B3DBC0001F93ED /* FSTopicViewController.h */,
+				02F6158616B3DBC0001F93ED /* FSTopicViewController.m */,
 				7439F1461657372C00490E7A /* FSProListViewController.h */,
 				74CD28B01675A8D8001DFE4D /* FSProdListViewController.h */,
 				74CD28B11675A8D8001DFE4D /* FSProdListViewController.m */,
@@ -2668,6 +2699,13 @@
 				74DC99F616A56E7900580415 /* promotion_header_icon@2x.png in Resources */,
 				74DC99F916A5755600580415 /* icon.png in Resources */,
 				74DC99FB16A5756400580415 /* icon@2x.png in Resources */,
+				02F6158C16B3DBD4001F93ED /* topic1.png in Resources */,
+				02F6158D16B3DBD4001F93ED /* topic2.png in Resources */,
+				02F6158E16B3DBD4001F93ED /* topic3.png in Resources */,
+				02F6158F16B3DBD4001F93ED /* topic4.png in Resources */,
+				02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */,
+				0203213B16B64658007E0E9A /* bottom_nav_topic_icon.png in Resources */,
+				0203213C16B64658007E0E9A /* bottom_nav_topic_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2874,6 +2912,8 @@
 				74254F55169D3C3A002E269E /* FSItemBase.m in Sources */,
 				74254F58169D3C93002E269E /* FSPagedItem.m in Sources */,
 				74C0093E169EE31900DA759A /* SplashViewController.m in Sources */,
+				02F6158716B3DBC0001F93ED /* FSTopicViewController.m in Sources */,
+				02F6159316B3DC57001F93ED /* FSTopicListCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2950,8 +2990,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yi gong";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yi gong";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -2980,8 +3020,8 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "C2E0018C-318F-4B98-A9A1-E0AEDA14AFA5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C2E0018C-318F-4B98-A9A1-E0AEDA14AFA5";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3052,8 +3092,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Yong Yi gong (XSE5RGF58U)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yong Yi gong (XSE5RGF58U)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3086,8 +3126,8 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "DA4D4A33-230C-4F0B-8581-0C1169BA6C4E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DA4D4A33-230C-4F0B-8581-0C1169BA6C4E";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3102,8 +3142,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Yi gong";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Yi gong";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3132,8 +3172,8 @@
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "818BCD69-04F6-4F8F-ACD3-C6B5DCC8F7AA";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "818BCD69-04F6-4F8F-ACD3-C6B5DCC8F7AA";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3153,7 +3193,7 @@
 				74582E2A16952FA0007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		74CD91C11643A78600970F55 /* Build configuration list for PBXNativeTarget "FashionShop" */ = {
 			isa = XCConfigurationList;
@@ -3163,7 +3203,7 @@
 				74582E2B16952FA0007CDDF3 /* Archive */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

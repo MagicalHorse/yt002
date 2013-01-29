@@ -17,7 +17,7 @@
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
-@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate>
+@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate,UIAlertViewDelegate>
 
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;

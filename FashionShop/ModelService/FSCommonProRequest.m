@@ -37,6 +37,7 @@
 @synthesize comment;
 @synthesize pType;
 @synthesize price;
+@synthesize pID;
 
 @synthesize routeResourcePath;
 
@@ -126,8 +127,11 @@
         RKJSONParserJSONKit* parser = [[RKJSONParserJSONKit alloc] init];
         NSError *error = NULL;
         NSDictionary *result = [parser objectFromString:response.bodyAsString error:&error];
-        if (!error && [[result objectForKey:@"statusCode"] intValue]==200)
+        if (!error && [[result objectForKey:@"statusCode"] intValue]==200) {
+            id msg = [[result objectForKey:@"data"] objectForKey:@"id"];
+            pID = [NSString stringWithFormat:@"%@", msg];
             completeBlock();
+        }
         else
             errorBlock();
     } else if (errorBlock && isClientRequest){

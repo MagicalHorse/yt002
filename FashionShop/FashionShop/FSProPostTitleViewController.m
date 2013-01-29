@@ -50,7 +50,7 @@
 {
     if (self.navigationItem)
     {
-        self.navigationItem.title = NSLocalizedString(@"Fill title", nil);
+        self.navigationItem.title = NSLocalizedString(@"PRO_POST_TITLE_LABEL", nil);
     }
     _lblName.font = ME_FONT(14);
     _lblName.textColor = [UIColor colorWithRed:76 green:86 blue:108];
@@ -74,10 +74,44 @@
         _txtPrice.layer.borderWidth = 1;
         _txtPrice.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
         _txtPrice.delegate = self;
-    } else
+        
+        _lbProDesc.font = ME_FONT(14);
+        _lbProDesc.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
+        _lbProDesc.textAlignment = NSTextAlignmentRight;
+        [_txtProDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+        _txtProDesc.layer.borderWidth = 1;
+        _txtProDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+        _txtProDesc.delegate = self;
+        
+        _lbProTime.font = ME_FONT(14);
+        _lbProTime.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
+        _lbProTime.textAlignment = NSTextAlignmentRight;
+        [_txtProStartTime setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+        _txtProStartTime.layer.borderWidth = 1;
+        _txtProStartTime.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+        _txtProStartTime.delegate = self;
+        
+        [_txtProEndTime setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+        _txtProEndTime.layer.borderWidth = 1;
+        _txtProEndTime.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+        _txtProEndTime.delegate = self;
+    }
+    else
     {
         _lblPrice.layer.opacity = 0;
         _txtPrice.layer.opacity = 0;
+        
+        _lbProDesc.layer.opacity = 0;
+        _txtProDesc.layer.opacity = 0;
+        
+        _lbProTime.layer.opacity = 0;
+        _txtProStartTime.layer.opacity = 0;
+        _txtProEndTime.layer.opacity = 0;
+        
+        if ([_txtProEndTime.superview isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scroll = (UIScrollView*)_txtProEndTime.superview;
+            scroll.scrollEnabled = NO;
+        }
     }
     _txtTitle.delegate = self;
     _txtDesc.delegate = self;
@@ -160,6 +194,11 @@
     [self setLblDescName:nil];
     [self setLblPrice:nil];
     [self setTxtPrice:nil];
+    [self setLbProDesc:nil];
+    [self setTxtProDesc:nil];
+    [self setLbProTime:nil];
+    [self setTxtProEndTime:nil];
+    [self setTxtProStartTime:nil];
     [super viewDidUnload];
 }
 @end
