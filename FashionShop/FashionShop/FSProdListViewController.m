@@ -392,13 +392,13 @@
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_TAG_CELL forIndexPath:indexPath];
         [(FSProdTagCell *)cell setData:[_tags objectAtIndex:indexPath.row]];
         cell.layer.borderColor = [UIColor colorWithRed:206 green:206 blue:206].CGColor;
-        cell.layer.borderWidth = 1;
+        cell.layer.borderWidth = 0.5;
     } else if (cv == _cvContent)
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
         [(FSProdDetailCell *)cell setData:[_prods objectAtIndex:indexPath.row]];
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
-        cell.layer.borderWidth = 1;
+        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        cell.layer.borderWidth = 0.5;
         if (_cvContent.dragging == NO &&
             _cvContent.decelerating == NO)
         {

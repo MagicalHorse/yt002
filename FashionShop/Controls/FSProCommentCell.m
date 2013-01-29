@@ -33,7 +33,7 @@
 
 -(void)setData:(FSComment *)data{
     _data = data;
-    _lblNickie.text = [NSString stringWithFormat:@"%@:",_data.inUser.nickie];
+    _lblNickie.text = [NSString stringWithFormat:@"%@",_data.inUser.nickie];
     _lblNickie.font = ME_FONT(14);
     _lblNickie.textColor = [UIColor colorWithRed:229 green:0 blue:79];
     [_lblNickie sizeToFit];

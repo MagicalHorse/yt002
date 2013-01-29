@@ -40,7 +40,7 @@
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
 #define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
-#define PRO_DETAIL_COMMENT_CELL_HEIGHT 73
+#define PRO_DETAIL_COMMENT_CELL_HEIGHT 74
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
 @interface FSProDetailViewController ()
 {
@@ -119,7 +119,7 @@
     FSSourceType source = [dataProviderInContext proDetailViewSourceTypeFromContext:self forIndex:pageIndex];
 	if (source == FSSourceProduct)
         identifier = NSStringFromClass([FSProdDetailView class]);
-	FSDetailBaseView * view = [paginatorView dequeueReusablePageWithIdentifier:identifier];
+	FSDetailBaseView * view = (FSDetailBaseView*)[paginatorView dequeueReusablePageWithIdentifier:identifier];
 	if (!view) {
         if (source == FSSourcePromotion)
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProDetailView" owner:self options:nil] lastObject];
@@ -300,7 +300,7 @@
         else
         {
             FSCoupon *coupon = respData.responseData;
-            FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
+            FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
             if ([view.data isKindOfClass:[FSProdItemEntity class]])
             {
                 ((FSProdItemEntity *)view.data).couponTotal ++;
@@ -637,13 +637,13 @@
 }
 -(NSString *)transformCommentText
 {
-    FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     NSString *trimedText = [[commentView.txtComment.text stringByReplacingOccurrencesOfString:@"\n" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
     return trimedText;
 }
 -(void)saveComment:(UIButton *)sender
 {
-    FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     [commentView.txtComment resignFirstResponder];
     NSString *trimedText = [self transformCommentText];
     if (trimedText.length>40 ||trimedText.length<1)
@@ -697,7 +697,7 @@
 
 -(void) internalDoComent:(dispatch_block_t)callback
 {
-    FSProCommentInputView *commentView = [self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    //FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     NSString *commentText = [self transformCommentText];
     FSCommonCommentRequest *request = [[FSCommonCommentRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
@@ -721,7 +721,7 @@
             [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
             [blockSelf hideCommentInputView:self];
             [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
-            
+            [(id)self.paginatorView.currentPage resetScrollViewSize];
         }
         if (callback)
             callback();
@@ -771,7 +771,6 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
-    NSMutableArray *comments = [parentView.data comments];
     FSProCommentHeader * view = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentHeader" owner:self options:nil] lastObject];
     view.count = [[parentView.data comments] count];
     return view;
@@ -779,7 +778,7 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [self resetScrollViewSize:tableView.superview.superview.superview];
+    [self resetScrollViewSize:(FSDetailBaseView*)tableView.superview.superview.superview];
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -806,7 +805,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSProCommentCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    FSProCommentCell *cell = (FSProCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     CGFloat totalHeight = 31; //yoffset
     totalHeight += [cell.lblComment sizeThatFits:cell.lblComment.frame.size].height;
     

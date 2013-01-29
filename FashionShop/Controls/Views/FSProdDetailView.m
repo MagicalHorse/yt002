@@ -23,6 +23,7 @@
 @interface FSProdDetailView ()
 {
     FSProdItemEntity *_data;
+    float couponLeft;
 }
 
 @end
@@ -82,10 +83,13 @@
     _lblDescrip.numberOfLines = 0;
     origFrame = _lblDescrip.frame;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
-    int yOff = 2;
+    int yOff = 4;
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
-    origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff;
+    origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff * 2;
+    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
+        origFrame.origin.y -= yOff * 2 + 2;
+    }
     _lblDescrip.frame = origFrame;
   
     if (_data.resource &&
@@ -120,7 +124,7 @@
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
     [_btnStore setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff, storesize.width, storesize.height);
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff*2, storesize.width, storesize.height);
     if (_data.price &&
         [_data.price intValue]>0)
     {
@@ -202,9 +206,24 @@
               forControlEvents:UIControlEventTouchUpInside];
         _btnFavor.customView = sheepButton;
     }
-    UIButton *sheepButton = _btnFavor.customView;
+    UIButton *sheepButton = (UIButton*)_btnFavor.customView;
     [sheepButton setImage:sheepImage forState:UIControlStateNormal];
     [sheepButton sizeToFit];
+    
+    //更新优惠按钮
+    if (_data.isFavored) {
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
+        [_array removeObject:_btnCoupon];
+        [_myToolBar setItems:_array];
+    }
+    else {
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
+        CGRect _rect = _btnCoupon.customView.frame;
+        _rect.origin.x = 200;
+        _btnCoupon.customView.frame = _rect;
+        [_array addObject:_btnCoupon];
+        [_myToolBar setItems:_array];
+    }
 }
 
 -(void) resetScrollViewSize

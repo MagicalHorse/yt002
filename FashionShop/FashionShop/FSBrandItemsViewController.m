@@ -273,8 +273,8 @@
     PSUICollectionViewCell * cell = nil;
           cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
         [(FSProdDetailCell *)cell setData:[_prods objectAtIndex:indexPath.row]];
-        cell.layer.borderColor = [UIColor grayColor].CGColor;
-        cell.layer.borderWidth = 1;
+        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        cell.layer.borderWidth = 0.5;
         if (_brandContent.dragging == NO &&
             _brandContent.decelerating == NO)
         {

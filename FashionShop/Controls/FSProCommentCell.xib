@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">11G63</string>
+		<string key="IBDocument.SystemVersion">12C60</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
-		<string key="IBDocument.AppKitVersion">1138.51</string>
-		<string key="IBDocument.HIToolboxVersion">569.00</string>
+		<string key="IBDocument.AppKitVersion">1187.34</string>
+		<string key="IBDocument.HIToolboxVersion">625.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">1929</string>
@@ -44,7 +44,7 @@
 							<object class="IBUILabel" id="734813645">
 								<reference key="NSNextResponder" ref="391732143"/>
 								<int key="NSvFlags">288</int>
-								<string key="NSFrame">{{75, 31}, {210, 25}}</string>
+								<string key="NSFrame">{{75, 31}, {210, 10}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="312745452"/>
@@ -125,7 +125,7 @@
 							<object class="IBUIImageView" id="312745452">
 								<reference key="NSNextResponder" ref="391732143"/>
 								<int key="NSvFlags">264</int>
-								<string key="NSFrame">{{0, 72}, {320, 1}}</string>
+								<string key="NSFrame">{{0, 73}, {320, 1}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -154,7 +154,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 							</object>
 						</array>
-						<string key="NSFrameSize">{320, 72}</string>
+						<string key="NSFrameSize">{320, 73}</string>
 						<reference key="NSSuperview" ref="438388892"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1024774251"/>
@@ -170,7 +170,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
 				</array>
-				<string key="NSFrameSize">{320, 73}</string>
+				<string key="NSFrameSize">{320, 74}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="391732143"/>

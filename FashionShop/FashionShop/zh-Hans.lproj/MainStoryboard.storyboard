@@ -41,7 +41,7 @@
             </objects>
             <point key="canvasLocation" x="-298" y="-293"/>
         </scene>
-        <!--Topic View Controller - 专题列表-->
+        <!--Topic View Controller - 专题活动-->
         <scene sceneID="z1D-kP-vBI">
             <objects>
                 <viewController id="iBb-IO-WFz" customClass="FSTopicViewController" sceneMemberID="viewController">
@@ -61,7 +61,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="专题列表" id="qZm-im-HTB"/>
+                    <navigationItem key="navigationItem" title="专题活动" id="qZm-im-HTB"/>
                     <connections>
                         <outlet property="tbAction" destination="OKa-83-DWH" id="bJ2-Y5-i4F"/>
                     </connections>

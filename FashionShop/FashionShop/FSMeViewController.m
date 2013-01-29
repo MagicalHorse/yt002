@@ -902,7 +902,7 @@
         cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSFavorProCell" forIndexPath:indexPath];
         [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
         ((FSFavorProCell *)cell).data = item;;
-    cell.layer.borderWidth = 1;
+    cell.layer.borderWidth = 0.5;
     cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
         if (_likeView.dragging == NO && _likeView.decelerating == NO)
         {

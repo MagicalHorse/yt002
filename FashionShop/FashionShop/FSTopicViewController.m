@@ -40,7 +40,7 @@
     
     [self.tbAction registerNib:[UINib nibWithNibName:@"FSTopicListCell" bundle:nil] forCellReuseIdentifier:TOPIC_LIST_CELL];
     self.tbAction.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tbAction.backgroundColor = [UIColor lightGrayColor];
+    self.tbAction.backgroundColor = APP_BACKGROUND_COLOR;
     
     [self prepareData];
     [self preparePresent];

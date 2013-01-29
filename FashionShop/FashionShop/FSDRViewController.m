@@ -582,8 +582,8 @@
     NSString *identifier = [self isDR]?DR_DETAIL_CELL:DR_FAVOR_DETAIL_CELL;
     PSUICollectionViewCell * cell = [cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     [(id)cell setData:[_items objectAtIndex:indexPath.row]];
-    cell.layer.borderColor = [UIColor grayColor].CGColor;
-    cell.layer.borderWidth = 1;
+    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    cell.layer.borderWidth = 0.5;
     if (_itemsView.dragging == NO &&
         _itemsView.decelerating == NO)
     {

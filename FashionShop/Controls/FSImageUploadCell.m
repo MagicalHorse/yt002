@@ -103,14 +103,14 @@
      FSImageCollectionCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSImageCollectionCell" forIndexPath:indexPath];
     cell.imageView.image = item;
     [cell.btnRemove addTarget:self action:@selector(doRemoveImage:) forControlEvents:UIControlEventTouchUpInside];
-    cell.layer.borderWidth = 1;
+    cell.layer.borderWidth = 0.5;
     cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
     
     return cell;
 }
 -(void)doRemoveImage:(UIButton *)sender
 {
-    FSImageCollectionCell *container = sender.superview.superview;
+    FSImageCollectionCell *container = (FSImageCollectionCell*)sender.superview.superview;
     NSIndexPath *indexPath = [imageView indexPathForCell:container ];
     if (indexPath)
     {

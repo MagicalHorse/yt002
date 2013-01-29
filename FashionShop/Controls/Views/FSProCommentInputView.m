@@ -31,7 +31,7 @@
 
 -(void) prepareLayout
 {
-    self.layer.borderWidth = 1;
+    self.layer.borderWidth = 0.5;
     self.layer.borderColor = [UIColor colorWithRed:102 green:102 blue:102].CGColor;
 }
 

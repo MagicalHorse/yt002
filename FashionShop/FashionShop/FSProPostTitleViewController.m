@@ -59,11 +59,11 @@
     _lblDescName.textColor = [UIColor colorWithRed:76 green:86 blue:108];
     _lblDescName.textAlignment = NSTextAlignmentRight;
     [_txtTitle setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
-    _txtTitle.layer.borderWidth = 1;
+    _txtTitle.layer.borderWidth = 0.5;
     _txtTitle.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
     _txtTitle.placeholder =NSLocalizedString(@"only 40 chars allowed", nil);
     [_txtDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
-    _txtDesc.layer.borderWidth = 2;
+    _txtDesc.layer.borderWidth = 1;
     _txtDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
     if (_publishSource==FSSourceProduct)
     {

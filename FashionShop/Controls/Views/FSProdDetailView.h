@@ -26,6 +26,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnFavor;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
+@property (strong, nonatomic) IBOutlet UIToolbar *myToolBar;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
 

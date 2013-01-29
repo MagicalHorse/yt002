@@ -65,7 +65,7 @@
     _lblFavorCount.font = ME_FONT(12);
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
-    _lblDescrip.font = ME_FONT(13);
+    _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 0;
     CGRect origFrame = _lblDescrip.frame;
@@ -73,9 +73,11 @@
     int yOff = 4;
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
-    origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+yOff;
+    origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+yOff * 2;
+    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
+        origFrame.origin.y -= yOff * 2 + 2;
+    }
     _lblDescrip.frame = origFrame;
-
 
     if (_data.resource &&
         _data.resource.count>0)
@@ -103,7 +105,7 @@
     _btnStore.titleLabel.font = ME_FONT(14);
     
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff, storesize.width, storesize.height);
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff*2, storesize.width, storesize.height);
     if (_data.tagId!=0)
     {
         _btnTag.alpha =1;
@@ -115,6 +117,9 @@
     {
         _btnTag.alpha = 0;
     }
+    
+    //隐藏该按钮
+    _btnTag.alpha = 0;
 
     CGRect superFrame =   _btnStore.superview.frame;
     superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
@@ -191,7 +196,7 @@
               forControlEvents:UIControlEventTouchUpInside];
         _btnFavor.customView = sheepButton;
     }
-    UIButton *sheepButton = _btnFavor.customView;
+    UIButton *sheepButton = (UIButton*)_btnFavor.customView;
     [sheepButton setImage:sheepImage forState:UIControlStateNormal];
     [sheepButton sizeToFit];
 }
