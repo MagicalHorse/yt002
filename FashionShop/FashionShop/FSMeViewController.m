@@ -104,8 +104,9 @@
     [self ensureDataContext];
     __block FSMeViewController *blockSelf = self;
     [_dataSourceProvider setValue:^(FSUserLoginRequest *request){
+        [blockSelf beginLoading:blockSelf.view];
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
-            
+            [blockSelf endLoading:blockSelf.view];
             if (!response.isSuccess)
             {
                 if (blockSelf->completeCallBack!=nil)
@@ -134,7 +135,9 @@
     } forKey:LOGIN_FROM_3RDPARTY_ACTION];
     
     [_dataSourceProvider setValue:^(FSUserProfileRequest *request){
+        [blockSelf beginLoading:blockSelf.view];
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
+            [blockSelf endLoading:blockSelf.view];
             if (!response.isSuccess)
             {
                 [FSUser removeUserProfile];
@@ -151,7 +154,6 @@
                 
                 [blockSelf->_userProfile save];
                 [blockSelf displayUserProfile];
-                
             }
             
         }];
@@ -236,7 +238,6 @@
      _isLogined = [FSModelManager sharedModelManager].isLogined;
     if(!_isLogined)
     {
-        
         [self displayUserLogin];
     }
     else
@@ -397,7 +398,7 @@
             {
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|StoreField];
                 [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
                 [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
                 uploadController.publishSource = FSSourceProduct;
@@ -410,7 +411,7 @@
             {
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField|BrandField|TagField];
+                [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField];
                 [uploadController setMustFields:ImageField|TitleField|DurationField|StoreField];
                 [uploadController setRoute:RK_REQUEST_PRO_UPLOAD];
                 uploadController.publishSource = FSSourcePromotion;
@@ -536,7 +537,7 @@
     _btnPoints.titleLabel.font = ME_FONT(9);
     _btnPoints.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnPoints setTitle:[NSString stringWithFormat:@"%d",_userProfile.pointsTotal] forState:UIControlStateNormal];
-    _btnCoupons.titleLabel.font = ME_FONT(9);
+    _btnCoupons.titleLabel.font = ME_FONT(12);
     _btnCoupons.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
     
@@ -580,6 +581,7 @@
     _favorPageIndex = 1;
     [self loadILike:true nextPage:_favorPageIndex  withCallback:nil];
 }
+
 -(void) loadILike:(BOOL)showProgress nextPage:(int)pageIndex withCallback:(dispatch_block_t)callback
 {
     if (showProgress)
@@ -1189,6 +1191,7 @@
 
 -(void) onQQLoginSuccess
 {
+    [self beginLoading:self.view];
     [_qq getUserInfoWithFormat:@"json" parReserved:nil delegate:self onSuccess:@selector(onQQUserInfoGet:) onFailure:@selector(onQQUserInfoFail:)];
     
 }
@@ -1201,7 +1204,7 @@
 
 
 - (void)onQQUserInfoGet:(id)result{
-    
+    [self endLoading:self.view];
     NSDictionary *homeDic = (NSDictionary *)result;
     FSUserLoginRequest *request = [[FSUserLoginRequest alloc] init];
     request.accessToken = _qq.accessToken;
@@ -1214,6 +1217,7 @@
 }
 
 - (void)onQQUserInfoFail:(NSError *)error{
+    [self endLoading:self.view];
    [self reportError:error.description];
 }
 

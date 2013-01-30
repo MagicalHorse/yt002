@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSCommonProRequest.h"
 #import "TDSemiModalViewController.h"
+#import "FSPlaceHoldTextView.h"
 
 @protocol FSProPostTitleViewControllerDelegate;
 
@@ -18,7 +19,7 @@
 @property (strong, nonatomic) IBOutlet UITextField *txtTitle;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblDescName;
-@property (strong, nonatomic) IBOutlet UITextView *txtDesc;
+@property (strong, nonatomic) IBOutlet FSPlaceHoldTextView *txtDesc;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblPrice;
 @property (strong, nonatomic) IBOutlet UITextField *txtPrice;
@@ -32,6 +33,7 @@
 
 - (IBAction)doSave:(id)sender;
 - (IBAction)doCancel:(id)sender;
+- (IBAction)selDuration:(id)sender;
 
 @property (strong,nonatomic) id delegate;
 @property (nonatomic) FSSourceType publishSource;

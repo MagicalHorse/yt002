@@ -8,6 +8,11 @@
 
 #import "NSString+Extention.h"
 #import <CommonCrypto/CommonDigest.h>
+#import "RegexKitLite.h"
+
+const NSString* REG_EMAIL = @"\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+const NSString* REG_MOBILE = @"^(13[0-9]|15[0-9]|18[0-9]|14[0-9])\\d{8}$";
+const NSString* REG_PHONE = @"^(([0\\+]\\d{2,3}-?)?(0\\d{2,3})-?)?(\\d{7,8})";
 
 @implementation NSString (Extention)
 
@@ -90,6 +95,18 @@
         return [NSString stringWithFormat:NSLocalizedString(@"%dkiloes", nil),numberOfKilos];
     else
         return [NSString stringWithFormat:NSLocalizedString(@"%dmeters", nil),(int)input];
+}
+
++(BOOL)isEmail:(NSString *)input{
+	return [input isMatchedByRegex:[NSString stringWithFormat:@"%@",REG_EMAIL]];
+}
+
++(BOOL)isPhoneNum:(NSString *)input{
+	return [input isMatchedByRegex:[NSString stringWithFormat:@"%@",REG_PHONE]];
+}
+
++(BOOL)isMobileNum:(NSString *)input{
+	return [input isMatchedByRegex:[NSString stringWithFormat:@"%@",REG_MOBILE]];
 }
 
 @end

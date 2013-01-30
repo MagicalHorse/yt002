@@ -26,6 +26,14 @@
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;
+    if (1) {
+        _btnPro.hidden = NO;
+        _btnPro.frame = CGRectMake(5, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
+    }
+    else {
+        _btnPro.hidden = YES;
+    }
+    
     if (_data.price &&
         [_data.price intValue]>0)
     {

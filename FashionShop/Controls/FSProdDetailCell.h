@@ -14,6 +14,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imgPic;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnPrice;
+@property (strong, nonatomic) IBOutlet UIButton *btnPro;
 
 @property(nonatomic,strong) FSProdItemEntity *data;
 

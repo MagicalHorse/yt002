@@ -19,8 +19,10 @@
 #import "FSProItemEntity.h"
 #import "FSCoreStore.h"
 #import "FSImageUploadCell.h"
+#import "NSString+Extention.h"
 
 #define EXIT_ALERT_TAG 1011
+#define SAVE_INFO_TAG 1012
 
 
 @interface FSProPostMainViewController ()
@@ -192,13 +194,23 @@
 
 -(void) doSave
 {
-    [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
-        [self internalDoSave:callback];
-    } completeCallbck:^{
-        [self endProgress];
-        [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
-    }];
-
+    //做预发布
+    NSMutableString *_msg = [NSMutableString string];
+    [_msg appendFormat:@"标题:%@\n", _proRequest.title];
+    [_msg appendFormat:@"描述信息:%@\n", _proRequest.descrip];
+    if (_publishSource == FSSourceProduct) {
+        [_msg appendFormat:@"价格:￥%@\n", _proRequest.price];
+        [_msg appendFormat:@"品牌名称:%@\n", _proRequest.brandName];
+    }
+    else {
+        [_msg appendFormat:@"活动开始时间:%@\n", _proRequest.startdate];
+        [_msg appendFormat:@"活动结束时间:%@\n", _proRequest.enddate];
+    }
+    [_msg appendFormat:@"门店名称:%@", _proRequest.storeName];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Content Preview",nil) message:_msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+    alert.tag = SAVE_INFO_TAG;
+    [alert show];
 }
 
 -(void) setProgress:(PostProgressStep)step withObject:(id)value
@@ -616,7 +628,7 @@
 {
     return  camera;
 }
-#pragma TDDatePickerControllerDelegate
+#pragma mark - TDDatePickerControllerDelegate
 - (void)datePickerSetDate:(TDDatePickerController *)viewController
 {
     [self proPostStep:PostStep3Finished didCompleteWithObject:@[viewController.datePicker.date]];
@@ -636,7 +648,23 @@
 }
 -(void)titleViewControllerSetTitle:(FSProPostTitleViewController *)viewController
 {
-    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text,viewController.txtDesc.text,viewController.txtPrice.text]];
+    NSMutableString *_desc = [NSMutableString stringWithFormat:@"%@", viewController.txtDesc.text];
+    if (_publishSource == FSSourceProduct) {
+        if (![NSString isNilOrEmpty:viewController.txtProDesc.text]) {
+            [_desc appendFormat:@"。\n参与活动:%@", viewController.txtProDesc.text];
+        }
+        if (![NSString isNilOrEmpty:viewController.txtProStartTime.text]) {
+            [_desc appendFormat:@"。\n活动有效期:%@ ~ ", viewController.txtProStartTime.text];
+            if (![NSString isNilOrEmpty:viewController.txtProEndTime.text]) {
+                [_desc appendFormat:@"%@", viewController.txtProEndTime.text];
+            }
+            else {
+                [_desc appendFormat:@"%@", @"Error"];
+            }
+        }
+    }
+    NSLog(@"desc:%@", _desc);
+    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, viewController.txtPrice.text]];
     [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
@@ -651,6 +679,14 @@
 {
     if (alertView.tag == EXIT_ALERT_TAG && buttonIndex == 1) {
         [self dismissViewControllerAnimated:TRUE completion:nil];
+    }
+    if (alertView.tag = SAVE_INFO_TAG && buttonIndex == 1) {
+        [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
+            [self internalDoSave:callback];
+        } completeCallbck:^{
+            [self endProgress];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
+        }];
     }
 }
 @end

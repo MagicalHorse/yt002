@@ -9,7 +9,7 @@
 #import "FSNickieViewController.h"
 #import "UIViewController+Loading.h"
 #import "FSUserProfileRequest.h"
-
+#import "NSString+Extention.h"
 
 @interface FSNickieViewController ()
 {
@@ -176,25 +176,25 @@
     NSMutableString *error = *errorin;
     if (_nickField.text.length<=0)
     {
-        [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_ZERO", nil)];;
-        return false;
+        [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_ZERO", nil)];
+        return NO;
     } else if(_nickField.text.length>10)
     {
-        [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_TOO_MANY", nil)];;
-        return false;
+        [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_TOO_MANY", nil)];
+        return NO;
     }
     else if (_phoneField.text.length>0)
     {
-        NSString *phone = _phoneField.text;
-        NSError *error1 = NULL;
-        NSDataDetector *detector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypePhoneNumber error:&error1];
-        NSArray *matches = [detector matchesInString:phone options:0 range:NSMakeRange(0, [phone length])];
-        if (!(matches != nil && matches.count ==1)) {
-            [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_PHONE", nil)];
-            return false;
+        if ([NSString isMobileNum:_phoneField.text]) {
+            return YES;
+        }
+        else {
+            [error appendString:NSLocalizedString(@"USER_NICKIE_VALIDATE_PHONE", nil)];;
+//            [self reportError:NSLocalizedString(@"USER_NICKIE_VALIDATE_PHONE", nil)];
+            return NO;
         }
     }
-    return true;
+    return YES;
 }
 
 #pragma UITableViewController delegate

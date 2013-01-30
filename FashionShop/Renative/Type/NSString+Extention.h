@@ -19,4 +19,25 @@
 
 +(NSString *)stringMetersFromDouble:(double)input;
 
+/**
+ 判断字符串是否符合Email格式。
+ @param input 字符串
+ @returns 布尔值 YES: 符合 NO: 不符合
+ */
++(BOOL)isEmail:(NSString *)input;
+
+/**
+ 判断字符串是否符合手机号格式。
+ @param input 字符串
+ @returns 布尔值 YES: 符合 NO: 不符合
+ */
++(BOOL)isPhoneNum:(NSString *)input;
+
+/**
+ 判断字符串是否符合电话格式。
+ @param input 字符串
+ @returns 布尔值 YES: 符合 NO: 不符合
+ */
++(BOOL)isMobileNum:(NSString *)input;
+
 @end

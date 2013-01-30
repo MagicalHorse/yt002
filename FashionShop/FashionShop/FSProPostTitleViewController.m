@@ -9,10 +9,14 @@
 #import "FSProPostTitleViewController.h"
 #import "UIViewController+Loading.h"
 #import "FSProPostMainViewController.h"
+#import "NSString+Extention.h"
 
 @interface FSProPostTitleViewController ()
 {
     UIView *backView;
+    TDDatePickerController* _datePicker;
+    TDDatePickerController* _dateEndPicker;
+    id activityObject;
 }
 
 @end
@@ -35,6 +39,11 @@
     [super viewDidLoad];
     [self decorateTapDismissKeyBoard];
     [self bindControl];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [_txtTitle becomeFirstResponder];
 }
 
 -(void) decorateTapDismissKeyBoard
@@ -61,12 +70,13 @@
     [_txtTitle setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtTitle.layer.borderWidth = 0.5;
     _txtTitle.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
-    _txtTitle.placeholder =NSLocalizedString(@"only 40 chars allowed", nil);
+    _txtTitle.placeholder = [NSString stringWithFormat:NSLocalizedString(@"only %d chars allowed", nil), 10];
     [_txtDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
-    _txtDesc.layer.borderWidth = 1;
+    _txtDesc.layer.borderWidth = 2;
     _txtDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
     if (_publishSource==FSSourceProduct)
     {
+        _txtDesc.placeholder = NSLocalizedString(@"Input Product Desc", nil);
         _lblPrice.font = ME_FONT(14);
         _lblPrice.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
         _lblPrice.textAlignment = NSTextAlignmentRight;
@@ -89,15 +99,16 @@
         [_txtProStartTime setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
         _txtProStartTime.layer.borderWidth = 1;
         _txtProStartTime.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
-        _txtProStartTime.delegate = self;
+        _txtProStartTime.tag = 1;
         
         [_txtProEndTime setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
         _txtProEndTime.layer.borderWidth = 1;
+        _txtProEndTime.tag = 2;
         _txtProEndTime.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
-        _txtProEndTime.delegate = self;
     }
     else
     {
+        _txtDesc.placeholder = NSLocalizedString(@"Input Promotion Desc", nil);
         _lblPrice.layer.opacity = 0;
         _txtPrice.layer.opacity = 0;
         
@@ -115,21 +126,33 @@
     }
     _txtTitle.delegate = self;
     _txtDesc.delegate = self;
-    
 }
-
 
 -(BOOL) checkInput
 {
-    if (!(_txtTitle.text.length>0 &&
-        _txtTitle.text.length<40))
+    if (!(_txtTitle.text.length > 0 &&
+        _txtTitle.text.length < 10))
     {
-        [self reportError:NSLocalizedString(@"PRO_POST_TITLE_LENGTH_ERROR", nil)];
-        return FALSE;
+        int titleLength = 10;
+        [self reportError:[NSString stringWithFormat:NSLocalizedString(@"PRO_POST_TITLE_LENGTH_ERROR %d", nil), titleLength]];
+        return NO;
     }
+    //如果选择了活动描述，则要求一定要输入有效期。
+    if (![NSString isNilOrEmpty:_txtProDesc.text]) {
+        if ([NSString isNilOrEmpty:_txtProStartTime.text] || [NSString isNilOrEmpty:_txtProStartTime.text]) {
+            [self reportError:NSLocalizedString(@"PRO_POST_DURATION_ERROR", nil)];
+            return NO;
+        }
+        //有效期合法性判断
+        //...
+    }
+    //如果是商品，必须要输入价格
+//    if (_publishSource == FSSourceProduct &&
+//        ([NSString isNilOrEmpty:_txtPrice.text] || _txtPrice.text.intValue <= 0)) {
+//        [self reportError:NSLocalizedString(@"", nil)];
+//        return NO;
+//    }
     return YES;
-
-    
 }
 
 -(void) dismissKB
@@ -143,10 +166,43 @@
     {
         [_txtPrice resignFirstResponder];
     }
-
 }
 
-#pragma uitextfielddelegate
+#pragma mark - TDDatePickerControllerDelegate
+
+- (void)datePickerSetDate:(TDDatePickerController *)viewController
+{
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:@"yyyy年MM月dd日 HH时mm分"];
+    if (viewController == _datePicker)
+    {
+        _txtProStartTime.text = [formater stringFromDate:_datePicker.datePicker.date];
+    }
+    else if(viewController == _dateEndPicker)
+    {
+        _txtProEndTime.text = [formater stringFromDate:_dateEndPicker.datePicker.date];
+    }
+    [self dismissSemiModalViewController:viewController];
+}
+
+- (void)datePickerCancel:(TDDatePickerController *)viewController
+{
+    [self dismissSemiModalViewController:viewController];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    activityObject = textView;
+}
+
+#pragma mark - UITextFieldDelegate
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    activityObject = textField;
+}
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -154,15 +210,20 @@
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField != _txtPrice) {
-        return YES;
+    if (textField == _txtTitle) {
+        if (textField.text.length > 9 && ![string isEqualToString:@""]) {
+            return NO;
+        }
     }
-    if ([string isEqualToString:@""]) {
-        return YES;
+    if (textField == _txtPrice) {
+        if ([string isEqualToString:@""]) {
+            return YES;
+        }
+        if (textField.text.length > 7) {
+            return NO;
+        }
     }
-    if (textField.text.length > 7) {
-        return NO;
-    }
+    
     return YES;
 }
 
@@ -189,6 +250,26 @@
         [delegate titleViewControllerCancel:self];
     }
 }
+
+- (IBAction)selDuration:(id)sender {
+    UIButton* btn = (UIButton*)sender;
+    if (btn.tag == 1) {
+        if (!_datePicker) {
+            _datePicker = [[TDDatePickerController alloc] init];
+            _datePicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_datePicker];
+    }
+    else {
+        if (!_dateEndPicker) {
+            _dateEndPicker = [[TDDatePickerController alloc] init];
+            _dateEndPicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_dateEndPicker];
+    }
+    [activityObject resignFirstResponder];
+}
+
 - (void)viewDidUnload {
     [self setLblName:nil];
     [self setLblDescName:nil];
