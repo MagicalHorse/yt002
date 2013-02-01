@@ -22,6 +22,10 @@ typedef void (^FSProgressExecBlock) (dispatch_block_t);
 -(void) showNoResult:(UIView *)container withText:(NSString *)text originOffset:(CGFloat)height;
 -(void) hideNoResult:(UIView *)container;
 
+-(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName withText:(NSString *)text;
+-(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName  withText:(NSString *)text originOffset:(CGFloat)height;
+-(void) hideNoResultImage:(UIView *)container;
+
 -(void) reportError:(NSString *)message;
 
 -(void) startProgress:(NSString *)message withExeBlock:(FSProgressExecBlock)block completeCallbck:(dispatch_block_t)callback;

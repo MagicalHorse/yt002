@@ -17,6 +17,7 @@
 #define UIVIEWCONTROLLER_CAT_PROGRESS_ID 10002
 #define UIVIEWCONTROLLER_CAT_ENTER_VIEW 10003
 #define UIVIEWCONTROLLER_NO_RESULT_ID 10004
+#define UIVIEWCONTROLLER_NO_RESULT_ImageID 10005
 
 @implementation UIViewController(loading)
 
@@ -147,6 +148,59 @@
     
 }
 
+//列表为空时显示图片
+
+-(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName  withText:(NSString *)text
+{
+    [self showNoResultImage:container withImage:imageName  withText:(NSString *)text originOffset:0];
+}
+-(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName  withText:(NSString *)text originOffset:(CGFloat)height
+{
+    if (!container)
+        container = self.view;
+    UIImageView *blankView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ImageID];
+    if(!blankView)
+    {
+        UIImage *blankImage = [UIImage imageNamed:imageName];
+        blankView = [[UIImageView alloc] initWithImage:blankImage];
+        blankView.frame = CGRectMake(self.view.frame.size.width/2-blankImage.size.width/2,self.view.frame.origin.y+height+10, blankImage.size.width, blankImage.size.height);
+        blankView.tag = UIVIEWCONTROLLER_NO_RESULT_ImageID;
+    }
+    if(text)
+    {
+        UILabel *noResult =(UILabel *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ID];
+        if(!noResult)
+        {
+            noResult = [[UILabel alloc] init];
+            noResult.text = text;
+            noResult.font = ME_FONT(12);
+            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(12)];
+            noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
+        }
+        
+        [container addSubview:noResult];
+        [container bringSubviewToFront:noResult];
+    }
+    [container addSubview:blankView];
+    [container bringSubviewToFront:blankView];
+    
+}
+-(void) hideNoResultImage:(UIView *)container
+{
+    if (!container)
+        container = self.view;
+    UIImageView *blankView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ImageID];
+    if (blankView)
+    {
+        [blankView removeFromSuperview];
+    }
+    UILabel *noResult =(UILabel *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ID];
+    if (noResult)
+    {
+        [noResult removeFromSuperview];
+    }
+}
 
 -(void) reportError:(NSString *)message
 {

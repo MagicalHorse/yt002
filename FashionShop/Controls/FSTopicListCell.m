@@ -26,4 +26,18 @@
     // Configure the view for the selected state
 }
 
+-(void)setData:(FSTopic *)data
+{
+    _data = data;
+    
+    if (_data.resources && _data.resources.count>0)
+    {
+        NSURL *url = [(FSResource *)_data.resources[0] absoluteUrl];
+        if (url)
+        {
+            [_content setImageWithURL:url placeholderImage:nil];
+        }
+    }
+}
+
 @end

@@ -12,7 +12,7 @@
 @implementation FSPagedFavor
 +(NSString *)pagedKeyPath
 {
-    return @"favorite";
+    return @"items";
 }
 
 +(Class)pagedModel

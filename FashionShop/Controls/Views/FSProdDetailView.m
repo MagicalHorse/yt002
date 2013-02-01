@@ -82,9 +82,11 @@
     int yOff = 5;
     if (_data.isFavored) {
         _btnActivity.hidden = NO;
-        _btnActivity.titleLabel.font = ME_FONT(14);
+        _btnActivity.titleLabel.font = ME_FONT(13);
         [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
-        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateSelected];
+        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
+        [_btnActivity setBackgroundImage:[UIImage imageNamed:@"promotion_normal_bg.png"] forState:UIControlStateNormal];
+        [_btnActivity setBackgroundImage:[UIImage imageNamed:@"promotion_selected_bg.png"] forState:UIControlStateHighlighted];
         origFrame = _btnActivity.frame;
         origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff * 2;
         _btnActivity.frame = origFrame;

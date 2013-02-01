@@ -20,7 +20,7 @@
     #define REST_API_URL   @"http://10.32.11.65:9550/api"
 #elif defined ENVIRONMENT_ADHOC
 //adhoc
-    #define REST_API_URL   @"http://itoo.yintai.com:7070/api"
+    #define REST_API_URL   @"http://10.10.11.65:7070/api"
 #elif defined ENVIRONMENT_STORE
 //production
     #define REST_API_URL   @"http://itoo.yintai.com/api"
@@ -29,28 +29,18 @@
     #define REST_API_URL   @"http://10.32.11.65:9550/api"
 #endif
 
-//测试
-//#define SINA_WEIBO_APP_KEY @"1594791248"
-//#define SINA_WEIBO_APP_SECRET_KEY @"7ef3ddef06d52a937a0fcc3fc44d19f4"
 //正式
 #define SINA_WEIBO_APP_KEY @"2978041275"
 #define SINA_WEIBO_APP_SECRET_KEY @"ea68b2a26ca930c6b51d434decdd2c9b"
 #define SINA_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
-//测试
-//#define QQ_WEIBO_APP_KEY @"801298995"
-//#define QQ_WEIBO_APP_SECRET_KEY @"dbab88f4d3e0b27c00b15f52d1a5fc61"
 //正式
 #define QQ_WEIBO_APP_KEY @"801302732"
 #define QQ_WEIBO_APP_SECRET_KEY @"cd497771f88f6971ad11855088d050fd"
 #define QQ_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
-//测试
-//#define WEIXIN_API_APP_KEY @"wx730465bd3f0845af"
 //正式
 #define WEIXIN_API_APP_KEY @"wx413d6a12d10df434"
-
-
 
 #define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
 
@@ -64,7 +54,6 @@
 
 #define CollectionView_Default_Height 100.0f
 
-//HeQingshan
 #define NAV_HIGH        44
 #define TAB_HIGH        49
 #define APP_HIGH        [[UIScreen mainScreen] applicationFrame].size.height
@@ -76,7 +65,6 @@
 #define theApp          ((FSAppDelegate *) [[UIApplication sharedApplication] delegate])
 #define STATUSBAR_HIGH  ([UIApplication sharedApplication].statusBarHidden?0:20)
 //当前设备是否支持高清
-//#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
 #define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? ([[UIScreen mainScreen] currentMode].size.width == 640 || [[UIScreen mainScreen] currentMode].size.width == 1536) : NO)
 //是否高清，放大系数
 #define RetinaFactor (isRetina?2:1)

@@ -197,7 +197,7 @@
 {
     if (!prods)
         return;
-    NSMutableArray *indexPathArray = [@[] mutableCopy];
+//    NSMutableArray *indexPathArray = [@[] mutableCopy];
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_prods indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
             if ([[(FSProdItemEntity *)obj1 valueForKey:@"id"] intValue] ==[[(FSProdItemEntity *)obj valueForKey:@"id"] intValue])
@@ -226,7 +226,15 @@
     }];
     if (shouldReload)
       [_cvContent reloadData];
- 
+    if (_prods.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_cvContent withImage:@"blank_dongdong.png" withText:nil   originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:_cvContent];
+    }
 }
 
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted

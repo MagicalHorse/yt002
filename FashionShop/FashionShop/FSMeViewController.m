@@ -489,6 +489,7 @@
     [_userProfileView removeFromSuperview];
     [self.view addSubview:_userProfileView];
     [self bindUserProfile];
+    [self setSegHeader];
     if (_loginView!=nil)
     {
         [_loginView removeFromSuperview];
@@ -497,6 +498,25 @@
     [self registerLocalNotification];
     
 }
+
+-(void) setSegHeader
+{
+    [_segHeader removeAllSegments];
+    [_segHeader insertSegmentWithTitle:NSLocalizedString(@"User_Profile_Like", nil) atIndex:0 animated:FALSE];
+    if (_userProfile.userLevelId==FSDARENUser) {
+        [_segHeader insertSegmentWithTitle:NSLocalizedString(@"i shared", nil) atIndex:1 animated:FALSE];
+    }
+    [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
+    _segHeader.selectedSegmentIndex = 0;
+    _isInRefreshing = YES;
+    [self loadILike];
+}
+
+-(void)dealSegChanged:(UISegmentedControl *) segmentedControl
+{
+    [self loadILike];
+}
+
 -(void) ensureDataContext
 {
     _likePros = nil;
@@ -542,6 +562,7 @@
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
     
     _vLikeHeader.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
+    [_segHeader setSelectedSegmentIndex:0];
     _lblLikeHeader.font = ME_FONT(12);
     _lblLikeHeader.text = NSLocalizedString(_userProfile.userLevelId==FSDARENUser?@"i shared":@"User_Profile_Like", nil);
     
@@ -570,10 +591,6 @@
   
     _likeView.delegate = self;
     _likeView.dataSource = self;
-
-    
-    [self loadILike];
-
 }
 
 -(void) loadILike
@@ -588,7 +605,8 @@
         [self beginLoading:_likeView];
     _favorPageIndex = pageIndex;
     FSEntityRequestBase *request = [self createRequest:pageIndex];
-    NSString *blockKey = _userProfile.userLevelId==FSDARENUser?LOGIN_GET_USER_SHARE:LOGIN_GET_USER_LIKE;
+    NSString *blockKey = _segHeader.selectedSegmentIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
+    NSLog(@"blockKey:%@", blockKey);
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
         if (showProgress)
             [self endLoading:_likeView];
@@ -671,7 +689,9 @@
     {
         [list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likePros indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
+                //if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
+                if ([(FSFavor *)obj1 sourceId] ==[(FSFavor *)obj sourceId] &&
+                    [(FSFavor *)obj1 sourceType]==[(FSFavor *)obj sourceType])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -732,14 +752,13 @@
             [_likeView reloadData];
         if (_likePros.count<1)
         {
-            [self showNoResult:_likeView withText:NSLocalizedString(@"no shared item", nil)];
+            //加载空视图
+            [self showNoResultImage:_likeView withImage:@"blank_me.png" withText:NSLocalizedString(@"no shared item", nil) originOffset:20];   
         } else
         {
             [self hideNoResult:_likeView];
         }
-        
     }
-
 }
 
 -(void)filterAccount:(int)index
@@ -976,7 +995,7 @@
     
 	[refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     [self loadImagesForOnscreenRows];
-  
+    NSLog(@"crollView.contentOffset:%@\nscrollView.contentSize:%@\nscrollView.frame:%@", NSStringFromCGPoint(scrollView.contentOffset), NSStringFromCGSize(scrollView.contentSize), NSStringFromCGRect(scrollView.frame));
     if (!_noMoreFavor &&
         !_isInLoading &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
@@ -1341,6 +1360,7 @@
     [self setLikeContainer:nil];
     [self setThumbImg:nil];
     [self setImgLevel:nil];
+    [self setSegHeader:nil];
     [super viewDidUnload];
 }
 

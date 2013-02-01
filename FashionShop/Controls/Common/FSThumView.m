@@ -65,15 +65,23 @@
     [self setNeedsLayout];
  
 }
+
 -(void)ensureImageButton
 {
     if (_imgButton)
         return;
     _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
-    [_imgButton setBackgroundImage:[UIImage imageNamed:@"default_thum_icon.png"] forState:UIControlStateNormal];
-    _imgButton.contentMode = UIViewContentModeScaleAspectFill;
+    
+    UIImage *backgroundImage = [UIImage imageNamed:@"default_thum_icon.png"];
+    UIImageView *uiImageView=[[UIImageView alloc] initWithImage:backgroundImage];
+    uiImageView.contentMode=UIViewContentModeScaleAspectFit;
+    uiImageView.frame = _imgButton.frame;
+    uiImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    uiImageView.layer.borderWidth = 1;
+    [_imgButton addSubview:uiImageView];
     [self addSubview:_imgButton];
 }
+
 -(void)setDelegate:(id<FSThumViewDelegate>)delegate
 {
     if (delegate)

@@ -14,6 +14,7 @@
 #import "FSFavorProCell.h"
 #import "SpringboardLayout.h"
 #import "FSRefreshableViewController.h"
+#import "FSSegmentControl.h"
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
@@ -33,6 +34,7 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 @property (strong, nonatomic) IBOutlet UIButton *btnCoupons;
 @property (strong, nonatomic) IBOutlet UIView *vLikeHeader;
 @property (strong, nonatomic) IBOutlet UILabel *lblLikeHeader;
+@property (strong, nonatomic) IBOutlet FSSegmentControl *segHeader;
 @property (strong, nonatomic) IBOutlet UIView *likeContainer;
 
 @property (strong,nonatomic) FSLoginCompleteDelegate completeCallBack;

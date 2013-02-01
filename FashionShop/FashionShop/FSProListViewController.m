@@ -334,7 +334,6 @@ typedef enum {
     NSMutableArray *source = [_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (source == nil || source.count<=0)
     {
-
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.nextPage = 1;
@@ -449,7 +448,15 @@ typedef enum {
         [indexDates addObject:obj];
     }
     
-    
+    if (_dateSource.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:nil   originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:_contentView ];
+    }
 }
 -(void) mergeByStore:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
 {
@@ -480,6 +487,16 @@ typedef enum {
             [_storeSource addObject:obj.store];
         
         [indexStore addObject:obj];
+    }
+    
+    if (_storeSource.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:nil   originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:_contentView ];
     }
 }
 -(void)fillFetchResultInMemory:(FSProItems *)pros

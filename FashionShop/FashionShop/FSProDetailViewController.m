@@ -595,6 +595,7 @@
         CGFloat height = PRO_DETAIL_COMMENT_INPUT_HEIGHT;
         commentInput.frame = CGRectMake(0, self.view.frame.size.height-TOOLBAR_HEIGHT-height, self.view.frame.size.width, height);
         commentInput.txtComment.delegate = self;
+        [commentInput.txtComment becomeFirstResponder];
         [commentInput.btnComment addTarget:self action:@selector(saveComment:) forControlEvents:UIControlEventTouchUpInside];
         [commentInput.btnCancel addTarget:self action:@selector(clearComment:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:commentInput];

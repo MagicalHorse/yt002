@@ -123,7 +123,15 @@
         }];
         [_contentView reloadData];
     }
-    
+    if (_likes.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:nil  originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:_contentView];
+    }
 }
 
 -(FSCommonUserRequest *)createRequest:(int)index

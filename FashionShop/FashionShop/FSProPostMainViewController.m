@@ -161,7 +161,6 @@
     _tbAction.dataSource = self;
     _tbAction.delegate = self;
     [_tbAction reloadData];
-    
 }
 
 -(void) clearData
@@ -386,6 +385,7 @@
             _datePicker = [[TDDatePickerController alloc] init];
             _datePicker.delegate = self;
         }
+        _datePicker.datePicker.minimumDate = [NSDate date];
         [self presentSemiModalViewController:_datePicker];
     }
     else {
@@ -393,6 +393,7 @@
             _dateEndPicker = [[TDDatePickerController alloc] init];
             _dateEndPicker.delegate = self;
         }
+        _dateEndPicker.datePicker.minimumDate = [NSDate date];
         [self presentSemiModalViewController:_dateEndPicker];
     }
 }
@@ -681,12 +682,36 @@
         [self dismissViewControllerAnimated:TRUE completion:nil];
     }
     if (alertView.tag = SAVE_INFO_TAG && buttonIndex == 1) {
-        [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
-            [self internalDoSave:callback];
-        } completeCallbck:^{
-            [self endProgress];
-            [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
-        }];
+        //如果不是结束日期>开始日期>当前日期,则返回错误提示
+        NSMutableString *error = [@"" mutableCopy];
+        if([self validateDate:&error])
+        {
+            [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
+                [self internalDoSave:callback];
+            } completeCallbck:^{
+                [self endProgress];
+                [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
+            }];
+        }
+        else
+        {
+            [self reportError:error];
+        }
     }
 }
+
+- (BOOL)validateDate:(NSMutableString **)errorin
+{
+    if (!errorin)
+        *errorin = [@"" mutableCopy];
+    NSMutableString *error = *errorin;
+    NSDate *now=[[NSDate alloc] init];
+    if([_proRequest.startdate compare:now]==NSOrderedAscending)
+    {
+        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_STARTDATE_VALIDATE", nil)];;
+        return false;
+    }
+    return true;
+}
+
 @end
