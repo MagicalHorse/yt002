@@ -12,6 +12,7 @@
 @implementation FSDetailBaseView
 @synthesize pType;
 @synthesize showViewMask = _showViewMask;
+@synthesize myToolBar;
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];

@@ -77,6 +77,14 @@ void uncaughtExceptionHandler(NSException *exception)
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
+    //添加背景色
+    NSArray *array = [root.view subviews];
+    UITabBar *_tabbar = [array objectAtIndex:1];
+    UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
+    UIImageView *_vImage = [[UIImageView alloc] initWithImage:_image];
+    _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
+    [_tabbar insertSubview:_vImage atIndex:1];
+    
     self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
     [self.window makeKeyAndVisible];

@@ -18,7 +18,7 @@
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
-@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate,UIAlertViewDelegate>
+@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate,UINavigationControllerDelegate>
 
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;
@@ -32,8 +32,6 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
 @property (strong, nonatomic) IBOutlet UIButton *btnPoints;
 @property (strong, nonatomic) IBOutlet UIButton *btnCoupons;
-@property (strong, nonatomic) IBOutlet UIView *vLikeHeader;
-@property (strong, nonatomic) IBOutlet UILabel *lblLikeHeader;
 @property (strong, nonatomic) IBOutlet FSSegmentControl *segHeader;
 @property (strong, nonatomic) IBOutlet UIView *likeContainer;
 

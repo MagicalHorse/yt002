@@ -19,7 +19,7 @@
     BOOL isInRemove;
 }
 
-- (IBAction)doRemoveItem:(id)sender;
+//- (IBAction)doRemoveItem:(id)sender;
 
 @end
 
@@ -54,7 +54,6 @@
 
 -(void) prepareRemoveClick
 {
-    
     deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 24)];
     [deleteButton setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
      
@@ -68,7 +67,16 @@
     }
 }
 
+-(void) showProIcon
+{
+    _btnPro.hidden = NO;
+    _btnPro.frame = CGRectMake(0, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
+}
 
+-(void) hidenProIcon
+{
+    _btnPro.hidden = YES;
+}
 
 - (void)applyLayoutAttributes:(SpringboardLayoutAttributes *)layoutAttributes
 {
@@ -87,7 +95,7 @@
     }
 }
 
-- (void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop
+-(void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop
 {
     if (!self.imgResource.image &&
         [_data respondsToSelector:@selector(resources)])
@@ -98,7 +106,7 @@
             NSURL *url = [resource absoluteUrl];
             if (url)
             {
-                [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor)];
+                [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
             }
         }
        

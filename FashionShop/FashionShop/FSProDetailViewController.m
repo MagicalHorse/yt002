@@ -18,7 +18,7 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "FSDRViewController.h"
 #import "FSProCommentHeader.h"
-#import "FSBrandItemsViewController.h"
+#import "FSProductListViewController.h"
 #import "FSStoreDetailViewController.h"
 #import "FSSearchViewController.h"
 
@@ -95,7 +95,6 @@
     currentPageIndex = -1;
     [self.paginatorView reloadData];
     self.currentPageIndex = indexInContext;
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -127,6 +126,11 @@
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProdDetailView" owner:self options:nil] lastObject];
     }
     [view setPType:source];
+    CGRect _rect = view.myToolBar.frame;
+    _rect.size.height = TAB_HIGH;
+    view.myToolBar.frame = _rect;
+    
+    [view setToolBarBackgroundImage];
 
     if ([view respondsToSelector:@selector(imgThumb)])
     {
@@ -157,7 +161,6 @@
 
 -(void) resetScrollViewSize:(FSDetailBaseView *)view
 {
-    
     [view resetScrollViewSize];
 }
 
@@ -166,7 +169,7 @@
     if (currentPageIndex== pageIndex)
         return;
     currentPageIndex= pageIndex;
-    __block FSDetailBaseView * blockViewForRefresh = paginatorView.currentPage;
+    __block FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)paginatorView.currentPage;
     __block FSProDetailViewController *blockSelf = self;
     _sourceType = blockViewForRefresh.pType;
    
@@ -231,7 +234,7 @@
 
 -(void)delayLoadComments:(NSNumber *)proId
 {
-    __block FSDetailBaseView * blockViewForRefresh = self.paginatorView.currentPage;
+    __block FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)self.paginatorView.currentPage;
     if (!blockViewForRefresh)
         return;
     __block FSProDetailViewController *blockSelf = self;
@@ -341,7 +344,7 @@
     {
         request.routeResourcePath = _sourceType==FSSourceProduct?RK_REQUEST_FAVOR_PROD_REMOVE:RK_REQUEST_FAVOR_PRO_REMOVE;
     }
-    FSDetailBaseView *view = self.paginatorView.currentPage;
+    FSDetailBaseView *view = (FSDetailBaseView*)self.paginatorView.currentPage;
     if ([view.data isKindOfClass:[FSProdItemEntity class]])
     {
         ((FSProdItemEntity *)view.data).isFavored = !favored;
@@ -357,7 +360,7 @@
         if (respData.isSuccess)
         {
             
-            FSDetailBaseView *view = blockSelf.paginatorView.currentPage;
+            FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
             if ([view.data isKindOfClass:[FSProdItemEntity class]])
             {
                 ((FSProdItemEntity *)view.data).isFavored = !favored;
@@ -401,7 +404,7 @@
         [sheepButton addTarget:self action:@selector(doFavor:) forControlEvents:UIControlEventTouchUpInside];
         button.customView = sheepButton;
     }
-    UIButton *sheepButton = button.customView;
+    UIButton *sheepButton = (UIButton*)button.customView;
     [sheepButton setImage:sheepImage forState:UIControlStateNormal];
     [sheepButton sizeToFit];
     //button.customView = sheepButton;
@@ -483,21 +486,15 @@
 }
 
 - (IBAction)showBrand:(id)sender {
-    FSDetailBaseView * view = self.paginatorView.currentPage;
+    FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
     FSBrand *tbrand = [view.data brand];
-    FSBrandItemsViewController *dr = [[FSBrandItemsViewController alloc] initWithNibName:@"FSBrandItemsViewController" bundle:nil];
+    FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
     dr.brand = tbrand;
     [self.navigationController pushViewController:dr animated:TRUE];
 }
 
-- (IBAction)goPromotionPage:(id)sender {
-}
-
-- (IBAction)goActivity:(id)sender {
-}
-
 - (IBAction)goStore:(id)sender {
-    FSDetailBaseView * view = self.paginatorView.currentPage;
+    FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
     FSStore *store = [view.data store];
     FSStoreDetailViewController *sv = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
     sv.store =store;
@@ -548,13 +545,6 @@
                         UIBarButtonItem *favorButton = [view btnFavor];
                         [self internalDoFavor:favorButton];
                     }
-              /*
-                    [self startProgress:NSLocalizedString(@"FS_PRODETAIL_FAVORING",nil)withExeBlock:^(dispatch_block_t callback){
-                        [self internalDoFavor:callback];
-                    } completeCallbck:^{
-                        [self endProgress];
-                    }];
-                     */
                 }
             }];
         };
@@ -736,7 +726,7 @@
     
 
 }
-#pragma FSImageSlide datasource
+#pragma mark - FSImageSlide datasource
 -(int)numberOfImagesInSlides:(FSImageSlideViewController *)view
 {
     return [[self itemSource] resource].count;
@@ -762,22 +752,41 @@
             [view reportError:NSLocalizedString(@"COMM_OPERATE_COMPL", nil)];
         }
     }];
-
 }
-#pragma FSThumbView delegate
+#pragma mark - FSThumbView delegate
 -(void)didTapThumView:(id)sender
 {
    if ([sender isKindOfClass:[FSThumView class]])
    {
-    [self goDR:[(FSThumView *)sender ownerUser].uid];
+       [self goDR:[(FSThumView *)sender ownerUser].uid];
    }
 }
 
-#pragma UITableViewSource delegate
+#pragma mark - UITableViewDelegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if (indexPath.section == 0 && indexPath.row == 0 && [parentView.data isFavored]) {
+        if (_sourceType == FSSourceProduct) {
+            //去活动详情
+        }
+        else {
+            //去商品列表
+        }
+    }
+}
+
+#pragma mark - UITableViewSource delegate
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if ([parentView.data isFavored]) {
+        if (section == 0) {
+            return nil;
+        }
+    }
     FSProCommentHeader * view = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentHeader" owner:self options:nil] lastObject];
     view.count = [[parentView.data comments] count];
     return view;
@@ -786,15 +795,29 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     [self resetScrollViewSize:(FSDetailBaseView*)tableView.superview.superview.superview];
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if ([parentView.data isFavored]) {
+        return 2;
+    }
     return 1;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if (!parentView.data) {
+        return 0;
+    }
+    int yOffset = PRO_DETAIL_COMMENT_HEADER_HEIGHT;
+    if ([parentView.data isFavored]) {
+        if (section == 0) {
+            return 1;
+        }
+        yOffset += 40;
+    }
     NSMutableArray *comments = [parentView.data comments];
     if (!comments ||
         comments.count<=0)
-        [self showNoResult:tableView withText:NSLocalizedString(@"no comments", Nil) originOffset:PRO_DETAIL_COMMENT_HEADER_HEIGHT];
+        [self showNoResult:tableView withText:NSLocalizedString(@"no comments", Nil) originOffset:yOffset];
     else
         [self hideNoResult:tableView];
     return comments?comments.count:0;
@@ -802,8 +825,26 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
     FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if ([parentView.data isFavored]) {
+        if (indexPath.section == 0) {
+            UITableViewCell *_cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+            if (_sourceType == FSSourceProduct) {
+                _cell.textLabel.text = @"查看商品活动详情";
+            }
+            else {
+                _cell.textLabel.text = @"查看活动商品列表";
+            }
+            _cell.textLabel.font = ME_FONT(14);
+            _cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            _cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            UILabel *_line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+            _line.backgroundColor = RGBCOLOR(213, 213, 213);
+            [_cell addSubview:_line];
+            return _cell;
+        }
+    }
+    FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
     [detailCell setData:[[parentView.data comments] objectAtIndex:indexPath.row]];
     detailCell.imgThumb.delegate = self;
    
@@ -812,8 +853,14 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if ([parentView.data isFavored]) {
+        if (indexPath.section == 0) {
+            return 40;
+        }
+    }
     FSProCommentCell *cell = (FSProCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-    CGFloat totalHeight = 31; //yoffset
+    CGFloat totalHeight = 31;
     totalHeight += [cell.lblComment sizeThatFits:cell.lblComment.frame.size].height;
     
     return MAX(PRO_DETAIL_COMMENT_CELL_HEIGHT,totalHeight+10);
@@ -821,10 +868,16 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    if ([parentView.data isFavored]) {
+        if (section == 0) {
+            return 0;
+        }
+    }
     return PRO_DETAIL_COMMENT_HEADER_HEIGHT;
 }
 
-#pragma UITEXTFIELD DELEGATE
+#pragma mark - UITEXTFIELD DELEGATE
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return [textField resignFirstResponder];

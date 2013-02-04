@@ -52,6 +52,7 @@ static FSShareView *_instance;
         [self configActionsIcon];
         AWActionSheet *sheet = [[AWActionSheet alloc] initWithIconSheetDelegate:self ItemCount:shareCells.count];
         [sheet showInView:vc.view];
+    sheet.cancelButtonIndex = 0;
     //}
 }
 

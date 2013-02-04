@@ -389,7 +389,6 @@
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (PSUICollectionView *)collectionView {
-    
     return 1;
 }
 
@@ -404,7 +403,14 @@
     } else if (cv == _cvContent)
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
-        [(FSProdDetailCell *)cell setData:[_prods objectAtIndex:indexPath.row]];
+        FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
+        [(FSProdDetailCell *)cell setData:_data];
+        if (1) {
+            [(FSProdDetailCell *)cell showProIcon];
+        }
+        else {
+            [(FSProdDetailCell *)cell hidenProIcon];
+        }
         cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
         cell.layer.borderWidth = 0.5;
         if (_cvContent.dragging == NO &&

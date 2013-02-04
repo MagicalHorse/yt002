@@ -58,6 +58,7 @@
 
 @interface UIImageView (WebCache) <SDWebImageManagerDelegate>
 
+-(void) setImageUrl:(NSURL *)imageUrl resizeWidth:(CGSize)size placeholderImage:(UIImage *)placeholder ;
 
 -(void) setImageUrl:(NSURL *)imageUrl resizeWidth:(CGSize)size ;
 /**

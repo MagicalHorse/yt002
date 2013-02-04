@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Fashion. All rights reserved.
 //
 
-#import "FSBrandItemsViewController.h"
+#import "FSProductListViewController.h"
 #import "UIViewController+Loading.h"
 #import "FSProdDetailCell.h"
 #import "FSProDetailViewController.h"
@@ -23,7 +23,7 @@
 #define ITEM_CELL_WIDTH 100
 #define PROD_PAGE_SIZE 20
 
-@interface FSBrandItemsViewController ()
+@interface FSProductListViewController ()
 {
     NSMutableArray *_prods;
     
@@ -41,7 +41,7 @@
 
 @end
 
-@implementation FSBrandItemsViewController
+@implementation FSProductListViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -62,7 +62,6 @@
 
 -(void) prepareData
 {
-
     _prods = [@[] mutableCopy];
     [self zeroMemoryBlock];
     [self beginLoading:_brandContent];
@@ -105,6 +104,9 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
+    CGRect _rect = _contentView.frame;
+    _rect.size.height = APP_HIGH>480?504:415;
+    _contentView.frame = _rect;
     _brandContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
     [_contentView addSubview:_brandContent];
     [_brandContent setCollectionViewLayout:clayout];
@@ -210,7 +212,7 @@
 -(void)loadMore
 {
     [self beginLoadMoreLayout:_brandContent];
-    __block FSBrandItemsViewController *blockSelf = self;
+    __block FSProductListViewController *blockSelf = self;
     [self refreshContent:FALSE withCallback:^{
          [blockSelf endLoadMore:_brandContent];
     }];

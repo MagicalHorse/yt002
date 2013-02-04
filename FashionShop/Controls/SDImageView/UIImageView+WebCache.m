@@ -58,6 +58,7 @@
     // Remove in progress downloader from queue
     [manager cancelForDelegate:self];
 
+    self.contentMode = UIViewContentModeScaleAspectFill;
     self.image = placeholder;
 
     if (url)
@@ -67,6 +68,14 @@
 }
 #endif
 
+-(void) setImageUrl:(NSURL *)imageUrl resizeWidth:(CGSize)size placeholderImage:(UIImage *)placeholder
+{
+    if (placeholder) {
+        self.contentMode = UIViewContentModeScaleAspectFill;
+        self.image = placeholder;
+    }
+    [self setImageUrl:imageUrl resizeWidth:size];
+}
 
 -(void) setImageUrl:(NSURL *)imageUrl resizeWidth:(CGSize)size
 {
@@ -74,8 +83,6 @@
     
     // Remove in progress downloader from queue
     [manager cancelForDelegate:self];
-    
-    self.image = nil;
 
     objc_setAssociatedObject(self, CROP_SIZE_TAG,[NSValue valueWithCGSize:size], OBJC_ASSOCIATION_COPY_NONATOMIC);
     objc_setAssociatedObject(self, IMAGE_IS_LAZY_TAG,[NSNumber numberWithBool:TRUE], OBJC_ASSOCIATION_COPY_NONATOMIC);
@@ -84,7 +91,6 @@
     {
         [manager downloadWithURL:imageUrl delegate:self];
     }
-    
 }
 
 -(UIImage *) cropImageIfNeed:(UIImage *)source
@@ -128,13 +134,16 @@
 {
     NSNumber * isLazyInt = objc_getAssociatedObject(self, IMAGE_IS_LAZY_TAG);
     
+    if (self.image != image) {
+        self.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    
     if ([isLazyInt boolValue])
     {
         UIImage *cropImage = image;
         
-        [self setImage:cropImage];//cropImage;
+        [self setImage:cropImage];
         [self performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:FALSE];
-        
     }
     else
     {
@@ -148,13 +157,17 @@
 {
     NSNumber * isLazyInt = objc_getAssociatedObject(self, IMAGE_IS_LAZY_TAG);
     
+    //图片从网站下载成功则改变其显示模式
+    if (self.image != image) {
+        self.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    
     if ([isLazyInt boolValue])
     {
         UIImage *cropImage = image;
         
-        [self setImage:cropImage];//cropImage;
+        [self setImage:cropImage];
         [self performSelectorOnMainThread:@selector(setNeedsLayout) withObject:nil waitUntilDone:FALSE];
-        
     }
     else
     {

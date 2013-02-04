@@ -18,5 +18,7 @@
 
 @property(nonatomic,strong) FSProdItemEntity *data;
 
+-(void) showProIcon;
+-(void) hidenProIcon;
 -(void)willRemoveFromView;
 @end

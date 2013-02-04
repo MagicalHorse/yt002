@@ -22,4 +22,7 @@
 @property (nonatomic,readonly) NSURL *absoluteUrl120;
 @property (nonatomic,readonly) NSURL *absoluteUrl320;
 @property (nonatomic,readonly) NSURL *absoluteUrlOrigin;
+
+-(NSURL *)absoluteUr:(int)width;
+
 @end

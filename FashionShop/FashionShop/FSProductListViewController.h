@@ -12,7 +12,14 @@
 #import "FSProDetailViewController.h"
 #import "FSRefreshableViewController.h"
 
-@interface FSBrandItemsViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
+typedef enum {
+    FSPageTypeAll = 0,
+    FSPageTypeBrand = 1,
+    FSPageTypeTopic = 2,
+}FSPageType;
+
+@interface FSProductListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
 @property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (strong, nonatomic) FSBrand *brand;
+@property (nonatomic) FSPageType pageType;
 @end

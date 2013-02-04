@@ -26,27 +26,31 @@
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;
-    if (1) {
-        _btnPro.hidden = NO;
-        _btnPro.frame = CGRectMake(5, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
-    }
-    else {
-        _btnPro.hidden = YES;
-    }
     
     if (_data.price &&
         [_data.price intValue]>0)
     {
-        _btnPrice.alpha =1;
+        _btnPrice.alpha =0.6;
         [_btnPrice setTitle:[NSString stringWithFormat:@"¥%d",[_data.price intValue]] forState:UIControlStateNormal];
         [_btnPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:9];
         CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
-        _btnPrice.frame = CGRectMake(self.frame.size.width-newsize.width, self.frame.size.height-newsize.height, newsize.width, newsize.height);
+        _btnPrice.frame = CGRectMake(self.frame.size.width-newsize.width, self.frame.size.height-newsize.height - 5, newsize.width, newsize.height);
     } else
     {
         _btnPrice.alpha = 0;
     }
+}
+
+-(void) showProIcon
+{
+    _btnPro.hidden = NO;
+    _btnPro.frame = CGRectMake(0, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
+}
+
+-(void) hidenProIcon
+{
+    _btnPro.hidden = YES;
 }
 
 - (void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop
@@ -58,7 +62,7 @@
             NSURL *url = [(FSResource *)_data.resource[0] absoluteUrl];
             if (url)
             {
-                [_imgPic setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor)];
+                [_imgPic setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
             }
         }
         

@@ -50,8 +50,16 @@
 {
     [super viewDidLoad];
     
-//    [self prepareData];
-//    [self prepareLayout];
+    [self prepareData];
+    [self prepareLayout];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (!_topicList || _topicList.count <= 0) {
+        
+    }
 }
 
 -(void) prepareData
@@ -64,6 +72,7 @@
         _currentPage = 0;
         FSTopicRequest *request =
         [self buildListRequest:RK_REQUEST_TOPIC_LIST nextPage:1 isRefresh:FALSE];
+        _isInLoading = YES;
         [request send:[FSPagedTopic class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:tbAction];
             if (resp.isSuccess)
@@ -78,6 +87,7 @@
             {
                 [self reportError:resp.errorDescrip];
             }
+            _isInLoading = NO;
         }];
     }
 }
@@ -85,25 +95,15 @@
 -(void) zeroMemoryBlock
 {
     _currentPage = 0;
-    _noMoreResult= FALSE;
+    _noMoreResult= NO;
+    _isInLoading = NO;
 }
 
 -(FSTopicRequest *)buildListRequest:(NSString *)route nextPage:(int)page isRefresh:(BOOL)isRefresh
 {
     FSTopicRequest *request = [[FSTopicRequest alloc] init];
-    if(isRefresh)
-    {
-    //    request.requestType = 0;
-        request.previousLatestDate = _refreshLatestDate;
-    }
-    else
-    {
-     //   request.requestType = 1;
-        request.previousLatestDate = _firstLoadDate;
-    }
-    
     request.nextPage = page;
-    request.pageSize = COMMON_PAGE_SIZE;
+    request.pageSize = 2;//COMMON_PAGE_SIZE;
     return request;
 }
 
@@ -112,8 +112,8 @@
     if (!prods)
         return;
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        int index = [prods indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-            if ([[(FSTopic *)obj1 valueForKey:@"id"] isEqualToValue:[(FSTopic *)obj valueForKey:@"id"]])
+        int index = [_topicList indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
+            if ([(FSTopic *)obj1 topicId] == [(FSTopic *)obj topicId])
             {
                 return TRUE;
                 *stop1 = TRUE;
@@ -129,7 +129,6 @@
             {
                 [_topicList insertObject:obj atIndex:0];
             }
-            
         }
     }];
     [tbAction reloadData];
@@ -159,27 +158,55 @@
     if (!isRefresh)
     {
         _currentPage++;
-        nextPage = _currentPage +1;
+        nextPage = _currentPage + 1;
+    }
+    else {
+        [self zeroMemoryBlock];
     }
     FSTopicRequest *request = [self buildListRequest:RK_REQUEST_TOPIC_LIST nextPage:nextPage isRefresh:isRefresh];
-    [request send:[FSPagedTopic class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+    _isInLoading = YES;
+    [request send:[FSPagedTopic class] withRequest:request completeCallBack:^(FSEntityBase *response) {
         callback();
-        if (resp.isSuccess)
+        if (response.isSuccess)
         {
-            FSPagedTopic *result = resp.responseData;
-            if (isRefresh)
+            FSPagedTopic *result = response.responseData;
+            if (isRefresh) {
                 _refreshLatestDate = [[NSDate alloc] init];
+                [_topicList removeAllObjects];
+            }
             else
             {
                 if (result.totalPageCount <= _currentPage+1)
                     _noMoreResult = TRUE;
             }
-            [self fillProdInMemory:result.items isInsert:isRefresh];
+            [self fillProdInMemory:result.items isInsert:NO];
         }
         else
         {
-            [self reportError:resp.errorDescrip];
+            [self reportError:response.errorDescrip];
         }
+        _isInLoading = NO;
+    }];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    if(!_noMoreResult
+       && (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+       &&scrollView.contentOffset.y>0)
+    {
+        [self loadMore];   
+    }
+}
+
+-(void)loadMore{
+    if (_isInLoading)
+        return;
+    __block FSTopicViewController *blockSelf = self;
+    [self beginLoadMoreLayout:tbAction];
+    [self refreshContent:NO withCallback:^{
+        [blockSelf endLoadMore:blockSelf.tbAction];
     }];
 }
 
@@ -211,7 +238,6 @@
     FSTopicListCell *cell = [self.tbAction dequeueReusableCellWithIdentifier:TOPIC_LIST_CELL];
     [cell setData:_topicList[indexPath.row]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    //cell.content.image = [UIImage imageNamed:[NSString stringWithFormat:@"topic%d.png", indexPath.row+1]];
     cell.content.layer.cornerRadius = 8;
     cell.content.layer.borderWidth = 0;
     return cell;

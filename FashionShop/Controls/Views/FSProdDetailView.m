@@ -78,8 +78,9 @@
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
       [self bringSubviewToFront:_lblFavorCount];
     
+    int yOff = 5 + _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y;
+    /*
     //添加活动按钮
-    int yOff = 5;
     if (_data.isFavored) {
         _btnActivity.hidden = NO;
         _btnActivity.titleLabel.font = ME_FONT(13);
@@ -96,6 +97,7 @@
         _btnActivity.hidden = YES;
         yOff += _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y;
     }
+     */
     
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
     _lblDescrip.font = ME_FONT(14);
@@ -106,9 +108,6 @@
     origFrame.size.height = fitSize.height;
     origFrame.size.width = fitSize.width;
     origFrame.origin.y = yOff;
-//    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
-//        origFrame.origin.y -= yOff * 2 + 2;
-//    }
     _lblDescrip.frame = origFrame;
     yOff += _lblDescrip.frame.size.height + 5;
   
@@ -117,7 +116,7 @@
     {
         FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
-        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor)];
+        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
         if (_data.resource.count>1)
         {
             UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
@@ -213,6 +212,7 @@
 {
     [self unregisterKVO];
 }
+
 -(void)updateInteraction
 {
     NSString *name = !_data.isFavored?@"bottom_nav_like_icon":@"bottom_nav_notlike_icon";
@@ -231,27 +231,39 @@
     [sheepButton setImage:sheepImage forState:UIControlStateNormal];
     [sheepButton sizeToFit];
     
+    
+}
+
+-(void)updateToolBar:(id)data
+{
+    _data = data;
     //更新优惠按钮
     if (_data.isFavored) {
-        NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count >= 7) {
             [_array removeObject:_fixibleItem3];
             [_array removeObject:_btnCoupon];
             _fixibleItem1.width = 70;
             _fixibleItem4.width = 70;
-            [_myToolBar setItems:_array animated:YES];
+            [self.myToolBar setItems:_array animated:YES];
         }
     }
     else {
-        NSMutableArray *_array = [NSMutableArray arrayWithArray:_myToolBar.items];
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count < 7) {
             [_array insertObject:_fixibleItem3 atIndex:4];
             [_array insertObject:_btnCoupon atIndex:5];
             _fixibleItem1.width = 40;
             _fixibleItem4.width = 40;
-            [_myToolBar setItems:_array animated:YES];
+            [self.myToolBar setItems:_array animated:YES];
         }
     }
+}
+
+-(void)setToolBarBackgroundImage
+{
+    UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
+    [self.myToolBar setBackgroundImage:_image forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 }
 
 -(void) resetScrollViewSize

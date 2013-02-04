@@ -132,7 +132,6 @@
 {
     if (!_isInRefreshing)
     {
-        
         _isInRefreshing = TRUE;
         [self startRefresh:view.superview  withCallback:^{
             _isInRefreshing = FALSE;

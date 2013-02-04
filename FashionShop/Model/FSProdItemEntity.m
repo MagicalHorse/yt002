@@ -13,7 +13,6 @@
 
 @implementation FSProdItemEntity
 
-
 @synthesize id;
 @synthesize store;
 @synthesize title;

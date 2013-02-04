@@ -12,9 +12,9 @@
 
 @interface FSThumView()
 {
-
     UIButton *_imgButton;
     UIImageView *_drImage;
+    UIImageView *_imgView;
 }
 
 @end
@@ -53,7 +53,8 @@
     if (_owner &&
         _owner.thumnailUrl)
     {
-        [_imgButton setImageWithURL:_owner.thumnailUrl];
+        [self reloadThumb:_owner.thumnailUrl];
+//        [_imgButton setImageWithURL:_owner.thumnailUrl];
         [_imgButton setTitle:@"" forState:UIControlStateNormal];
         
         if (_owner.userLevelId == FSDARENUser)
@@ -72,13 +73,13 @@
         return;
     _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
     
-    UIImage *backgroundImage = [UIImage imageNamed:@"default_thum_icon.png"];
-    UIImageView *uiImageView=[[UIImageView alloc] initWithImage:backgroundImage];
-    uiImageView.contentMode=UIViewContentModeScaleAspectFit;
-    uiImageView.frame = _imgButton.frame;
-    uiImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    uiImageView.layer.borderWidth = 1;
-    [_imgButton addSubview:uiImageView];
+    UIImage *backgroundImage = [UIImage imageNamed:@"default_icon50.png"];
+    _imgView=[[UIImageView alloc] initWithImage:backgroundImage];
+    _imgView.contentMode=UIViewContentModeScaleAspectFit;
+    _imgView.frame = _imgButton.frame;
+    _imgView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    _imgView.layer.borderWidth = 1;
+    [_imgButton addSubview:_imgView];
     [self addSubview:_imgButton];
 }
 
@@ -117,8 +118,7 @@
 }
 -(void) reloadThumb:(NSURL *)image
 {
-    [_imgButton setImageWithURL:image];
-
+    [_imgView setImageWithURL:image placeholderImage:[UIImage imageNamed:@"default_icon50.png"]];
 }
 -(void)doTapThumb:(id)sender
 {

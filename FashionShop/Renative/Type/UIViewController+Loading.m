@@ -122,7 +122,7 @@
 {
     if (!container)
         container = self.view;
-    UILabel *noResult =(UILabel *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ID];
+    UILabel *noResult = (UILabel *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ID];
     if(!noResult)
     {
         noResult = [[UILabel alloc] init];

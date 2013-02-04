@@ -508,7 +508,7 @@
     }
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
     _segHeader.selectedSegmentIndex = 0;
-    _isInRefreshing = YES;
+    _isInRefreshing = NO;
     [self loadILike];
 }
 
@@ -561,16 +561,16 @@
     _btnCoupons.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
     
-    _vLikeHeader.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     [_segHeader setSelectedSegmentIndex:0];
-    _lblLikeHeader.font = ME_FONT(12);
-    _lblLikeHeader.text = NSLocalizedString(_userProfile.userLevelId==FSDARENUser?@"i shared":@"User_Profile_Like", nil);
     
     SpringboardLayout *layout = [[SpringboardLayout alloc] init];
     layout.itemWidth = ITEM_CELL_WIDTH;
     layout.columnCount = I_LIKE_COLUMNS;
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 0, 5);
     layout.delegate = self;
+    CGRect rect = _likeContainer.frame;//CGRectMake(0, 0, 320, APP_HIGH>480?353:265);
+    rect.size.height = APP_HIGH>480?353:265;
+    _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
     _likeView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _likeView.backgroundColor = [UIColor whiteColor];
@@ -595,8 +595,17 @@
 
 -(void) loadILike
 {
+    if (_isInLoading) {
+        return;
+    }
     _favorPageIndex = 1;
-    [self loadILike:true nextPage:_favorPageIndex  withCallback:nil];
+    _isInLoading = YES;
+    _isInRefreshing = YES;
+    [self loadILike:true nextPage:_favorPageIndex  withCallback:^{
+        _isInLoading = NO;
+        _isInRefreshing = NO;
+        [_likeView setContentOffset:CGPointMake(0, 0) animated:NO];
+    }];
 }
 
 -(void) loadILike:(BOOL)showProgress nextPage:(int)pageIndex withCallback:(dispatch_block_t)callback
@@ -618,7 +627,7 @@
 
 -(FSEntityRequestBase *)createRequest:(int)page
 {
-    if (_userProfile.userLevelId == FSDARENUser)
+    if (_userProfile.userLevelId == FSDARENUser && _segHeader.selectedSegmentIndex == 1)
     {
         FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
         request.userToken = _userProfile.uToken;
@@ -645,10 +654,10 @@
 {
     [self beginLoadMoreLayout:_likeView];
     __block FSMeViewController *blockSelf = self;
+    _isInRefreshing = NO;
     [self loadILike:FALSE nextPage:++_favorPageIndex withCallback:^{
         [blockSelf endLoadMore:blockSelf->_likeView];
         _isInLoading = FALSE;
-        
     }];
     
 }
@@ -689,9 +698,7 @@
     {
         [list enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likePros indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                //if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
-                if ([(FSFavor *)obj1 sourceId] ==[(FSFavor *)obj sourceId] &&
-                    [(FSFavor *)obj1 sourceType]==[(FSFavor *)obj sourceType])
+                if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -920,18 +927,21 @@
         return nil;
     PSUICollectionViewCell *cell = nil;
     id item = [_likePros objectAtIndex:index];
-        cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSFavorProCell" forIndexPath:indexPath];
-        [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
-        ((FSFavorProCell *)cell).data = item;;
+    cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSFavorProCell" forIndexPath:indexPath];
+    [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
+    ((FSFavorProCell *)cell).data = item;
+    if (_segHeader.selectedSegmentIndex == 0) {
+        [(FSFavorProCell *)cell showProIcon];
+    }
     cell.layer.borderWidth = 0.5;
     cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
-        if (_likeView.dragging == NO && _likeView.decelerating == NO)
-        {
-            int width = ITEM_CELL_WIDTH;
-            int height = cell.frame.size.height - 40;
-            [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
-        }
-        
+    if (_likeView.dragging == NO && _likeView.decelerating == NO)
+    {
+        int width = ITEM_CELL_WIDTH;
+        int height = cell.frame.size.height;
+        [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
+    }
+    
     return cell;
 }
 
@@ -1014,7 +1024,7 @@
     [self loadImagesForOnscreenRows];
 }
 
-#pragma mark EGORefreshTableHeaderDelegate Methods
+#pragma mark - EGORefreshTableHeaderDelegate Methods
 
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view
 {
@@ -1056,6 +1066,9 @@
 
 - (void)activateDeletionMode:(UILongPressGestureRecognizer *)gr
 {
+    if (_segHeader.selectedSegmentIndex == 0) {
+        return;
+    }
     if (gr.state == UIGestureRecognizerStateBegan)
     {
         NSIndexPath *indexPath = [_likeView indexPathForItemAtPoint:[gr locationInView:_likeView]];
@@ -1362,53 +1375,6 @@
     [self setImgLevel:nil];
     [self setSegHeader:nil];
     [super viewDidUnload];
-}
-
-#pragma UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag = Favorite_Delete_Alert_Tag && buttonIndex == 1) {
-        /*
-        FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
-        if (cell)
-        {
-            FSEntityRequestBase *request = nil;
-            if (_userProfile.userLevelId == FSDARENUser) {
-                FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
-                removeRequest.uToken = _userProfile.uToken;
-                removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
-                
-                removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
-                removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
-                request = removeRequest;
-                
-            } else
-            {
-                FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
-                removeRequest.userToken = _userProfile.uToken;
-                removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
-                removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
-                request = removeRequest;
-            }
-            [self beginLoading:cell];
-            [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
-                [self endLoading:cell];
-                if (!resp.isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {
-                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
-                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
-                    
-                }
-            }];
-            
-        }
-         */
-    }
 }
 
 @end

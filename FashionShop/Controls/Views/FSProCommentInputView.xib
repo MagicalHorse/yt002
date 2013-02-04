@@ -2,7 +2,7 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1536</int>
-		<string key="IBDocument.SystemVersion">12C60</string>
+		<string key="IBDocument.SystemVersion">12C3012</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2843</string>
 		<string key="IBDocument.AppKitVersion">1187.34</string>
 		<string key="IBDocument.HIToolboxVersion">625.00</string>
@@ -42,7 +42,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrameSize">{320, 45}</string>
 						<reference key="NSSuperview" ref="541179670"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="869999344"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -57,8 +56,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{253, 5}, {60, 29}}</string>
 						<reference key="NSSuperview" ref="541179670"/>
-						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -99,7 +96,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{242, 31}</string>
 								<reference key="NSSuperview" ref="869999344"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="45662220"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -114,7 +110,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{3, 4}, {208, 22}}</string>
 								<reference key="NSSuperview" ref="869999344"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="568541518"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor">
@@ -144,7 +139,6 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{212, 3}, {23, 24}}</string>
 								<reference key="NSSuperview" ref="869999344"/>
-								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="736180651"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
@@ -175,7 +169,6 @@
 						</array>
 						<string key="NSFrame">{{5, 5}, {248, 31}}</string>
 						<reference key="NSSuperview" ref="541179670"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="368455981"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -190,7 +183,6 @@
 				</array>
 				<string key="NSFrameSize">{320, 45}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="75399018"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -314,45 +306,7 @@
 			<nil key="sourceID"/>
 			<int key="maxID">155</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<object class="IBPartialClassDescription">
-					<string key="className">FSKeyboardAvoidingUIView</string>
-					<string key="superclassName">UIView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/FSKeyboardAvoidingUIView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">FSProCommentInputView</string>
-					<string key="superclassName">FSKeyboardAvoidingUIView</string>
-					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="btnCancel">UIButton</string>
-						<string key="btnComment">UIButton</string>
-						<string key="txtComment">UITextView</string>
-					</dictionary>
-					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<object class="IBToOneOutletInfo" key="btnCancel">
-							<string key="name">btnCancel</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="btnComment">
-							<string key="name">btnComment</string>
-							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="txtComment">
-							<string key="name">txtComment</string>
-							<string key="candidateClassName">UITextView</string>
-						</object>
-					</dictionary>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/FSProCommentInputView.h</string>
-					</object>
-				</object>
-			</array>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaTouchFramework</string>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>

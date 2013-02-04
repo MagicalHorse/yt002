@@ -11,7 +11,6 @@
 @implementation FSModelBase
 
 
-
 + (NSString *) relationKeyPath
 {
     return @"data";

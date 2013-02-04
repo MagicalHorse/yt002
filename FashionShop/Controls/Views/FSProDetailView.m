@@ -84,7 +84,7 @@
     {
         FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(self.frame.size.width, _imgView.frame.size.height );
-        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor)];
+        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
     }
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
     imgBG.userInteractionEnabled = FALSE;
@@ -130,6 +130,12 @@
     NSLog(@"new Frame y:%f",_tbComment.frame.origin.y);
     
     [self updateInteraction];
+}
+
+-(void)setToolBarBackgroundImage
+{
+    UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
+    [self.myToolBar setBackgroundImage:_image forToolbarPosition:UIToolbarPositionAny barMetrics:UIBarMetricsDefault];
 }
 
 -(void)registerKVO

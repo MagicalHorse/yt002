@@ -41,25 +41,23 @@
     }
     else
         return nil;
-
 }
 
 -(NSURL *)absoluteUrl120
 {
-    if (relativePath && domain)
-    {
-        NSString *relative = [self composeRelativeFromWidth:120*RetinaFactor];
-        
-        return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
-    }
-    else
-        return nil;
+    return [self absoluteUr:120];
 }
+
 -(NSURL *)absoluteUrl320
+{
+    return [self absoluteUr:320];
+}
+
+-(NSURL *)absoluteUr:(int)_width
 {
     if (relativePath && domain)
     {
-        NSString *relative = [self composeRelativeFromWidth:320*RetinaFactor];
+        NSString *relative = [self composeRelativeFromWidth:(_width*RetinaFactor)];
         
         return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
     }

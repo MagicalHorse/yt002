@@ -57,6 +57,7 @@
         curYOff = storeLogo.frame.size.height +storeLogo.frame.origin.y;
     }
     UIImage *locImg = [UIImage imageNamed:@"location_icon"];
+    locImg = [locImg stretchableImageWithLeftCapWidth:0 topCapHeight:0];
     UIImageView *locImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff, locImg.size.width, locImg.size.height)];
     [locImgView setContentMode:UIViewContentModeScaleAspectFit];
     [locImgView setImage:locImg];

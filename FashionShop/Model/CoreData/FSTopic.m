@@ -9,25 +9,32 @@
 #import "FSTopic.h"
 
 @implementation FSTopic
+
 @synthesize createdDate;
 @synthesize updatedDate;
 @synthesize description;
 @synthesize name;
 @synthesize isFavorited;
-@synthesize id;
+@synthesize topicId;
 @synthesize resources;
 
 +(RKObjectMapping *)getRelationDataMap
 {
-    return [self getRelationDataMap:NO];
+    return [self getRelationDataMap:FALSE];
 }
 
 +(RKObjectMapping *)getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"createddate", @"createdDate", @"updateddate", @"updatedDate", @"description", @"description", @"name", @"name", @"isfavorited", @"isfavorited", @"id", @"id", nil];
+    [relationMap mapKeyPath:@"isfavorited" toAttribute:@"isFavorited"];
+    [relationMap mapKeyPath:@"id" toAttribute:@"topicId"];
+    [relationMap mapKeyPath:@"createddate" toAttribute:@"createdDate"];
+    [relationMap mapKeyPath:@"description" toAttribute:@"description"];
+    [relationMap mapKeyPath:@"name" toAttribute:@"name"];
+    [relationMap mapKeyPath:@"updateddate" toAttribute:@"updatedDate"];
     
-    [relationMap mapKeyPath:@"resources" toRelationship:@"resources" withMapping:[FSResource getRelationDataMap]];
+    RKObjectMapping *resourceRelation = [FSResource getRelationDataMap];
+    [relationMap mapKeyPath:@"resources" toRelationship:@"resources" withMapping:resourceRelation];
     
     return relationMap;
 }

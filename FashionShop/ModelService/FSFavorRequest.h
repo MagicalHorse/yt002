@@ -14,6 +14,7 @@
 #define RK_REQUEST_FAVOR_REMOVE @"/favorite/destroy"
 #define RK_REQUEST_FAVOR_PRO_REMOVE @"/promotion/favor/destroy"
 #define RK_REQUEST_FAVOR_PROD_REMOVE @"/product/favor/destroy"
+#define RK_REQUEST_FAVOR_PROD_LIST @"/favorite/daren/list"
 
 @interface FSFavorRequest : FSEntityRequestBase
 

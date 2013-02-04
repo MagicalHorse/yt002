@@ -14,8 +14,11 @@
 @property(nonatomic,strong) id data;
 @property(nonatomic) FSSourceType pType;
 @property(nonatomic) BOOL showViewMask;
+@property (strong, nonatomic) IBOutlet UIToolbar *myToolBar;
 
+-(void)updateToolBar:(id)data;
 -(void)resetScrollViewSize;
 -(void) updateInteraction:(id)updatedEntity;
+-(void)setToolBarBackgroundImage;
 
 @end

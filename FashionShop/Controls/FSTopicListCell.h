@@ -10,7 +10,7 @@
 #import "FSTopic.h"
 #import "UIImageView+WebCache.h"
 
-@interface FSTopicListCell : UITableViewCell<ImageContainerDownloadDelegate>
+@interface FSTopicListCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *content;
 
