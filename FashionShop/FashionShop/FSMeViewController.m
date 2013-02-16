@@ -147,6 +147,9 @@
                 {
                     blockSelf->completeCallBack(false);
                 }
+                else {
+                    [blockSelf reportError:response.errorDescrip];
+                }
             }
             else
             {
@@ -163,15 +166,14 @@
     
     [_dataSourceProvider setValue:^(FSFavorRequest *request,dispatch_block_t uicallback){
         [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *response) {
-
             if (!response.isSuccess)
             {
-                //[FSUser removeUserProfile];
-                //[blockSelf displayUserLogin];
-                
                 if (blockSelf->completeCallBack!=nil)
                 {
                     blockSelf->completeCallBack(false);
+                }
+                else {
+                    [blockSelf reportError:response.errorDescrip];
                 }
             }
             else
@@ -185,12 +187,9 @@
             }
             if (uicallback)
                 uicallback();
-          
-            
         }];
-        
-        
     } forKey:LOGIN_GET_USER_LIKE];
+    
     [_dataSourceProvider setValue:^(FSFavorRequest *request,dispatch_block_t uicallback){
         [request send:[FSPagedItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
             
@@ -199,6 +198,9 @@
                 if (blockSelf->completeCallBack!=nil)
                 {
                     blockSelf->completeCallBack(false);
+                }
+                else {
+                    [blockSelf reportError:response.errorDescrip];
                 }
             }
             else
@@ -212,11 +214,7 @@
             }
             if (uicallback)
                 uicallback();
-            
-            
         }];
-        
-        
     } forKey:LOGIN_GET_USER_SHARE];
     
     NSArray *views =[[NSBundle mainBundle] loadNibNamed:@"FSLoginView" owner:self options:nil];
@@ -228,7 +226,6 @@
     _userProfileView = [views objectAtIndex:0];
     _isFirstLoad = true;
     [self switchView];
-       
 }
 
 -(void) switchView
@@ -508,6 +505,8 @@
     }
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
     _segHeader.selectedSegmentIndex = 0;
+    [_segHeader setSegBGColor:RGBCOLOR(210, 255, 255)];
+    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     _isInRefreshing = NO;
     [self loadILike];
 }
@@ -568,7 +567,7 @@
     layout.columnCount = I_LIKE_COLUMNS;
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 0, 5);
     layout.delegate = self;
-    CGRect rect = _likeContainer.frame;//CGRectMake(0, 0, 320, APP_HIGH>480?353:265);
+    CGRect rect = _likeContainer.frame;
     rect.size.height = APP_HIGH>480?353:265;
     _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
@@ -931,7 +930,26 @@
     [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
     ((FSFavorProCell *)cell).data = item;
     if (_segHeader.selectedSegmentIndex == 0) {
-        [(FSFavorProCell *)cell showProIcon];
+        if ([item isKindOfClass:[FSFavor class]]) {
+            FSFavor *_fav = (FSFavor*)item;
+            if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
+                [(FSFavorProCell *)cell showProIcon];
+            }
+            else {
+                [(FSFavorProCell *)cell hidenProIcon];
+            }
+        }
+    }
+    else if(_segHeader.selectedSegmentIndex == 1){
+        if ([item isKindOfClass:[FSItemBase class]]) {
+            FSItemBase *_fav = (FSItemBase*)item;
+            if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
+                [(FSFavorProCell *)cell showProIcon];
+            }
+            else {
+                [(FSFavorProCell *)cell hidenProIcon];
+            }
+        }
     }
     cell.layer.borderWidth = 0.5;
     cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
@@ -1141,7 +1159,6 @@
 
 #pragma FSProDetailItemSourceProvider
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
-
 {
     FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
     Class respClass;

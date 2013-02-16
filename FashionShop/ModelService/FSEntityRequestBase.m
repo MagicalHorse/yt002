@@ -113,8 +113,7 @@
 - (void)objectLoader:(RKObjectLoader *)objectLoader didFailWithError:(NSError *)error
 {
     if (requestCompleteCallback)
-    {
-        
+    {   
         FSEntityBase *response = [[FSEntityBase alloc] init];
         response.isSuccess = false;
         response.errorType = NetworkError;

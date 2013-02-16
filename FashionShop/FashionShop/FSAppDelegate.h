@@ -19,6 +19,8 @@
 
 @property (strong,nonatomic) FSLocationManager *locationManager;
 
+@property (strong,nonatomic) NSMutableArray *allBrands;
+
 +(FSAppDelegate *)app;
 -(void)entryMain;
 

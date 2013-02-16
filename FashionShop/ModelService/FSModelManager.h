@@ -26,6 +26,7 @@
 
 -(void) forceReloadTags;
 -(void) forceReloadBrands;
+-(void) forceReloadAllBrands;//下载带分组品牌数据
 -(void) forceReloadStores;
 
 -(BOOL) isLogined;

@@ -26,10 +26,12 @@
 @property (nonatomic,assign) NSInteger favorTotal;
 @property (nonatomic,strong) NSMutableArray *coupons;
 @property (nonatomic, strong) NSMutableArray *comments;
+@property (nonatomic, strong) NSMutableArray *promotions;
 @property (nonatomic,strong) FSBrand * brand;
 @property (nonatomic,strong) NSNumber *price;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
+@property (nonatomic,readonly) BOOL hasPromotion;
 
 
 @end

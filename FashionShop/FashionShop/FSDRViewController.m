@@ -20,7 +20,7 @@
 #import "FSFavorRequest.h"
 #import "FSCommonProRequest.h"
 #import "FSPagedFavor.h"
-
+#import "FSProdItemEntity.h"
 
 #define DR_DETAIL_CELL @"DRdetailcell"
 #define DR_FAVOR_DETAIL_CELL @"DR_FAVOR_DETAIL_CELL"
@@ -65,13 +65,14 @@
 -(void) bindSegHeader
 {
     [_segHeader removeAllSegments];
-    [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta like", nil) atIndex:0 animated:FALSE];
+    [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta Like", nil) atIndex:0 animated:NO];
     if ([self isDR]) {
-        [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta share", nil) atIndex:1 animated:FALSE];
+        [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta Share", nil) atIndex:1 animated:NO];
     }
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
     _segHeader.selectedSegmentIndex = 0;
-    [_segHeader setSelectedSegmentIndex:0];
+    [_segHeader setSegBGColor:RGBCOLOR(210, 255, 255)];
+    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
 }
 
 -(void)dealSegChanged:(UISegmentedControl *) segmentedControl
@@ -241,9 +242,10 @@
     }];
     
     [_itemsView reloadData];
-    if (!_items ||
-        _items.count<=0)
-        [self showNoResult:_itemsView withText:NSLocalizedString(@"no products shared", Nil)];
+    if (!_items || _items.count<=0) {
+
+        [self showNoResult:_itemsView withText:NSLocalizedString((_segHeader.selectedSegmentIndex == 0?@"no products liked":@"no products shared"), Nil)];
+    }
     else
         [self hideNoResult:_itemsView];
     
@@ -280,9 +282,9 @@
     }];
     
     [_itemsView reloadData];
-    if (!_items ||
-        _items.count<=0)
-        [self showNoResult:_itemsView withText:NSLocalizedString(@"no products shared", Nil)];
+    if (!_items || _items.count<=0) {
+        [self showNoResult:_itemsView withText:NSLocalizedString((_segHeader.selectedSegmentIndex == 0?@"no products liked":@"no products shared"), Nil)];
+    }
     else
         [self hideNoResult:_itemsView];
 }
@@ -605,9 +607,32 @@
     if (_items.count <= 0) {
         return cell;
     }
-    [(id)cell setData:[_items objectAtIndex:indexPath.row]];
+    id item = [_items objectAtIndex:indexPath.row];
+    [(id)cell setData:item];
     cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
     cell.layer.borderWidth = 0.5;
+    if (_segHeader.selectedSegmentIndex == 0) {
+        if ([item isKindOfClass:[FSFavor class]]) {
+            FSFavor *_fav = (FSFavor*)item;
+            if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
+                [(FSFavorProCell *)cell showProIcon];
+            }
+            else {
+                [(FSFavorProCell *)cell hidenProIcon];
+            }
+        }
+    }
+    else if(_segHeader.selectedSegmentIndex == 1){
+        if ([item isKindOfClass:[FSProdItemEntity class]]) {
+            FSProdItemEntity *_fav = (FSProdItemEntity*)item;
+            if (_fav.hasPromotion) {
+                [(FSFavorProCell *)cell showProIcon];
+            }
+            else {
+                [(FSFavorProCell *)cell hidenProIcon];
+            }
+        }
+    }
     if (_itemsView.dragging == NO &&
         _itemsView.decelerating == NO)
     {

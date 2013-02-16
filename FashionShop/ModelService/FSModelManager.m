@@ -15,7 +15,7 @@
 #import "FSLocationManager.h"
 #import "FSCoreStore.h"
 #import "FSCoreBrand.h"
-
+#import "FSGroupBrand.h"
 
 @interface FSModelManager()
 {
@@ -120,6 +120,7 @@ static FSModelManager *_modelManager;
     }];
 
 }
+
 -(void) forceReloadBrands
 {
     [self enqueueBackgroundBlock:^{
@@ -129,6 +130,24 @@ static FSModelManager *_modelManager;
         [request send:[FSCoreBrand class] withRequest:request completeCallBack:nil];
     }];
 }
+
+-(void) forceReloadAllBrands
+{
+    [self enqueueBackgroundBlock:^{
+        FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_CONFIG_GROUP_BRAND_ALL;
+        [request send:[FSGroupBrandList class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                FSGroupBrandList *allBrands = req.responseData;
+                theApp.allBrands = allBrands.brandList;
+            }
+            else {
+                //do nothing
+            }
+        }];
+    }];
+}
+
 -(void) forceReloadStores
 {
     [self enqueueBackgroundBlock:^() {
@@ -146,7 +165,8 @@ static FSModelManager *_modelManager;
 -(void) initConfig
 {
     [self forceReloadTags];
-    [self forceReloadBrands];
+    //[self forceReloadBrands];
+    [self forceReloadAllBrands];
     [self forceReloadStores];
 
 }

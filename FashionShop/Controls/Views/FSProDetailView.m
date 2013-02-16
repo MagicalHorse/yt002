@@ -216,9 +216,7 @@
     while (--commentCount >=0) {
         totalHeight+= [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:0]];
     }
-    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
-    NSLog(@"new Frame y:%f",table.frame.origin.y);
-    //origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
+    origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.isProductBinded?40:0);
     [table setFrame:origiFrame];
     
     CGSize originContent = self.svContent.contentSize;
@@ -233,6 +231,11 @@
 {
     _imgView.image = nil;
     _data = nil;
+}
+
+-(void)updateToolBar:(id)data
+{
+    
 }
 
 @end

@@ -90,7 +90,6 @@ static FSLocationManager *_locationManager;
             {
                 _locationManager = [[FSLocationManager alloc] init];
                 [_locationManager initLocationManager];
-
                 
             }
             
@@ -99,8 +98,6 @@ static FSLocationManager *_locationManager;
     }
    
     return _locationManager;
-
-    
 }
 
 + (NSString *) computeDistanceToCurrentLocation:(CLLocationCoordinate2D)where{

@@ -26,5 +26,7 @@
 @property(nonatomic,strong) NSNumber * tagid;
 @property(nonatomic,strong) NSNumber * drUserId;
 @property(nonatomic,strong) NSNumber *brandId;
+@property(nonatomic,strong) NSNumber *topicId;
+@property(nonatomic,strong) NSNumber *promotionId;
 
 @end

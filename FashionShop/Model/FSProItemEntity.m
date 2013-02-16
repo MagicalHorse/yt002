@@ -29,11 +29,12 @@
 @synthesize tagId;
 @synthesize isFavored;
 @synthesize isCouponed;
+@synthesize isProductBinded;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",nil];
+    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",@"isproductbinded",@"isProductBinded",nil];
     NSString *relationKeyPath = @"store";
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];
@@ -43,16 +44,21 @@
     RKObjectMapping *resourceRelationMap = [FSResource getRelationDataMap];
     [relationMap mapKeyPath:@"resources" toRelationship:@"resource" withMapping:resourceRelationMap];
     
+//    RKObjectMapping *promotionRelationMap = [FSProItemEntity getRelationDataMap];
+//    [relationMap mapKeyPath:@"promotions" toRelationship:@"promotions" withMapping:promotionRelationMap];
+    
    // RKObjectMapping *couponRelationMap = [FSCoupon getRelationDataMap];
    // [relationMap mapKeyPath:@"coupon" toRelationship:@"coupons" withMapping:couponRelationMap];
     RKObjectMapping *commentRelationMap = [FSComment getRelationDataMap];
     [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];
         return relationMap;
 }
+
 -(NSMutableArray *)comments
 {
     if (!_comments)
         _comments= [@[] mutableCopy];
     return _comments;
 }
+
 @end

@@ -373,7 +373,6 @@
     [self loadImagesForOnscreenRows];
 }
 
-
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {
@@ -400,12 +399,13 @@
         [(FSProdTagCell *)cell setData:[_tags objectAtIndex:indexPath.row]];
         cell.layer.borderColor = [UIColor colorWithRed:206 green:206 blue:206].CGColor;
         cell.layer.borderWidth = 0.5;
-    } else if (cv == _cvContent)
+    }
+    else if (cv == _cvContent)
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
         FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
         [(FSProdDetailCell *)cell setData:_data];
-        if (1) {
+        if (_data.hasPromotion) {
             [(FSProdDetailCell *)cell showProIcon];
         }
         else {

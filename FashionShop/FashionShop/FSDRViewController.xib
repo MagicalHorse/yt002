@@ -42,7 +42,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{70, 9}, {122, 20}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="45688391"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -76,7 +75,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{70, 33}, {35, 30}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="180001817"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -119,7 +117,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{110, 33}, {35, 30}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="460366376"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -146,7 +143,6 @@
 						<int key="NSvFlags">290</int>
 						<string key="NSFrame">{{0, 73}, {320, 30}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="180292733"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
@@ -155,8 +151,8 @@
 						<int key="IBNumberOfSegments">2</int>
 						<int key="IBSelectedSegmentIndex">0</int>
 						<array key="IBSegmentTitles">
-							<string>Ta 喜欢</string>
-							<string>Ta 分享</string>
+							<string>他喜欢</string>
+							<string>他分享</string>
 						</array>
 						<array class="NSMutableArray" key="IBSegmentWidths">
 							<real value="0.0"/>
@@ -174,14 +170,13 @@
 							<object class="NSNull" id="4"/>
 							<reference ref="4"/>
 						</array>
-						<bool key="IBMomentary">YES</bool>
 					</object>
 					<object class="IBUIView" id="180292733">
 						<reference key="NSNextResponder" ref="800926144"/>
 						<int key="NSvFlags">274</int>
+						<array class="NSMutableArray" key="NSSubviews"/>
 						<string key="NSFrame">{{0, 103}, {320, 465}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -197,7 +192,6 @@
 						<int key="NSvFlags">292</int>
 						<string key="NSFrame">{{8, 9}, {54, 54}}</string>
 						<reference key="NSSuperview" ref="800926144"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="574011894"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
@@ -210,7 +204,6 @@
 				</array>
 				<string key="NSFrameSize">{320, 568}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="126636830"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
@@ -368,6 +361,7 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">228</int>
 						<reference key="object" ref="180292733"/>
+						<array class="NSMutableArray" key="children"/>
 						<reference key="parent" ref="800926144"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -393,7 +387,7 @@
 				<string key="231.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="235.CustomClassName">FSSegmentControl</string>
 				<string key="235.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-				<integer value="1" key="235.IUISegmentedControlInspectorSelectedSegmentMetadataKey"/>
+				<integer value="0" key="235.IUISegmentedControlInspectorSelectedSegmentMetadataKey"/>
 				<string key="68.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<real value="1" key="68.IBUIButtonInspectorSelectedEdgeInsetMetadataKey"/>
 				<string key="69.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -404,7 +398,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">236</int>
+			<int key="maxID">237</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

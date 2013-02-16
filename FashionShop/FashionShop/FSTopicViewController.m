@@ -15,6 +15,7 @@
 #import "FSResource.h"
 #import "FSPagedTopic.h"
 #import "FSTopic.h"
+#import "FSProductListViewController.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
@@ -219,6 +220,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
+    FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+    dr.topic = topic;
+    dr.pageType = FSPageTypeTopic;
+    [self.navigationController pushViewController:dr animated:TRUE];
+    //[self.navigationController presentModalViewController:dr animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

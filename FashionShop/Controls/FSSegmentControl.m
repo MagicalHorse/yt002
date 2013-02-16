@@ -28,6 +28,7 @@
 @implementation FSSegmentControl
 {
     NSInteger _selectedSegmentIndex;
+    BOOL _hasSetColor;
 }
 
 + (Class)layerClass
@@ -78,6 +79,27 @@
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     ((CAShapeLayer *)self.layer).fillColor = PRO_LIST_HEADER_BGCOLOR.CGColor;
     self.backgroundColor =[UIColor whiteColor];
+}
+
+-(void)setSegBGColor:(UIColor*)aColor
+{
+    ((CAShapeLayer *)self.layer).fillColor = aColor.CGColor;
+}
+
+-(void)setTitleColor:(UIColor*)aColor selectedColor:(UIColor*)aSelColor
+{
+    [self._items enumerateObjectsUsingBlock:^(UILabel *item, NSUInteger idx, BOOL *stop)
+     {
+         if (self.selectedSegmentIndex == idx)
+         {
+             item.textColor = aSelColor;
+         }
+         else
+         {
+             item.textColor = aColor;
+         }
+     }];
+    _hasSetColor = YES;
 }
 
 - (void)insertSegmentWithImage:(UIImage *)image atIndex:(NSUInteger)segment animated:(BOOL)animated
@@ -251,7 +273,7 @@
     CGFloat itemsVAlignCenter = (CGRectGetHeight(self.bounds) - self.arrowSize / 2) / 2;
     
     __block CGFloat pos = interItemSpace;
-   __block int itemIndex = 0;
+    __block int itemIndex = 0;
     [self._items enumerateObjectsUsingBlock:^(UIView *item, NSUInteger idx, BOOL *stop)
      {
          if (self.selectedSegmentIndex == idx)
@@ -286,12 +308,16 @@
         {
             if (item == selectedItem)
             {
-                item.textColor = [UIColor colorWithRed:255 green:255 blue:255];
+                if (!_hasSetColor) {
+                    item.textColor = [UIColor colorWithRed:255 green:255 blue:255];
+                }
                 item.font = [UIFont boldSystemFontOfSize:PRO_LIST_HEADER_FONTSZ];
             }
             else
             {
-                item.textColor =PRO_LIST_HEADER_COLOR;
+                if (!_hasSetColor) {
+                    item.textColor =PRO_LIST_HEADER_COLOR;
+                }
             }
         }
         

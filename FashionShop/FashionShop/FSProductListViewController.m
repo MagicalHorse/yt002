@@ -28,7 +28,7 @@
     NSMutableArray *_prods;
     
     UIActivityIndicatorView * moreIndicator;
-    PSUICollectionView *_brandContent;
+    PSUICollectionView *_productContent;
     BOOL _isInLoading;
     BOOL _firstTimeLoadDone;
     int _prodPageIndex;
@@ -64,12 +64,12 @@
 {
     _prods = [@[] mutableCopy];
     [self zeroMemoryBlock];
-    [self beginLoading:_brandContent];
+    [self beginLoading:_productContent];
     _prodPageIndex = 0;
     FSProListRequest *request =
     [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:_brandContent];
+        [self endLoading:_productContent];
         if (resp.isSuccess)
         {
             FSBothItems *result = resp.responseData;
@@ -96,8 +96,15 @@
 
 -(void) prepareLayout
 {
-    
-    self.navigationItem.title = _brand.name;
+    if (_pageType == FSPageTypeBrand) {
+        self.navigationItem.title = _brand.name;
+    }
+    else if(_pageType == FSPageTypeTopic) {
+        self.navigationItem.title = _topic.name;
+    }
+    else if(_pageType == FSPageTypeCommon) {
+        self.navigationItem.title = _titleName;
+    }
     [self replaceBackItem];
     SpringboardLayout *clayout = [[SpringboardLayout alloc] init];
     clayout.itemWidth = ITEM_CELL_WIDTH;
@@ -105,22 +112,22 @@
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
     CGRect _rect = _contentView.frame;
-    _rect.size.height = APP_HIGH>480?504:415;
+    _rect.size.height = (APP_HIGH>480?504:415) - (_pageType==FSPageTypeTopic?TAB_HIGH:0);
     _contentView.frame = _rect;
-    _brandContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
-    [_contentView addSubview:_brandContent];
-    [_brandContent setCollectionViewLayout:clayout];
-    _brandContent.backgroundColor = [UIColor whiteColor];
-    [_brandContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
-    [self prepareRefreshLayout:_brandContent withRefreshAction:^(dispatch_block_t action) {
+    _productContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
+    [_contentView addSubview:_productContent];
+    [_productContent setCollectionViewLayout:clayout];
+    _productContent.backgroundColor = [UIColor whiteColor];
+    [_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    [self prepareRefreshLayout:_productContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^(){
             action();
         }];
         
     }];
     
-    _brandContent.delegate = self;
-    _brandContent.dataSource = self;
+    _productContent.delegate = self;
+    _productContent.dataSource = self;
     
 }
 
@@ -144,13 +151,12 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
-                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
+                [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
             } else
             {
                 [_prods insertObject:obj atIndex:0];
-                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
-            
         }
     }];
 }
@@ -160,7 +166,15 @@
 {
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.routeResourcePath = route;
-    request.brandId = [_brand valueForKey:@"id"];
+    if (_pageType == FSPageTypeBrand) {
+        request.brandId = [_brand valueForKey:@"id"];
+    }
+    else if(_pageType == FSPageTypeTopic) {
+        request.topicId = [NSNumber numberWithInt:_topic.topicId];
+    }
+    else if(_pageType == FSPageTypeCommon) {
+        request.promotionId = [NSNumber numberWithInt:_commonID];
+    }
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
     if(isRefresh)
@@ -211,12 +225,11 @@
 
 -(void)loadMore
 {
-    [self beginLoadMoreLayout:_brandContent];
+    [self beginLoadMoreLayout:_productContent];
     __block FSProductListViewController *blockSelf = self;
     [self refreshContent:FALSE withCallback:^{
-         [blockSelf endLoadMore:_brandContent];
+         [blockSelf endLoadMore:_productContent];
     }];
-    
 }
 
 
@@ -224,14 +237,13 @@
 {
     if ([_prods count] > 0)
     {
-        NSArray *visiblePaths = [_brandContent indexPathsForVisibleItems];
+        NSArray *visiblePaths = [_productContent indexPathsForVisibleItems];
         for (NSIndexPath *indexPath in visiblePaths)
         {
-            id<ImageContainerDownloadDelegate> cell = (id<ImageContainerDownloadDelegate>)[_brandContent cellForItemAtIndexPath:indexPath];
+            id<ImageContainerDownloadDelegate> cell = (id<ImageContainerDownloadDelegate>)[_productContent cellForItemAtIndexPath:indexPath];
             int width = ITEM_CELL_WIDTH;
             int height = [(PSUICollectionViewCell *)cell frame].size.height;
-            [cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
-            
+            [cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height)];
         }
     }
 }
@@ -256,7 +268,6 @@
     [self loadImagesForOnscreenRows];
 }
 
-
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {
@@ -273,17 +284,24 @@
 
 - (PSUICollectionViewCell *)collectionView:(PSUICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PSUICollectionViewCell * cell = nil;
-          cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
-        [(FSProdDetailCell *)cell setData:[_prods objectAtIndex:indexPath.row]];
-        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        cell.layer.borderWidth = 0.5;
-        if (_brandContent.dragging == NO &&
-            _brandContent.decelerating == NO)
-        {
-            int width = PROD_LIST_DETAIL_CELL_WIDTH;
-            int height = cell.frame.size.height;
-            [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
-        }
+    cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
+    FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
+    [(FSProdDetailCell *)cell setData: _data];
+    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    cell.layer.borderWidth = 0.5;
+    if (_data.hasPromotion) {
+        [(FSProdDetailCell *)cell showProIcon];
+    }
+    else {
+        [(FSProdDetailCell *)cell hidenProIcon];
+    }
+    if (_productContent.dragging == NO &&
+        _productContent.decelerating == NO)
+    {
+        int width = PROD_LIST_DETAIL_CELL_WIDTH;
+        int height = cell.frame.size.height;
+        [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
+    }
    
     return cell;
 }
@@ -309,7 +327,7 @@
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (collectionView == _brandContent)
+    if (collectionView == _productContent)
     {
         [(FSProdDetailCell *)cell willRemoveFromView];
     }

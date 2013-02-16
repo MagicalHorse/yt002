@@ -11,12 +11,15 @@
 #import "FSLocationManager.h"
 #import "UIViewController+Loading.h"
 #import "UIImageView+WebCache.h"
+#import "FSStoreMapViewController.h"
+#import "PositionAnnotation.h"
 
+#define kMKCoordinateSpan 0.07
 
-#define BAIDU_MAP_URL @"http://api.map.baidu.com/marker?location=%f,%f&title=%@&content=%@&output=html"
 @interface FSStoreDetailViewController ()
 {
-
+    MKMapView *_mapView;
+    UIImageView *_picImage;
 }
 
 @end
@@ -35,101 +38,52 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self prepareLayout];
-}
--(void)prepareLayout
-{
+    
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     self.title = _store.name;
-    int xOff = 10;
-
-    int yOff = 10;
-    int yOff2 = 15;
-    int curYOff =0;
-    if (_store.resource &&
-        _store.resource.count>0)
-    {
-        UIImageView *storeLogo = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, yOff, 320, 35)];
-        storeLogo.contentMode = UIViewContentModeScaleAspectFit;
-        [storeLogo setImageWithURL:[(FSResource *)[_store.resource lastObject] absoluteUrlOrigin]];
-        [self.view addSubview:storeLogo];
-        curYOff = storeLogo.frame.size.height +storeLogo.frame.origin.y;
-    }
-    UIImage *locImg = [UIImage imageNamed:@"location_icon"];
-    locImg = [locImg stretchableImageWithLeftCapWidth:0 topCapHeight:0];
-    UIImageView *locImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff, locImg.size.width, locImg.size.height)];
-    [locImgView setContentMode:UIViewContentModeScaleAspectFit];
-    [locImgView setImage:locImg];
-    [self.view addSubview:locImgView];
     
-    int addressStartX = locImgView.frame.origin.x+locImgView.frame.size.width+2;
-    NSString *addText = [NSString stringWithFormat:NSLocalizedString(@"address: %@", nil),_store.address];
-    int addWidth = SCREEN_WIDTH-xOff-addressStartX;
-    UILabel *lblAddress = [[UILabel alloc] initWithFrame:CGRectMake(addressStartX, locImgView.frame.origin.y+2, SCREEN_WIDTH-xOff-addressStartX, 0)];
-    lblAddress.text = addText;
-    lblAddress.font = ME_FONT(12);
-    lblAddress.adjustsFontSizeToFitWidth = YES;
-    lblAddress.numberOfLines = 0;
-    int height = [addText sizeWithFont:lblAddress.font constrainedToSize:CGSizeMake(addWidth, 1000) lineBreakMode:UILineBreakModeCharacterWrap].height;
-    lblAddress.frame = CGRectMake(addressStartX, locImgView.frame.origin.y, addWidth, height);
-    lblAddress.lineBreakMode = UILineBreakModeCharacterWrap;
-    lblAddress.textColor =[UIColor colorWithRed:102 green:102 blue:102];
-    [self.view addSubview:lblAddress];
-    curYOff=lblAddress.frame.size.height+lblAddress.frame.origin.y;
-    
-    UIImage *phoneImg = [UIImage imageNamed:@"phone_icon"];
-    UIImageView *phImgView = [[UIImageView alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff2, phoneImg.size.width, phoneImg.size.height)];
-    [phImgView setContentMode:UIViewContentModeScaleAspectFit];
-    [phImgView setImage:phoneImg];
-    [self.view addSubview:phImgView];
-    UILabel *lblPhone = [[UILabel alloc] initWithFrame:CGRectMake(phImgView.frame.origin.x+phImgView.frame.size.width+2, phImgView.frame.origin.y, 300, phImgView.frame.size.height)];
-    lblPhone.text = [NSString stringWithFormat:NSLocalizedString(@"phone: %@", nil),_store.phone];
-    lblPhone.font = ME_FONT(12);
-    lblPhone.textColor =[UIColor colorWithRed:102 green:102 blue:102];
-    [lblPhone sizeToFit];
-    [self.view addSubview:lblPhone];
-    UIButton *_btnPhone = [UIButton buttonWithType:UIButtonTypeCustom];
-    _btnPhone.frame = lblPhone.frame;
-    [_btnPhone addTarget:self action:@selector(clickToDial:) forControlEvents:UIControlEventTouchUpInside];
-    _btnPhone.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:_btnPhone];
-    
-    curYOff=phImgView.frame.size.height+phImgView.frame.origin.y;
-    
-    if (_store.descrip)
-    {
-        UILabel *lblDesTitle = [[UILabel alloc] initWithFrame:CGRectMake(xOff, curYOff+yOff2, 320, 20)];
-        lblDesTitle.text = NSLocalizedString(@"detail descritpion", nil);
-        lblDesTitle.font = ME_FONT(14);
-        lblDesTitle.textColor =[UIColor colorWithRed:51 green:51 blue:51];
-        [lblDesTitle sizeToFit];
-        [self.view addSubview:lblDesTitle];
-        curYOff=lblDesTitle.frame.size.height+lblDesTitle.frame.origin.y;
-        UILabel *lblDes = [[UILabel alloc] initWithFrame:CGRectMake(xOff, curYOff, 320-xOff*2, 320)];
-        lblDes.text = _store.descrip;
-        lblDes.font = ME_FONT(10);
-        lblDes.textColor = [UIColor colorWithRed:102 green:102 blue:102];
-        lblDes.numberOfLines = 0;
-        [lblDes sizeToFit];
-        [self.view addSubview:lblDes];
-        curYOff=lblDes.frame.size.height+lblDes.frame.origin.y;
-    }
-    _detailContainer.frame = CGRectMake(_detailContainer.frame.origin.x,_detailContainer.frame.origin.y,_detailContainer.frame.size.width,curYOff+yOff);
-
-    CGRect mapFrame = _mapView.frame;
-    mapFrame.origin.y = _detailContainer.frame.size.height;
-    mapFrame.origin.x = 0;
-    mapFrame.size.width = 320;
-    _mapView.frame = mapFrame;
-    _mapView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth;
-    [_mapView setDelegate:self];
-    NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:[self generateMapUrl]]
-                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                        timeoutInterval:60.0];
-    [_mapView loadRequest:request];
-   
+    [self viewToImage];
 }
+
+//截图
+- (void)viewToImage
+{
+    CLLocationCoordinate2D center;
+    center.latitude = [_store.lantit floatValue];
+    center.longitude = [_store.longit floatValue];
+    
+    _mapView= [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
+    MKCoordinateSpan span = {kMKCoordinateSpan, kMKCoordinateSpan};
+    MKCoordinateRegion region = MKCoordinateRegionMake(center, span);
+    [_mapView setRegion:region animated:NO];
+    
+    PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:center title:nil subTitle:nil];
+    [_mapView addAnnotation:annotation];
+    
+    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:0.5];
+}
+
+-(void)createImage:(UIView*)view
+{
+    if(UIGraphicsBeginImageContextWithOptions != NULL)
+    {
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(296, 196), NO, 0.0);
+    } else {
+        UIGraphicsBeginImageContext(CGSizeMake(296, 196));
+    }
+    
+    //获取图像
+    [_mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    _picImage = [[UIImageView alloc] initWithImage:image];
+    _picImage.frame = CGRectMake(10, 10, 300, 200);
+    
+    [_tbAction reloadData];
+}
+
 - (IBAction)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -140,56 +94,121 @@
 	[[UIApplication sharedApplication] openURL:url];
 }
 
--(NSString *)generateMapUrl
-{
-    NSString *url =  [NSString stringWithFormat:BAIDU_MAP_URL,
-                      [_store.lantit floatValue],
-                      [_store.longit floatValue],
-                      _store.name,
-                      _store.address];
-    return [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-}
-
-
-#pragma mark - UIWebViewDelegate Methods
-
-
-- (void)webViewDidStartLoad:(UIWebView *)aWebView{
-    if (self)
-	[self beginLoading:_mapView];
-}
-
-- (void)webViewDidFinishLoad:(UIWebView *)aWebView{
-    if (self)
-	[self endLoading:_mapView];
-}
-
-- (void)webView:(UIWebView *)aWebView didFailLoadWithError:(NSError *)error{
-    if (self)
-    [self endLoading:_mapView];
-}
-
-- (BOOL)webView:(UIWebView *)aWebView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    if (self)
-        return YES;
-    return NO;
-}
-
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(void)dealloc
-{
-    [_mapView setDelegate:nil];
-}
 - (void)viewDidUnload {
-
-    [self setMapView:nil];
-    [self setDetailContainer:nil];
+    [self setTbAction:nil];
     [super viewDidUnload];
 }
+
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.row) {
+        case CellTitle:
+        {
+            int height =[_store.name sizeWithFont:ME_FONT(16) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
+            return height;
+        }
+            break;
+        case CellPicture:
+        {
+            return 220;
+        }
+            break;
+        case CellAddress:
+        {
+            int height =[_store.address sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
+            return height;
+        }
+            break;
+        case CellDesc:
+        {
+            int height =[_store.descrip sizeWithFont:ME_FONT(13) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
+            return height;
+        }
+            break;
+        default:
+            break;
+    }
+    return 44;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.row) {
+        case CellPicture:
+        case CellAddress:
+        {
+            FSStoreMapViewController *controller = [[FSStoreMapViewController alloc] initWithNibName:@"FSStoreMapViewController" bundle:nil];
+            controller.store = _store;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        case CellPhone:
+        {
+            [self clickToDial:nil];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 5;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    UIFont *font = ME_FONT(14);
+    switch (indexPath.row) {
+        case CellTitle:
+        {
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.text = _store.name;
+            cell.textLabel.font = ME_FONT(18);
+        }
+            break;
+        case CellPicture:
+        {
+            [cell addSubview:_picImage];
+        }
+            break;
+        case CellAddress:
+        {
+            UIImage *locImg = [UIImage imageNamed:@"location_icon"];
+            cell.imageView.image = locImg;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = _store.address;
+            cell.textLabel.font = font;
+            cell.textLabel.numberOfLines = 0;
+        }
+            break;
+        case CellPhone:
+        {
+            UIImage *phoneImg = [UIImage imageNamed:@"phone_icon"];
+            cell.imageView.image = phoneImg;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = _store.phone;
+            cell.textLabel.font = font;
+        }
+            break;
+        case CellDesc:
+        {
+            cell.textLabel.text = _store.descrip;
+            cell.textLabel.font = ME_FONT(13);
+            cell.textLabel.numberOfLines = 0;
+        }
+            break;
+        default:
+            break;
+    }
+    return cell;
+}
+
 @end

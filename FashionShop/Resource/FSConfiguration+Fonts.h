@@ -26,7 +26,7 @@
 #define PRO_LIST_NEW_HEADER_FONTSZ 24
 #define PRO_LIST_NEW_HEADER2_FONTSZ 12
 
-#define APP_BACKGROUND_COLOR [UIColor lightGrayColor]
+#define APP_BACKGROUND_COLOR RGBCOLOR(220,220,220)
 
 #define ME_FONT(x)  [UIFont systemFontOfSize:x]//[UIFont fontWithName:@"HiraginoSansGB-W3" size:x]
 #define ME_FONT_NICKIE 18

@@ -46,13 +46,12 @@ static FSShareView *_instance;
     else
     {
      */
-        parentVC = vc;
-        shareItems = items;
-        shareCompleteaction = action;
-        [self configActionsIcon];
-        AWActionSheet *sheet = [[AWActionSheet alloc] initWithIconSheetDelegate:self ItemCount:shareCells.count];
-        [sheet showInView:vc.view];
-    sheet.cancelButtonIndex = 0;
+    parentVC = vc;
+    shareItems = items;
+    shareCompleteaction = action;
+    [self configActionsIcon];
+    AWActionSheet *sheet = [[AWActionSheet alloc] initWithIconSheetDelegate:self ItemCount:shareCells.count];
+    [sheet showInView:vc.view];
     //}
 }
 

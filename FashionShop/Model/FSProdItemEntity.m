@@ -10,6 +10,7 @@
 #import "FSResource.h"
 #import "FSCoupon.h"
 #import "FSComment.h"
+#import "FSProItemEntity.h"
 
 @implementation FSProdItemEntity
 
@@ -24,10 +25,12 @@
 @synthesize resource;
 @synthesize coupons;
 @synthesize comments;
+@synthesize promotions;
 @synthesize brand;
 @synthesize price;
 @synthesize isCouponed;
 @synthesize isFavored;
+@synthesize hasPromotion;
 
 +(RKObjectMapping *) getRelationDataMap
 {
@@ -42,8 +45,8 @@
     RKObjectMapping *userRelationMap = [FSUser getRelationDataMap];
     [relationMap mapKeyPath:@"recommenduser" toRelationship:@"fromUser" withMapping:userRelationMap];
     
-   // RKObjectMapping *couponRelationMap = [FSCoupon getRelationDataMap];
-    //[relationMap mapKeyPath:@"coupon" toRelationship:@"coupons" withMapping:couponRelationMap];
+    RKObjectMapping *promotionRelationMap = [FSProItemEntity getRelationDataMap];
+    [relationMap mapKeyPath:@"promotions" toRelationship:@"promotions" withMapping:promotionRelationMap];
     
     RKObjectMapping *commentRelationMap = [FSComment getRelationDataMap];
     [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];
@@ -52,6 +55,17 @@
     [relationMap mapKeyPath:@"brand" toRelationship:@"brand" withMapping:brandRelationMap];
     
     return relationMap;
+}
+
+-(BOOL)hasPromotion
+{
+    if (!promotions) {
+        return NO;
+    }
+    if (promotions.count > 0) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

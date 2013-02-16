@@ -79,25 +79,6 @@
       [self bringSubviewToFront:_lblFavorCount];
     
     int yOff = 5 + _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y;
-    /*
-    //添加活动按钮
-    if (_data.isFavored) {
-        _btnActivity.hidden = NO;
-        _btnActivity.titleLabel.font = ME_FONT(13);
-        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateNormal];
-        [_btnActivity setTitleColor:[UIColor colorWithRed:229 green:0 blue:79] forState:UIControlStateHighlighted];
-        [_btnActivity setBackgroundImage:[UIImage imageNamed:@"promotion_normal_bg.png"] forState:UIControlStateNormal];
-        [_btnActivity setBackgroundImage:[UIImage imageNamed:@"promotion_selected_bg.png"] forState:UIControlStateHighlighted];
-        origFrame = _btnActivity.frame;
-        origFrame.origin.y = _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y+yOff * 2;
-        _btnActivity.frame = origFrame;
-        yOff += origFrame.origin.y + _btnActivity.frame.size.height + 5;
-    }
-    else {
-        _btnActivity.hidden = YES;
-        yOff += _imgLikeBG.frame.size.height+_imgLikeBG.frame.origin.y;
-    }
-     */
     
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
     _lblDescrip.font = ME_FONT(14);
@@ -220,7 +201,6 @@
     if (!_btnFavor.customView)
     {
         UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        //[sheepButton addTarget:targ action:action forControlEvents:UIControlEventTouchUpInside];
         [sheepButton setShowsTouchWhenHighlighted:YES];
         [sheepButton addTarget:_tbComment.delegate
                             action:@selector(doFavor:)
@@ -238,7 +218,7 @@
 {
     _data = data;
     //更新优惠按钮
-    if (_data.isFavored) {
+    if (!_data.hasPromotion) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count >= 7) {
             [_array removeObject:_fixibleItem3];
@@ -275,7 +255,7 @@
     while (--commentCount >=0) {
         totalHeight+= [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:0]];
     }
-    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT;
+    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.hasPromotion?40:0);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;

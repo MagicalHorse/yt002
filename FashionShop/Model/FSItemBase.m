@@ -8,6 +8,7 @@
 
 #import "FSItemBase.h"
 #import "FSResource.h"
+#import "FSProItemEntity.h"
 
 @implementation FSItemBase
 
@@ -18,7 +19,8 @@
 @synthesize sourceName;
 @synthesize store;
 @synthesize resources;
-
+@synthesize hasPromotion;
+@synthesize promotions;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -33,7 +35,23 @@
     [relationMap mapKeyPath:@"resources" toRelationship:@"resources" withMapping:resourceRelationMap];
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:@"store" toRelationship:@"store" withMapping:storeRelationMap];
+    RKObjectMapping *promotionRelationMap = [FSProItemEntity getRelationDataMap];
+    [relationMap mapKeyPath:@"promotions" toRelationship:@"promotions" withMapping:promotionRelationMap];
     return relationMap;
+}
+
+-(BOOL)hasPromotion
+{
+    if (sourceType == FSSourcePromotion) {
+        return NO;
+    }
+    if (!promotions) {
+        return NO;
+    }
+    if (promotions.count > 0) {
+        return YES;
+    }
+    return NO;
 }
 
 @end

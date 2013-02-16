@@ -9,9 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "FSStore.h"
 
-@interface FSStoreDetailViewController : UIViewController<UIWebViewDelegate>
-@property (strong, nonatomic) IBOutlet UIWebView *mapView;
+#import <MapKit/MapKit.h>
+#import <CoreLocation/CoreLocation.h>
 
-@property (strong, nonatomic) IBOutlet UIView *detailContainer;
+typedef enum {
+    CellTitle,
+    CellPicture,
+    CellAddress,
+    CellPhone,
+    CellDesc,
+}CellType;
+
+@interface FSStoreDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate> 
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (strong, nonatomic) FSStore *store;
+
 @end

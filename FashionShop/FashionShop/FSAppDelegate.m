@@ -15,6 +15,7 @@
 #import "FSDeviceRegisterRequest.h"
 #import "FSAnalysis.h"
 #import "SplashViewController.h"
+#import "FSStoreMapViewController.h"
 
 @interface FSAppDelegate(){
     NSString *localToken;
@@ -28,6 +29,7 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 @implementation FSAppDelegate
+@synthesize allBrands;
 
 @synthesize modelManager,locationManager;
 

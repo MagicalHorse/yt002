@@ -10,6 +10,9 @@
 
 @interface FSSegmentControl : UISegmentedControl
 
-
 @property(nonatomic) CGFloat arrowSize;
+
+-(void)setSegBGColor:(UIColor*)aColor;
+-(void)setTitleColor:(UIColor*)aColor selectedColor:(UIColor*)aSelColor;
+
 @end

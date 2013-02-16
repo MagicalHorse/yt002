@@ -12,6 +12,7 @@
 #define RK_REQUEST_CONFIG_BRAND_ALL @"/brand/all"
 #define RK_REQUEST_CONFIG_STORE_ALL @"/store/all"
 #define RK_REQUEST_CONFIG_TAG_ALL @"/tag/all"
+#define RK_REQUEST_CONFIG_GROUP_BRAND_ALL @"/brand/groupall"
 
 @interface FSConfigListRequest : FSEntityRequestBase
 

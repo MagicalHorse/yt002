@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 #import "FSStore.h"
 #import "FSBrand.h"
+#import "FSGroupBrand.h"
 #import "FSCoreBrand.h"
 #import "FSCoreTag.h"
 #import "FSProPostTitleViewController.h"
@@ -364,7 +365,8 @@
 - (IBAction)doSelBrand:(id)sender {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
     [ tableSelect setDataSource:^id{
-        return [FSBrand allBrandsLocal];
+        //return [FSBrand allBrandsLocal];
+        return [FSGroupBrandList allBrandsLocal];
     } step:PostStep4Finished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", nil);
     [self.navigationController pushViewController:tableSelect animated:TRUE];}

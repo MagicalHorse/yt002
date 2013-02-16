@@ -35,13 +35,13 @@
     } else if (cout <=6) {
         rowCount = 2;
     }
-    NSString* titleBlank = @"\n\n\n\n\n\n";
+    NSString* titleBlank = @"\n\n\n\n";
     for (int i = 1 ; i<rowCount; i++) {
-        titleBlank = [NSString stringWithFormat:@"%@%@",titleBlank,@"\n\n\n\n\n\n"];
+        titleBlank = [NSString stringWithFormat:@"%@%@",titleBlank,@"\n\n\n\n"];
     }
     self = [super initWithTitle:titleBlank
                        delegate:nil
-              cancelButtonTitle:nil//NSLocalizedString(@"Cancel", nil)
+              cancelButtonTitle:NSLocalizedString(@"Cancel", nil)
          destructiveButtonTitle:nil
               otherButtonTitles:nil];
     if (self) {

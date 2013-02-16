@@ -36,7 +36,8 @@
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:9];
         CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
         _btnPrice.frame = CGRectMake(self.frame.size.width-newsize.width, self.frame.size.height-newsize.height - 5, newsize.width, newsize.height);
-    } else
+    }
+    else
     {
         _btnPrice.alpha = 0;
     }
@@ -45,7 +46,7 @@
 -(void) showProIcon
 {
     _btnPro.hidden = NO;
-    _btnPro.frame = CGRectMake(0, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
+    _btnPro.frame = CGRectMake(0, 0,25, 25);
 }
 
 -(void) hidenProIcon

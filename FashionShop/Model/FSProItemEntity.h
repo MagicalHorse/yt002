@@ -35,6 +35,6 @@
 @property (nonatomic) int tagId;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
-
+@property (nonatomic,assign) NSNumber* isProductBinded;
 
 @end

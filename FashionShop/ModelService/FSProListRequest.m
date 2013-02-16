@@ -16,6 +16,8 @@
 @synthesize tagid;
 @synthesize drUserId;
 @synthesize brandId;
+@synthesize topicId;
+@synthesize promotionId;
 @synthesize routeResourcePath=_routeResourcePath;
 
 -(NSString *) routeResourcePath
@@ -48,6 +50,8 @@
     [map mapKeyPath:@"tagid" toAttribute:@"request.tagid"];
     [map mapKeyPath:@"userid" toAttribute:@"request.drUserId"];
     [map mapKeyPath:@"brandid" toAttribute:@"request.brandId"];
+    [map mapKeyPath:@"topicid" toAttribute:@"request.topicId"];
+    [map mapKeyPath:@"promotionid" toAttribute:@"request.promotionId"];
 }
 
 

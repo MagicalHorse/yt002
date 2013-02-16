@@ -760,10 +760,11 @@ typedef enum {
     }
 }
 
-#pragma FSProDetailItemSourceProvider
+#pragma mark - FSProDetailItemSourceProvider
+
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
-     FSProItemEntity *item =  [view.navContext objectAtIndex:index];
+    FSProItemEntity *item =  [view.navContext objectAtIndex:index];
     if (item)
         block(item);
     else
@@ -779,6 +780,7 @@ typedef enum {
 {
     return TRUE;
 }
+
 -(void)dealloc
 {
     [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];

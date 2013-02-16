@@ -17,6 +17,8 @@
 @property (nonatomic, strong) NSDate * indate;
 @property (nonatomic,strong) NSString * sourceName;
 @property (nonatomic,strong) NSMutableArray *resources;
+@property (nonatomic, strong) NSMutableArray *promotions;
+@property (nonatomic,readonly) BOOL hasPromotion;
 @property (nonatomic,strong) FSStore *store;
 
 @end
