@@ -79,8 +79,9 @@ static FSShareView *_instance;
     {
         shareCells = [@[] mutableCopy];
         [self createActionCell:SHARE_WB_ICON withTitle:SHARE_WB_TITLE];
-        [self createActionCell:SHARE_WX_ICON    withTitle:SHARE_WX_TITLE];
+        [self createActionCell:SHARE_WX_FRIENDS_ICON    withTitle:SHARE_WX_FRIENDS_ICON];
         [self createActionCell:SHARE_TC_ICON    withTitle:SHARE_TC_TITLE];
+        [self createActionCell:SHARE_WX_ICON    withTitle:SHARE_WX_TITLE];
     }
 }
 -(void)createActionCell:(NSString *)icon withTitle:(NSString *)title
@@ -112,14 +113,21 @@ static FSShareView *_instance;
             activity = [[FSWeiboActivity alloc] init];
             break;
         }
+        case 1://微信好友
+        {
+            activity = [FSWeixinActivity sharedInstance];
+            ((FSWeixinActivity*)activity).shareType = WXShareTypeFriend;
+            break;
+        }
         case 2:
         {
             activity = [[FSTCWBActivity alloc] init];
             break;
         }
-        case 1:
+        case 3:
         {
             activity = [FSWeixinActivity sharedInstance];
+            ((FSWeixinActivity*)activity).shareType = WXShareTypeFriendCircle;
             break;
         }
         default:

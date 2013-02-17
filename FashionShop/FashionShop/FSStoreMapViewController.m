@@ -11,7 +11,7 @@
 #import "UIViewController+Loading.h"
 #import "PositionAnnotation.h"
 
-#define kMKCoordinateSpan 0.07
+#define kMKCoordinateSpan 0.007
 
 @interface FSStoreMapViewController ()
 - (void)animateToPlace:(CLLocationCoordinate2D)place;

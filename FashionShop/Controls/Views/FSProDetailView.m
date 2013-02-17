@@ -235,7 +235,28 @@
 
 -(void)updateToolBar:(id)data
 {
-    
+    _data = data;
+    //更新优惠按钮
+    if (_data.isPublication) {
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
+        if (_array.count >= 7) {
+            [_array removeObject:_fixibleItem3];
+            [_array removeObject:_btnCoupon];
+            _fixibleItem1.width = 70;
+            _fixibleItem4.width = 70;
+            [self.myToolBar setItems:_array animated:YES];
+        }
+    }
+    else {
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
+        if (_array.count < 7) {
+            [_array insertObject:_fixibleItem3 atIndex:4];
+            [_array insertObject:_btnCoupon atIndex:5];
+            _fixibleItem1.width = 40;
+            _fixibleItem4.width = 40;
+            [self.myToolBar setItems:_array animated:YES];
+        }
+    }
 }
 
 @end

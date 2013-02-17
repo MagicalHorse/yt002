@@ -14,7 +14,7 @@ static BOOL Is_Weixin_Registered = false;
 static FSWeixinActivity *singleon;
 
 @implementation FSWeixinActivity
-@synthesize title,img;
+@synthesize title,img,shareType;
 
 
 +(FSWeixinActivity *)sharedInstance
@@ -36,11 +36,21 @@ static FSWeixinActivity *singleon;
 }
 
 - (NSString *)activityTitle {
-    return SHARE_WX_TITLE;
+    if (shareType == WXShareTypeFriend) {
+        return SHARE_WX_FRIENDS_TITLE;
+    }
+    else {
+        return SHARE_WX_TITLE;
+    }
 }
 
 - (UIImage *)activityImage {
-    return [UIImage imageNamed:SHARE_WX_ICON];
+    if (shareType == WXShareTypeFriend) {
+        return [UIImage imageNamed:SHARE_WX_FRIENDS_ICON];
+    }
+    else {
+        return [UIImage imageNamed:SHARE_WX_ICON];
+    }
 }
 
 
@@ -97,7 +107,6 @@ static FSWeixinActivity *singleon;
 {
     if (img )
     {
-        
         WXMediaMessage *message = [WXMediaMessage message];
         message.title = title;
     
@@ -111,7 +120,12 @@ static FSWeixinActivity *singleon;
         SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
         req.bText = NO;
         req.message = message;
-        req.scene = WXSceneTimeline;
+        if (shareType == WXShareTypeFriend) {
+            req.scene = WXSceneSession;
+        }
+        else{
+            req.scene = WXSceneTimeline;
+        }
         
         [WXApi sendReq:req];
         
@@ -120,7 +134,12 @@ static FSWeixinActivity *singleon;
         SendMessageToWXReq* req = [[SendMessageToWXReq alloc] init];
         req.bText = YES;
         req.text = title;
-        req.scene = WXSceneTimeline;
+        if (shareType == WXShareTypeFriend) {
+            req.scene = WXSceneSession;
+        }
+        else{
+            req.scene = WXSceneTimeline;
+        }
         
         [WXApi sendReq:req];
     }

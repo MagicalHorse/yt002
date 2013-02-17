@@ -145,7 +145,7 @@
 {
 
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
-    [self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:[UIColor colorWithRed:239 green:239 blue:239]}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -397,8 +397,8 @@
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_TAG_CELL forIndexPath:indexPath];
         [(FSProdTagCell *)cell setData:[_tags objectAtIndex:indexPath.row]];
-        cell.layer.borderColor = [UIColor colorWithRed:206 green:206 blue:206].CGColor;
-        cell.layer.borderWidth = 0.5;
+//        cell.layer.borderColor = [UIColor colorWithRed:206 green:206 blue:206].CGColor;
+//        cell.layer.borderWidth = 0.5;
     }
     else if (cv == _cvContent)
     {
@@ -411,8 +411,8 @@
         else {
             [(FSProdDetailCell *)cell hidenProIcon];
         }
-        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-        cell.layer.borderWidth = 0.5;
+//        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//        cell.layer.borderWidth = 0.5;
         if (_cvContent.dragging == NO &&
             _cvContent.decelerating == NO)
         {

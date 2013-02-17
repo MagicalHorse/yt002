@@ -71,12 +71,13 @@
     }
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
     _segHeader.selectedSegmentIndex = 0;
-    [_segHeader setSegBGColor:RGBCOLOR(210, 255, 255)];
+    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
     [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
 }
 
 -(void)dealSegChanged:(UISegmentedControl *) segmentedControl
 {
+    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     [self beginLoading:_itemsView];
     [self refreshContent:YES withCallback:^{
         [self endLoading:_itemsView];
@@ -242,13 +243,15 @@
     }];
     
     [_itemsView reloadData];
-    if (!_items || _items.count<=0) {
-
-        [self showNoResult:_itemsView withText:NSLocalizedString((_segHeader.selectedSegmentIndex == 0?@"no products liked":@"no products shared"), Nil)];
+    if (!_items || _items.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
     }
     else
+    {
         [self hideNoResult:_itemsView];
-    
+    }
 }
 
 -(void) fillFavorInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
@@ -282,11 +285,15 @@
     }];
     
     [_itemsView reloadData];
-    if (!_items || _items.count<=0) {
-        [self showNoResult:_itemsView withText:NSLocalizedString((_segHeader.selectedSegmentIndex == 0?@"no products liked":@"no products shared"), Nil)];
+    if (!_items || _items.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
     }
     else
+    {
         [self hideNoResult:_itemsView];
+    }
 }
 
 -(FSCommonUserRequest *)createDRRequest
@@ -609,8 +616,8 @@
     }
     id item = [_items objectAtIndex:indexPath.row];
     [(id)cell setData:item];
-    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    cell.layer.borderWidth = 0.5;
+//    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//    cell.layer.borderWidth = 0.5;
     if (_segHeader.selectedSegmentIndex == 0) {
         if ([item isKindOfClass:[FSFavor class]]) {
             FSFavor *_fav = (FSFavor*)item;

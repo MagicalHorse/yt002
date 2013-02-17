@@ -14,7 +14,7 @@
 #import "FSStoreMapViewController.h"
 #import "PositionAnnotation.h"
 
-#define kMKCoordinateSpan 0.07
+#define kMKCoordinateSpan 0.005
 
 @interface FSStoreDetailViewController ()
 {
@@ -43,6 +43,14 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     self.title = _store.name;
     
+    if (!_picImage) {
+        _picImage = [[UIImageView alloc] init];
+        _picImage.frame = CGRectMake(10, 10, 300, 200);
+        _picImage.clipsToBounds = YES;
+    }
+    _picImage.contentMode = UIViewContentModeScaleAspectFill;
+    _picImage.image = [UIImage imageNamed:@"default_icon320.png"];
+    
     [self viewToImage];
 }
 
@@ -53,7 +61,8 @@
     center.latitude = [_store.lantit floatValue];
     center.longitude = [_store.longit floatValue];
     
-    _mapView= [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, 300, 200)];
+    _mapView= [[MKMapView alloc] initWithFrame:CGRectMake(0, 1000, 300, 200)];
+    [self.view addSubview:_mapView];
     MKCoordinateSpan span = {kMKCoordinateSpan, kMKCoordinateSpan};
     MKCoordinateRegion region = MKCoordinateRegionMake(center, span);
     [_mapView setRegion:region animated:NO];
@@ -61,7 +70,7 @@
     PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:center title:nil subTitle:nil];
     [_mapView addAnnotation:annotation];
     
-    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:0.5];
+    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:2];
 }
 
 -(void)createImage:(UIView*)view
@@ -78,9 +87,13 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    _picImage = [[UIImageView alloc] initWithImage:image];
-    _picImage.frame = CGRectMake(10, 10, 300, 200);
+    if (!_picImage) {
+        _picImage = [[UIImageView alloc] init];
+        _picImage.frame = CGRectMake(10, 10, 300, 200);
+    }
+    _picImage.image = image;
     
+    [_mapView removeFromSuperview];
     [_tbAction reloadData];
 }
 
@@ -209,6 +222,13 @@
             break;
     }
     return cell;
+}
+
+#pragma mark - MKMapViewDelegate
+
+- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView
+{
+    
 }
 
 @end

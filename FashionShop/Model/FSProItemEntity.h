@@ -35,6 +35,8 @@
 @property (nonatomic) int tagId;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
-@property (nonatomic,assign) NSNumber* isProductBinded;
+@property (nonatomic,strong) NSNumber* isProductBinded;
+@property (nonatomic,assign) BOOL isPublication;
+@property (nonatomic,strong) NSNumber *limitCount;
 
 @end

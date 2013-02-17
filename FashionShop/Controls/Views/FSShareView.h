@@ -27,7 +27,9 @@ typedef void (^FSShareCompleteHandler) (NSString *activityType, BOOL completed) 
 #import "AWActionSheet.h"
 
 #define SHARE_WX_ICON @"weixin_icon"
-#define SHARE_WX_TITLE @"微信"
+#define SHARE_WX_TITLE @"微信朋友圈"
+#define SHARE_WX_FRIENDS_ICON @"weixin_friends_icon"
+#define SHARE_WX_FRIENDS_TITLE @"微信好友"
 #define SHARE_WB_ICON @"xinlang_weibo_icon"
 #define SHARE_WB_TITLE @"新浪微博"
 #define SHARE_TC_ICON @"tengxun_weibo_icon"

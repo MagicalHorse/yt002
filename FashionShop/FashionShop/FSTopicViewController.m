@@ -104,7 +104,7 @@
 {
     FSTopicRequest *request = [[FSTopicRequest alloc] init];
     request.nextPage = page;
-    request.pageSize = 2;//COMMON_PAGE_SIZE;
+    request.pageSize = COMMON_PAGE_SIZE;
     return request;
 }
 
@@ -132,6 +132,15 @@
             }
         }
     }];
+    if (_topicList.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:tbAction withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:tbAction];
+    }
     [tbAction reloadData];
 }
 
@@ -245,7 +254,7 @@
     FSTopicListCell *cell = [self.tbAction dequeueReusableCellWithIdentifier:TOPIC_LIST_CELL];
     [cell setData:_topicList[indexPath.row]];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.content.layer.cornerRadius = 8;
+    cell.content.layer.cornerRadius = 10;
     cell.content.layer.borderWidth = 0;
     return cell;
 }

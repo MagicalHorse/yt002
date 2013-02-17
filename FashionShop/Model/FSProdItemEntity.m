@@ -63,6 +63,11 @@
         return NO;
     }
     if (promotions.count > 0) {
+        for (FSProItemEntity *item in promotions) {
+            if (item.isPublication) {
+                return NO;
+            }
+        }
         return YES;
     }
     return NO;

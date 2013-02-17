@@ -82,10 +82,15 @@ void uncaughtExceptionHandler(NSException *exception)
     //添加背景色
     NSArray *array = [root.view subviews];
     UITabBar *_tabbar = [array objectAtIndex:1];
-    UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
-    UIImageView *_vImage = [[UIImageView alloc] initWithImage:_image];
+    id item = [_tabbar.subviews objectAtIndex:0];
+    [item removeFromSuperview];
+    //UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
+    //UIImageView *_vImage = [[UIImageView alloc] initWithImage:_image];
+    UIImageView *_vImage = [[UIImageView alloc] init];
+    _vImage.backgroundColor = [UIColor blackColor];
+    _vImage.alpha = 0.95f;
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
-    [_tabbar insertSubview:_vImage atIndex:1];
+    [_tabbar insertSubview:_vImage atIndex:0];
     
     self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
@@ -100,7 +105,7 @@ void uncaughtExceptionHandler(NSException *exception)
 -(void) setGlobalLayout
 {
     [[UINavigationBar appearance] setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:16],UITextAttributeTextColor:[UIColor colorWithRed:239 green:239 blue:239]}];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:16],UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
         [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
 }
 

@@ -20,7 +20,7 @@ typedef enum {
     CellDesc,
 }CellType;
 
-@interface FSStoreDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate> 
+@interface FSStoreDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (strong, nonatomic) FSStore *store;
 

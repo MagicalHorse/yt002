@@ -47,7 +47,7 @@
     if (self) {
         [self setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
         IconDelegate = delegate;
-        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 10, 320, 60*rowCount)];
+        self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 10, 320, 70*rowCount)];
         [scrollView setPagingEnabled:YES];
         [scrollView setBackgroundColor:[UIColor clearColor]];
         [scrollView setShowsHorizontalScrollIndicator:NO];
@@ -98,11 +98,11 @@
     
     if (count <= 3) {
         [self setTitle:@"\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 60)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, 70)];
         rowCount = 1;
     } else if (count <= 6) {
         [self setTitle:@"\n\n\n\n\n\n\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 120)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, 140)];
         rowCount = 2;
     }
     [scrollView setContentSize:CGSizeMake(320*(count/itemPerPage+1), scrollView.frame.size.height)];

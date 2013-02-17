@@ -505,7 +505,7 @@
     }
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
     _segHeader.selectedSegmentIndex = 0;
-    [_segHeader setSegBGColor:RGBCOLOR(210, 255, 255)];
+    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
     [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     _isInRefreshing = NO;
     [self loadILike];
@@ -513,6 +513,7 @@
 
 -(void)dealSegChanged:(UISegmentedControl *) segmentedControl
 {
+    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     [self loadILike];
 }
 
@@ -717,12 +718,13 @@
             [_likeView reloadData];
         if (_likePros.count<1)
         {
-            [self showNoResult:_likeView withText:NSLocalizedString(@"no likes added", nil)];
-        } else
+            //加载空视图
+            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+        }
+        else
         {
             [self hideNoResult:_likeView];
         }
-        
     }
 }
 -(void)fillItemslist:(NSArray *)list isInsert:(BOOL)isInsert
@@ -759,8 +761,9 @@
         if (_likePros.count<1)
         {
             //加载空视图
-            [self showNoResultImage:_likeView withImage:@"blank_me.png" withText:NSLocalizedString(@"no shared item", nil) originOffset:20];   
-        } else
+            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+        }
+        else
         {
             [self hideNoResult:_likeView];
         }
@@ -951,8 +954,8 @@
             }
         }
     }
-    cell.layer.borderWidth = 0.5;
-    cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
+//    cell.layer.borderWidth = 0.5;
+//    cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
     if (_likeView.dragging == NO && _likeView.decelerating == NO)
     {
         int width = ITEM_CELL_WIDTH;

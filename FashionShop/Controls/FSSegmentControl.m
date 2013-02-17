@@ -92,11 +92,11 @@
      {
          if (self.selectedSegmentIndex == idx)
          {
-             item.textColor = aSelColor;
+             item.textColor = aColor;
          }
          else
          {
-             item.textColor = aColor;
+             item.textColor = aSelColor;
          }
      }];
     _hasSetColor = YES;

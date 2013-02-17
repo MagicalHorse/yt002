@@ -159,6 +159,15 @@
             }
         }
     }];
+    if (_prods.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_contentView withImage:@"blank_preferential.png" withText:nil  originOffset:30];
+    }
+    else
+    {
+        [self hideNoResult:_contentView];
+    }
 }
 
 
@@ -287,8 +296,8 @@
     cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
     FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
     [(FSProdDetailCell *)cell setData: _data];
-    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    cell.layer.borderWidth = 0.5;
+//    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//    cell.layer.borderWidth = 0.5;
     if (_data.hasPromotion) {
         [(FSProdDetailCell *)cell showProIcon];
     }
