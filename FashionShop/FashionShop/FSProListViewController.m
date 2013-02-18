@@ -455,7 +455,7 @@ typedef enum {
     }
     else
     {
-        [self hideNoResult:_contentView ];
+        [self hideNoResultImage:_contentView ];
     }
 }
 -(void) mergeByStore:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
@@ -496,7 +496,7 @@ typedef enum {
     }
     else
     {
-        [self hideNoResult:_contentView ];
+        [self hideNoResultImage:_contentView ];
     }
 }
 -(void)fillFetchResultInMemory:(FSProItems *)pros
@@ -718,7 +718,6 @@ typedef enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
     NSMutableArray *rows = NULL;
     if (_currentSearchIndex==SortByDistance)
@@ -741,6 +740,19 @@ typedef enum {
     [self presentViewController:navControl animated:YES completion:nil];
     [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
     
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
+    FSProItemEntity *_item = [tmpPros objectAtIndex:indexPath.row];
+    if (_currentSearchIndex == (int)PRO_LIST_FILTER_NEAREST) {
+        [_dic setValue:@"最近距离" forKey:@"查看方式"];
+    }
+    else {
+        [_dic setValue:@"最新发布" forKey:@"查看方式"];
+    }
+    [_dic setValue:_item.title forKey:@"活动名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"活动ID"];
+    [[FSAnalysis instance] logEvent:@"查看活动详情" withParameters:_dic];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate

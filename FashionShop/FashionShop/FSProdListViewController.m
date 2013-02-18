@@ -143,7 +143,6 @@
 }
 -(void) prepareLayout
 {
-
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
     [self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
@@ -156,6 +155,7 @@
     _cvTags.backgroundColor = [UIColor clearColor];
     _tagContainer.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _tagContainer.contentMode = UIViewContentModeCenter;
+    _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
     _cvTags.dataSource = self;
     [self reCreateContentView];
@@ -187,10 +187,8 @@
         
     }];
     
-
     _cvContent.delegate = self;
     _cvContent.dataSource = self;
-
 }
 
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted needReload:(BOOL)shouldReload
@@ -226,6 +224,7 @@
     }];
     if (shouldReload)
       [_cvContent reloadData];
+    
     if (_prods.count<1)
     {
         //加载空视图
@@ -233,7 +232,7 @@
     }
     else
     {
-        [self hideNoResult:_cvContent];
+        [self hideNoResultImage:_cvContent];
     }
 }
 
@@ -397,8 +396,6 @@
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_TAG_CELL forIndexPath:indexPath];
         [(FSProdTagCell *)cell setData:[_tags objectAtIndex:indexPath.row]];
-//        cell.layer.borderColor = [UIColor colorWithRed:206 green:206 blue:206].CGColor;
-//        cell.layer.borderWidth = 0.5;
     }
     else if (cv == _cvContent)
     {
@@ -411,8 +408,6 @@
         else {
             [(FSProdDetailCell *)cell hidenProIcon];
         }
-//        cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//        cell.layer.borderWidth = 0.5;
         if (_cvContent.dragging == NO &&
             _cvContent.decelerating == NO)
         {
@@ -424,11 +419,7 @@
     return cell;
 }
 
-
-
-
 #pragma mark - PSUICollectionViewDelegate
-
 
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -436,7 +427,14 @@
     {
         [[collectionView cellForItemAtIndexPath:indexPath] setSelected:TRUE];
         [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE];
-        [self beginSwitchTag:[_tags objectAtIndex:indexPath.row]];
+        FSCoreTag *tag = [_tags objectAtIndex:indexPath.row];
+        [self beginSwitchTag:tag];
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:tag.name forKey:@"分类名称"];
+        [_dic setValue:@"东东商品列表" forKey:@"页面来源"];
+        [[FSAnalysis instance] logEvent:@"查看分类" withParameters:_dic];
     }
     else if (collectionView == _cvContent)
     {
@@ -447,8 +445,15 @@
         detailViewController.sourceType = FSSourceProduct;
         UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self presentViewController:navControl animated:YES completion:nil];
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        FSProdItemEntity *_item = [_prods objectAtIndex:indexPath.row];
+        [_dic setValue:_item.title forKey:@"商品名称"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
+        [_dic setValue:@"东东商品列表" forKey:@"页面来源"];
+        [[FSAnalysis instance] logEvent:@"查看详情" withParameters:_dic];
     }
-
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath

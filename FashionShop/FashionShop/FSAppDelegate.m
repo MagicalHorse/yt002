@@ -88,12 +88,15 @@ void uncaughtExceptionHandler(NSException *exception)
     //UIImageView *_vImage = [[UIImageView alloc] initWithImage:_image];
     UIImageView *_vImage = [[UIImageView alloc] init];
     _vImage.backgroundColor = [UIColor blackColor];
-    _vImage.alpha = 0.95f;
+    //_vImage.alpha = 0.95f;
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
     [_tabbar insertSubview:_vImage atIndex:0];
     
     self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
+    for (UIViewController *item in root.viewControllers) {
+        [[FSAnalysis instance] autoTrackPages:item];
+    }
     [self.window makeKeyAndVisible];
 }
 

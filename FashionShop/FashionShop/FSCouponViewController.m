@@ -71,10 +71,13 @@
                     _noMore = true;
                 [self mergeLike:innerResp isInsert:false];
                 
+                /*
+                //同步Me的主页数据。
                 FSUser *localUser = (FSUser*)[FSUser localProfile];
                 if ([localUser.uid isEqualToNumber:currentUser.uid]) {
                     localUser.couponsTotal = innerResp.totalCount;
                 }
+                 */
             }
             else
             {
@@ -146,7 +149,7 @@
     }
     else
     {
-        [self hideNoResult:_contentView];
+        [self hideNoResultImage:_contentView];
     }
 }
 

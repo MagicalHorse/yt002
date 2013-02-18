@@ -24,6 +24,6 @@
 
 +(NSArray *) localTags
 {
-    return [FSCoreTag findAllSortedBy:@"name" ascending:TRUE];
+    return [FSCoreTag findAllSortedBy:@"sort" ascending:NO];
 }
 @end

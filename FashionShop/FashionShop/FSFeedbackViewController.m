@@ -59,6 +59,8 @@
     _txtPhone.placeholder = NSLocalizedString(@"Contact place holder", nil);
     _txtContent.delegate = self;
     _txtPhone.delegate = self;
+    
+    _txtContent.superview.backgroundColor = APP_BACKGROUND_COLOR;
 }
 
 -(void) decorateTapDismissKeyBoard

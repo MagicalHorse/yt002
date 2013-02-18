@@ -14,7 +14,7 @@
 @dynamic id;
 @dynamic name;
 @dynamic sort;
-
+@dynamic desc;
 
 
 +(RKObjectMapping *)getRelationDataMap:(Class)class withParentMap:(RKObjectMapping *)parentMap
@@ -24,7 +24,8 @@
     relationMapping.primaryKeyAttribute = @"id";
     [relationMapping mapKeyPath:@"id" toAttribute:@"id"];
     [relationMapping mapKeyPath:@"name" toAttribute:@"name"];
-    [relationMapping mapKeyPath:@"sort" toAttribute:@"sort"];
+    [relationMapping mapKeyPath:@"sortorder" toAttribute:@"sort"];
+    [relationMapping mapKeyPath:@"description" toAttribute:@"desc"];
     return relationMapping;
 }
 

@@ -139,7 +139,7 @@
     }
     else
     {
-        [self hideNoResult:tbAction];
+        [self hideNoResultImage:tbAction];
     }
     [tbAction reloadData];
 }
@@ -220,7 +220,7 @@
     }];
 }
 
-#pragma UITableViewDelegate
+#pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -234,8 +234,13 @@
     dr.topic = topic;
     dr.pageType = FSPageTypeTopic;
     [self.navigationController pushViewController:dr animated:TRUE];
-    //[self.navigationController presentModalViewController:dr animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:topic.name forKey:@"专题名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", topic.topicId] forKey:@"专题ID"];
+    [[FSAnalysis instance] logEvent:@"查看专题列表" withParameters:_dic];
 }
 
 #pragma UITableViewDataSource

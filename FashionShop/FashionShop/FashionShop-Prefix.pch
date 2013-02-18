@@ -25,6 +25,7 @@
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
 #import "FSConfiguration.h"
+#import "FSAnalysis.h"
 
 #import "PSTCollectionView.h"
 

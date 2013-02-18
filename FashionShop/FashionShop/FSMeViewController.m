@@ -723,7 +723,7 @@
         }
         else
         {
-            [self hideNoResult:_likeView];
+            [self hideNoResultImage:_likeView];
         }
     }
 }
@@ -765,7 +765,7 @@
         }
         else
         {
-            [self hideNoResult:_likeView];
+            [self hideNoResultImage:_likeView];
         }
     }
 }

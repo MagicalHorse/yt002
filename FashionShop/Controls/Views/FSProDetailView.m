@@ -237,7 +237,7 @@
 {
     _data = data;
     //更新优惠按钮
-    if (_data.isPublication) {
+    if (!_data.isPublication) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count >= 7) {
             [_array removeObject:_fixibleItem3];

@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"Picture Browse", nil);
     [self prepareLayout];
     [self presentData];
 }

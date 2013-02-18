@@ -330,6 +330,17 @@
         }
 
     }];
+    
+    //统计
+    FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
+    NSString *_name;
+    if (_sourceType == FSSourceProduct) {
+        _name = [NSString stringWithFormat:@"商品-优惠券  %@", [view.data valueForKey:@"title"]];
+    }
+    else {
+        _name = [NSString stringWithFormat:@"活动-优惠券  %@", [view.data valueForKey:@"title"]];
+    }
+    [[FSAnalysis instance] logEvent:_name withParameters:nil];
 }
 
 -(void) internalDoFavor:(UIBarButtonItem *)button
@@ -390,7 +401,26 @@
         button.enabled = TRUE;
     }];
     
+    //统计
+    NSString *_name;
+    if (favored) {
+        if (_sourceType == FSSourceProduct) {
+            _name = [NSString stringWithFormat:@"商品-喜欢  %@", [view.data valueForKey:@"title"]];
+        }
+        else {
+            _name = [NSString stringWithFormat:@"活动-喜欢  %@", [view.data valueForKey:@"title"]];
+        }
+    }
+    else {
+        if (_sourceType == FSSourceProduct) {
+            _name = [NSString stringWithFormat:@"商品-取消喜欢  %@", [view.data valueForKey:@"title"]];
+        }
+        else {
+            _name = [NSString stringWithFormat:@"活动-取消喜欢  %@", [view.data valueForKey:@"title"]];
+        }
+    }
     
+    [[FSAnalysis instance] logEvent:_name withParameters:nil];
 }
 -(void) updateFavorButtonStatus:(UIBarButtonItem *)button canFavored:(BOOL)canfavored
 {
@@ -705,6 +735,17 @@
         if (callback)
             callback();
     }];
+    
+    //统计
+    FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
+    NSString *_name;
+    if (_sourceType == FSSourceProduct) {
+        _name = [NSString stringWithFormat:@"商品-评论  %@", [view.data valueForKey:@"title"]];
+    }
+    else {
+        _name = [NSString stringWithFormat:@"活动-评论  %@", [view.data valueForKey:@"title"]];
+    }
+    [[FSAnalysis instance] logEvent:_name withParameters:nil];
 }
 
 -(BOOL)IsBindPromotionOrProduct:(id)_item
@@ -851,10 +892,10 @@
         if (indexPath.section == 0) {
             UITableViewCell *_cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
             if (_sourceType == FSSourceProduct) {
-                _cell.textLabel.text = @"查看商品活动详情";
+                _cell.textLabel.text = NSLocalizedString(@"Browse Promotion Detail", nil);
             }
             else {
-                _cell.textLabel.text = @"查看活动商品列表";
+                _cell.textLabel.text = NSLocalizedString(@"Browse Products List", nil);
             }
             _cell.textLabel.font = ME_FONT(14);
             _cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

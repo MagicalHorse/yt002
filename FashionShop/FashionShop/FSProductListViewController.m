@@ -166,7 +166,7 @@
     }
     else
     {
-        [self hideNoResult:_contentView];
+        [self hideNoResultImage:_contentView];
     }
 }
 

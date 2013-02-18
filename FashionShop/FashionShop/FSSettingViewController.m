@@ -53,7 +53,7 @@
     _tbAction.dataSource= self;
     _tbAction.delegate = self;
     _tbAction.backgroundView = [[UIView alloc]init];
-    _tbAction.backgroundColor = [UIColor colorWithRed:223.0/255.0 green:223.0/255.0 blue:223.0/255.0 alpha:1.0f];
+    _tbAction.backgroundColor = APP_BACKGROUND_COLOR;
     [_tbAction reloadData];
 }
 

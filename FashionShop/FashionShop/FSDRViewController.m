@@ -250,7 +250,7 @@
     }
     else
     {
-        [self hideNoResult:_itemsView];
+        [self hideNoResultImage:_itemsView];
     }
 }
 
@@ -292,7 +292,7 @@
     }
     else
     {
-        [self hideNoResult:_itemsView];
+        [self hideNoResultImage:_itemsView];
     }
 }
 
