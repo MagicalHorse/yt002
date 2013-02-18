@@ -37,6 +37,10 @@
 #import <PassKit/PassKit.h>
 #import "NSData+Base64.h"
 
+#import "EGOPhotoGlobal.h"
+#import "MyPhoto.h"
+#import "MyPhotoSource.h"
+
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
 #define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
@@ -588,11 +592,22 @@
 {
     if ([self numberOfImagesInSlides:nil]<=0)
         return;
-    FSImageSlideViewController *slide = [[FSImageSlideViewController alloc] initWithNibName:@"FSImageSlideViewController" bundle:nil];
-    slide.source = self;
-    slide.wantsFullScreenLayout = YES;
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:slide];
-    [self presentViewController:nav animated:TRUE completion:nil];
+//    FSImageSlideViewController *slide = [[FSImageSlideViewController alloc] initWithNibName:@"FSImageSlideViewController" bundle:nil];
+//    slide.source = self;
+//    slide.wantsFullScreenLayout = YES;
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:slide];
+//    [self presentViewController:nav animated:TRUE completion:nil];
+    
+    NSMutableArray *photoArray=[NSMutableArray arrayWithCapacity:[[self itemSource] resource].count];
+    for(NSString *res in [[self itemSource] resource])
+    {
+        MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[(FSResource *)res absoluteUrl320] name:nil];
+        [photoArray addObject:photo];
+    }
+    MyPhotoSource *source = [[MyPhotoSource alloc] initWithPhotos:photoArray];
+    EGOPhotoViewController *photoController = [[EGOPhotoViewController alloc] initWithPhotoSource:source];
+    [self.navigationController pushViewController:photoController animated:YES];
+    photoController.source = self;
 }
 
 - (void) displayCommentInputView:(id)parent
@@ -766,15 +781,15 @@
 }
 
 #pragma mark - FSImageSlide datasource
--(int)numberOfImagesInSlides:(FSImageSlideViewController *)view
+-(int)numberOfImagesInSlides:(EGOPhotoViewController *)view
 {
     return [[self itemSource] resource].count;
 }
--(NSURL *)imageSlide:(FSImageSlideViewController *)view imageNameForIndex:(int)index
+-(NSURL *)imageSlide:(EGOPhotoViewController *)view imageNameForIndex:(int)index
 {
     return [(FSResource *)[[[self itemSource] resource] objectAtIndex:index] absoluteUrl320];
 }
--(void)imageSlide:(FSImageSlideViewController *)view didShareTap:(BOOL)shared
+-(void)imageSlide:(EGOPhotoViewController *)view didShareTap:(BOOL)shared
 {
     NSMutableArray *shareItems = [@[] mutableCopy];
     id curView = self.paginatorView.currentPage;

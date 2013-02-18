@@ -24,4 +24,7 @@
 +(FSAppDelegate *)app;
 -(void)entryMain;
 
+-(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName;
+-(NSString*)readFromFile:(NSString *)aFileName;
+
 @end

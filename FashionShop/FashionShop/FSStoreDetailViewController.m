@@ -70,7 +70,7 @@
     PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:center title:nil subTitle:nil];
     [_mapView addAnnotation:annotation];
     
-    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:2];
+    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:3];
 }
 
 -(void)createImage:(UIView*)view

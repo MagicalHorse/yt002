@@ -152,6 +152,15 @@
 //        [self reportError:NSLocalizedString(@"", nil)];
 //        return NO;
 //    }
+    if ([_lbProDesc.text isEqualToString:@""]) {
+        return YES;
+    }
+    NSMutableString *error = [@"" mutableCopy];
+    if(![self validateDate:&error])
+    {
+        [self reportError:error];
+        return NO;
+    }
     return YES;
 }
 
@@ -268,6 +277,19 @@
         [self presentSemiModalViewController:_dateEndPicker];
     }
     [activityObject resignFirstResponder];
+}
+
+- (BOOL)validateDate:(NSMutableString **)errorin
+{
+    if (!errorin)
+        *errorin = [@"" mutableCopy];
+    NSMutableString *error = *errorin;
+    if([_dateEndPicker.datePicker.date compare:_datePicker.datePicker.date] != NSOrderedDescending)
+    {
+        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_DATE_VALIDATE", nil)];;
+        return false;
+    }
+    return true;
 }
 
 - (void)viewDidUnload {

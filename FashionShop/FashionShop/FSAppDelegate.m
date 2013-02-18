@@ -56,8 +56,9 @@ void uncaughtExceptionHandler(NSException *exception)
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     //goto splash
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];  
-    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"hasLaunched"]) {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    NSString *content = [self readFromFile:@"hasLaunched"];
+    if (!content || ![content isEqualToString:@"hasLaunched"]) {
 		SplashViewController *SVCtrl = [[SplashViewController alloc] init];
         SVCtrl.view.alpha = 1.0f;
         self.window.backgroundColor = [UIColor whiteColor];
@@ -247,6 +248,20 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName
+{
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *fileName=[[paths objectAtIndex:0] stringByAppendingPathComponent:aFileName];
+    return [aString writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
+}
+
+-(NSString*)readFromFile:(NSString *)aFileName
+{
+    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *fileName=[[paths objectAtIndex:0] stringByAppendingPathComponent:aFileName];
+    return [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil];
 }
 
 @end

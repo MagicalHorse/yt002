@@ -194,6 +194,13 @@
 
 -(void) doSave
 {
+    NSMutableString *error = [@"" mutableCopy];
+    if (_publishSource == FSSourcePromotion) {
+        if(![self validateDate:&error])
+        {
+            [self reportError:error];
+        }
+    }
     //做预发布
     NSMutableString *_msg = [NSMutableString string];
     [_msg appendFormat:@"标题:%@\n", _proRequest.title];
@@ -334,8 +341,6 @@
         [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
         return;
     }
-    
-
 }
 -(void)didImageRemoveAll
 {
@@ -387,7 +392,7 @@
             _datePicker = [[TDDatePickerController alloc] init];
             _datePicker.delegate = self;
         }
-        _datePicker.datePicker.minimumDate = [NSDate date];
+        //_datePicker.datePicker.minimumDate = [NSDate date];
         [self presentSemiModalViewController:_datePicker];
     }
     else {
@@ -395,7 +400,7 @@
             _dateEndPicker = [[TDDatePickerController alloc] init];
             _dateEndPicker.delegate = self;
         }
-        _dateEndPicker.datePicker.minimumDate = [NSDate date];
+        //_dateEndPicker.datePicker.minimumDate = [NSDate date];
         [self presentSemiModalViewController:_dateEndPicker];
     }
 }
@@ -683,22 +688,13 @@
     if (alertView.tag == EXIT_ALERT_TAG && buttonIndex == 1) {
         [self dismissViewControllerAnimated:TRUE completion:nil];
     }
-    if (alertView.tag = SAVE_INFO_TAG && buttonIndex == 1) {
-        //如果不是结束日期>开始日期>当前日期,则返回错误提示
-        NSMutableString *error = [@"" mutableCopy];
-        if([self validateDate:&error])
-        {
-            [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
-                [self internalDoSave:callback];
-            } completeCallbck:^{
-                [self endProgress];
-                [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
-            }];
-        }
-        else
-        {
-            [self reportError:error];
-        }
+    if (alertView.tag == SAVE_INFO_TAG && buttonIndex == 1) {
+        [self startProgress:NSLocalizedString(@"prodct uploading...", nil) withExeBlock:^(dispatch_block_t callback){
+            [self internalDoSave:callback];
+        } completeCallbck:^{
+            [self endProgress];
+            [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
+        }];
     }
 }
 
@@ -707,10 +703,9 @@
     if (!errorin)
         *errorin = [@"" mutableCopy];
     NSMutableString *error = *errorin;
-    NSDate *now=[[NSDate alloc] init];
-    if([_proRequest.startdate compare:now]==NSOrderedAscending)
+    if([_dateEndPicker.datePicker.date compare:_datePicker.datePicker.date] != NSOrderedDescending)
     {
-        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_STARTDATE_VALIDATE", nil)];;
+        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_DATE_VALIDATE", nil)];;
         return false;
     }
     return true;

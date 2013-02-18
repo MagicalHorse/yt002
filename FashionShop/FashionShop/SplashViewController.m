@@ -135,7 +135,8 @@
         [self dismissModalViewControllerAnimated:YES];
     } else {
         [theApp entryMain];
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunched"];
+        //[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasLaunched"];
+        [theApp writeFile:@"hasLaunched" fileName:@"hasLaunched"];
         [self.view removeFromSuperview];
     }
 }

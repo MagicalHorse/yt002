@@ -12,21 +12,28 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_APP_SECRET_KEY @"yintai123456"
 #define REST_API_CLIENT_VERSION @"1.0.0"
 
 #if defined ENVIRONMENT_DEV
 //测试库
     #define REST_API_URL   @"http://10.32.11.65:9550/api"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
+
 #elif defined ENVIRONMENT_ADHOC
 //adhoc
     #define REST_API_URL   @"http://10.10.11.65:7070/api"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
+
 #elif defined ENVIRONMENT_STORE
 //production
     #define REST_API_URL   @"http://itoo.yintai.com/api"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
+
 #else
 //测试库
     #define REST_API_URL   @"http://10.32.11.65:9550/api"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
+
 #endif
 
 //正式
