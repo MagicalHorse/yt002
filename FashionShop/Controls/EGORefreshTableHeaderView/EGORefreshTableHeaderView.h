@@ -33,6 +33,13 @@ typedef enum{
 	EGOOPullRefreshLoading,	
 } EGOPullRefreshState;
 
+@interface MyAcitivityView : UIView
+
+-(void)startLoading:(UIView*)container;
+-(void)endLoading:(UIView*)container;
+
+@end
+
 @protocol EGORefreshTableHeaderDelegate;
 @interface EGORefreshTableHeaderView : UIView {
 	
@@ -42,8 +49,7 @@ typedef enum{
 	UILabel *_lastUpdatedLabel;
 	UILabel *_statusLabel;
 	CALayer *_arrowImage;
-	UIActivityIndicatorView *_activityView;
-	
+	MyAcitivityView *_activityView;
 }
 
 @property(nonatomic,weak) id <EGORefreshTableHeaderDelegate> delegate;

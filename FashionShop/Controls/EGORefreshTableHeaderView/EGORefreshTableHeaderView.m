@@ -25,13 +25,57 @@
 //
 
 #import "EGORefreshTableHeaderView.h"
+#import "UIViewController+Loading.h"
 
 
 #define TEXT_COLOR	 [UIColor colorWithRed:87.0/255.0 green:108.0/255.0 blue:137.0/255.0 alpha:1.0]
 #define FLIP_ANIMATION_DURATION 0.18f
 
+#define UIVIEW_CAT_LOADING_ID 100
 
-@interface EGORefreshTableHeaderView (Private)
+@implementation MyAcitivityView
+
+-(void)startLoading:(UIView*)container
+{
+    if (!container)
+        container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
+    if(!loadMoreView)
+    {
+        loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-50,container.frame.origin.y+85, 20, 20)];
+        loadMoreView.tag = UIVIEW_CAT_LOADING_ID;
+    }
+    [container addSubview:loadMoreView];
+    [loadMoreView.layer removeAllAnimations];
+    loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
+    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
+    animation.duration = .4;
+    animation.cumulative =YES;
+    animation.repeatCount = 2000;
+    [loadMoreView.layer addAnimation:animation forKey:@"animation"];
+    [loadMoreView startAnimating];
+}
+
+-(void)endLoading:(UIView*)container
+{
+    if (!container)
+        container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
+    if (loadMoreView)
+    {
+        [loadMoreView.layer removeAllAnimations];
+        loadMoreView.image = nil;
+        [loadMoreView removeFromSuperview];
+    }
+}
+
+@end
+
+@interface EGORefreshTableHeaderView (Private) {
+    
+}
 - (void)setState:(EGOPullRefreshState)aState;
 @end
 
@@ -69,7 +113,8 @@
 		_statusLabel=label;
         
 		CALayer *layer = [CALayer layer];
-		layer.frame = CGRectMake(100, frame.size.height - 65.0f, 30.0f, 55.0f);
+		//layer.frame = CGRectMake(100, frame.size.height - 65.0f, 30.0f, 55.0f);
+        layer.frame = CGRectMake(108, frame.size.height - 52.0f, 15, 39);
 		layer.contentsGravity = kCAGravityResizeAspect;
 		layer.contents = (id)[UIImage imageNamed:arrow].CGImage;
 		
@@ -82,11 +127,10 @@
 		[[self layer] addSublayer:layer];
 		_arrowImage=layer;
         
-		UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		MyAcitivityView *view = [[MyAcitivityView alloc] init];
 		view.frame = CGRectMake(100, frame.size.height - 38.0f, 20.0f, 20.0f);
-		[self addSubview:view];
+		//[self addSubview:view];
 		_activityView = view;
-        
         
 		[self setState:EGOOPullRefreshNormal];
         
@@ -148,7 +192,7 @@
 			}
             
 			_statusLabel.text = NSLocalizedString(@"Pull down to refresh...", @"Pull down to refresh status");
-			[_activityView stopAnimating];
+			[_activityView endLoading:self];
 			[CATransaction begin];
 			[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions]; 
 			_arrowImage.hidden = NO;
@@ -161,7 +205,7 @@
 		case EGOOPullRefreshLoading:
             
 			_statusLabel.text = NSLocalizedString(@"Loading...", @"Loading Status");
-			[_activityView startAnimating];
+			[_activityView startLoading:self];
 			[CATransaction begin];
 			[CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions]; 
 			_arrowImage.hidden = YES;

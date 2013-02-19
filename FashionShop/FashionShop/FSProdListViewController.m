@@ -144,16 +144,16 @@
 -(void) prepareLayout
 {
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
-    [self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
+    //[self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
      _cvTags = [[PSUICollectionView alloc] initWithFrame:_tagContainer.bounds collectionViewLayout:layout];
     [_tagContainer addSubview:_cvTags];
+    _tagContainer.backgroundColor = [UIColor whiteColor];//RGBCOLOR(242, 242, 242);
     [_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
     _cvTags.backgroundColor = [UIColor clearColor];
-    _tagContainer.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _tagContainer.contentMode = UIViewContentModeCenter;
     _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
@@ -178,7 +178,7 @@
     _cvContent = [[PSUICollectionView alloc] initWithFrame:conFrame collectionViewLayout:clayout];
     [_contentContainer addSubview:_cvContent];
     [_cvContent setCollectionViewLayout:clayout];
-    _cvContent.backgroundColor = [UIColor whiteColor];
+    _cvContent.backgroundColor = RGBCOLOR(242, 242, 242);//[UIColor whiteColor];
     [_cvContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_cvContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^(){

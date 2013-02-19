@@ -35,7 +35,8 @@
     if (self.isSelected) {
         UIView* bgview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
         bgview.opaque = YES;
-        bgview.backgroundColor = [UIColor colorWithRed:209 green:0 blue:79];
+        //bgview.backgroundColor = [UIColor colorWithRed:209 green:0 blue:79];
+        bgview.backgroundColor = [UIColor clearColor];
         [self setBackgroundView:bgview];
     } else
         [self setBackgroundView:nil];
@@ -57,7 +58,7 @@
     _lblTag.font = ME_FONT(12);
     _lblTag.numberOfLines = 0;
     _lblTag.backgroundColor = [UIColor clearColor];
-    _lblTag.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    _lblTag.textColor = RGBCOLOR(75, 73, 72);//[UIColor colorWithRed:153 green:153 blue:153];
     _lblTag.textAlignment = NSTextAlignmentCenter;
  
 
@@ -68,13 +69,13 @@
     [super setSelected:selected];
     if (selected)
     {
-        _lblTag.textColor= [UIColor colorWithRed:255 green:254 blue:254];
-        _lblTag.font = [UIFont boldSystemFontOfSize:14];
+        _lblTag.textColor= RGBCOLOR(218, 33, 85);//[UIColor colorWithRed:255 green:254 blue:254];
+        _lblTag.font = [UIFont boldSystemFontOfSize:12];
        
     } else
     {
         _lblTag.font = ME_FONT(12);
-        _lblTag.textColor =[UIColor colorWithRed:153 green:153 blue:153];
+        _lblTag.textColor = RGBCOLOR(75, 73, 72);//[UIColor colorWithRed:153 green:153 blue:153];
     }
     [self switchBackground];
     [self setNeedsDisplay];

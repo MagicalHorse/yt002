@@ -85,11 +85,8 @@ void uncaughtExceptionHandler(NSException *exception)
     UITabBar *_tabbar = [array objectAtIndex:1];
     id item = [_tabbar.subviews objectAtIndex:0];
     [item removeFromSuperview];
-    //UIImage *_image = [UIImage imageNamed:@"Toolbar_bg.png"];
-    //UIImageView *_vImage = [[UIImageView alloc] initWithImage:_image];
     UIImageView *_vImage = [[UIImageView alloc] init];
     _vImage.backgroundColor = [UIColor blackColor];
-    //_vImage.alpha = 0.95f;
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
     [_tabbar insertSubview:_vImage atIndex:0];
     
@@ -99,6 +96,14 @@ void uncaughtExceptionHandler(NSException *exception)
         [[FSAnalysis instance] autoTrackPages:item];
     }
     [self.window makeKeyAndVisible];
+    
+//    self.navigationController.navigationBar.tintColor = nil;
+//    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+//    self.navigationController.navigationBar.translucent = YES;
+    
+//    root.tabBar.tintColor = nil;
+//    root.tabBar.barStyle = UIBarStyleBlack;
+//    root.tabBar.translucent = YES;
 }
 
 
@@ -109,8 +114,8 @@ void uncaughtExceptionHandler(NSException *exception)
 -(void) setGlobalLayout
 {
     [[UINavigationBar appearance] setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont systemFontOfSize:16],UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
-        [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:4 forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont boldSystemFontOfSize:18],UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
+        [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:0 forBarMetrics:UIBarMetricsDefault];
 }
 
 -(void) setupAnalys

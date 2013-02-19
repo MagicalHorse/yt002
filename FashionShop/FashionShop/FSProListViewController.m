@@ -515,10 +515,11 @@ typedef enum {
 -(void)loadMore{
     if (_inLoading)
         return;
-    UIActivityIndicatorView *loadMore = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    //UIActivityIndicatorView *loadMore = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     
-    _contentView.tableFooterView = loadMore;
-    [loadMore startAnimating];
+    //_contentView.tableFooterView = loadMore;
+    //[loadMore startAnimating];
+    [self beginLoadMoreLayout:_contentView];
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.requestType = 1;
@@ -531,7 +532,8 @@ typedef enum {
     _state = BeginLoadingMore;
     _inLoading = TRUE;
     block(request,^(){
-        _contentView.tableFooterView = nil;
+        //_contentView.tableFooterView = nil;
+        [self endLoadMore:_contentView];
         _state = EndLoadingMore;
         _inLoading = FALSE;
     });
@@ -766,9 +768,7 @@ typedef enum {
        && !cannotLoadMore)
         
     {
-
         [self loadMore];
-        
     }
 }
 

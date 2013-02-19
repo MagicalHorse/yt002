@@ -502,10 +502,12 @@
     [_segHeader insertSegmentWithTitle:NSLocalizedString(@"User_Profile_Like", nil) atIndex:0 animated:FALSE];
     if (_userProfile.userLevelId==FSDARENUser) {
         [_segHeader insertSegmentWithTitle:NSLocalizedString(@"i shared", nil) atIndex:1 animated:FALSE];
+        _segHeader.selectedSegmentIndex = 1;
     }
-    [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
-    _segHeader.selectedSegmentIndex = 0;
-    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
+    else        
+        _segHeader.selectedSegmentIndex = 0;
+
+    [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
     [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     _isInRefreshing = NO;
     [self loadILike];
