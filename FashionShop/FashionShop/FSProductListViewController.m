@@ -28,7 +28,6 @@
     NSMutableArray *_prods;
     
     UIActivityIndicatorView * moreIndicator;
-    PSUICollectionView *_productContent;
     BOOL _isInLoading;
     BOOL _firstTimeLoadDone;
     int _prodPageIndex;
@@ -111,11 +110,12 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
-    CGRect _rect = _contentView.frame;
-    _rect.size.height = (APP_HIGH>480?504:415) - (_pageType==FSPageTypeTopic?TAB_HIGH:0);
-    _contentView.frame = _rect;
-    _productContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
-    [_contentView addSubview:_productContent];
+//    CGRect _rect = _contentView.frame;
+//    _rect.size.height = (APP_HIGH>480?504:415) - (_pageType==FSPageTypeTopic?TAB_HIGH:0);
+//    _contentView.frame = _rect;_productContent.bounds
+    //_productContent = [[PSUICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320, 460) collectionViewLayout:clayout];
+//    [_contentView addSubview:_productContent];
+//    [_productContent setCollectionViewLayout:clayout];
     [_productContent setCollectionViewLayout:clayout];
     _productContent.backgroundColor = [UIColor whiteColor];
     [_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
@@ -162,11 +162,11 @@
     if (_prods.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_preferential.png" withText:nil  originOffset:30];
+        [self showNoResultImage:_productContent withImage:@"blank_preferential.png" withText:nil  originOffset:30];
     }
     else
     {
-        [self hideNoResultImage:_contentView];
+        [self hideNoResultImage:_productContent];
     }
 }
 
@@ -395,4 +395,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)viewDidUnload {
+    [self setProductContent:nil];
+    [super viewDidUnload];
+}
 @end

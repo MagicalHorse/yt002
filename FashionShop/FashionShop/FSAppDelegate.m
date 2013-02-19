@@ -252,15 +252,17 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName
 {
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *fileName=[[paths objectAtIndex:0] stringByAppendingPathComponent:aFileName];
+    //NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = NSTemporaryDirectory();
+    NSString *fileName=[path stringByAppendingPathComponent:aFileName];
     return [aString writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
 
 -(NSString*)readFromFile:(NSString *)aFileName
 {
-    NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *fileName=[[paths objectAtIndex:0] stringByAppendingPathComponent:aFileName];
+    //NSArray *paths=NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = NSTemporaryDirectory();
+    NSString *fileName=[path stringByAppendingPathComponent:aFileName];
     return [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil];
 }
 

@@ -21,7 +21,8 @@ typedef enum {
 }FSPageType;
 
 @interface FSProductListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
-@property (strong, nonatomic) IBOutlet UIView *contentView;
+//@property (strong, nonatomic) IBOutlet UIView *contentView;
+@property (strong, nonatomic) IBOutlet PSUICollectionView *productContent;
 @property (strong, nonatomic) FSBrand *brand;
 @property (strong, nonatomic) FSTopic *topic;
 @property (nonatomic, assign) NSInteger commonID;
