@@ -395,7 +395,7 @@
             {
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|BrandField|StoreField];
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
                 [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
                 [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
                 uploadController.publishSource = FSSourceProduct;

@@ -84,6 +84,7 @@
                     NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)
                     ] mutableCopy];
     _sections = [@[] mutableCopy];
@@ -112,6 +113,12 @@
          if (_mustFields & BrandField)
         _totalFields++;
     }
+    if (_availFields & TagField)
+    {
+        [_sections addObject:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
+        if (_mustFields & TagField)
+            _totalFields++;
+    }
     if (_availFields & StoreField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
@@ -124,6 +131,7 @@
             NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil):
                     [@[NSLocalizedString(@"PRO_POST_DURATION_STARTTEXT", Nil),NSLocalizedString(@"PRO_POST_DURATION_ENDTEXT", Nil)] mutableCopy],
             NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil):NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", Nil),
+            NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
             NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil):NSLocalizedString(@"PRO_POST_STORE_NOTEXT", Nil),
             } mutableCopy];
     _rowDone = [@{} mutableCopy];
@@ -185,7 +193,6 @@
             cleanup();
         [blockSelf clearData];
     } error:^{
-
         [blockSelf updateProgress:NSLocalizedString(@"upload failed!", nil)];
         if (cleanup)
             cleanup();
@@ -199,6 +206,7 @@
         if(![self validateDate:&error])
         {
             [self reportError:error];
+            return;
         }
     }
     //做预发布
@@ -569,6 +577,11 @@
         }
         case 40:
         {
+            [self doSelTag:nil];
+            break;
+        }
+        case 50:
+        {
             [self doSelStore:nil];
             break;
         }
@@ -660,14 +673,16 @@
     if (_publishSource == FSSourceProduct) {
         if (![NSString isNilOrEmpty:viewController.txtProDesc.text]) {
             [_desc appendFormat:@"。\n参与活动:%@", viewController.txtProDesc.text];
-        }
-        if (![NSString isNilOrEmpty:viewController.txtProStartTime.text]) {
-            [_desc appendFormat:@"。\n活动有效期:%@ ~ ", viewController.txtProStartTime.text];
-            if (![NSString isNilOrEmpty:viewController.txtProEndTime.text]) {
-                [_desc appendFormat:@"%@", viewController.txtProEndTime.text];
-            }
-            else {
-                [_desc appendFormat:@"%@", @"Error"];
+            
+            //必须活动描述不为空，才能添加后面的内容
+            if (![NSString isNilOrEmpty:viewController.txtProStartTime.text]) {
+                [_desc appendFormat:@"。\n活动有效期:%@ ~ ", viewController.txtProStartTime.text];
+                if (![NSString isNilOrEmpty:viewController.txtProEndTime.text]) {
+                    [_desc appendFormat:@"%@", viewController.txtProEndTime.text];
+                }
+                else {
+                    [_desc appendFormat:@"%@", @"Error"];
+                }
             }
         }
     }

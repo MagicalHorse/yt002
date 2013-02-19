@@ -281,6 +281,9 @@
 
 - (BOOL)validateDate:(NSMutableString **)errorin
 {
+    if (_publishSource == FSSourcePromotion) {
+        return YES;
+    }
     if (!errorin)
         *errorin = [@"" mutableCopy];
     NSMutableString *error = *errorin;
