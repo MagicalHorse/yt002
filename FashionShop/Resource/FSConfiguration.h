@@ -21,7 +21,7 @@
 
 #elif defined ENVIRONMENT_ADHOC
 //adhoc
-    #define REST_API_URL   @"http://10.10.11.65:7070/api"
+    #define REST_API_URL   @"http://122.226.53.114:7070/api"
     #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 #elif defined ENVIRONMENT_STORE
