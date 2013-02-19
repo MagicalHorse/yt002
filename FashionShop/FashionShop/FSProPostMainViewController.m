@@ -211,17 +211,18 @@
     }
     //做预发布
     NSMutableString *_msg = [NSMutableString string];
-    [_msg appendFormat:@"标题:%@\n", _proRequest.title];
-    [_msg appendFormat:@"描述信息:%@\n", _proRequest.descrip];
+    [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Title:%@", nil), _proRequest.title];
+    [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Desc:%@", nil), _proRequest.descrip];
     if (_publishSource == FSSourceProduct) {
-        [_msg appendFormat:@"价格:￥%@\n", _proRequest.price];
-        [_msg appendFormat:@"品牌名称:%@\n", _proRequest.brandName];
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Price:%@", nil), _proRequest.price];
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_BrandName:%@", nil), _proRequest.brandName];
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_TagType:%@", nil), _proRequest.tagName];
     }
     else {
-        [_msg appendFormat:@"活动开始时间:%@\n", _proRequest.startdate];
-        [_msg appendFormat:@"活动结束时间:%@\n", _proRequest.enddate];
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Pro_StartTime:%@", nil), _proRequest.startdate];
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Pro_EndTime:%@", nil), _proRequest.enddate];
     }
-    [_msg appendFormat:@"门店名称:%@", _proRequest.storeName];
+    [_msg appendFormat:NSLocalizedString(@"Upload_Preview_StoreName:%@", nil), _proRequest.storeName];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Content Preview",nil) message:_msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     alert.tag = SAVE_INFO_TAG;
@@ -672,11 +673,11 @@
     NSMutableString *_desc = [NSMutableString stringWithFormat:@"%@", viewController.txtDesc.text];
     if (_publishSource == FSSourceProduct) {
         if (![NSString isNilOrEmpty:viewController.txtProDesc.text]) {
-            [_desc appendFormat:@"。\n参与活动:%@", viewController.txtProDesc.text];
+            [_desc appendFormat:NSLocalizedString(@"Part_Promotion %@", nil), viewController.txtProDesc.text];
             
             //必须活动描述不为空，才能添加后面的内容
             if (![NSString isNilOrEmpty:viewController.txtProStartTime.text]) {
-                [_desc appendFormat:@"。\n活动有效期:%@ ~ ", viewController.txtProStartTime.text];
+                [_desc appendFormat:NSLocalizedString(@"Promotion_Duration %@", nil), viewController.txtProStartTime.text];
                 if (![NSString isNilOrEmpty:viewController.txtProEndTime.text]) {
                     [_desc appendFormat:@"%@", viewController.txtProEndTime.text];
                 }

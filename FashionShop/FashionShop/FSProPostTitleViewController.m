@@ -152,7 +152,7 @@
 //        [self reportError:NSLocalizedString(@"", nil)];
 //        return NO;
 //    }
-    if ([_lbProDesc.text isEqualToString:@""]) {
+    if ([_txtProDesc.text isEqualToString:@""]) {
         return YES;
     }
     NSMutableString *error = [@"" mutableCopy];
@@ -282,6 +282,9 @@
 - (BOOL)validateDate:(NSMutableString **)errorin
 {
     if (_publishSource == FSSourcePromotion) {
+        return YES;
+    }
+    if ([_txtProDesc.text isEqualToString:@""]) {
         return YES;
     }
     if (!errorin)
