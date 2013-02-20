@@ -171,11 +171,11 @@
             </objects>
             <point key="canvasLocation" x="220" y="423"/>
         </scene>
-        <!--Navigation Controller - 优惠-->
+        <!--Navigation Controller - 促销-->
         <scene sceneID="4fv-wU-XGG">
             <objects>
                 <navigationController id="Vyq-9h-WKw" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="优惠" image="bottom_nav_promotion_icon.png" id="llC-FE-9sM"/>
+                    <tabBarItem key="tabBarItem" title="促销" image="bottom_nav_promotion_icon.png" id="llC-FE-9sM"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6de-82-rJ5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -213,7 +213,7 @@
     <resources>
         <image name="bottom_nav_dongdong_icon.png" width="24" height="24"/>
         <image name="bottom_nav_me_icon.png" width="24" height="24"/>
-        <image name="bottom_nav_promotion_icon.png" width="29" height="24"/>
+        <image name="bottom_nav_promotion_icon.png" width="24" height="18"/>
         <image name="bottom_nav_topic_icon.png" width="24" height="24"/>
     </resources>
     <classes>

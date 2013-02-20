@@ -162,7 +162,7 @@
     if (_prods.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_productContent withImage:@"blank_preferential.png" withText:nil  originOffset:30];
+        [self showNoResultImage:_productContent withImage:@"blank_preferential.png" withText:NSLocalizedString(@"TipInfo_Product_List", nil)  originOffset:30];
     }
     else
     {

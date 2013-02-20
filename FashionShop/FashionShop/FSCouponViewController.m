@@ -145,7 +145,7 @@
     if (_likes.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:nil  originOffset:30];
+        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:30];
     }
     else
     {

@@ -451,7 +451,7 @@ typedef enum {
     if (_dateSource.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:nil   originOffset:30];
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
     }
     else
     {
@@ -492,7 +492,7 @@ typedef enum {
     if (_storeSource.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:nil   originOffset:30];
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
     }
     else
     {

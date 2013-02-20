@@ -228,7 +228,7 @@
     if (_prods.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_cvContent withImage:@"blank_dongdong.png" withText:nil   originOffset:30];
+        [self showNoResultImage:_cvContent withImage:@"blank_dongdong.png" withText:NSLocalizedString(@"TipInfo_DongDong_ProductList", nil)   originOffset:30];
     }
     else
     {

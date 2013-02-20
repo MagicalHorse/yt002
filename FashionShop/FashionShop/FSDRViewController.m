@@ -246,7 +246,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_DR_Shared_List", nil)  originOffset:30];
     }
     else
     {
@@ -288,7 +288,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:30];
     }
     else
     {

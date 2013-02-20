@@ -721,7 +721,7 @@
         if (_likePros.count<1)
         {
             //加载空视图
-            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Me_Liked_List", nil)  originOffset:30];
         }
         else
         {
@@ -763,7 +763,7 @@
         if (_likePros.count<1)
         {
             //加载空视图
-            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Me_Shared_List", nil)  originOffset:30];
         }
         else
         {

@@ -83,12 +83,12 @@ void uncaughtExceptionHandler(NSException *exception)
     //添加背景色
     NSArray *array = [root.view subviews];
     UITabBar *_tabbar = [array objectAtIndex:1];
-    id item = [_tabbar.subviews objectAtIndex:0];
-    [item removeFromSuperview];
+    //id item = [_tabbar.subviews objectAtIndex:0];
+    //[item removeFromSuperview];
     UIImageView *_vImage = [[UIImageView alloc] init];
     _vImage.backgroundColor = [UIColor blackColor];
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
-    [_tabbar insertSubview:_vImage atIndex:0];
+    [_tabbar insertSubview:_vImage atIndex:1];
     
     self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
@@ -96,14 +96,6 @@ void uncaughtExceptionHandler(NSException *exception)
         [[FSAnalysis instance] autoTrackPages:item];
     }
     [self.window makeKeyAndVisible];
-    
-//    self.navigationController.navigationBar.tintColor = nil;
-//    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-//    self.navigationController.navigationBar.translucent = YES;
-    
-//    root.tabBar.tintColor = nil;
-//    root.tabBar.barStyle = UIBarStyleBlack;
-//    root.tabBar.translucent = YES;
 }
 
 

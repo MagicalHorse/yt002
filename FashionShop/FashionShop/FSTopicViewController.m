@@ -135,7 +135,7 @@
     if (_topicList.count<1)
     {
         //加载空视图
-        [self showNoResultImage:tbAction withImage:@"blank_specialtopic.png" withText:nil  originOffset:30];
+        [self showNoResultImage:tbAction withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Topic_List", nil)  originOffset:30];
     }
     else
     {

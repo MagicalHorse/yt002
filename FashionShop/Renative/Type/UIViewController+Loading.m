@@ -173,8 +173,9 @@
         {
             noResult = [[UILabel alloc] init];
             noResult.text = text;
-            noResult.font = ME_FONT(12);
-            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(12)];
+            noResult.textAlignment = UITextAlignmentCenter;
+            noResult.font = ME_FONT(14);
+            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(14)];
             noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
             noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
         }
