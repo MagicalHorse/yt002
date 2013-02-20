@@ -408,8 +408,8 @@
         else {
             [(FSProdDetailCell *)cell hidenProIcon];
         }
-        if (_cvContent.dragging == NO &&
-            _cvContent.decelerating == NO)
+//        if (_cvContent.dragging == NO &&
+//            _cvContent.decelerating == NO)
         {
             int width = PROD_LIST_DETAIL_CELL_WIDTH;
             int height = cell.frame.size.height;

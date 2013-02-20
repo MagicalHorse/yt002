@@ -958,7 +958,7 @@
     }
 //    cell.layer.borderWidth = 0.5;
 //    cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
-    if (_likeView.dragging == NO && _likeView.decelerating == NO)
+//    if (_likeView.dragging == NO && _likeView.decelerating == NO)
     {
         int width = ITEM_CELL_WIDTH;
         int height = cell.frame.size.height;

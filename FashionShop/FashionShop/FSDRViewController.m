@@ -640,8 +640,8 @@
             }
         }
     }
-    if (_itemsView.dragging == NO &&
-        _itemsView.decelerating == NO)
+//    if (_itemsView.dragging == NO &&
+//        _itemsView.decelerating == NO)
     {
         int width = PROD_LIST_DETAIL_CELL_WIDTH;
         int height = cell.frame.size.height;
@@ -660,7 +660,7 @@
     FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
     detailViewController.navContext = _items;
     detailViewController.dataProviderInContext = self;
-    detailViewController.indexInContext = indexPath.row;
+    detailViewController.indexInContext = indexPath.row*[self numberOfSectionsInCollectionView:collectionView] + indexPath.section;;
     detailViewController.sourceType = FSSourceProduct;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
@@ -756,10 +756,10 @@
 {
     return FSSourceProduct;
 }
--(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
-{
-    return [self isDR];
-}
+//-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+//{
+//    return [self isDR];
+//}
 
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout
 {

@@ -304,8 +304,8 @@
     else {
         [(FSProdDetailCell *)cell hidenProIcon];
     }
-    if (_productContent.dragging == NO &&
-        _productContent.decelerating == NO)
+//    if (_productContent.dragging == NO &&
+//        _productContent.decelerating == NO)
     {
         int width = PROD_LIST_DETAIL_CELL_WIDTH;
         int height = cell.frame.size.height;

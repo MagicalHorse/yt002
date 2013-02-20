@@ -278,8 +278,8 @@
     [(FSProdDetailCell *)cell setData:[_prods objectAtIndex:indexPath.row]];
     cell.layer.borderColor = [UIColor grayColor].CGColor;
     cell.layer.borderWidth = 1;
-    if (_brandContent.dragging == NO &&
-        _brandContent.decelerating == NO)
+//    if (_brandContent.dragging == NO &&
+//        _brandContent.decelerating == NO)
     {
         int width = PROD_LIST_DETAIL_CELL_WIDTH;
         int height = cell.frame.size.height;
