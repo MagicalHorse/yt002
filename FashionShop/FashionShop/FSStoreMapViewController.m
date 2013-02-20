@@ -125,6 +125,13 @@
 	self.locationManager.delegate = nil;
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.locationManager stopUpdatingLocation];
+	self.locationManager.delegate = nil;
+}
+
 - (void)viewDidUnload {
     [self setMapView:nil];
     [self.locationManager stopUpdatingLocation];

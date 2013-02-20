@@ -209,6 +209,17 @@
                 [blockSelf.navigationItem setTitle:navTitle] ;
                 blockViewForRefresh.showViewMask= FALSE;
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+                
+                //_arrowRight.hidden = [self hasNextPage]?NO:YES;
+                [self.view bringSubviewToFront:_arrowRight];
+                CGRect _rect = _arrowRight.frame;
+                _rect.size.height = 15;
+                _arrowRight.frame = _rect;
+                //_arrowLeft.hidden = [self hasPrePage]?NO:YES;
+                [self.view bringSubviewToFront:_arrowLeft];
+                _rect = _arrowLeft.frame;
+                _rect.size.height = 15;
+                _arrowLeft.frame = _rect;
             } else
             {
                 [self onButtonCancel];
@@ -780,6 +791,22 @@
     return NO;
 }
 
+-(BOOL)hasNextPage
+{
+    if (self.currentPageIndex == navContext.count - 1) {
+        return NO;
+    }
+    return YES;
+}
+
+-(BOOL)hasPrePage
+{
+    if (self.currentPageIndex == 0) {
+        return NO;
+    }
+    return YES;
+}
+
 #pragma mark - FSImageSlide datasource
 -(int)numberOfImagesInSlides:(EGOPhotoViewController *)view
 {
@@ -975,6 +1002,8 @@
 
 - (void)viewDidUnload {
     [self set_thumView:nil];
+    [self setArrowLeft:nil];
+    [self setArrowRight:nil];
     [super viewDidUnload];
 }
 

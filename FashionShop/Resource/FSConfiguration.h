@@ -16,8 +16,7 @@
 
 #if defined ENVIRONMENT_DEV
 //测试库
-    //#define REST_API_URL   @"http://10.32.11.65:9550/api"
-    #define REST_API_URL   @"http://10.10.11.65:7070/api"
+    #define REST_API_URL   @"http://10.32.11.65:9550/api"
     #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 #elif defined ENVIRONMENT_ADHOC

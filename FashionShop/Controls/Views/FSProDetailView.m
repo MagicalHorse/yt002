@@ -238,6 +238,8 @@
     _data = data;
     //更新优惠按钮
     if (!_data.isPublication) {
+        _btnCoupon.enabled = NO;
+        /*
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count >= 7) {
             [_array removeObject:_fixibleItem3];
@@ -246,9 +248,13 @@
             _fixibleItem4.width = 70;
             [self.myToolBar setItems:_array animated:YES];
         }
+         */
     }
     else {
+        _btnCoupon.enabled = YES;
+        /*
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
+        _btnCoupon.enabled = NO;
         if (_array.count < 7) {
             [_array insertObject:_fixibleItem3 atIndex:4];
             [_array insertObject:_btnCoupon atIndex:5];
@@ -256,6 +262,7 @@
             _fixibleItem4.width = 40;
             [self.myToolBar setItems:_array animated:YES];
         }
+         */
     }
 }
 

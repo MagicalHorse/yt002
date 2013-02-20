@@ -40,6 +40,8 @@
 - (IBAction)goStore:(id)sender;
 
 @property (strong, nonatomic) IBOutlet FSThumView *_thumView;
+@property (strong, nonatomic) IBOutlet UIImageView *arrowLeft;
+@property (strong, nonatomic) IBOutlet UIImageView *arrowRight;
 
 - (IBAction)doFavor:(id)sender;
 @property (strong,nonatomic) id<FSProDetailItemSourceProvider> dataProviderInContext;
