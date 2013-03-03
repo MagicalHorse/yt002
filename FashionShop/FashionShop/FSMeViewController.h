@@ -15,10 +15,11 @@
 #import "SpringboardLayout.h"
 #import "FSRefreshableViewController.h"
 #import "FSSegmentControl.h"
+#import "FSQQConnectActivity.h"
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
-@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate,UINavigationControllerDelegate>
+@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSSettingCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,FSThumViewDelegate,UINavigationControllerDelegate,FSQQConnectActivityDelegate>
 
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;
@@ -38,8 +39,8 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 @property (strong,nonatomic) FSLoginCompleteDelegate completeCallBack;
 - (IBAction)doLogin:(id)sender;
 - (IBAction)doSuggest:(id)sender;
+- (IBAction)doLoginQQWeiBo:(id)sender;
 - (IBAction)doLoginQQ:(id)sender;
-- (IBAction)doLogOut:(id)sender;
 
 - (IBAction)doShowLikes:(id)sender;
 - (IBAction)doShowFans:(id)sender;

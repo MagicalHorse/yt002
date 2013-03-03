@@ -16,6 +16,7 @@
 #import "FSAnalysis.h"
 #import "SplashViewController.h"
 #import "FSStoreMapViewController.h"
+#import <TencentOpenAPI/TencentOAuth.h>
 
 @interface FSAppDelegate(){
     NSString *localToken;
@@ -120,20 +121,23 @@ void uncaughtExceptionHandler(NSException *exception)
     NSString *schema = url.scheme ;
     if ([schema hasPrefix:WEIXIN_API_APP_KEY])
     {
-        
         return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
     }
+    if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
+        return [TencentOAuth HandleOpenURL:url];
+    }
     return YES; 
-    
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    
     NSString *schema = url.scheme ;
     if ([schema hasPrefix:WEIXIN_API_APP_KEY])
     {
       return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
+    }
+    if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
+        return [TencentOAuth HandleOpenURL:url];
     }
     return YES;
 }

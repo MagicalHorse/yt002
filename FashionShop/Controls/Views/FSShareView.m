@@ -10,7 +10,7 @@
 #import "FSTCWBActivity.h"
 #import "FSWeiboActivity.h"
 #import "FSWeixinActivity.h"
-
+#import "FSQQConnectActivity.h"
 
 static FSShareView *_instance;
 
@@ -82,6 +82,7 @@ static FSShareView *_instance;
         [self createActionCell:SHARE_WX_FRIENDS_ICON    withTitle:SHARE_WX_FRIENDS_ICON];
         [self createActionCell:SHARE_TC_ICON    withTitle:SHARE_TC_TITLE];
         [self createActionCell:SHARE_WX_ICON    withTitle:SHARE_WX_TITLE];
+        [self createActionCell:SHARE_QQ_ICON    withTitle:SHARE_QQ_TITLE];
     }
 }
 -(void)createActionCell:(NSString *)icon withTitle:(NSString *)title
@@ -128,6 +129,11 @@ static FSShareView *_instance;
         {
             activity = [FSWeixinActivity sharedInstance];
             ((FSWeixinActivity*)activity).shareType = WXShareTypeFriendCircle;
+            break;
+        }
+        case 4:
+        {
+            activity = [FSQQConnectActivity sharedInstance];
             break;
         }
         default:

@@ -65,6 +65,7 @@
     UIView *_userProfileView;
     SinaWeibo *_weibo;
     TCWBEngine *_qq;
+    FSQQConnectActivity *_qqConnect;
     NSMutableDictionary *_dataSourceProvider;
     bool _isLogined;
     
@@ -464,7 +465,7 @@
     }
 }
 
-- (IBAction)doLoginQQ:(id)sender {
+- (IBAction)doLoginQQWeiBo:(id)sender {
     if (!_qq)
     {
         _qq = [[TCWBEngine alloc] initWithAppKey:QQ_WEIBO_APP_KEY andSecret:QQ_WEIBO_APP_SECRET_KEY andRedirectUrl:QQ_WEIBO_APP_REDIRECT_URI];
@@ -472,6 +473,15 @@
         
     }
     [_qq logInWithDelegate:self onSuccess:@selector(onQQLoginSuccess) onFailure:@selector(onQQLoginFail:)];
+}
+
+- (IBAction)doLoginQQ:(id)sender
+{
+    if (!_qqConnect) {
+        _qqConnect = [FSQQConnectActivity sharedInstance];
+        _qqConnect.qqDelegate = self;
+    }
+    [_qqConnect authorize];
 }
 
 - (void)removeAuthData
@@ -911,6 +921,60 @@
 {
     return _camera;
 }
+
+#pragma mark - FSQQConnectActivityDelegate
+
+/**
+ * 登录成功后的回调
+ */
+- (void)tencentDidLogin:(FSQQConnectActivity*)view
+{
+    if (_qqConnect.tencentOAuth.accessToken
+        && 0 != [_qqConnect.tencentOAuth.accessToken length])
+    {
+        [self beginLoading:self.view];
+        [_qqConnect.tencentOAuth getUserInfo];
+    }
+}
+
+/**
+ * 登录失败后的回调
+ * param cancelled 代表用户是否主动退出登录
+ */
+- (void)tencentDidNotLogin:(FSQQConnectActivity*)view state:(BOOL)cancelled
+{
+    
+}
+
+/**
+ * 登录时网络有问题的回调
+ */
+- (void)tencentDidNotNetWork:(FSQQConnectActivity*)view
+{
+    
+}
+
+/**
+ * 获取用户个人信息回调
+ * \param response API返回结果，具体定义参见sdkdef.h文件中\ref APIResponse
+ * \remarks 正确返回示例: \snippet example/getUserInfoResponse.exp success
+ *          错误返回示例: \snippet example/getUserInfoResponse.exp fail
+ */
+- (void)getUserInfoResponse:(FSQQConnectActivity*)view response:(APIResponse*) response
+{
+    if (response.retCode == URLREQUEST_SUCCEED)
+	{
+        FSUserLoginRequest *request = [[FSUserLoginRequest alloc] init];
+        request.nickie = [response.jsonResponse objectForKey:@"nickname"];
+        request.accessToken = _qqConnect.tencentOAuth.accessToken;
+        request.thirdPartySourceType = @3;
+        request.thirdPartyUid = _qqConnect.tencentOAuth.openId;
+        request.thumnail = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
+        ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
+    }
+    [self endLoading:self.view];
+}
+
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {

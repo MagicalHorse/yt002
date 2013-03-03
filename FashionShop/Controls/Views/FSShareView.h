@@ -34,6 +34,8 @@ typedef void (^FSShareCompleteHandler) (NSString *activityType, BOOL completed) 
 #define SHARE_WB_TITLE @"新浪微博"
 #define SHARE_TC_ICON @"tengxun_weibo_icon"
 #define SHARE_TC_TITLE @"腾迅微博"
+#define SHARE_QQ_ICON @"xinlang_weibo_icon"
+#define SHARE_QQ_TITLE @"QQ Zone"
 
 
 @interface FSShareView : NSObject<AWActionSheetDelegate>

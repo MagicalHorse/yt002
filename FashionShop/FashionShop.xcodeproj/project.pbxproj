@@ -57,6 +57,10 @@
 		025A544E16BBA5F2001919EA /* blank_specialtopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 025A544216BBA5F2001919EA /* blank_specialtopic.png */; };
 		025A544F16BBA5F2001919EA /* blank_specialtopic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025A544316BBA5F2001919EA /* blank_specialtopic@2x.png */; };
 		025A545116BBA60A001919EA /* comment_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 025A545016BBA60A001919EA /* comment_bg.png */; };
+		025C4C9B16E2FBA800A7D1E7 /* FSQQConnectActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C4C9A16E2FBA800A7D1E7 /* FSQQConnectActivity.m */; };
+		025C4CA116E2FDBB00A7D1E7 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */; };
+		025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */; };
+		025C4CA516E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
@@ -660,6 +664,11 @@
 		025A544216BBA5F2001919EA /* blank_specialtopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blank_specialtopic.png; sourceTree = "<group>"; };
 		025A544316BBA5F2001919EA /* blank_specialtopic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank_specialtopic@2x.png"; sourceTree = "<group>"; };
 		025A545016BBA60A001919EA /* comment_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment_bg.png; sourceTree = "<group>"; };
+		025C4C9916E2FBA800A7D1E7 /* FSQQConnectActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQQConnectActivity.h; sourceTree = "<group>"; };
+		025C4C9A16E2FBA800A7D1E7 /* FSQQConnectActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSQQConnectActivity.m; sourceTree = "<group>"; };
+		025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TencentOpenAPI.framework; path = Library/qqweibo/QQConnectSDK/TencentOpenAPI.framework; sourceTree = "<group>"; };
+		025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TencentOpenApi_IOS_Bundle.bundle; path = Library/qqweibo/QQConnectSDK/TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
 		0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSStoreMapViewController.xib; sourceTree = "<group>"; };
@@ -1378,6 +1387,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */,
 				74B551AA16671A0400E402DC /* libicucore.dylib in Frameworks */,
 				74C427C71692C2E300651F79 /* libRestKit.a in Frameworks */,
 				74B6F6CD166B17E6003ACB90 /* PassKit.framework in Frameworks */,
@@ -1401,6 +1411,7 @@
 				74CD919B1643A78500970F55 /* CoreGraphics.framework in Frameworks */,
 				74CD29CD1675E5CC001DFE4D /* libFlurry.a in Frameworks */,
 				7418EF95168989F40067B030 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
+				025C4CA116E2FDBB00A7D1E7 /* TencentOpenAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2279,6 +2290,8 @@
 				741A1F77165C917F00289BE2 /* FSWeiboActivity.m */,
 				741A1F7F165CBCCE00289BE2 /* FSWeixinActivity.h */,
 				741A1F80165CBCCE00289BE2 /* FSWeixinActivity.m */,
+				025C4C9916E2FBA800A7D1E7 /* FSQQConnectActivity.h */,
+				025C4C9A16E2FBA800A7D1E7 /* FSQQConnectActivity.m */,
 				741A1F87165CC59A00289BE2 /* FSShareView.h */,
 				741A1F88165CC59A00289BE2 /* FSShareView.m */,
 				7464FB20166734220054ADCD /* FSTCWBActivity.h */,
@@ -2573,6 +2586,7 @@
 		74CD91871643A78500970F55 = {
 			isa = PBXGroup;
 			children = (
+				025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */,
 				74DC99FA16A5756400580415 /* icon@2x.png */,
 				74DC99F816A5755600580415 /* icon.png */,
 				74D2B579165B66B700E3D13D /* App */,
@@ -2598,6 +2612,8 @@
 		74CD91951643A78500970F55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */,
+				025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */,
 				74B551A916671A0300E402DC /* libicucore.dylib */,
 				74B6F6CC166B17E6003ACB90 /* PassKit.framework */,
 				74BAC5FD1651F7CA00D7F866 /* CoreData.framework */,
@@ -2826,6 +2842,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				025C4CA516E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				749E2EFC168B2D8800581D0E /* Localizable.strings in Resources */,
 				749E2EFB168B2D7F00581D0E /* MainStoryboard.storyboard in Resources */,
 				74BAC5471651F37900D7F866 /* blueArrow.png in Resources */,
@@ -3350,6 +3367,7 @@
 				021716B116D242390098288A /* EGOPhotoCaptionView.m in Sources */,
 				021716B216D242390098288A /* EGOPhotoImageView.m in Sources */,
 				021716B316D242390098288A /* EGOPhotoScrollView.m in Sources */,
+				025C4C9B16E2FBA800A7D1E7 /* FSQQConnectActivity.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3430,6 +3448,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
+					"\"$(SRCROOT)/Library/qqweibo/QQConnectSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FashionShop/FashionShop-Prefix.pch";
@@ -3453,6 +3472,7 @@
 					"-objC",
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
+					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
@@ -3532,6 +3552,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
+					"\"$(SRCROOT)/Library/qqweibo/QQConnectSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FashionShop/FashionShop-Prefix.pch";
@@ -3559,6 +3580,7 @@
 					"-objC",
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
+					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
@@ -3582,6 +3604,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
+					"\"$(SRCROOT)/Library/qqweibo/QQConnectSDK\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "FashionShop/FashionShop-Prefix.pch";
@@ -3605,6 +3628,7 @@
 					"-objC",
 					"-force_load",
 					"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/libRestKit.a",
+					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
 				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";

@@ -36,18 +36,22 @@
 
 #endif
 
-//正式
+//新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
 #define SINA_WEIBO_APP_SECRET_KEY @"ea68b2a26ca930c6b51d434decdd2c9b"
 #define SINA_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
-//正式
+//腾讯微博
 #define QQ_WEIBO_APP_KEY @"801302732"
 #define QQ_WEIBO_APP_SECRET_KEY @"cd497771f88f6971ad11855088d050fd"
 #define QQ_WEIBO_APP_REDIRECT_URI @"http://www.intime.com.cn"
 
-//正式
+//微信
 #define WEIXIN_API_APP_KEY @"wx413d6a12d10df434"
+
+//QQ联合登陆
+#define QQ_CONNECT_APP_ID @"100382932"
+#define QQ_CONNECT_APP_KEY @"8acc22a900a6cf3a144c4e7364dafa78"
 
 #define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
 
