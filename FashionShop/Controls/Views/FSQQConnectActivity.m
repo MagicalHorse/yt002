@@ -17,7 +17,7 @@ static FSQQConnectActivity *singleon;
 
 
 @implementation FSQQConnectActivity
-@synthesize title,img;
+@synthesize title,img,imgURL;
 
 - (NSString *)activityType {
     return @"UIActivityFSPostToQQZone";
@@ -42,6 +42,30 @@ static FSQQConnectActivity *singleon;
     {
         img = [activityItems objectAtIndex:1];
     }
+    if (activityItems.count > 2) {
+        imgURL = [activityItems objectAtIndex:2];
+    }
+}
+
+- (UIViewController *)activityViewController
+{
+    return nil;
+}
+
+-(void) performActivity
+{
+    if (!_tencentOAuth.isSessionValid)
+    {
+        [self authorize];
+    }
+    else {
+        TCAddShareDic *params = [TCAddShareDic dictionary];
+        params.paramTitle = title;
+        params.paramImages = imgURL;
+        params.paramUrl = @"http://www.intime.com.cn";
+        
+        [_tencentOAuth addShareWithParams:params];
+    }
 }
 
 +(FSQQConnectActivity *)sharedInstance
@@ -63,8 +87,7 @@ static FSQQConnectActivity *singleon;
         _permissions = [NSMutableArray arrayWithObjects:
                         kOPEN_PERMISSION_GET_SIMPLE_USER_INFO,
                         kOPEN_PERMISSION_GET_VIP_INFO,
-                        kOPEN_PERMISSION_UPLOAD_PIC,
-                        kOPEN_PERMISSION_ADD_TOPIC,
+                        kOPEN_PERMISSION_ADD_SHARE,
                         nil];
     }
 }
@@ -84,6 +107,9 @@ static FSQQConnectActivity *singleon;
 {
     if ([_qqDelegate respondsToSelector:@selector(tencentDidLogin:)]) {
         [_qqDelegate tencentDidLogin:self];
+    }
+    else {
+        [self performActivity];
     }
 }
 /**
@@ -125,6 +151,19 @@ static FSQQConnectActivity *singleon;
     if ([_qqDelegate respondsToSelector:@selector(getUserInfoResponse:response:)]) {
         [_qqDelegate getUserInfoResponse:self response:response];
     }
+}
+
+- (void)addShareResponse:(APIResponse*) response
+{
+    if (response.retCode == URLREQUEST_SUCCEED)
+	{
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"COMM_OPERATE_SUCCESS", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+		[alert show];
+	}
+	else {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"COMM_OPERATE_FAILED", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:nil];
+		[alert show];
+	}
 }
 
 @end

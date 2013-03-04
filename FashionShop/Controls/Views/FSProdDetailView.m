@@ -98,6 +98,7 @@
         FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
+        _imageURL = imgObj.absoluteUrl320.absoluteString;
         if (_data.resource.count>1)
         {
             UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
@@ -225,7 +226,7 @@
             [_array removeObject:_btnCoupon];
             _fixibleItem1.width = 70;
             _fixibleItem4.width = 70;
-            [self.myToolBar setItems:_array animated:YES];
+            [self.myToolBar setItems:_array animated:NO];
         }
     }
     else {
@@ -235,7 +236,7 @@
             [_array insertObject:_btnCoupon atIndex:5];
             _fixibleItem1.width = 40;
             _fixibleItem4.width = 40;
-            [self.myToolBar setItems:_array animated:YES];
+            [self.myToolBar setItems:_array animated:NO];
         }
     }
 }

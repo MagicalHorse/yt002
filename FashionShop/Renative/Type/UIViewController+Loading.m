@@ -19,6 +19,8 @@
 #define UIVIEWCONTROLLER_NO_RESULT_ID 10004
 #define UIVIEWCONTROLLER_NO_RESULT_ImageID 10005
 
+BOOL networkIsWorking = NO;
+
 @implementation UIViewController(loading)
 
 -(void) prepareEnterView:(UIView *)container
@@ -77,6 +79,7 @@
 
 -(void) beginLoading:(UIView *)container
 {
+    networkIsWorking = YES;
     if (!container)
         container = self.view;
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
@@ -101,6 +104,7 @@
 }
 -(void) endLoading:(UIView *)container
 {
+    networkIsWorking = NO;
     if (!container)
         container = self.view;
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
@@ -178,6 +182,7 @@
             CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(14)];
             noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
             noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
+            noResult.backgroundColor = [UIColor clearColor];
         }
         
         [container addSubview:noResult];

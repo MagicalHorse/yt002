@@ -17,4 +17,5 @@
 -(void) endLoadMore:(UIScrollView *)container;
 
 @property(nonatomic) BOOL isInRefresh;
+@property(nonatomic) BOOL inLoading;
 @end

@@ -18,7 +18,6 @@
     UIImageView *loadMoreView;
     
     UICallBackWith1Param _action;
-    BOOL _inLoading;
 }
 
 @end

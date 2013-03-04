@@ -85,6 +85,7 @@
         FSResource *imgObj = _data.resource[0];
         CGSize cropSize = CGSizeMake(self.frame.size.width, _imgView.frame.size.height );
         [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
+        _imageURL = imgObj.absoluteUrl320.absoluteString;
     }
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
     imgBG.userInteractionEnabled = FALSE;
@@ -239,30 +240,9 @@
     //更新优惠按钮
     if (!_data.isPublication) {
         _btnCoupon.enabled = NO;
-        /*
-        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
-        if (_array.count >= 7) {
-            [_array removeObject:_fixibleItem3];
-            [_array removeObject:_btnCoupon];
-            _fixibleItem1.width = 70;
-            _fixibleItem4.width = 70;
-            [self.myToolBar setItems:_array animated:YES];
-        }
-         */
     }
     else {
         _btnCoupon.enabled = YES;
-        /*
-        NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
-        _btnCoupon.enabled = NO;
-        if (_array.count < 7) {
-            [_array insertObject:_fixibleItem3 atIndex:4];
-            [_array insertObject:_btnCoupon atIndex:5];
-            _fixibleItem1.width = 40;
-            _fixibleItem4.width = 40;
-            [self.myToolBar setItems:_array animated:YES];
-        }
-         */
     }
 }
 

@@ -38,5 +38,7 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 
+@property (strong, nonatomic) NSString *imageURL;
+
 
 @end

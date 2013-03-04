@@ -510,6 +510,9 @@
     if ([view imgView].image != nil)
     {
         [shareItems addObject:[view imgView].image];
+        if ([view imageURL]) {
+            [shareItems addObject:[view imageURL]];
+        }
     }
     
     [[FSShareView instance] shareBegin:self withShareItems:shareItems  completeHander:^(NSString *activityType, BOOL completed){

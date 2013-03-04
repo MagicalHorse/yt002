@@ -28,8 +28,6 @@
 #define ITEM_CELL_WIDTH 100
 #define DEFAULT_TAG_WIDTH 50
 
-#define PROD_PAGE_SIZE 10
-
 @interface FSProdListViewController ()
 {
     NSMutableArray *_tags;
@@ -289,7 +287,7 @@
 
     request.tagid =[_currentTag valueForKey:@"id"];
     request.nextPage = page;
-    request.pageSize = PROD_PAGE_SIZE;
+    request.pageSize = COMMON_PAGE_SIZE;
     return request;
 }
 -(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
@@ -326,7 +324,6 @@
 
 -(void)loadMore
 {
-
     [self beginLoadMoreLayout:_cvContent];
     __block FSProdListViewController *blockSelf = self;
     [self refreshContent:FALSE withCallback:^{
@@ -351,20 +348,18 @@
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-	[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    [super scrollViewDidScroll:scrollView];
     [self loadImagesForOnscreenRows];
-
-    if (!_noMoreResult &&
-        (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+    
+    if (!_noMoreResult && !self.inLoading &&
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
         &&scrollView.contentOffset.y>0)
     {
         [self loadMore];
     }
-
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

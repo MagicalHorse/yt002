@@ -573,21 +573,18 @@
     }
 }
 
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-	[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    [super scrollViewDidScroll:scrollView];
     [self loadImagesForOnscreenRows];
     if (!_noMoreResult &&
         !_isInLoadingMore &&
-        (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 150> scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
         &&scrollView.contentOffset.y>0)
     {
         [self loadMore];
     }
-    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

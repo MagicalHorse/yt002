@@ -55,6 +55,7 @@
 
 @property(nonatomic,strong) NSString *title;
 @property(nonatomic,strong) UIImage *img;
+@property(nonatomic,strong) NSString *imgURL;
 
 +(FSQQConnectActivity *)sharedInstance;
 -(void)initTencentOAuth;

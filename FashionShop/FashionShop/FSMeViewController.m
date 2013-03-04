@@ -667,9 +667,10 @@
     [self beginLoadMoreLayout:_likeView];
     __block FSMeViewController *blockSelf = self;
     _isInRefreshing = NO;
+    _isInLoading = YES;
     [self loadILike:FALSE nextPage:++_favorPageIndex withCallback:^{
         [blockSelf endLoadMore:blockSelf->_likeView];
-        _isInLoading = FALSE;
+        _isInLoading = NO;
     }];
     
 }
@@ -938,23 +939,6 @@
 }
 
 /**
- * 登录失败后的回调
- * param cancelled 代表用户是否主动退出登录
- */
-- (void)tencentDidNotLogin:(FSQQConnectActivity*)view state:(BOOL)cancelled
-{
-    
-}
-
-/**
- * 登录时网络有问题的回调
- */
-- (void)tencentDidNotNetWork:(FSQQConnectActivity*)view
-{
-    
-}
-
-/**
  * 获取用户个人信息回调
  * \param response API返回结果，具体定义参见sdkdef.h文件中\ref APIResponse
  * \remarks 正确返回示例: \snippet example/getUserInfoResponse.exp success
@@ -972,7 +956,9 @@
         request.thumnail = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
         ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
     }
-    [self endLoading:self.view];
+    else {
+        [self endLoading:self.view];
+    }
 }
 
 #pragma mark - PSUICollectionView Datasource
@@ -1082,28 +1068,19 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-      
     [refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    
-	[refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     [self loadImagesForOnscreenRows];
     NSLog(@"crollView.contentOffset:%@\nscrollView.contentSize:%@\nscrollView.frame:%@", NSStringFromCGPoint(scrollView.contentOffset), NSStringFromCGSize(scrollView.contentSize), NSStringFromCGRect(scrollView.frame));
     if (!_noMoreFavor &&
         !_isInLoading &&
-        (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
         &&scrollView.contentOffset.y>0)
     {
-        _isInLoading = true;
+        _isInLoading = YES;
         [self loadMore];
     }
-     
-	
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

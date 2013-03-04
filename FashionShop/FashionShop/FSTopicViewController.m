@@ -199,14 +199,15 @@
     }];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    [super scrollViewDidScroll:scrollView];
     if(!_noMoreResult
-       && (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+       && !_isInLoading
+       && (scrollView.contentOffset.y+scrollView.frame.size.height) + 100 > scrollView.contentSize.height
        &&scrollView.contentOffset.y>0)
     {
-        [self loadMore];   
+        [self loadMore];
     }
 }
 
@@ -215,8 +216,10 @@
         return;
     __block FSTopicViewController *blockSelf = self;
     [self beginLoadMoreLayout:tbAction];
+    _isInLoading = YES;
     [self refreshContent:NO withCallback:^{
         [blockSelf endLoadMore:blockSelf.tbAction];
+        _isInLoading = NO;
     }];
 }
 

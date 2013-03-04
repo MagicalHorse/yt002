@@ -757,16 +757,15 @@ typedef enum {
     [[FSAnalysis instance] logEvent:@"查看活动详情" withParameters:_dic];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    [super scrollViewDidScroll:scrollView];
     bool cannotLoadMore = _currentSearchIndex==0?_noMoreNearest:_noMoreNewest;
     if(_state!=BeginLoadingMore
-       && (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+       && !_inLoading
+       && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
        &&scrollView.contentOffset.y>0
        && !cannotLoadMore)
-        
     {
         [self loadMore];
     }

@@ -36,6 +36,7 @@
     NSDate * _firstLoadDate;
     
     bool _noMoreResult;
+    BOOL _isLoading;
 }
 
 @end
@@ -236,8 +237,10 @@
 {
     [self beginLoadMoreLayout:_productContent];
     __block FSProductListViewController *blockSelf = self;
+    _isLoading = YES;
     [self refreshContent:FALSE withCallback:^{
          [blockSelf endLoadMore:_productContent];
+        _isLoading = NO;
     }];
 }
 
@@ -257,19 +260,17 @@
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-	[super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    [super scrollViewDidScroll:scrollView];
     [self loadImagesForOnscreenRows];
-    if (!_noMoreResult &&
-        (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+    if (!_noMoreResult && !_isLoading &&
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
         &&scrollView.contentOffset.y>0)
     {
         [self loadMore];
     }
-    
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView

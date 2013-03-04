@@ -61,7 +61,7 @@
 #define LN_USER_UPDATED @"LN_USER_UPDATED"
 #define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
 #define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
-#define COMMON_PAGE_SIZE 10
+#define COMMON_PAGE_SIZE 20
 
 #define CollectionView_Default_Height 100.0f
 
