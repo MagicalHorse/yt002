@@ -61,6 +61,10 @@
 		025C4CA116E2FDBB00A7D1E7 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */; };
 		025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */; };
 		025C4CA516E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */; };
+		025D430216E72453007B02EC /* qq_friends_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D42FE16E72453007B02EC /* qq_friends_icon.png */; };
+		025D430316E72453007B02EC /* qq_friends_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */; };
+		025D430416E72453007B02EC /* qqconnect_login_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430016E72453007B02EC /* qqconnect_login_btn.png */; };
+		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
@@ -79,10 +83,6 @@
 		02D4E7DD16BD68F600B6385A /* default_icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D916BD68F600B6385A /* default_icon120.png */; };
 		02D4E7DE16BD68F600B6385A /* default_icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */; };
 		02F6158716B3DBC0001F93ED /* FSTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6158616B3DBC0001F93ED /* FSTopicViewController.m */; };
-		02F6158C16B3DBD4001F93ED /* topic1.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158816B3DBD4001F93ED /* topic1.png */; };
-		02F6158D16B3DBD4001F93ED /* topic2.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158916B3DBD4001F93ED /* topic2.png */; };
-		02F6158E16B3DBD4001F93ED /* topic3.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158A16B3DBD4001F93ED /* topic3.png */; };
-		02F6158F16B3DBD4001F93ED /* topic4.png in Resources */ = {isa = PBXBuildFile; fileRef = 02F6158B16B3DBD4001F93ED /* topic4.png */; };
 		02F6159316B3DC57001F93ED /* FSTopicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6159116B3DC57001F93ED /* FSTopicListCell.m */; };
 		02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02F6159216B3DC57001F93ED /* FSTopicListCell.xib */; };
 		02FB0CC616BAB04B00396287 /* FSTopic.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB0CC516BAB04B00396287 /* FSTopic.m */; };
@@ -669,6 +669,10 @@
 		025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TencentOpenAPI.framework; path = Library/qqweibo/QQConnectSDK/TencentOpenAPI.framework; sourceTree = "<group>"; };
 		025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TencentOpenApi_IOS_Bundle.bundle; path = Library/qqweibo/QQConnectSDK/TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
+		025D42FE16E72453007B02EC /* qq_friends_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qq_friends_icon.png; sourceTree = "<group>"; };
+		025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qq_friends_icon@2x.png"; sourceTree = "<group>"; };
+		025D430016E72453007B02EC /* qqconnect_login_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qqconnect_login_btn.png; sourceTree = "<group>"; };
+		025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qqconnect_login_btn@2x.png"; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
 		0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSStoreMapViewController.xib; sourceTree = "<group>"; };
@@ -690,10 +694,6 @@
 		02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon120@2x.png"; sourceTree = "<group>"; };
 		02F6158516B3DBC0001F93ED /* FSTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTopicViewController.h; sourceTree = "<group>"; };
 		02F6158616B3DBC0001F93ED /* FSTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTopicViewController.m; sourceTree = "<group>"; };
-		02F6158816B3DBD4001F93ED /* topic1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic1.png; sourceTree = "<group>"; };
-		02F6158916B3DBD4001F93ED /* topic2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic2.png; sourceTree = "<group>"; };
-		02F6158A16B3DBD4001F93ED /* topic3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic3.png; sourceTree = "<group>"; };
-		02F6158B16B3DBD4001F93ED /* topic4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = topic4.png; sourceTree = "<group>"; };
 		02F6159016B3DC57001F93ED /* FSTopicListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSTopicListCell.h; path = Controls/FSTopicListCell.h; sourceTree = "<group>"; };
 		02F6159116B3DC57001F93ED /* FSTopicListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSTopicListCell.m; path = Controls/FSTopicListCell.m; sourceTree = "<group>"; };
 		02F6159216B3DC57001F93ED /* FSTopicListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSTopicListCell.xib; path = Controls/FSTopicListCell.xib; sourceTree = "<group>"; };
@@ -2080,6 +2080,10 @@
 				025A543716BBA5DE001919EA /* blankimages */,
 				022A6D2016D4F79500374639 /* arrow_left.png */,
 				022A6D2116D4F79600374639 /* arrow_left@2x.png */,
+				025D42FE16E72453007B02EC /* qq_friends_icon.png */,
+				025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */,
+				025D430016E72453007B02EC /* qqconnect_login_btn.png */,
+				025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */,
 				022A6D2216D4F79600374639 /* arrow_right.png */,
 				022A6D2316D4F79600374639 /* arrow_right@2x.png */,
 				0240874B16D0DEB8005DCF0A /* weixin_friends_icon.png */,
@@ -2099,10 +2103,6 @@
 				023734C116B8FF9600CECCF3 /* promotion_icon@2x.png */,
 				0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */,
 				0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */,
-				02F6158816B3DBD4001F93ED /* topic1.png */,
-				02F6158916B3DBD4001F93ED /* topic2.png */,
-				02F6158A16B3DBD4001F93ED /* topic3.png */,
-				02F6158B16B3DBD4001F93ED /* topic4.png */,
 				74DC99F316A56E7900580415 /* promotion_header_icon.png */,
 				74DC99F416A56E7900580415 /* promotion_header_icon@2x.png */,
 				74793A1B16A0352E00AEF5B9 /* more_img_icon.png */,
@@ -3084,10 +3084,6 @@
 				74DC99F616A56E7900580415 /* promotion_header_icon@2x.png in Resources */,
 				74DC99F916A5755600580415 /* icon.png in Resources */,
 				74DC99FB16A5756400580415 /* icon@2x.png in Resources */,
-				02F6158C16B3DBD4001F93ED /* topic1.png in Resources */,
-				02F6158D16B3DBD4001F93ED /* topic2.png in Resources */,
-				02F6158E16B3DBD4001F93ED /* topic3.png in Resources */,
-				02F6158F16B3DBD4001F93ED /* topic4.png in Resources */,
 				02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */,
 				0203213B16B64658007E0E9A /* bottom_nav_topic_icon.png in Resources */,
 				0203213C16B64658007E0E9A /* bottom_nav_topic_icon@2x.png in Resources */,
@@ -3140,6 +3136,10 @@
 				022A6D2516D4F79600374639 /* arrow_left@2x.png in Resources */,
 				022A6D2616D4F79600374639 /* arrow_right.png in Resources */,
 				022A6D2716D4F79600374639 /* arrow_right@2x.png in Resources */,
+				025D430216E72453007B02EC /* qq_friends_icon.png in Resources */,
+				025D430316E72453007B02EC /* qq_friends_icon@2x.png in Resources */,
+				025D430416E72453007B02EC /* qqconnect_login_btn.png in Resources */,
+				025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

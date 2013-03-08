@@ -49,8 +49,10 @@ void uncaughtExceptionHandler(NSException *exception)
     
     //setup exception handler
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+#if defined ENVIRONMENT_STORE
     //setup analysis
     [self setupAnalys];
+#endif
     
     //set global layout
     [self setGlobalLayout];

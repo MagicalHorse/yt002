@@ -16,6 +16,7 @@
 #import "FSPagedTopic.h"
 #import "FSTopic.h"
 #import "FSProductListViewController.h"
+#import "SecondViewController.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
@@ -50,6 +51,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"Left"
+//                                                             style:UIBarButtonItemStylePlain
+//                                                            target:self
+//                                                            action:@selector(showLeft)];
+//    self.navigationItem.leftBarButtonItem = left;
     
     [self prepareData];
     [self prepareLayout];

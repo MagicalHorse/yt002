@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-
 @property (strong,nonatomic) FSModelManager *modelManager;
 
 @property (strong,nonatomic) FSLocationManager *locationManager;
