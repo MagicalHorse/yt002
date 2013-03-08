@@ -16,7 +16,6 @@
 #import "FSPagedTopic.h"
 #import "FSTopic.h"
 #import "FSProductListViewController.h"
-#import "SecondViewController.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
