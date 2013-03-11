@@ -1807,6 +1807,8 @@
 		74712B601647702600D31A0D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				74DC99FA16A5756400580415 /* icon@2x.png */,
+				74DC99F816A5755600580415 /* icon.png */,
 				74B95A06167838D300FE47AB /* images */,
 				74CD919D1643A78600970F55 /* Supporting Files */,
 				74CD919F1643A78600970F55 /* Localizable.strings */,
@@ -2586,9 +2588,6 @@
 		74CD91871643A78500970F55 = {
 			isa = PBXGroup;
 			children = (
-				025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */,
-				74DC99FA16A5756400580415 /* icon@2x.png */,
-				74DC99F816A5755600580415 /* icon.png */,
 				74D2B579165B66B700E3D13D /* App */,
 				74A381C916512A17003FF79D /* ModelService */,
 				74A380CA1651223B003FF79D /* Library */,
@@ -2612,6 +2611,7 @@
 		74CD91951643A78500970F55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */,
 				025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */,
 				025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */,
 				74B551A916671A0300E402DC /* libicucore.dylib */,
