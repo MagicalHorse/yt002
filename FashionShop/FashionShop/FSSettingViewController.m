@@ -11,6 +11,7 @@
 #import "FSFeedbackViewController.h"
 #import "FSModelManager.h"
 #import "UIViewController+Loading.h"
+#import "FSCardBindViewController.h"
 
 @interface FSSettingViewController ()
 {
@@ -48,7 +49,8 @@
 
 -(void) bindAction
 {
-    _rows = @[NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil), NSLocalizedString(@"USER_SETTING_FEEDBACK", nil)];
+    _rows = @[NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil), NSLocalizedString(@"USER_SETTING_FEEDBACK", nil),
+              NSLocalizedString(@"Bind Card", nil)];
 
     _tbAction.dataSource= self;
     _tbAction.delegate = self;
@@ -85,7 +87,11 @@
             [self.navigationController pushViewController:feedbackController animated:true];
             break;
         }
-            
+        case 2: //会员卡绑定
+        {
+            FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+            [self.navigationController pushViewController:con animated:YES];
+        }
         default:
             break;
     }

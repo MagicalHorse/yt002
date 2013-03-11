@@ -65,9 +65,13 @@
 		025D430316E72453007B02EC /* qq_friends_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */; };
 		025D430416E72453007B02EC /* qqconnect_login_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430016E72453007B02EC /* qqconnect_login_btn.png */; };
 		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
+		025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E962D16ED9FE10031B68C /* FSCardRequest.m */; };
+		025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E963416EDA1CE0031B68C /* FSCardInfo.m */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
+		02992D5B16ED789E007ACF62 /* FSCardBindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02992D5916ED789E007ACF62 /* FSCardBindViewController.m */; };
+		02992D5C16ED789E007ACF62 /* FSCardBindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */; };
 		02A2617516BA589C0089546B /* promotion_normal_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2617116BA589C0089546B /* promotion_normal_bg.png */; };
 		02A2617616BA589C0089546B /* promotion_normal_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2617216BA589C0089546B /* promotion_normal_bg@2x.png */; };
 		02A2617716BA589C0089546B /* promotion_selected_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2617316BA589C0089546B /* promotion_selected_bg.png */; };
@@ -673,11 +677,18 @@
 		025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qq_friends_icon@2x.png"; sourceTree = "<group>"; };
 		025D430016E72453007B02EC /* qqconnect_login_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qqconnect_login_btn.png; sourceTree = "<group>"; };
 		025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qqconnect_login_btn@2x.png"; sourceTree = "<group>"; };
+		025E962C16ED9FE10031B68C /* FSCardRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardRequest.h; path = ModelService/FSCardRequest.h; sourceTree = "<group>"; };
+		025E962D16ED9FE10031B68C /* FSCardRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardRequest.m; path = ModelService/FSCardRequest.m; sourceTree = "<group>"; };
+		025E963316EDA1CE0031B68C /* FSCardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardInfo.h; path = Model/FSCardInfo.h; sourceTree = "<group>"; };
+		025E963416EDA1CE0031B68C /* FSCardInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardInfo.m; path = Model/FSCardInfo.m; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
 		0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSStoreMapViewController.xib; sourceTree = "<group>"; };
 		0298BA4116C40EC200BB2C29 /* FSGroupBrand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSGroupBrand.h; path = Model/FSGroupBrand.h; sourceTree = "<group>"; };
 		0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSGroupBrand.m; path = Model/FSGroupBrand.m; sourceTree = "<group>"; };
+		02992D5816ED789D007ACF62 /* FSCardBindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSCardBindViewController.h; sourceTree = "<group>"; };
+		02992D5916ED789E007ACF62 /* FSCardBindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSCardBindViewController.m; sourceTree = "<group>"; };
+		02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCardBindViewController.xib; sourceTree = "<group>"; };
 		02A2617116BA589C0089546B /* promotion_normal_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = promotion_normal_bg.png; sourceTree = "<group>"; };
 		02A2617216BA589C0089546B /* promotion_normal_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "promotion_normal_bg@2x.png"; sourceTree = "<group>"; };
 		02A2617316BA589C0089546B /* promotion_selected_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = promotion_selected_bg.png; sourceTree = "<group>"; };
@@ -799,8 +810,8 @@
 		74793A1816A0334200AEF5B9 /* brand_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brand_bg@2x.png"; sourceTree = "<group>"; };
 		74793A1B16A0352E00AEF5B9 /* more_img_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more_img_icon.png; sourceTree = "<group>"; };
 		74793A1C16A0352E00AEF5B9 /* more_img_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more_img_icon@2x.png"; sourceTree = "<group>"; };
-		749B2B95169845680073F4B5 /* FSFeedbackRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSFeedbackRequest.h; sourceTree = "<group>"; };
-		749B2B96169845680073F4B5 /* FSFeedbackRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSFeedbackRequest.m; sourceTree = "<group>"; };
+		749B2B95169845680073F4B5 /* FSFeedbackRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSFeedbackRequest.h; path = FashionShop/FSFeedbackRequest.h; sourceTree = "<group>"; };
+		749B2B96169845680073F4B5 /* FSFeedbackRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSFeedbackRequest.m; path = FashionShop/FSFeedbackRequest.m; sourceTree = "<group>"; };
 		749B2B97169845680073F4B5 /* FSFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSFeedbackViewController.h; sourceTree = "<group>"; };
 		749B2B98169845680073F4B5 /* FSFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSFeedbackViewController.m; sourceTree = "<group>"; };
 		749B2B99169845680073F4B5 /* FSFeedbackViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSFeedbackViewController.xib; sourceTree = "<group>"; };
@@ -1643,6 +1654,10 @@
 				74B8674416844E76001E1C97 /* FSThumnailRequest.m */,
 				02FB0CCA16BAB64B00396287 /* FSTopicRequest.h */,
 				02FB0CCB16BAB64B00396287 /* FSTopicRequest.m */,
+				025E962C16ED9FE10031B68C /* FSCardRequest.h */,
+				025E962D16ED9FE10031B68C /* FSCardRequest.m */,
+				749B2B95169845680073F4B5 /* FSFeedbackRequest.h */,
+				749B2B96169845680073F4B5 /* FSFeedbackRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -1800,6 +1815,8 @@
 				74254F54169D3C3A002E269E /* FSItemBase.m */,
 				02FB0CC416BAB04B00396287 /* FSTopic.h */,
 				02FB0CC516BAB04B00396287 /* FSTopic.m */,
+				025E963316EDA1CE0031B68C /* FSCardInfo.h */,
+				025E963416EDA1CE0031B68C /* FSCardInfo.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2006,8 +2023,9 @@
 		74B773CD1665A2DE000F4389 /* User */ = {
 			isa = PBXGroup;
 			children = (
-				749B2B95169845680073F4B5 /* FSFeedbackRequest.h */,
-				749B2B96169845680073F4B5 /* FSFeedbackRequest.m */,
+				02992D5816ED789D007ACF62 /* FSCardBindViewController.h */,
+				02992D5916ED789E007ACF62 /* FSCardBindViewController.m */,
+				02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */,
 				749B2B97169845680073F4B5 /* FSFeedbackViewController.h */,
 				749B2B98169845680073F4B5 /* FSFeedbackViewController.m */,
 				749B2B99169845680073F4B5 /* FSFeedbackViewController.xib */,
@@ -2641,21 +2659,21 @@
 		74CD919C1643A78600970F55 /* FashionShop */ = {
 			isa = PBXGroup;
 			children = (
-				74C0093D169EE31900DA759A /* SplashViewController.m */,
-				74C018FE16992DC600576942 /* SplashViewController.h */,
 				74CD28AF1675A8B0001DFE4D /* Prod */,
 				74CD28AD1675A876001DFE4D /* Pro */,
 				74DE30871668815E008D0CA6 /* ProUpload */,
 				74B773CD1665A2DE000F4389 /* User */,
 				74CD91AE1643A78600970F55 /* MainStoryboard.storyboard */,
-				7439F1471657372C00490E7A /* FSProListViewController.m */,
 				02F6158516B3DBC0001F93ED /* FSTopicViewController.h */,
+				7439F1471657372C00490E7A /* FSProListViewController.m */,
 				02F6158616B3DBC0001F93ED /* FSTopicViewController.m */,
 				7439F1461657372C00490E7A /* FSProListViewController.h */,
 				74CD28B01675A8D8001DFE4D /* FSProdListViewController.h */,
 				74CD28B11675A8D8001DFE4D /* FSProdListViewController.m */,
 				74C8AC1A168C1D0900EEABE4 /* FSRefreshableViewController.h */,
 				74C8AC1B168C1D0900EEABE4 /* FSRefreshableViewController.m */,
+				74C018FE16992DC600576942 /* SplashViewController.h */,
+				74C0093D169EE31900DA759A /* SplashViewController.m */,
 			);
 			path = FashionShop;
 			sourceTree = "<group>";
@@ -3140,6 +3158,7 @@
 				025D430316E72453007B02EC /* qq_friends_icon@2x.png in Resources */,
 				025D430416E72453007B02EC /* qqconnect_login_btn.png in Resources */,
 				025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */,
+				02992D5C16ED789E007ACF62 /* FSCardBindViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3368,6 +3387,9 @@
 				021716B216D242390098288A /* EGOPhotoImageView.m in Sources */,
 				021716B316D242390098288A /* EGOPhotoScrollView.m in Sources */,
 				025C4C9B16E2FBA800A7D1E7 /* FSQQConnectActivity.m in Sources */,
+				02992D5B16ED789E007ACF62 /* FSCardBindViewController.m in Sources */,
+				025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */,
+				025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

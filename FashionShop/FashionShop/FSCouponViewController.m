@@ -52,7 +52,6 @@
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
     [self prepareData];
     [self preparePresent];
-    
 }
 
 -(void) prepareData

@@ -29,10 +29,9 @@
 @property (nonatomic,assign) int couponsTotal;
 @property (nonatomic,strong) NSMutableArray *coupons;
 
-//HeQingshan
 @property (nonatomic,assign) int gender;//性别
 @property (nonatomic,strong) NSString *signature;//签名
-@property (nonatomic,strong) NSString *appID;//应用程序ID，后期可能会从用户中剔除。因为该ID和用户无关
+@property (nonatomic,strong) NSString *appID;//应用程序ID
 + (void) removeUserProfile;
 
 +(FSUser *) localProfile;

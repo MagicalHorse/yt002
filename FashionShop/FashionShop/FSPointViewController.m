@@ -13,6 +13,7 @@
 #import "FSPagedPoint.h"
 #import "FSModelManager.h"
 #import "FSConfiguration.h"
+#import "FSCardBindViewController.h"
 
 @interface FSPointViewController ()
 {
@@ -47,6 +48,36 @@
     [self prepareData];
     [self preparePresent];
     
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    sheepButton.titleLabel.font = FONT(14);
+    if (1) {
+        [sheepButton setTitle:@"绑定会员卡" forState:UIControlStateNormal];
+        sheepButton.tag = 1;
+    }
+    else {
+        [sheepButton setTitle:@"会员卡规则" forState:UIControlStateNormal];
+        sheepButton.tag = 2;
+    }
+    [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [sheepButton sizeToFit];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
+    [self.navigationItem setRightBarButtonItem:item];
+}
+
+-(void)onButtonClick:(UIButton*)sender
+{
+    if (sender.tag == 1) {
+        FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+        [self.navigationController pushViewController:con animated:YES];
+    }
+    else {
+        
+    }
 }
 
 -(void) prepareData
