@@ -12,7 +12,13 @@
 #import "FSProDetailViewController.h"
 #import "FSRefreshableViewController.h"
 
-@interface FSProdListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
+@interface FSSearchBar : UISearchBar {
+    UIView *filterView;
+}
+
+@end
+
+@interface FSProdListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,UISearchBarDelegate, UISearchDisplayDelegate,UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet PSUICollectionView *cvTags;
 @property (strong, nonatomic) IBOutlet UIView *tagContainer;

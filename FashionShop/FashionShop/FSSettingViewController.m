@@ -49,8 +49,14 @@
 
 -(void) bindAction
 {
-    _rows = @[NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil), NSLocalizedString(@"USER_SETTING_FEEDBACK", nil),
-              NSLocalizedString(@"Bind Card", nil)];
+    if ([currentUser.isBindCard boolValue]) {
+        _rows = @[NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil), NSLocalizedString(@"USER_SETTING_FEEDBACK", nil),
+                  NSLocalizedString(@"Card Info Query", nil)];
+    }
+    else{
+        _rows = @[NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil), NSLocalizedString(@"USER_SETTING_FEEDBACK", nil),
+                  NSLocalizedString(@"Bind Card", nil)];
+    }
 
     _tbAction.dataSource= self;
     _tbAction.delegate = self;
@@ -87,9 +93,10 @@
             [self.navigationController pushViewController:feedbackController animated:true];
             break;
         }
-        case 2: //会员卡绑定
+        case 2: //会员卡绑定和会员卡积分查询
         {
             FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+            con.currentUser = currentUser;
             [self.navigationController pushViewController:con animated:YES];
         }
         default:

@@ -11,6 +11,7 @@
 #import "FSUserLoginRequest.h"
 #import "CommonResponseHeader.h"
 #import "FSModelBase.h"
+#import "FSCardInfo.h"
 
 @interface FSUser : FSModelBase
 
@@ -32,6 +33,9 @@
 @property (nonatomic,assign) int gender;//性别
 @property (nonatomic,strong) NSString *signature;//签名
 @property (nonatomic,strong) NSString *appID;//应用程序ID
+@property (nonatomic,assign) NSNumber * isBindCard;//是否绑定了会员卡
+@property (nonatomic,strong) FSCardInfo *cardInfo;//会员卡信息
+
 + (void) removeUserProfile;
 
 +(FSUser *) localProfile;

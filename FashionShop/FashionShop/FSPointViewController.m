@@ -73,6 +73,7 @@
 {
     if (sender.tag == 1) {
         FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+        con.currentUser = currentUser;
         [self.navigationController pushViewController:con animated:YES];
     }
     else {

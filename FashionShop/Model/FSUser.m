@@ -36,7 +36,8 @@
 @synthesize gender;
 @synthesize signature;
 @synthesize appID;
-
+@synthesize isBindCard;
+@synthesize cardInfo;
 
 +(RKObjectMapping *) getRelationDataMap
 {
@@ -47,7 +48,7 @@
 +(RKObjectMapping *) getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",nil];
+    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",nil];
     return relationMap;
 }
 
@@ -58,7 +59,6 @@
     [[FSLocalPersist sharedPersist] removeObjectInDisk:LOCAL_STORE_USER_LOGIN_TOKEN];
      [[FSLocalPersist sharedPersist] removeObjectInDisk:LOCAL_STORE_USER_LOGIN_UID];
     [[FSModelManager sharedModelManager] removeWeiboAuthCache];
-    
 }
 
 

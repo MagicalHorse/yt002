@@ -28,6 +28,34 @@
 #define ITEM_CELL_WIDTH 100
 #define DEFAULT_TAG_WIDTH 50
 
+@implementation FSSearchBar
+
+- (void)layoutSubviews {
+    self.autoresizesSubviews = YES;
+	UITextField *searchField;
+	NSUInteger numViews = [self.subviews count];
+	for(int i = 0; i < numViews; i++) {
+		if([[self.subviews objectAtIndex:i] isKindOfClass:[UITextField class]]) {
+			searchField = [self.subviews objectAtIndex:i];
+		}
+	}
+	if(!(searchField == nil)) {
+		searchField.textColor = [UIColor redColor];
+		[searchField setBorderStyle:UITextBorderStyleRoundedRect];
+		//UIImage *image = [UIImage imageNamed: @"esri.png"];
+		//UIImageView *iView = [[UIImageView alloc] initWithImage:image];
+		//searchField.leftView = iView;
+	}
+    filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, APP_WIDTH, 40)];
+    filterView.backgroundColor = [UIColor redColor];
+    [self addSubview:filterView];
+    [self bringSubviewToFront:filterView];
+    
+	[super layoutSubviews];
+}
+
+@end
+
 @interface FSProdListViewController ()
 {
     NSMutableArray *_tags;
@@ -45,7 +73,13 @@
     FSCoreTag * _currentTag;
     
     bool _noMoreResult;
+    BOOL _isSearching;
+    
+    UIView *searchFilterView;
 }
+
+@property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
+@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
 
 @end
 
@@ -65,7 +99,33 @@
     [super viewDidLoad];
     [self prepareLayout];
     [self prepareData];
+    
+    UIBarButtonItem *baritemSearch = [self createPlainBarButtonItem:@"ok_icon.png" target:self action:@selector(onSearch:)];
+    [self.navigationItem setRightBarButtonItem:baritemSearch];
+}
 
+-(void)onSearch:(UIButton*)sender
+{
+    if (!self.searchBar) {
+        self.searchBar = [[FSSearchBar alloc] initWithFrame:CGRectMake(0, -0, 0, 0)];
+        self.searchBar.placeholder = @"Search";
+        self.searchBar.delegate = self;
+        [self.searchBar sizeToFit];
+        
+        self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+        self.searchDisplayController.searchResultsDataSource = self;
+        self.searchDisplayController.searchResultsDelegate = self;
+        self.searchDisplayController.delegate = self;
+    }
+    if(!_isSearching){
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+        [self.view addSubview:self.searchBar];
+        [self.searchBar becomeFirstResponder];
+        _isSearching = YES;
+    }
+    else {
+        [self.searchBar removeFromSuperview];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -532,4 +592,48 @@
     [self setLblTitle:nil];
     [super viewDidUnload];
 }
+
+#pragma mark - TableView Delegate and DataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.textLabel.text = self.searchBar.text;
+    cell.textLabel.font = FONT(15);
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self toSearch];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Search Delegate
+
+- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    if (_isSearching) {
+        [self.searchBar removeFromSuperview];
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+        _isSearching = NO;
+    }
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self toSearch];
+}
+
+-(void)toSearch
+{
+    //跳转搜索界面进行搜索
+}
+
 @end

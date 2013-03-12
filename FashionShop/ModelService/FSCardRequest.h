@@ -8,9 +8,9 @@
 
 #import "FSEntityRequestBase.h"
 
-#define RK_REQUEST_USER_CARD_BIND @"card/bind"
-#define RK_REQUEST_USER_CARD_UNBIND @"card/unbind"
-#define RK_REQUEST_USER_CARD_DETAIL @"card/detail"
+#define RK_REQUEST_USER_CARD_BIND @"/card/bind"
+#define RK_REQUEST_USER_CARD_UNBIND @"/card/unbind"
+#define RK_REQUEST_USER_CARD_DETAIL @"/card/detail"
 
 @interface FSCardRequest : FSEntityRequestBase
 
