@@ -9,7 +9,14 @@
 /* Begin PBXBuildFile section */
 		0203213B16B64658007E0E9A /* bottom_nav_topic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */; };
 		0203213C16B64658007E0E9A /* bottom_nav_topic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */; };
+		0206AB6F16FB5D27008ADFBC /* FSCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0211778B16CF54E700559653 /* PositionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211778A16CF54E700559653 /* PositionAnnotation.m */; };
+		02160CA7170090D500D77FE0 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160CA5170090D500D77FE0 /* search.png */; };
+		02160CA8170090D500D77FE0 /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160CA6170090D500D77FE0 /* search@2x.png */; };
+		02160E2117009ECF00D77FE0 /* search_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2017009ECF00D77FE0 /* search_bg.png */; };
+		02160E251701720200D77FE0 /* FSPointMemberCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E241701720200D77FE0 /* FSPointMemberCardCell.m */; };
+		02160E2B1701721E00D77FE0 /* FSPointMemberCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */; };
+		02160E2D1701816100D77FE0 /* bind_card_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */; };
 		0217169E16D242390098288A /* EGOPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167116D242390098288A /* EGOPhotoViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0217169F16D242390098288A /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167416D242390098288A /* EGOCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716A016D242390098288A /* EGOImageLoadConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167716D242390098288A /* EGOImageLoadConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -602,8 +609,17 @@
 /* Begin PBXFileReference section */
 		0203213916B64658007E0E9A /* bottom_nav_topic_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom_nav_topic_icon.png; sourceTree = "<group>"; };
 		0203213A16B64658007E0E9A /* bottom_nav_topic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_nav_topic_icon@2x.png"; sourceTree = "<group>"; };
+		0206AB6D16FB5D27008ADFBC /* FSCycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCycleScrollView.h; path = Controls/Common/FSCycleScrollView.h; sourceTree = "<group>"; };
+		0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCycleScrollView.m; path = Controls/Common/FSCycleScrollView.m; sourceTree = "<group>"; };
 		0211778916CF54E700559653 /* PositionAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PositionAnnotation.h; path = Controls/PositionAnnotation.h; sourceTree = "<group>"; };
 		0211778A16CF54E700559653 /* PositionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PositionAnnotation.m; path = Controls/PositionAnnotation.m; sourceTree = "<group>"; };
+		02160CA5170090D500D77FE0 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		02160CA6170090D500D77FE0 /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
+		02160E2017009ECF00D77FE0 /* search_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_bg.png; sourceTree = "<group>"; };
+		02160E231701720200D77FE0 /* FSPointMemberCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPointMemberCardCell.h; path = Controls/FSPointMemberCardCell.h; sourceTree = "<group>"; };
+		02160E241701720200D77FE0 /* FSPointMemberCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPointMemberCardCell.m; path = Controls/FSPointMemberCardCell.m; sourceTree = "<group>"; };
+		02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSPointMemberCardCell.xib; path = Controls/FSPointMemberCardCell.xib; sourceTree = "<group>"; };
+		02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bind_card_btn@2x.png"; sourceTree = "<group>"; };
 		0217167016D242390098288A /* EGOPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOPhotoViewController.h; sourceTree = "<group>"; };
 		0217167116D242390098288A /* EGOPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoViewController.m; sourceTree = "<group>"; };
 		0217167316D242390098288A /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
@@ -1680,6 +1696,8 @@
 		743EBBCC166CCC9300673882 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				0206AB6D16FB5D27008ADFBC /* FSCycleScrollView.h */,
+				0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */,
 				0211778916CF54E700559653 /* PositionAnnotation.h */,
 				0211778A16CF54E700559653 /* PositionAnnotation.m */,
 				023734C316B90A8E00CECCF3 /* FSPlaceHoldTextView.h */,
@@ -1733,6 +1751,9 @@
 				74BF301D1665F07500B8A0FE /* FSPointDetailCell.xib */,
 				74BF301F1665F13700B8A0FE /* FSPointDetailCell.h */,
 				74BF30201665F13700B8A0FE /* FSPointDetailCell.m */,
+				02160E231701720200D77FE0 /* FSPointMemberCardCell.h */,
+				02160E241701720200D77FE0 /* FSPointMemberCardCell.m */,
+				02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */,
 				74BF30271665F81D00B8A0FE /* FSLikeDetailCell.xib */,
 				74BF30291665F95200B8A0FE /* FSLikeDetailCell.h */,
 				74BF302A1665F95200B8A0FE /* FSLikeDetailCell.m */,
@@ -2097,6 +2118,10 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */,
+				02160E2017009ECF00D77FE0 /* search_bg.png */,
+				02160CA5170090D500D77FE0 /* search.png */,
+				02160CA6170090D500D77FE0 /* search@2x.png */,
 				025A543716BBA5DE001919EA /* blankimages */,
 				022A6D2016D4F79500374639 /* arrow_left.png */,
 				022A6D2116D4F79600374639 /* arrow_left@2x.png */,
@@ -2665,9 +2690,9 @@
 				74B773CD1665A2DE000F4389 /* User */,
 				74CD91AE1643A78600970F55 /* MainStoryboard.storyboard */,
 				02F6158516B3DBC0001F93ED /* FSTopicViewController.h */,
-				7439F1471657372C00490E7A /* FSProListViewController.m */,
 				02F6158616B3DBC0001F93ED /* FSTopicViewController.m */,
 				7439F1461657372C00490E7A /* FSProListViewController.h */,
+				7439F1471657372C00490E7A /* FSProListViewController.m */,
 				74CD28B01675A8D8001DFE4D /* FSProdListViewController.h */,
 				74CD28B11675A8D8001DFE4D /* FSProdListViewController.m */,
 				74C8AC1A168C1D0900EEABE4 /* FSRefreshableViewController.h */,
@@ -3159,6 +3184,11 @@
 				025D430416E72453007B02EC /* qqconnect_login_btn.png in Resources */,
 				025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */,
 				02992D5C16ED789E007ACF62 /* FSCardBindViewController.xib in Resources */,
+				02160CA7170090D500D77FE0 /* search.png in Resources */,
+				02160CA8170090D500D77FE0 /* search@2x.png in Resources */,
+				02160E2117009ECF00D77FE0 /* search_bg.png in Resources */,
+				02160E2B1701721E00D77FE0 /* FSPointMemberCardCell.xib in Resources */,
+				02160E2D1701816100D77FE0 /* bind_card_btn@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3390,6 +3420,8 @@
 				02992D5B16ED789E007ACF62 /* FSCardBindViewController.m in Sources */,
 				025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */,
 				025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */,
+				0206AB6F16FB5D27008ADFBC /* FSCycleScrollView.m in Sources */,
+				02160E251701720200D77FE0 /* FSPointMemberCardCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3465,8 +3497,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3497,8 +3529,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3569,8 +3601,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3605,8 +3637,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3621,8 +3653,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3653,8 +3685,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

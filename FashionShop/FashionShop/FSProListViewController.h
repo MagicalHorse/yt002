@@ -13,16 +13,15 @@
 #import "FSProDetailViewController.h"
 #import "FSRefreshableViewController.h"
 #import "FSSegmentControl.h"
+#import "FSCycleScrollView.h"
 
-@interface FSProListViewController : FSRefreshableViewController <UITableViewDataSource, UITableViewDelegate,FSProDetailItemSourceProvider>
+@interface FSProListViewController : FSRefreshableViewController <UITableViewDataSource, UITableViewDelegate,FSProDetailItemSourceProvider,FSCycleScrollViewDatasource,FSCycleScrollViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
 
 @property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
-
-
 
 
 

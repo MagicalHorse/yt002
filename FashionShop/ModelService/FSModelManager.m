@@ -33,7 +33,7 @@ static FSModelManager *_modelManager;
     [RKManagedObjectStore deleteStoreInApplicationDataDirectoryWithFilename:@"FSShop.sqlite"];
     RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
     RKObjectManager *objectManager = [RKObjectManager objectManagerWithBaseURL:baseURL];
-    objectManager.client.baseURL = baseURL;
+    //objectManager.client.baseURL = baseURL;
     [RKManagedObjectMapping addDefaultDateFormatterForString:@"yyyy-MM-dd'T'HH:mm:ssZ" inTimeZone:nil];
     
     RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"FSShop.sqlite"];

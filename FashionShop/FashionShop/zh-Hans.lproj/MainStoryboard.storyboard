@@ -220,9 +220,9 @@
         <class className="FSMeViewController" superclassName="FSRefreshableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FSMeViewController.h"/>
             <relationships>
-                <relationship kind="action" name="doLogOut:"/>
                 <relationship kind="action" name="doLogin:"/>
                 <relationship kind="action" name="doLoginQQ:"/>
+                <relationship kind="action" name="doLoginQQWeiBo:"/>
                 <relationship kind="action" name="doShowCoupons:"/>
                 <relationship kind="action" name="doShowFans:"/>
                 <relationship kind="action" name="doShowLikes:"/>

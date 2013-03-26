@@ -40,6 +40,11 @@
     self.title = NSLocalizedString(@"User_Profile_Setting", nil);
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self bindAction];
 }
 

@@ -46,6 +46,7 @@
 #define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
 #define PRO_DETAIL_COMMENT_CELL_HEIGHT 74
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
+
 @interface FSProDetailViewController ()
 {
     MBProgressHUD *statusReport;
@@ -242,7 +243,6 @@
         } errorCallback:^{
             [self onButtonCancel];
         }];
- 
     }
   [self hideCommentInputView:nil];
 }
@@ -340,6 +340,10 @@
                     PKAddPassesViewController *passController = [[PKAddPassesViewController alloc] initWithPass:pass];
                     [self presentViewController:passController animated:TRUE completion:nil];
                 }
+            }
+            else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Pass Add Tip Info", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                [alert show];
             }
             [blockSelf updateProgressThenEnd:NSLocalizedString(@"coupon use instruction",nil) withDuration:2];
         }

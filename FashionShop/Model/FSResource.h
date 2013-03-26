@@ -24,5 +24,6 @@
 @property (nonatomic,readonly) NSURL *absoluteUrlOrigin;
 
 -(NSURL *)absoluteUr:(int)width;
+-(NSURL *)absoluteUr:(int)_width height:(int)_height;
 
 @end

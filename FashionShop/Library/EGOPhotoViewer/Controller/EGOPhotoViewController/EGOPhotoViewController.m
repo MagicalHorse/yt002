@@ -139,7 +139,6 @@
 	self.photoViews = views;
 	[views release];
 
-
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
 	if ([self.photoSource numberOfPhotos] == 1 && UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad) {
 		
@@ -231,7 +230,6 @@
 	if (_popover) {
 		[self addObserver:self forKeyPath:@"contentSizeForViewInPopover" options:NSKeyValueObservingOptionNew context:NULL];
 	}
-	
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
@@ -266,7 +264,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	
+	return interfaceOrientation == UIInterfaceOrientationPortrait;//只能竖屏
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 		return YES;

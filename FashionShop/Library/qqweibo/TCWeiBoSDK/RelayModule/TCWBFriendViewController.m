@@ -186,7 +186,7 @@
     
     [searchbar setDelegate:self];
     [searchbar setBarStyle:UIBarStyleDefault];
-    [searchbar setPlaceholder:@"搜索"];
+    [searchbar setPlaceholder:NSLocalizedString(@"Search Button Title", nil)];
     
     [self.view addSubview:searchbar];
     [searchbar release];

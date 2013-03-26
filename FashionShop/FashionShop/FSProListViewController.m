@@ -25,14 +25,14 @@
 #import "UIColor+RGB.h"
 #import "FSConfiguration.h"
 #import "FSStoreDetailViewController.h"
-
 #import "EGORefreshTableHeaderView.h"
+#import "UIImageView+WebCache.h"
 
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
+#define PRO_LIST_BANNER @"banner"
 #define PRO_LIST_NEAREST_HEADER_CELL @"ProNearestHeaderTableCell"
 #define PRO_LIST_NEAREST_CELL @"ProTableCell"
-#define PRO_LIST_PAGE_SIZE @10
 
 typedef enum {
     NormalList = 0,
@@ -54,6 +54,7 @@ typedef enum {
     FSProSortBy _currentSearchIndex;
     NSMutableDictionary *_dataSourceProvider;
     NSMutableDictionary *_dataSourcePro;
+    NSMutableArray *_dataSourceBannerData;
     NSMutableArray *_storeSource;
     NSMutableArray *_dateSource;
     NSMutableDictionary *_storeIndexSource;
@@ -72,9 +73,8 @@ typedef enum {
     bool _noMoreNearest;
     bool _noMoreNewest;
     bool _inLoading;
-    
-  
 }
+
 @end
 
 @implementation FSProListViewController
@@ -93,14 +93,13 @@ typedef enum {
 {
     [super viewDidLoad];
     
-
     // Do any additional setup after loading the view
     _nearestPageIndex = 0;
     _newestPageIndex = 0;
 
-    
     _dataSourceProvider = [@{} mutableCopy];
     _dataSourcePro = [@{} mutableCopy];
+    _dataSourceBannerData = [@[] mutableCopy];
     _storeSource =[@[] mutableCopy];
     _dateSource = [@[] mutableCopy];
     _storeIndexSource = [@{} mutableCopy];
@@ -121,7 +120,6 @@ typedef enum {
             if (!respData.isSuccess)
             {
                 [blockSelf reportError:respData.errorDescrip];
-                
             }
             else
             {
@@ -130,8 +128,6 @@ typedef enum {
                 {
                     blockSelf->_nearestPageIndex++;
                     [blockSelf fillFetchResultInMemory:response];
-                    
-                    
                 } else if(blockSelf->_state == BeginLoadingLatest){
                     blockSelf->_nearestPageIndex = 1;
                     [blockSelf renewLastUpdateTime];
@@ -186,20 +182,85 @@ typedef enum {
         }];
         
     } forKey:PRO_LIST_FILTER_NEWEST];
+    
+    [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
+        [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            if (!respData.isSuccess)
+            {
+                [blockSelf reportError:respData.errorDescrip];
+            }
+            else
+            {
+                FSProItems *response = (FSProItems *)respData.responseData;
+                [blockSelf->_dataSourceBannerData removeAllObjects];
+                for (FSProItemEntity *item in response.items) {
+                    [blockSelf->_dataSourceBannerData addObject:item];
+                }
+            }
+            if (uicallback)
+                uicallback();
+        }];
+    } forKey:PRO_LIST_BANNER];
+    
     [_contentView registerNib:[UINib nibWithNibName:@"FSProNearDetailCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSProNearestHeaderTableCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_HEADER_CELL];
 
     [self prepareLayout];
     [self setFilterType];
     [self initContentView];
-    
-    
+    [self loadBannerData];
+}
+-(void)loadBannerData
+{
+    DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:PRO_LIST_BANNER];
+    FSProListRequest *request = [[FSProListRequest alloc] init];
+    request.routeResourcePath = RK_REQUEST_PRO_BANNER_LIST;
+    request.requestType = 1;
+    request.pageSize = COMMON_PAGE_SIZE;
+    request.nextPage = 1;
+    request.filterType = FSProSortByDate;
+    _inLoading = TRUE;
+    block(request,^(){
+        _inLoading = FALSE;
+        if (_dataSourceBannerData.count > 0) {
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+            FSCycleScrollView *csView = [[FSCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, NAV_HIGH)];
+            csView.delegate = self;
+            csView.datasource = self;
+            csView.pageControl.frame = CGRectMake(0, 27, APP_WIDTH, 19);
+            [self.view addSubview:csView];
+            [self updateFrame];
+        }
+        else{
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+        }
+    });
+}
+-(void)updateFrame
+{
+    CGRect rect;
+    if (_dataSourceBannerData.count > 0) {
+        rect =  self.contentView.frame;
+        rect.origin.y += NAV_HIGH;
+        rect.size.height -= NAV_HIGH;
+        self.contentView.frame = rect;
+        rect =  self.segFilters.frame;
+        rect.origin.y += NAV_HIGH;
+        self.segFilters.frame = rect;
+    }
+    else{
+        rect =  self.contentView.frame;
+        rect.origin.y -= NAV_HIGH;
+        rect.size.height += NAV_HIGH;
+        self.contentView.frame = rect;
+        rect =  self.segFilters.frame;
+        rect.origin.y -= NAV_HIGH;
+        self.segFilters.frame = rect;
+    }
 }
 -(void) prepareLayout
 {
     self.navigationItem.title = NSLocalizedString(@"Promotions", nil);
-    
-
 }
 -(void) setFilterType
 {
@@ -224,7 +285,7 @@ typedef enum {
         request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.previousLatestDate = [[NSDate alloc] init];
-        request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
+        request.pageSize = COMMON_PAGE_SIZE;
         request.nextPage = 1;
         _state = BeginLoadingLatest;
         _inLoading = TRUE;
@@ -259,7 +320,7 @@ typedef enum {
     _nearFirstLoadDate = [[NSDate alloc] init];
     request.previousLatestDate = _nearFirstLoadDate;
     request.nextPage = 1;
-    request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
+    request.pageSize = COMMON_PAGE_SIZE;
     request.requestType = 1;
     
     _state = BeginLoadingMore;
@@ -303,14 +364,12 @@ typedef enum {
 
 -(NSString *)getKeyFromSelectedIndex
 {
-    
     switch (_currentSearchIndex)
     {
         case SortByDistance:
             return PRO_LIST_FILTER_NEAREST;
         case SortByDate:
             return PRO_LIST_FILTER_NEWEST;
-            
         default:
             break;
     }
@@ -343,7 +402,7 @@ typedef enum {
         request.previousLatestDate = _currentSearchIndex==0?_nearFirstLoadDate: _newFirstLoadDate;
         request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
+        request.pageSize = COMMON_PAGE_SIZE;
         [self beginLoading:_contentView];
         _state = BeginLoadingMore;
         _inLoading = TRUE;
@@ -501,7 +560,6 @@ typedef enum {
 }
 -(void)fillFetchResultInMemory:(FSProItems *)pros
 {
-    
     [self fillFetchResultInMemory:pros isInsert:false];
 }
 
@@ -523,7 +581,7 @@ typedef enum {
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.requestType = 1;
-    request.pageSize = [PRO_LIST_PAGE_SIZE intValue];
+    request.pageSize = COMMON_PAGE_SIZE;
     request.filterType= _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
@@ -790,6 +848,36 @@ typedef enum {
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
+}
+
+#pragma mark - FSCycleScrollViewDatasource & FSCycleScrollViewDelegate
+
+- (NSInteger)numberOfPages
+{
+    return _dataSourceBannerData.count;
+}
+
+- (UIView *)pageAtIndex:(NSInteger)index
+{
+    FSProItemEntity * item = _dataSourceBannerData[index];
+    NSURL *url = [(FSResource *)item.resource[0] absoluteUr:APP_WIDTH height:NAV_HIGH];
+    UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, NAV_HIGH)];
+    view.contentMode = UIViewContentModeScaleAspectFill;
+    [view setImageUrl:url resizeWidth:CGSizeMake(APP_WIDTH, NAV_HIGH)];
+    return view;
+}
+
+- (void)didClickPage:(FSCycleScrollView *)csView atIndex:(NSInteger)index
+{
+    FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    NSMutableArray *rows = NULL;
+    rows = _dataSourceBannerData;
+    detailViewController.navContext = rows;
+    detailViewController.dataProviderInContext = self;
+    detailViewController.indexInContext = index;
+    detailViewController.sourceType = FSSourcePromotion;
+    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    [self presentViewController:navControl animated:YES completion:nil];
 }
 
 -(void)dealloc

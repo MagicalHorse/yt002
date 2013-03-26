@@ -147,7 +147,7 @@
     CGSize contentSize = self.collectionView.frame.size;
     NSUInteger columnIndex = [self longestColumnIndex];
     CGFloat height = [self.columnHeights[columnIndex] floatValue];
-    contentSize.height = MAX(contentSize.height+60,height - self.interitemSpacing + self.sectionInset.bottom+150+60);
+    contentSize.height = MAX(contentSize.height+20,height - self.interitemSpacing + self.sectionInset.bottom+20);
     return contentSize;
 }
 

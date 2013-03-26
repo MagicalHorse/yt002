@@ -7,13 +7,17 @@
 //
 
 #import "FSEntityRequestBase.h"
+#import "FSProductListViewController.h"
 
 #define RK_REQUEST_PRO_LIST  @"/promotion/list"
 #define RK_REQUEST_PROD_LIST @"/product/list"
 #define RK_REQUEST_PROD_DR_LIST @"/product/daren/list"
+#define RK_REQUEST_PROD_SEARCH_LIST @"/product/search"
+#define RK_REQUEST_PRO_BANNER_LIST @"/promotion/banner/list"
 
 @interface FSProListRequest : FSEntityRequestBase
 
+@property (nonatomic) FSPageType pageType;
 @property(nonatomic,strong) NSNumber* longit;
 @property(nonatomic,strong) NSNumber *lantit;
 @property(nonatomic,assign) int nextPage;
@@ -28,5 +32,7 @@
 @property(nonatomic,strong) NSNumber *brandId;
 @property(nonatomic,strong) NSNumber *topicId;
 @property(nonatomic,strong) NSNumber *promotionId;
+@property(nonatomic,strong) NSString *keyword;//关键字
+@property(nonatomic,assign) FSProdSortType searchType;
 
 @end

@@ -29,4 +29,8 @@
 @property(nonatomic,strong) NSString *likeTypeName;
 @property(nonatomic,strong) NSString *likeUserId;
 
+@property(nonatomic,strong) NSDate * previousLatestDate;
+@property(nonatomic,assign) int requestType; //0:latest query, 1: more query
+@property(nonatomic,strong) NSString *requestTypeName;
+
 @end

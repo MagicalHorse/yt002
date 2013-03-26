@@ -14,6 +14,9 @@
 #import "FSModelManager.h"
 #import "FSConfiguration.h"
 #import "FSCardBindViewController.h"
+#import "FSCardRequest.h"
+#import "FSCardInfo.h"
+#import "FSPointMemberCardCell.h"
 
 @interface FSPointViewController ()
 {
@@ -22,11 +25,15 @@
     BOOL _noMore;
     BOOL _inLoading;
     UIRefreshControl *_refreshControl;
+    
+    NSDate *_refreshLatestDate;
+    NSDate * _firstLoadDate;
 }
 
 @end
 
 #define USER_POINT_TABLE_CELL @"userpointtablecell"
+#define USER_POINT_CARD_MEMBER_CELL @"userpointmembercardcell"
 @implementation FSPointViewController
 @synthesize currentUser;
 
@@ -45,40 +52,31 @@
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointDetailCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_TABLE_CELL];
+    [_contentView registerNib:[UINib nibWithNibName:@"FSPointMemberCardCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_CARD_MEMBER_CELL];
     [self prepareData];
     [self preparePresent];
-    
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    sheepButton.titleLabel.font = FONT(14);
-    if (1) {
-        [sheepButton setTitle:@"绑定会员卡" forState:UIControlStateNormal];
-        sheepButton.tag = 1;
+    
+    if (!currentUser.isBindCard) {
+        UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [sheepButton setBackgroundImage:[UIImage imageNamed:@"bind_card_btn.png"] forState:UIControlStateNormal];
+        [sheepButton sizeToFit];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
+        [self.navigationItem setRightBarButtonItem:item];
     }
-    else {
-        [sheepButton setTitle:@"会员卡规则" forState:UIControlStateNormal];
-        sheepButton.tag = 2;
-    }
-    [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [sheepButton sizeToFit];
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
-    [self.navigationItem setRightBarButtonItem:item];
+    
 }
 
 -(void)onButtonClick:(UIButton*)sender
 {
-    if (sender.tag == 1) {
-        FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
-        con.currentUser = currentUser;
-        [self.navigationController pushViewController:con animated:YES];
-    }
-    else {
-        
-    }
+    FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+    con.currentUser = currentUser;
+    [self.navigationController pushViewController:con animated:YES];
 }
 
 -(void) prepareData
@@ -87,7 +85,8 @@
     {
         [self beginLoading:_contentView];
         _currentPage = 1;
-        FSCommonUserRequest *request = [self createRequest:_currentPage];
+        _inLoading = YES;
+        FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:_currentPage isRefresh:NO];
         [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:_contentView];
             if (resp.isSuccess)
@@ -101,39 +100,106 @@
             {
                 [self reportError:resp.errorDescrip];
             }
+            _inLoading = NO;
         }];
     }
+    if (currentUser.isBindCard) {
+        if(!currentUser.cardInfo){
+            FSCardRequest *request = [[FSCardRequest alloc] init];
+            request.userToken = currentUser.uToken;
+            request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
+            [self beginLoading:self.view];
+            [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+                if (!resp.isSuccess)
+                {
+                    [self reportError:resp.description];
+                }
+                else
+                {
+                    //显示绑定成功界面
+                    currentUser.isBindCard = @YES;
+                    currentUser.cardInfo = resp.responseData;
+                    [_contentView reloadData];
+                }
+                [self endLoading:self.view];
+            }];
+        }
+        else{
+            [_contentView reloadData];
+        }
+    }
 }
+
 -(void) preparePresent
 {
-    self.navigationItem.title = [NSString stringWithFormat:NSLocalizedString(@"points%d", nil),currentUser.pointsTotal];
-    _refreshControl = [[UIRefreshControl alloc] init];
-    _refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"COMM_REFRESH_PULLTEXT", nil)];
-    [_refreshControl addTarget:self action:@selector(RefreshViewControlEventValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [_contentView addSubview:_refreshControl];
+    self.navigationItem.title = NSLocalizedString(@"points", nil);
+    
+    [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
+        [self refreshContent:TRUE withCallback:^(){
+            action();
+        }];
+    }];
     _contentView.dataSource = self;
     _contentView.delegate =self;
 }
 
--(void)RefreshViewControlEventValueChanged:(id)sender{
-    _refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"COMM_REFRESH_INGTEXT", nil)];
-    FSCommonUserRequest *request = [self createRequest:1];
+-(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
+{
+    int nextPage = 1;
+    if (!isRefresh)
+    {
+        _currentPage++;
+        nextPage = _currentPage + 1;
+    }
+    else {
+        [self zeroMemoryBlock];
+    }
+    _inLoading = YES;
+    FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:nextPage isRefresh:isRefresh];
+    __block FSPointViewController *blockSelf = self;
     [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
-        [_refreshControl endRefreshing];
+        callback();
         if (resp.isSuccess)
         {
             FSPagedPoint *innerResp = resp.responseData;
-            if (innerResp.totalPageCount<=_currentPage)
-                _noMore = true;
-            [self mergeLike:innerResp isInsert:true];
+            if (isRefresh)
+                blockSelf->_refreshLatestDate = [[NSDate alloc] init];
+            else
+            {
+                if (innerResp.totalPageCount <= blockSelf->_currentPage+1)
+                    blockSelf-> _noMore = TRUE;
+            }
+            [self mergeLike:innerResp isInsert:isRefresh];
         }
         else
         {
             [self reportError:resp.errorDescrip];
         }
+        _inLoading = NO;
     }];
-    
 }
+
+-(void) zeroMemoryBlock
+{
+    _currentPage = 0;
+    _noMore = NO;
+    _inLoading = NO;
+}
+
+-(void)addTableHeaderView
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, 80)];
+    view.backgroundColor = [UIColor whiteColor];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(5, 10, 150, 30)];
+    title.backgroundColor = [UIColor clearColor];
+    title.font = FONT(18);
+    UILabel *total = [[UILabel alloc] initWithFrame:CGRectMake(5, 40, 100, 30)];
+    total.backgroundColor = [UIColor clearColor];
+    total.font = FONT(18);
+    [view addSubview:total];
+    _contentView.tableHeaderView = view;
+}
+
 -(void) mergeLike:(FSPagedPoint *)response isInsert:(BOOL)isinsert
 {
     if (!_likes)
@@ -160,7 +226,6 @@
             }
             
         }];
-        [_contentView reloadData];
     }
     if (_likes.count<1)
     {
@@ -171,116 +236,195 @@
     {
         [self hideNoResultImage:_contentView];
     }
+    [_contentView reloadData];
 }
 
--(FSCommonUserRequest *)createRequest:(int)index
+-(FSCommonUserRequest *)buildListRequest:(NSString *)route nextPage:(int)page isRefresh:(BOOL)isRefresh
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
     request.userToken =[FSModelManager sharedModelManager].loginToken;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
-    request.pageIndex =[NSNumber numberWithInt:index];
+    request.pageIndex =[NSNumber numberWithInt:page];
     request.sort = @0;
-    request.routeResourcePath = RK_REQUEST_POINT_LIST;
+    request.routeResourcePath = route;
+    if(isRefresh)
+    {
+        request.requestType = 0;
+        request.previousLatestDate = _refreshLatestDate;
+    }
+    else
+    {
+        request.requestType = 1;
+        request.previousLatestDate = _firstLoadDate;
+    }
     return request;
 }
 -(void) presentData
 {
-    
     [_contentView reloadData];
 }
+
 - (IBAction)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
-    
+    if (currentUser.isBindCard) {
+        return 2;
+    }
+    else{
+        return 1;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _likes?_likes.count:0;
-    
+    if (currentUser.isBindCard && section == 0) {
+        return 1;
+    }
+    else{
+        return _likes?_likes.count:0;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    FSPointDetailCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_POINT_TABLE_CELL];
-    detailCell.data = [_likes objectAtIndex:indexPath.row];
-    return detailCell;
-    
+    if (currentUser.isBindCard && indexPath.section == 0) {
+        if (!currentUser.cardInfo) {
+            return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+        }
+        FSPointMemberCardCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_POINT_CARD_MEMBER_CELL];
+        detailCell.cardType.text = [NSString stringWithFormat:@"会员卡类型: %@-%@", currentUser.cardInfo.type,currentUser.cardInfo.cardLevel];
+        detailCell.cardNumber.text = [NSString stringWithFormat:@"会员卡卡号: %@", currentUser.cardInfo.cardNo];
+        detailCell.totalPoint.text = [NSString stringWithFormat:@"会员卡积点: %@", [currentUser.cardInfo.amount stringValue]];
+        return detailCell;
+    }
+    else{
+        FSPointDetailCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_POINT_TABLE_CELL];
+        detailCell.data = [_likes objectAtIndex:indexPath.row];
+        return detailCell;
+    }
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSPoint *point = [_likes objectAtIndex:indexPath.row];
-    CGFloat baseHeight = 35;
-    CGSize newSize = [point.getReason sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(200, 200) lineBreakMode:NSLineBreakByWordWrapping];
-    return MAX(newSize.height+20, baseHeight);
+    if (currentUser.isBindCard && indexPath.section == 0) {
+        return 110;
+    }
+    else{
+        FSPoint *point = [_likes objectAtIndex:indexPath.row];
+        CGFloat baseHeight = 35;
+        CGSize newSize = [point.getReason sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(200, 200) lineBreakMode:NSLineBreakByWordWrapping];
+        return MAX(newSize.height+20, baseHeight);
+    }
 }
+
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row %2==0)
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL1_BGCOLOR;
-               
-    } else
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL2_BGCOLOR;
+    if (currentUser.isBindCard && indexPath.section == 0) {
+        
     }
-
+    else{
+        if (indexPath.row %2==0)
+        {
+            cell.backgroundColor = PRO_LIST_NEAR_CELL1_BGCOLOR;
+            
+        } else
+        {
+            cell.backgroundColor = PRO_LIST_NEAR_CELL2_BGCOLOR;
+        }
+    }
 }
 
 #pragma mark - Table view delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 30;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, 30)];
+    view.backgroundColor = [UIColor darkGrayColor];
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, 30)];
+    title.backgroundColor = [UIColor clearColor];
+    title.font = BFONT(14);
+    title.textColor = [UIColor whiteColor];
+    if (section == 0) {
+        title.text = @"会员卡积点信息";
+        UILabel *total = [[UILabel alloc] initWithFrame:CGRectMake(APP_WIDTH-10-100, 0, 100, 30)];
+        total.textAlignment = UITextAlignmentRight;
+        total.backgroundColor = [UIColor clearColor];
+        total.font = BFONT(14);
+        total.textColor = [UIColor whiteColor];
+        [view addSubview:total];
+    }
+    else{
+        title.text = @"APP积点信息";
+    }
+    [view addSubview:title];
+    return view;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(!_inLoading &&
-       (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
-       &&scrollView.contentOffset.y>0
-       && !_noMore)
-        
+    [super scrollViewDidScroll:scrollView];
+    if(!_noMore
+       && !_inLoading
+       && (scrollView.contentOffset.y+scrollView.frame.size.height) + 100 > scrollView.contentSize.height
+       &&scrollView.contentOffset.y>0)
     {
-        _inLoading = TRUE;
-        FSCommonUserRequest *request = [self createRequest:_currentPage+1];
-        [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            _inLoading = FALSE;
-            if (resp.isSuccess)
-            {
-                FSPagedPoint *innerResp = resp.responseData;
-                if (innerResp.totalPageCount<=_currentPage+1)
-                    _noMore = true;
-                _currentPage ++;
-                [self mergeLike:innerResp isInsert:FALSE];
-            }
-            else
-            {
-                [self reportError:resp.errorDescrip];
-            }
-        }];
-        
-        
+        [self loadMore];
     }
-    
-    
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)loadMore{
+    if (_inLoading)
+        return;
+    __block FSPointViewController *blockSelf = self;
+    [self beginLoadMoreLayout:_contentView];
+    _inLoading = YES;
+    [self refreshContent:NO withCallback:^{
+        [blockSelf endLoadMore:blockSelf.contentView];
+        _inLoading = NO;
+    }];
 }
+
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+//{
+//    if(!_inLoading &&
+//       (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+//       &&scrollView.contentOffset.y>0
+//       && !_noMore)
+//    {
+//        _inLoading = TRUE;
+//        FSCommonUserRequest *request = [self createRequest:_currentPage+1];
+//        [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+//            _inLoading = FALSE;
+//            if (resp.isSuccess)
+//            {
+//                FSPagedPoint *innerResp = resp.responseData;
+//                if (innerResp.totalPageCount<=_currentPage+1)
+//                    _noMore = true;
+//                _currentPage ++;
+//                [self mergeLike:innerResp isInsert:FALSE];
+//            }
+//            else
+//            {
+//                [self reportError:resp.errorDescrip];
+//            }
+//        }];   
+//    }
+//}
 
 @end

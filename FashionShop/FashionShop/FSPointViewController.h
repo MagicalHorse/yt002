@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
+#import "FSRefreshableViewController.h"
 
-@interface FSPointViewController : UIViewController<UITableViewDataSource, UITableViewDelegate>
+@interface FSPointViewController : FSRefreshableViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
 

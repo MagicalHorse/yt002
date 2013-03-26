@@ -19,6 +19,9 @@
 @synthesize likeTypeName;
 @synthesize routeResourcePath;
 @synthesize likeUserId;
+@synthesize previousLatestDate;
+@synthesize requestType = _requestType;
+@synthesize requestTypeName;
 
 -(void)setLikeType:(NSNumber *)likeType
 {
@@ -33,6 +36,13 @@
         default:
             break;
     }
+}
+
+-(void)setRequestType:(int)requestType
+{
+    _requestType = requestType;
+    if (_requestType ==0 )
+        requestTypeName = @"refresh";
 }
 
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map

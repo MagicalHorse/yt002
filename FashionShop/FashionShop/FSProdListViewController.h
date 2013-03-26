@@ -12,13 +12,19 @@
 #import "FSProDetailViewController.h"
 #import "FSRefreshableViewController.h"
 
+@class FSSearchBar;
+@protocol MySegmentValueChangedDelegate <NSObject>
+@optional
+-(void)segmentValueChanged:(UISegmentedControl*)seg;
+@end
+
 @interface FSSearchBar : UISearchBar {
-    UIView *filterView;
 }
+@property (nonatomic,assign) id<MySegmentValueChangedDelegate> segmentDelegate;
 
 @end
 
-@interface FSProdListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,UISearchBarDelegate, UISearchDisplayDelegate,UITableViewDataSource, UITableViewDelegate>
+@interface FSProdListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,UISearchBarDelegate, UISearchDisplayDelegate,UITableViewDataSource, UITableViewDelegate,MySegmentValueChangedDelegate>
 
 @property (strong, nonatomic) IBOutlet PSUICollectionView *cvTags;
 @property (strong, nonatomic) IBOutlet UIView *tagContainer;

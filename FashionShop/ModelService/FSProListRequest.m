@@ -18,6 +18,8 @@
 @synthesize brandId;
 @synthesize topicId;
 @synthesize promotionId;
+@synthesize keyword;
+@synthesize searchType;
 @synthesize routeResourcePath=_routeResourcePath;
 
 -(NSString *) routeResourcePath
@@ -40,11 +42,22 @@
 }
 
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{
-    [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
-    [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];
     [map mapKeyPath:@"lat" toAttribute:@"request.lantit"];
+    
+    [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
+    [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
     [map mapKeyPath:@"sort" toAttribute:@"request.filterType"];
+    
+//    if (_pageType == FSPageTypeSearch) {
+//        [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
+//        [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
+//    }
+//    else {
+//        [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
+//        [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
+//        [map mapKeyPath:@"sort" toAttribute:@"request.filterType"];
+//    }
     [map mapKeyPath:@"refreshts" toAttribute:@"request.previousLatestDate"];
     [map mapKeyPath:@"type" toAttribute:@"request.requestTypeName"];
     [map mapKeyPath:@"tagid" toAttribute:@"request.tagid"];
@@ -52,6 +65,7 @@
     [map mapKeyPath:@"brandid" toAttribute:@"request.brandId"];
     [map mapKeyPath:@"topicid" toAttribute:@"request.topicId"];
     [map mapKeyPath:@"promotionid" toAttribute:@"request.promotionId"];
+    [map mapKeyPath:@"term" toAttribute:@"request.keyword"];
 }
 
 

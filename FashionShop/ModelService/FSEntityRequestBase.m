@@ -11,7 +11,7 @@
 #import "FSModelManager.h"
 #import "FSModelBase.h"
 #import "FSCoreModelBase.h"
-
+#import "FSProListRequest.h"
 
 @interface FSEntityRequestBase()
 {
@@ -35,10 +35,23 @@
     NSMutableDictionary *queryParams = [@{} mutableCopy];
     CommonHeader *comHeader = [[CommonHeader alloc] init];
     [queryParams addEntriesFromDictionary:[comHeader toQueryDic]];
-    RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
-    
-    return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]]  ;
-
+    RKURL *URL = nil;
+    if (![self.routeResourcePath isEqualToString:RK_REQUEST_PROD_SEARCH_LIST]) {
+        if ([manager.baseURL.absoluteString isEqualToString:@"http://intime-env-hvrevspudb.elasticbeanstalk.com"]) {
+            RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
+            manager.client.baseURL = baseURL;
+        }
+        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+        return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
+    }
+    else{
+        RKURL *baseURL = [RKURL URLWithBaseURLString:@"http://intime-env-hvrevspudb.elasticbeanstalk.com"];
+        manager.client.baseURL = baseURL;
+        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+        return [NSString stringWithFormat:@"%@?", [URL resourcePath]];
+    }
+//    URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+//    return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
 }
 
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{

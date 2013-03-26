@@ -11,6 +11,8 @@
 #import "FSProdDetailCell.h"
 #import "FSProdTagCell.h"
 #import "FSProDetailViewController.h"
+#import "FSProductListViewController.h"
+#import "FSFeedbackViewController.h"
 
 #import "FSTag.h"
 #import "FSCoreTag.h"
@@ -32,26 +34,50 @@
 
 - (void)layoutSubviews {
     self.autoresizesSubviews = YES;
-	UITextField *searchField;
 	NSUInteger numViews = [self.subviews count];
 	for(int i = 0; i < numViews; i++) {
-		if([[self.subviews objectAtIndex:i] isKindOfClass:[UITextField class]]) {
-			searchField = [self.subviews objectAtIndex:i];
-		}
+        id cc = [self.subviews objectAtIndex:i];
+        if([cc isKindOfClass:[UIButton class]])
+        {
+            UIButton *btn = (UIButton *)cc;
+            [btn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
+            btn.backgroundColor = RGBCOLOR(234, 234, 234);
+            [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+        }
+        if ([cc isKindOfClass:[UISegmentedControl class]]) {
+            UISegmentedControl * seg = (UISegmentedControl*)cc;
+            seg.tintColor = RGBCOLOR(222, 222, 222);
+            [seg addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
+            [self ChangeSegmentFont:seg];
+        }
 	}
-	if(!(searchField == nil)) {
-		searchField.textColor = [UIColor redColor];
-		[searchField setBorderStyle:UITextBorderStyleRoundedRect];
-		//UIImage *image = [UIImage imageNamed: @"esri.png"];
-		//UIImageView *iView = [[UIImageView alloc] initWithImage:image];
-		//searchField.leftView = iView;
-	}
-    filterView = [[UIView alloc] initWithFrame:CGRectMake(0, 44, APP_WIDTH, 40)];
-    filterView.backgroundColor = [UIColor redColor];
-    [self addSubview:filterView];
-    [self bringSubviewToFront:filterView];
     
 	[super layoutSubviews];
+}
+
+-(void)valueChanged:(UISegmentedControl *)sender
+{
+    [self ChangeSegmentFont:sender];
+    if (_segmentDelegate && [_segmentDelegate respondsToSelector:@selector(segmentValueChanged:)]) {
+        [_segmentDelegate segmentValueChanged:sender];
+    }
+}
+
+-(void)ChangeSegmentFont:(UIView *)aView
+{
+    if ([aView isKindOfClass:[UILabel class]]) {
+        UILabel *lb = (UILabel*)aView;
+        [lb setTextAlignment:UITextAlignmentCenter];
+        [lb setFrame:CGRectMake(0, 0, 155, 30)];
+        [lb setFont:[UIFont systemFontOfSize:14]];
+        lb.textColor = [UIColor grayColor];
+    }
+    NSArray *na = [aView subviews];
+    NSEnumerator *ne = [na objectEnumerator];
+    UIView *subView;
+    while (subView = [ne nextObject]) {
+        [self ChangeSegmentFont:subView];
+    }
 }
 
 @end
@@ -60,6 +86,8 @@
 {
     NSMutableArray *_tags;
     NSMutableArray *_prods;
+    NSMutableArray *_prodKeywords;
+    NSMutableArray *_brandKeywords;
     
     UIActivityIndicatorView * moreIndicator;
     BOOL _isInLoading;
@@ -67,6 +95,7 @@
     int _selectedTagIndex;
     int _prodPageIndex;
     CGFloat _actualTagWidth;
+    NSInteger _selectedIndex;
     
     NSDate *_refreshLatestDate;
     NSDate * _firstLoadDate;
@@ -79,6 +108,7 @@
 }
 
 @property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
+@property(nonatomic, strong, readwrite) UITableView *searchBarTable;
 @property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
 
 @end
@@ -100,7 +130,7 @@
     [self prepareLayout];
     [self prepareData];
     
-    UIBarButtonItem *baritemSearch = [self createPlainBarButtonItem:@"ok_icon.png" target:self action:@selector(onSearch:)];
+    UIBarButtonItem *baritemSearch = [self createPlainBarButtonItem:@"search.png" target:self action:@selector(onSearch:)];
     [self.navigationItem setRightBarButtonItem:baritemSearch];
 }
 
@@ -108,11 +138,17 @@
 {
     if (!self.searchBar) {
         self.searchBar = [[FSSearchBar alloc] initWithFrame:CGRectMake(0, -0, 0, 0)];
-        self.searchBar.placeholder = @"Search";
+        self.searchBar.placeholder = NSLocalizedString(@"Search Bar PlaceHolder String", nil);
         self.searchBar.delegate = self;
+        self.searchBar.showsScopeBar = YES;
+        self.searchBar.selectedScopeButtonIndex = 1;
+        self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"热门商品",@"热门品牌", nil];
+        self.searchBar.tintColor = RGBCOLOR(246, 246, 246);
+        self.searchBar.segmentDelegate = self;
         [self.searchBar sizeToFit];
         
         self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
+        [self.strongSearchDisplayController.searchResultsTableView reloadData];
         self.searchDisplayController.searchResultsDataSource = self;
         self.searchDisplayController.searchResultsDelegate = self;
         self.searchDisplayController.delegate = self;
@@ -150,6 +186,8 @@
 {
     _tags = [@[] mutableCopy];
     _prods = [@[] mutableCopy];
+    _prodKeywords = [NSMutableArray arrayWithObjects:@"a",@"b", nil];
+    _brandKeywords = [NSMutableArray arrayWithObjects:@"阿迪达斯",@"测试",@"衣恋", nil];
      _actualTagWidth = 0;
     [self zeroMemoryBlock];
     [_tags addObjectsFromArray:[FSTag localTags]];
@@ -202,7 +240,6 @@
 -(void) prepareLayout
 {
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
-    //[self.navigationController.navigationBar setTitleTextAttributes:@{UITextAttributeFont:ME_FONT(16),UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
@@ -253,7 +290,6 @@
 {
     if (!prods)
         return;
-//    NSMutableArray *indexPathArray = [@[] mutableCopy];
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_prods indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
             if ([[(FSProdItemEntity *)obj1 valueForKey:@"id"] intValue] ==[[(FSProdItemEntity *)obj valueForKey:@"id"] intValue])
@@ -276,8 +312,6 @@
                 if (!shouldReload)
                 [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
-            
-            
         }
     }];
     if (shouldReload)
@@ -463,13 +497,9 @@
         else {
             [(FSProdDetailCell *)cell hidenProIcon];
         }
-//        if (_cvContent.dragging == NO &&
-//            _cvContent.decelerating == NO)
-        {
-            int width = PROD_LIST_DETAIL_CELL_WIDTH;
-            int height = cell.frame.size.height;
-            [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
-        }
+        int width = PROD_LIST_DETAIL_CELL_WIDTH;
+        int height = cell.frame.size.height;
+        [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
     }
     return cell;
 }
@@ -597,14 +627,24 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (_selectedIndex == 0) {
+        return _prodKeywords.count;
+    }
+    else{
+        return _brandKeywords.count;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.textLabel.text = self.searchBar.text;
+    if (_selectedIndex == 0) {
+        cell.textLabel.text = _prodKeywords[indexPath.row];
+    }
+    else{
+        cell.textLabel.text = _brandKeywords[indexPath.row];
+    }
     cell.textLabel.font = FONT(15);
     return cell;
 }
@@ -633,7 +673,22 @@
 
 -(void)toSearch
 {
+//    [self.searchBar removeFromSuperview];
+//    [self.navigationController setNavigationBarHidden:NO animated:YES];
     //跳转搜索界面进行搜索
+    FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+    dr.keyWords = _searchBar.text;
+    dr.pageType = FSPageTypeSearch;
+    dr.titleName = NSLocalizedString(@"Search Result", nil);
+    [self.navigationController presentModalViewController:dr animated:YES];
+}
+
+#pragma mark - MySegmentValueChangedDelegate
+
+-(void)segmentValueChanged:(UISegmentedControl*)seg
+{
+    _selectedIndex = seg.selectedSegmentIndex;
+    [_strongSearchDisplayController.searchResultsTableView reloadData];
 }
 
 @end

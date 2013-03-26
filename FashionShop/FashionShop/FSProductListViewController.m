@@ -57,7 +57,6 @@
     [super viewDidLoad];
     [self prepareLayout];
     [self prepareData];
-    
 }
 
 -(void) prepareData
@@ -66,8 +65,13 @@
     [self zeroMemoryBlock];
     [self beginLoading:_productContent];
     _prodPageIndex = 0;
-    FSProListRequest *request =
-    [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
+    FSProListRequest *request = nil;
+    if (_pageType == FSPageTypeSearch) {
+        request = [self buildListRequest:RK_REQUEST_PROD_SEARCH_LIST nextPage:1 isRefresh:FALSE];
+    }
+    else {
+        request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
+    }
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:_productContent];
         if (resp.isSuccess)
@@ -83,15 +87,12 @@
             [self reportError:resp.errorDescrip];
         }
     }];
-
-
-    
 }
+
 -(void) zeroMemoryBlock
 {
     _prodPageIndex = 0;
     _noMoreResult= FALSE;
-   
 }
 
 -(void) prepareLayout
@@ -102,6 +103,9 @@
     else if(_pageType == FSPageTypeTopic) {
         self.navigationItem.title = _topic.name;
     }
+    else if(_pageType == FSPageTypeSearch) {
+        self.navigationItem.title = _titleName;
+    }
     else if(_pageType == FSPageTypeCommon) {
         self.navigationItem.title = _titleName;
     }
@@ -111,12 +115,6 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
-//    CGRect _rect = _contentView.frame;
-//    _rect.size.height = (APP_HIGH>480?504:415) - (_pageType==FSPageTypeTopic?TAB_HIGH:0);
-//    _contentView.frame = _rect;_productContent.bounds
-    //_productContent = [[PSUICollectionView alloc] initWithFrame:CGRectMake(0, 0, 320, 460) collectionViewLayout:clayout];
-//    [_contentView addSubview:_productContent];
-//    [_productContent setCollectionViewLayout:clayout];
     [_productContent setCollectionViewLayout:clayout];
     _productContent.backgroundColor = [UIColor whiteColor];
     [_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
@@ -129,13 +127,10 @@
     
     _productContent.delegate = self;
     _productContent.dataSource = self;
-    
 }
-
 
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
 {
-    
     if (!prods)
         return;
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -182,11 +177,20 @@
     else if(_pageType == FSPageTypeTopic) {
         request.topicId = [NSNumber numberWithInt:_topic.topicId];
     }
+    else if(_pageType == FSPageTypeSearch) {
+        request.keyword = _keyWords;
+        request.searchType = FSProdSortDefault;
+        request.pageType = FSPageTypeSearch;
+    }
     else if(_pageType == FSPageTypeCommon) {
         request.promotionId = [NSNumber numberWithInt:_commonID];
     }
-    request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    if(_pageType != FSPageTypeSearch)
+    {
+        request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    }
+    
     if(isRefresh)
     {
         request.requestType = 0;
@@ -200,8 +204,10 @@
 
     request.nextPage = page;
     request.pageSize = COMMON_PAGE_SIZE;
+    
     return request;
 }
+
 -(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
 {
     int nextPage = 1;
@@ -210,7 +216,13 @@
         _prodPageIndex++;
         nextPage = _prodPageIndex +1;
     }
-    FSProListRequest *request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:isRefresh];
+    FSProListRequest *request = nil;
+    if (_pageType == FSPageTypeSearch) {
+        request = [self buildListRequest:RK_REQUEST_PROD_SEARCH_LIST nextPage:nextPage isRefresh:isRefresh];
+    }
+    else {
+        request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:nextPage isRefresh:isRefresh];
+    }
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         callback();
         if (resp.isSuccess)
@@ -230,7 +242,6 @@
             [self reportError:resp.errorDescrip];
         }
     }];
-    
 }
 
 -(void)loadMore
@@ -243,7 +254,6 @@
         _isLoading = NO;
     }];
 }
-
 
 - (void)loadImagesForOnscreenRows
 {
@@ -267,7 +277,7 @@
     if (!_noMoreResult && !_isLoading &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
         && scrollView.contentSize.height>scrollView.frame.size.height
-        &&scrollView.contentOffset.y>0)
+        && scrollView.contentOffset.y>0)
     {
         [self loadMore];
     }
@@ -297,30 +307,20 @@
     cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
     FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
     [(FSProdDetailCell *)cell setData: _data];
-//    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//    cell.layer.borderWidth = 0.5;
     if (_data.hasPromotion) {
         [(FSProdDetailCell *)cell showProIcon];
     }
     else {
         [(FSProdDetailCell *)cell hidenProIcon];
     }
-//    if (_productContent.dragging == NO &&
-//        _productContent.decelerating == NO)
-    {
-        int width = PROD_LIST_DETAIL_CELL_WIDTH;
-        int height = cell.frame.size.height;
-        [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
-    }
+    int width = PROD_LIST_DETAIL_CELL_WIDTH;
+    int height = cell.frame.size.height;
+    [(id<ImageContainerDownloadDelegate>)cell imageContainerStartDownload:cell withObject:indexPath andCropSize:CGSizeMake(width, height) ];
    
     return cell;
 }
 
-
-
-
 #pragma mark - PSUICollectionViewDelegate
-
 
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -331,8 +331,6 @@
         detailViewController.sourceType = FSSourceProduct;
         UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self presentViewController:navControl animated:YES completion:nil];
-    
-    
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -364,9 +362,8 @@
     return totalHeight;
 }
 
-
-
 #pragma FSProDetailItemSourceProvider
+
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
     FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
@@ -388,12 +385,6 @@
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout
 {
     return FALSE;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)viewDidUnload {

@@ -58,7 +58,7 @@
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
     [formater setDateFormat:@"yyyy.MM.dd"];
     _lblInDate.text = [NSString stringWithFormat:@"%@",[formater stringFromDate:_data.inDate]];
-    _lblInDate.font = ME_FONT(9);
+    _lblInDate.font = ME_FONT(12);
     _lblInDate.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblInDate.textAlignment = NSTextAlignmentRight;
     

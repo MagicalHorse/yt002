@@ -50,11 +50,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"Left"
-//                                                             style:UIBarButtonItemStylePlain
-//                                                            target:self
-//                                                            action:@selector(showLeft)];
-//    self.navigationItem.leftBarButtonItem = left;
     
     [self prepareData];
     [self prepareLayout];
@@ -232,7 +227,18 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 205;
+    if (indexPath.row > _topicList.count) {
+        return 0;
+    }
+    FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
+    if (topic.resources.count <= 0) {
+        return 0;
+    }
+    FSResource * source = [topic.resources objectAtIndex:0];
+    if (source.width <= 0.0000001) {
+        return 0;
+    }
+    return source.height*314/source.width + 6;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -263,12 +269,24 @@
     if (indexPath.row >= _topicList.count) {
         return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     }
-    
+    if (indexPath.row > _topicList.count) {
+        return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    }
+    FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
+    if (topic.resources.count <= 0) {
+        return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    }
+    FSResource * source = [topic.resources objectAtIndex:0];
+    if (source.width <= 0.0000001) {
+        return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
+    }
     FSTopicListCell *cell = [self.tbAction dequeueReusableCellWithIdentifier:TOPIC_LIST_CELL];
     [cell setData:_topicList[indexPath.row]];
+    cell.content.frame = CGRectMake(3, 3, 314, source.height*315/source.width - 6);
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.content.layer.cornerRadius = 10;
-    cell.content.layer.borderWidth = 0;
+    cell.content.layer.borderWidth = 1;
+    cell.content.layer.borderColor = RGBACOLOR(0xee, 0xee, 0xee, 1).CGColor;
     return cell;
 }
 

@@ -65,9 +65,26 @@
         return nil;
 }
 
+-(NSURL *)absoluteUr:(int)_width height:(int)_height
+{
+    if (relativePath && domain)
+    {
+        NSString *relative = [self composeRelativeFromWidth:(_width*RetinaFactor) height:(_height*RetinaFactor)];
+        
+        return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
+    }
+    else
+        return nil;
+}
+
 -(NSString *) composeRelativeFromWidth:(int)inWid
 {
     return  [NSString stringWithFormat:@"%@_%dx0.jpg",self.relativePath,inWid];
-   }
+}
+
+-(NSString *) composeRelativeFromWidth:(int)inWid height:(int)inHeight
+{
+    return  [NSString stringWithFormat:@"%@_%dx%d.jpg",self.relativePath,inWid,inHeight];
+}
 
 @end

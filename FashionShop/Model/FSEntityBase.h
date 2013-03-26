@@ -36,8 +36,14 @@ typedef  enum
 {
     FSProSortByDate = 1,
     FSProSortByDist = 3,
-    FSProSortByPre = 4
+    FSProSortByPre = 4,
+    FSProSortDefault,
 }FSProSortType;
+
+typedef  enum
+{
+    FSProdSortDefault = 1,
+}FSProdSortType;
 
 @class FSEntityRequestBase;
 @interface FSEntityBase : NSObject

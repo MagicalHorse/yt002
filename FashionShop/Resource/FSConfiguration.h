@@ -12,8 +12,9 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.0.0"
+#define REST_API_CLIENT_VERSION @"2.1.0"
 
+/*
 #if defined ENVIRONMENT_DEV
 //测试库
     #define REST_API_URL   @"http://10.32.11.65:9550/api"
@@ -35,6 +36,9 @@
     #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 #endif
+ */
+#define REST_API_URL   @"http://122.226.53.114:7070/api"
+#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
@@ -61,7 +65,7 @@
 #define LN_USER_UPDATED @"LN_USER_UPDATED"
 #define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
 #define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
-#define COMMON_PAGE_SIZE 20
+#define COMMON_PAGE_SIZE 10
 
 #define CollectionView_Default_Height 100.0f
 
