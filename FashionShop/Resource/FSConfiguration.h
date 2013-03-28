@@ -85,6 +85,7 @@
 #define RetinaFactor (isRetina?2:1)
 // 是否iPad
 #define isPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define kRecorderDirectory [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]  stringByAppendingPathComponent:@"Audios"]
 
 #define RGBACOLOR(r,g,b,a)       [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]
 #define RGBCOLOR(r,g,b)          [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1]

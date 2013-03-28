@@ -17,6 +17,14 @@
 		02160E251701720200D77FE0 /* FSPointMemberCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E241701720200D77FE0 /* FSPointMemberCardCell.m */; };
 		02160E2B1701721E00D77FE0 /* FSPointMemberCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */; };
 		02160E2D1701816100D77FE0 /* bind_card_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */; };
+		02160E32170285FA00D77FE0 /* bind_card_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160E30170285FA00D77FE0 /* bind_card_bg.png */; };
+		02160E33170285FA00D77FE0 /* bind_card_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160E31170285FA00D77FE0 /* bind_card_bg@2x.png */; };
+		02160E3D1702D07D00D77FE0 /* FSKeyword.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E3C1702D07C00D77FE0 /* FSKeyword.m */; };
+		02160E401702D5D900D77FE0 /* FSCommonRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E3F1702D5D800D77FE0 /* FSCommonRequest.m */; };
+		02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E461703DB0100D77FE0 /* CL_AudioRecorder.m */; };
+		02160E4E1703E57D00D77FE0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E4D1703E57C00D77FE0 /* CoreAudio.framework */; };
+		02160E501703E58500D77FE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E4F1703E58500D77FE0 /* AVFoundation.framework */; };
+		02160E521703E98A00D77FE0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E511703E98900D77FE0 /* AudioToolbox.framework */; };
 		0217169E16D242390098288A /* EGOPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167116D242390098288A /* EGOPhotoViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0217169F16D242390098288A /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167416D242390098288A /* EGOCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716A016D242390098288A /* EGOImageLoadConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167716D242390098288A /* EGOImageLoadConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -93,6 +101,13 @@
 		02D4E7DC16BD68F600B6385A /* default_icon50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D816BD68F500B6385A /* default_icon50@2x.png */; };
 		02D4E7DD16BD68F600B6385A /* default_icon120.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D916BD68F600B6385A /* default_icon120.png */; };
 		02D4E7DE16BD68F600B6385A /* default_icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */; };
+		02E1859F17042D54003C918F /* comment_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E1859D17042D54003C918F /* comment_icon@2x.png */; };
+		02E185A017042D54003C918F /* comment_sel_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E1859E17042D54003C918F /* comment_sel_icon@2x.png */; };
+		02E185A717046CB0003C918F /* audio_change_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185A517046CB0003C918F /* audio_change_icon@2x.png */; };
+		02E185A817046CB0003C918F /* text_change_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185A617046CB0003C918F /* text_change_icon@2x.png */; };
+		02E185AA17046E29003C918F /* comment_input_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185A917046E29003C918F /* comment_input_bg@2x.png */; };
+		02E185AD17047040003C918F /* audio_btn_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AB17047040003C918F /* audio_btn_normal@2x.png */; };
+		02E185AE17047040003C918F /* audio_btn_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AC17047040003C918F /* audio_btn_sel@2x.png */; };
 		02F6158716B3DBC0001F93ED /* FSTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6158616B3DBC0001F93ED /* FSTopicViewController.m */; };
 		02F6159316B3DC57001F93ED /* FSTopicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6159116B3DC57001F93ED /* FSTopicListCell.m */; };
 		02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02F6159216B3DC57001F93ED /* FSTopicListCell.xib */; };
@@ -620,6 +635,18 @@
 		02160E241701720200D77FE0 /* FSPointMemberCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPointMemberCardCell.m; path = Controls/FSPointMemberCardCell.m; sourceTree = "<group>"; };
 		02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSPointMemberCardCell.xib; path = Controls/FSPointMemberCardCell.xib; sourceTree = "<group>"; };
 		02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bind_card_btn@2x.png"; sourceTree = "<group>"; };
+		02160E30170285FA00D77FE0 /* bind_card_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bind_card_bg.png; sourceTree = "<group>"; };
+		02160E31170285FA00D77FE0 /* bind_card_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bind_card_bg@2x.png"; sourceTree = "<group>"; };
+		02160E3B1702D07C00D77FE0 /* FSKeyword.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSKeyword.h; path = Model/FSKeyword.h; sourceTree = "<group>"; };
+		02160E3C1702D07C00D77FE0 /* FSKeyword.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSKeyword.m; path = Model/FSKeyword.m; sourceTree = "<group>"; };
+		02160E3E1702D5D700D77FE0 /* FSCommonRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCommonRequest.h; path = ModelService/FSCommonRequest.h; sourceTree = "<group>"; };
+		02160E3F1702D5D800D77FE0 /* FSCommonRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCommonRequest.m; path = ModelService/FSCommonRequest.m; sourceTree = "<group>"; };
+		02160E451703DB0100D77FE0 /* CL_AudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CL_AudioRecorder.h; sourceTree = "<group>"; };
+		02160E461703DB0100D77FE0 /* CL_AudioRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CL_AudioRecorder.m; sourceTree = "<group>"; };
+		02160E471703DB0100D77FE0 /* CL_VoiceEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CL_VoiceEngine.h; sourceTree = "<group>"; };
+		02160E4D1703E57C00D77FE0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		02160E4F1703E58500D77FE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		02160E511703E98900D77FE0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		0217167016D242390098288A /* EGOPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOPhotoViewController.h; sourceTree = "<group>"; };
 		0217167116D242390098288A /* EGOPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoViewController.m; sourceTree = "<group>"; };
 		0217167316D242390098288A /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
@@ -719,6 +746,13 @@
 		02D4E7D816BD68F500B6385A /* default_icon50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon50@2x.png"; sourceTree = "<group>"; };
 		02D4E7D916BD68F600B6385A /* default_icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_icon120.png; sourceTree = "<group>"; };
 		02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon120@2x.png"; sourceTree = "<group>"; };
+		02E1859D17042D54003C918F /* comment_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comment_icon@2x.png"; sourceTree = "<group>"; };
+		02E1859E17042D54003C918F /* comment_sel_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comment_sel_icon@2x.png"; sourceTree = "<group>"; };
+		02E185A517046CB0003C918F /* audio_change_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_change_icon@2x.png"; sourceTree = "<group>"; };
+		02E185A617046CB0003C918F /* text_change_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "text_change_icon@2x.png"; sourceTree = "<group>"; };
+		02E185A917046E29003C918F /* comment_input_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comment_input_bg@2x.png"; sourceTree = "<group>"; };
+		02E185AB17047040003C918F /* audio_btn_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_normal@2x.png"; sourceTree = "<group>"; };
+		02E185AC17047040003C918F /* audio_btn_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_sel@2x.png"; sourceTree = "<group>"; };
 		02F6158516B3DBC0001F93ED /* FSTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTopicViewController.h; sourceTree = "<group>"; };
 		02F6158616B3DBC0001F93ED /* FSTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTopicViewController.m; sourceTree = "<group>"; };
 		02F6159016B3DC57001F93ED /* FSTopicListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSTopicListCell.h; path = Controls/FSTopicListCell.h; sourceTree = "<group>"; };
@@ -1414,6 +1448,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02160E521703E98A00D77FE0 /* AudioToolbox.framework in Frameworks */,
+				02160E501703E58500D77FE0 /* AVFoundation.framework in Frameworks */,
+				02160E4E1703E57D00D77FE0 /* CoreAudio.framework in Frameworks */,
 				025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */,
 				74B551AA16671A0400E402DC /* libicucore.dylib in Frameworks */,
 				74C427C71692C2E300651F79 /* libRestKit.a in Frameworks */,
@@ -1445,6 +1482,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02160E441703DB0100D77FE0 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				02160E451703DB0100D77FE0 /* CL_AudioRecorder.h */,
+				02160E461703DB0100D77FE0 /* CL_AudioRecorder.m */,
+				02160E471703DB0100D77FE0 /* CL_VoiceEngine.h */,
+			);
+			name = Audio;
+			path = Controls/Audio;
+			sourceTree = "<group>";
+		};
 		0217166D16D242390098288A /* EGOPhotoViewer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1674,6 +1722,8 @@
 				025E962D16ED9FE10031B68C /* FSCardRequest.m */,
 				749B2B95169845680073F4B5 /* FSFeedbackRequest.h */,
 				749B2B96169845680073F4B5 /* FSFeedbackRequest.m */,
+				02160E3E1702D5D700D77FE0 /* FSCommonRequest.h */,
+				02160E3F1702D5D800D77FE0 /* FSCommonRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -1838,6 +1888,8 @@
 				02FB0CC516BAB04B00396287 /* FSTopic.m */,
 				025E963316EDA1CE0031B68C /* FSCardInfo.h */,
 				025E963416EDA1CE0031B68C /* FSCardInfo.m */,
+				02160E3B1702D07C00D77FE0 /* FSKeyword.h */,
+				02160E3C1702D07C00D77FE0 /* FSKeyword.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2118,6 +2170,15 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				02E185AB17047040003C918F /* audio_btn_normal@2x.png */,
+				02E185AC17047040003C918F /* audio_btn_sel@2x.png */,
+				02E185A917046E29003C918F /* comment_input_bg@2x.png */,
+				02E185A517046CB0003C918F /* audio_change_icon@2x.png */,
+				02E185A617046CB0003C918F /* text_change_icon@2x.png */,
+				02E1859D17042D54003C918F /* comment_icon@2x.png */,
+				02E1859E17042D54003C918F /* comment_sel_icon@2x.png */,
+				02160E30170285FA00D77FE0 /* bind_card_bg.png */,
+				02160E31170285FA00D77FE0 /* bind_card_bg@2x.png */,
 				02160E2C1701816100D77FE0 /* bind_card_btn@2x.png */,
 				02160E2017009ECF00D77FE0 /* search_bg.png */,
 				02160CA5170090D500D77FE0 /* search.png */,
@@ -2654,6 +2715,9 @@
 		74CD91951643A78500970F55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				02160E511703E98900D77FE0 /* AudioToolbox.framework */,
+				02160E4F1703E58500D77FE0 /* AVFoundation.framework */,
+				02160E4D1703E57C00D77FE0 /* CoreAudio.framework */,
 				025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */,
 				025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */,
 				025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */,
@@ -2747,6 +2811,7 @@
 		74CD91FE1643B20F00970F55 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				02160E441703DB0100D77FE0 /* Audio */,
 				743EBBCC166CCC9300673882 /* Common */,
 				74B48BA616548DED00777CC8 /* MBProgress */,
 				74556E28165371E300DD4C27 /* Cells */,
@@ -3189,6 +3254,15 @@
 				02160E2117009ECF00D77FE0 /* search_bg.png in Resources */,
 				02160E2B1701721E00D77FE0 /* FSPointMemberCardCell.xib in Resources */,
 				02160E2D1701816100D77FE0 /* bind_card_btn@2x.png in Resources */,
+				02160E32170285FA00D77FE0 /* bind_card_bg.png in Resources */,
+				02160E33170285FA00D77FE0 /* bind_card_bg@2x.png in Resources */,
+				02E1859F17042D54003C918F /* comment_icon@2x.png in Resources */,
+				02E185A017042D54003C918F /* comment_sel_icon@2x.png in Resources */,
+				02E185A717046CB0003C918F /* audio_change_icon@2x.png in Resources */,
+				02E185A817046CB0003C918F /* text_change_icon@2x.png in Resources */,
+				02E185AA17046E29003C918F /* comment_input_bg@2x.png in Resources */,
+				02E185AD17047040003C918F /* audio_btn_normal@2x.png in Resources */,
+				02E185AE17047040003C918F /* audio_btn_sel@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3422,6 +3496,9 @@
 				025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */,
 				0206AB6F16FB5D27008ADFBC /* FSCycleScrollView.m in Sources */,
 				02160E251701720200D77FE0 /* FSPointMemberCardCell.m in Sources */,
+				02160E3D1702D07D00D77FE0 /* FSKeyword.m in Sources */,
+				02160E401702D5D900D77FE0 /* FSCommonRequest.m in Sources */,
+				02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

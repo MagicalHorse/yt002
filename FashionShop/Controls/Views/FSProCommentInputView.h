@@ -12,7 +12,13 @@
 @interface FSProCommentInputView : FSKeyboardAvoidingUIView<UITextViewDelegate>
 @property (strong, nonatomic) IBOutlet UITextView *txtComment;
 @property (strong, nonatomic) IBOutlet UIButton *btnCancel;
-
 @property (strong, nonatomic) IBOutlet UIButton *btnComment;
+@property (strong, nonatomic) IBOutlet UIButton *btnChange;//切换状态按钮
+@property (strong, nonatomic) IBOutlet UIButton *btnAudio;
+@property (strong, nonatomic) IBOutlet UIView *txtView;
+
+//type==1:评论文字
+//type==2:评论语音
+-(void)updateControls:(int)type;
 
 @end

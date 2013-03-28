@@ -411,10 +411,19 @@ typedef enum {
             _inLoading = FALSE;
             [self endLoading:_contentView];
             [_contentView setContentOffset:CGPointZero];
+            [self reloadTableView];
         });
     } else{
         [self reloadTableView];
         [_contentView setContentOffset:CGPointZero];
+    }
+}
+
+-(void)calculateHeight:(FSProItems *)pros
+{
+    for (FSProItemEntity *item in pros.items) {
+        item.height = [item.title sizeWithFont:FONT(11) constrainedToSize:CGSizeMake(175, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 20;
+        NSLog(@"item.height:%d", item.height);
     }
 }
 
@@ -423,6 +432,8 @@ typedef enum {
     NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
     if (pros.items==nil || pros.items.count<=0)
         return;
+    //计算高度
+    [self calculateHeight:pros];
     if (inserted)
     {
         [tmpPros removeAllObjects];
@@ -645,7 +656,7 @@ typedef enum {
             NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
             [mdf setDateFormat:@"yyyy-MM-dd"];
             NSMutableArray *rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
-                       return rows.count;
+            return rows.count;
             break;
         }
         default:
@@ -724,9 +735,18 @@ typedef enum {
             [smdf setDateFormat:@"yyyy.MM.dd"];
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"MM.dd"];
+            int _height = 0;
+            CGRect _rect = listCell.lblTitle.frame;
+            _rect.size.height = proData.height;
+            _height = _rect.size.height;
+            listCell.lblTitle.frame = _rect;
+            listCell.lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
             listCell.lblTitle.text = proData.title;
+            _rect = listCell.lblSubTitle.frame;
+            _rect.origin.y = (_height - _rect.size.height)/2;
+            listCell.lblSubTitle.frame = _rect;
             listCell.lblSubTitle.text = [NSString stringWithFormat:NSLocalizedString(@"%@~%@", nil),[smdf stringFromDate:proData.startDate],[emdf stringFromDate:proData.endDate]];
-                       return listCell;
+            return listCell;
             break;
         }
         case SortByDate:
@@ -737,10 +757,21 @@ typedef enum {
             [mdf setDateFormat:@"yyyy-MM-dd"];
             NSMutableArray *rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
             FSProItemEntity * proData = [rows objectAtIndex:indexPath.row];
+            
+            int _height = 0;
+            CGRect _rect = listCell.lblTitle.frame;
+            _rect.origin.y = 0;
+            _rect.size.height = proData.height;
+            _height = _rect.size.height;
+            listCell.lblTitle.frame = _rect;
+            listCell.lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
             listCell.lblTitle.text = proData.title;
+            
+            _rect = listCell.lblSubTitle.frame;
+            _rect.origin.y = (_height - _rect.size.height)/2;
+            listCell.lblSubTitle.frame = _rect;
             listCell.lblSubTitle.text = proData.store.name;
             return listCell;
-
         }
         default:
             break;
@@ -748,10 +779,30 @@ typedef enum {
     return nil;
 }
 
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 35;
+    NSArray *rows;
+    if (_currentSearchIndex==SortByDistance) {
+        if (indexPath.section >= _storeSource.count) {
+            return 0;
+        }
+        int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
+        rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
+    }
+    else{
+        if (indexPath.section >= _dateSource.count) {
+            return 0;
+        }
+        NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
+        NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
+        [mdf setDateFormat:@"yyyy-MM-dd"];
+        rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+    }
+    if (indexPath.row >= rows.count) {
+        return 0;
+    }
+    FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
+    return proData.height;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

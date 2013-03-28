@@ -216,9 +216,25 @@ static FSModelManager *_modelManager;
     [self enqueueBackgroundBlock:^() {
         [[SDImageCache sharedImageCache] clearMemory];
         [[SDImageCache sharedImageCache] clearDisk];
+        [self clearCache];
     }];
-
 }
+
+-(void)clearAudioFile
+{
+    NSString *extension = @".acc";
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *cachesDirectory = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]  stringByAppendingPathComponent:@"Audios"];
+    NSArray *contents = [fileManager contentsOfDirectoryAtPath:cachesDirectory error:NULL];
+    NSEnumerator *e = [contents objectEnumerator];
+    NSString *filename;
+    while ((filename = [e nextObject])) {
+        if ([[filename pathExtension] isEqualToString:extension]) {
+            [fileManager removeItemAtPath:[cachesDirectory stringByAppendingPathComponent:filename] error:NULL];
+        }
+    }
+}
+
 #pragma BAIDU MAP DELEGATE
 - (void)onGetNetworkState:(int)iError
 {

@@ -16,7 +16,6 @@ typedef void (^FSRequestLoadComplete) (FSEntityBase *);
 typedef void(^DataSourceProviderRequestBlock)(FSEntityRequestBase *);
 typedef void(^DataSourceProviderRequest2Block)(FSEntityRequestBase *,dispatch_block_t);
 
-
 @interface FSEntityRequestBase : NSObject<RKObjectLoaderDelegate>
 
 @property(nonatomic,strong) NSString *routeResourcePath;

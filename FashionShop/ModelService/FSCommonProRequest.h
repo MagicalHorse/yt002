@@ -37,6 +37,7 @@
 @property(nonatomic,strong) NSNumber *price;
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
+@property(nonatomic,strong) NSString *fileName;
 
 @property(nonatomic,strong) NSString *pID;
 

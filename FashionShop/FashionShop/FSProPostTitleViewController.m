@@ -10,6 +10,7 @@
 #import "UIViewController+Loading.h"
 #import "FSProPostMainViewController.h"
 #import "NSString+Extention.h"
+#import "CL_VoiceEngine.h"
 
 @interface FSProPostTitleViewController ()
 {
@@ -17,6 +18,14 @@
     TDDatePickerController* _datePicker;
     TDDatePickerController* _dateEndPicker;
     id activityObject;
+    
+    RecordState _recordState;
+    CL_AudioRecorder* _audioRecoder;
+    BOOL              _isRecording;
+    NSDate* _downTime;//按下时间
+    NSInteger _minRecordGap;//最小录制时间间隔
+    
+    AVAudioPlayer * _player;
 }
 
 @end
@@ -39,6 +48,8 @@
     [super viewDidLoad];
     [self decorateTapDismissKeyBoard];
     [self bindControl];
+    
+    _minRecordGap = 1;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -128,6 +139,14 @@
     _txtDesc.delegate = self;
 }
 
+-(void)initAudioPlayer
+{
+    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [_player prepareToPlay];
+}
+
 -(BOOL) checkInput
 {
     if (!(_txtTitle.text.length > 0 &&
@@ -162,6 +181,27 @@
         return NO;
     }
     return YES;
+}
+
+
+
+- (BOOL)validateDate:(NSMutableString **)errorin
+{
+    if (_publishSource == FSSourcePromotion) {
+        return YES;
+    }
+    if ([_txtProDesc.text isEqualToString:@""]) {
+        return YES;
+    }
+    if (!errorin)
+        *errorin = [@"" mutableCopy];
+    NSMutableString *error = *errorin;
+    if([_dateEndPicker.datePicker.date compare:_datePicker.datePicker.date] != NSOrderedDescending)
+    {
+        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_DATE_VALIDATE", nil)];;
+        return false;
+    }
+    return true;
 }
 
 -(void) dismissKB
@@ -236,21 +276,14 @@
     return YES;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (IBAction)doSave:(id)sender {
     if ([self checkInput])
     {
         if ([delegate respondsToSelector:@selector(titleViewControllerSetTitle:)])
         {
             [delegate titleViewControllerSetTitle:self];
-        } 
+        }
     }
-
 }
 
 - (IBAction)doCancel:(id)sender {
@@ -279,23 +312,142 @@
     [activityObject resignFirstResponder];
 }
 
-- (BOOL)validateDate:(NSMutableString **)errorin
+- (IBAction)record:(id)sender {
+    switch (_recordState) {
+        case StartRecord:
+        {
+            
+        }
+            break;
+        case Recording:
+        {
+            
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark record function
+
+- (void)startToRecord
 {
-    if (_publishSource == FSSourcePromotion) {
-        return YES;
+    [activityObject resignFirstResponder];
+    
+    if (!_audioRecoder) {
+        _isRecording = NO;
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
+        {
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            NSError *error;
+            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
+            {
+                if ([audioSession setActive:YES error:&error])
+                {
+                }
+                else
+                {
+                    NSLog(@"Failed to set audio session category: %@", error);
+                }
+            }
+            else
+            {
+                NSLog(@"Failed to set audio session category: %@", error);
+            }
+            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
+        }
+        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
+            } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
+                NSLog(@"%@",[error localizedDescription]);
+            } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
+                NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+        }];
     }
-    if ([_txtProDesc.text isEqualToString:@""]) {
-        return YES;
-    }
-    if (!errorin)
-        *errorin = [@"" mutableCopy];
-    NSMutableString *error = *errorin;
-    if([_dateEndPicker.datePicker.date compare:_datePicker.datePicker.date] != NSOrderedDescending)
+    if (_isRecording == NO)
     {
-        [error appendString:NSLocalizedString(@"PRO_POST_DURATION_DATE_VALIDATE", nil)];;
-        return false;
+        _isRecording = YES;
+        _recordFileName = [NSString stringWithFormat:@"%f.aac", [[NSDate date] timeIntervalSince1970]];
+        _audioRecoder.recorderingFileName = _recordFileName;
+        [_audioRecoder startRecord];
     }
-    return true;
+}
+
+- (void)endRecord
+{
+    _isRecording = NO;
+    dispatch_queue_t stopQueue;
+    stopQueue = dispatch_queue_create("stopQueue", NULL);
+    dispatch_async(stopQueue, ^(void){
+        //run in main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_audioRecoder stopRecord];
+        });
+    });
+    dispatch_release(stopQueue);
+}
+
+-(void)endRecordAndDelete
+{
+    _isRecording = NO;
+    dispatch_queue_t stopQueue;
+    stopQueue = dispatch_queue_create("stopQueue", NULL);
+    dispatch_async(stopQueue, ^(void){
+        //run in main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_audioRecoder stopAndDeleteRecord];
+        });
+    });
+    dispatch_release(stopQueue);
+}
+
+#pragma mark button action
+
+- (IBAction)recordTouchDown:(id)sender
+{
+    if (_recordState == WaitPlay) {
+        return;
+    }
+    _downTime = [NSDate date];
+    [_btnRecord setTitle:@"松开结束" forState:UIControlStateNormal];
+    [self startToRecord];
+    _recordState = Recording;
+}
+
+- (IBAction)recordTouchUpInside:(id)sender
+{
+    [self endTouch];
+}
+
+- (IBAction)recordTouchUpOutside:(id)sender
+{
+    [self endTouch];
+}
+
+-(void)endTouch
+{
+    if (_recordState == WaitPlay) {
+        [self initAudioPlayer];
+        [_player play];
+    }
+    else if(_recordState == Recording){
+        NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
+        if (gap < _minRecordGap) {
+            //显示提示时间太短对话框
+            [self reportError:@"说话时间太短"];
+            //重新设置为起始状态
+            [_btnRecord setTitle:@"按住说话" forState:UIControlStateNormal];
+            _recordState = StartRecord;
+            [self endRecordAndDelete];
+        }
+        else{
+            [_btnRecord setTitle:@"点击播放" forState:UIControlStateNormal];
+            _recordState = WaitPlay;
+            [self endRecord];
+        }
+        NSLog(@"fileName:%@", _recordFileName);
+    }
 }
 
 - (void)viewDidUnload {
@@ -308,6 +460,8 @@
     [self setLbProTime:nil];
     [self setTxtProEndTime:nil];
     [self setTxtProStartTime:nil];
+    [self setLblDescVoice:nil];
+    [self setBtnRecord:nil];
     [super viewDidUnload];
 }
 @end

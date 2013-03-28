@@ -21,6 +21,8 @@
 #import "FSProductListViewController.h"
 #import "FSStoreDetailViewController.h"
 #import "FSSearchViewController.h"
+#import "FSProPostTitleViewController.h"
+#import "CL_VoiceEngine.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -52,6 +54,17 @@
     MBProgressHUD *statusReport;
     id proItem;
     int currentPageIndex;
+    
+    int replyIndex;//回复索引
+    BOOL isReplyToAll;//是否是回复给所有人
+    
+    RecordState _recordState;
+    CL_AudioRecorder* _audioRecoder;
+    BOOL              _isRecording;
+    NSDate* _downTime;//按下时间
+    NSInteger _minRecordGap;//最小录制时间间隔
+    
+    AVAudioPlayer * _player;
 }
 
 @end
@@ -80,9 +93,15 @@
 -(void) beginPrepareData
 {
     [self doBinding:nil];
-
 }
 
+-(void)initAudioPlayer
+{
+    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [_player prepareToPlay];
+}
 
 -(void) onButtonCancel
 {
@@ -98,6 +117,7 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [self.navigationItem setRightBarButtonItem:baritemShare];
     currentPageIndex = -1;
+    replyIndex = -1;
     [self.paginatorView reloadData];
     self.currentPageIndex = indexInContext;
 }
@@ -265,9 +285,9 @@
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
+            replyIndex = -1;
             if (blockViewForRefresh && blockSelf)
                 [[(id)blockViewForRefresh tbComment] reloadData];
-            
         }
         else
         {
@@ -463,8 +483,9 @@
 
 - (IBAction)doComment:(id)sender {
     id currentView =  self.paginatorView.currentPage;
+    isReplyToAll = YES;
     
-    [(UIScrollView *)[currentView tbComment].superview scrollRectToVisible:[currentView tbComment].frame animated:TRUE];
+    //[(UIScrollView *)[currentView tbComment].superview scrollRectToVisible:[currentView tbComment].frame animated:TRUE];
     [self displayCommentInputView:currentView];
 }
 
@@ -633,14 +654,30 @@
     FSProCommentInputView *commentInput = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     if (!commentInput)
     {
-         commentInput = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentInputView" owner:self options:nil] lastObject];
+        commentInput = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentInputView" owner:self options:nil] lastObject];
         CGFloat height = PRO_DETAIL_COMMENT_INPUT_HEIGHT;
         commentInput.frame = CGRectMake(0, self.view.frame.size.height-TOOLBAR_HEIGHT-height, self.view.frame.size.width, height);
         commentInput.txtComment.delegate = self;
-        [commentInput.txtComment becomeFirstResponder];
+        
         [commentInput.btnComment addTarget:self action:@selector(saveComment:) forControlEvents:UIControlEventTouchUpInside];
         [commentInput.btnCancel addTarget:self action:@selector(clearComment:) forControlEvents:UIControlEventTouchUpInside];
+        [commentInput.btnChange addTarget:self action:@selector(changeCommentType:) forControlEvents:UIControlEventTouchUpInside];
+        
+        //设置按钮背景图片
+        UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
+        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
+        [commentInput.btnAudio setBackgroundImage:image forState:UIControlStateNormal];
+        
+        image = [UIImage imageNamed:@"audio_btn_sel.png"];
+        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
+        [commentInput.btnAudio setBackgroundImage:image forState:UIControlStateHighlighted];
+        
+        [commentInput.btnAudio addTarget:self action:@selector(recordTouchDown:) forControlEvents:UIControlEventTouchDown];
+        [commentInput.btnAudio addTarget:self action:@selector(recordTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+        [commentInput.btnAudio addTarget:self action:@selector(recordTouchUpOutside:) forControlEvents:UIControlEventTouchUpOutside];
+    
         [self.view addSubview:commentInput];
+        
         commentInput.tag = PRO_DETAIL_COMMENT_INPUT_TAG;
         if  (commentInput.opaque!=1)
         {
@@ -653,34 +690,73 @@
             [self.view bringSubviewToFront:commentInput];
         }
 
-    } else
+    }
+    else if(isReplyToAll)
     {
         [self hideCommentInputView:parent];
     }
+    [self changeCommentType:nil];
 }
 
 -(void) hideCommentInputView:(id)parent
 {
     FSProCommentInputView *commentInput = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    //如果commentInput不为空，则
     if (commentInput)
     {
         commentInput.txtComment.text = @"";
         [commentInput.txtComment resignFirstResponder];
-        if (commentInput.opaque!=0)
-        {
-            commentInput.layer.opacity = 1;
-            [UIView beginAnimations:@"fadeout" context:(__bridge void *)([NSNumber numberWithFloat:commentInput.layer.opacity])];
-            [UIView setAnimationDuration:0.3];
-            commentInput.layer.opacity = 0;
-            [UIView commitAnimations];
-            [commentInput removeFromSuperview];
-        }
+        [commentInput removeFromSuperview];
+//        if (commentInput.opaque!=0)
+//        {
+//            commentInput.layer.opacity = 1;
+//            [UIView beginAnimations:@"fadeout" context:(__bridge void *)([NSNumber numberWithFloat:commentInput.layer.opacity])];
+//            [UIView setAnimationDuration:0.3];
+//            commentInput.layer.opacity = 0;
+//            [UIView commitAnimations];
+//            [commentInput removeFromSuperview];
+//        }
     }
     
 }
 -(void)clearComment:(UIButton *)sender
 {
+    //隐藏输入区域
     [self hideCommentInputView:self.view];
+    //取消任何回复特定用户的选项
+    replyIndex = -1;
+    id currentView =  self.paginatorView.currentPage;
+    [[currentView tbComment] reloadData];
+}
+
+//当点击语音和文字的切换按钮时，更新显示元素
+-(void)changeCommentType:(UIButton*)sender
+{
+    FSProCommentInputView *commentInput = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    if (commentInput) {
+        if (commentInput.txtComment.isFirstResponder) {
+            if (sender) {
+                [commentInput.txtComment resignFirstResponder];
+                [commentInput.btnChange setImage:[UIImage imageNamed:@"text_change_icon.png"] forState:UIControlStateNormal];
+                [commentInput updateControls:2];
+            }
+            else{
+                [commentInput.btnChange setImage:[UIImage imageNamed:@"audio_change_icon.png"] forState:UIControlStateNormal];
+                [commentInput updateControls:1];
+            }
+        }
+        else{
+            if (sender) {
+                [commentInput.txtComment becomeFirstResponder];
+                [commentInput.btnChange setImage:[UIImage imageNamed:@"audio_change_icon.png"] forState:UIControlStateNormal];
+                [commentInput updateControls:1];
+            }
+            else{
+                [commentInput.btnChange setImage:[UIImage imageNamed:@"text_change_icon.png"] forState:UIControlStateNormal];
+                [commentInput updateControls:2];
+            }
+        }
+    }
 }
 
 -(NSString *)transformCommentText
@@ -747,6 +823,15 @@
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
     request.sourceType = [NSNumber numberWithInt:_sourceType];
     request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
+    //回复特用户
+    if (!isReplyToAll) {
+        //获取选中用户的ID；
+        //获得对应的评论内容
+        id currentView =  self.paginatorView.currentPage;
+        FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
+        FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
+        request.replyuserID = item.inUser.uid;
+    }
     
     __block FSProDetailViewController *blockSelf = self;
     [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *respData){
@@ -764,6 +849,7 @@
             [blockSelf hideCommentInputView:self];
             [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
             [(id)self.paginatorView.currentPage resetScrollViewSize];
+            replyIndex = -1;
         }
         if (callback)
             callback();
@@ -956,7 +1042,16 @@
         }
     }
     FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    detailCell.selectionStyle = UITableViewCellSelectionStyleNone;
     [detailCell setData:[[parentView.data comments] objectAtIndex:indexPath.row]];
+    detailCell.btnComment.tag = indexPath.row;
+    [detailCell.btnComment addTarget:self action:@selector(replyComment:) forControlEvents:UIControlEventTouchUpInside];
+    if (replyIndex != indexPath.row) {
+        [detailCell.btnComment setImage:[UIImage imageNamed:@"comment_icon.png"] forState:UIControlStateNormal];
+    }
+    else{
+        [detailCell.btnComment setImage:[UIImage imageNamed:@"comment_sel_icon.png"] forState:UIControlStateNormal];
+    }
     detailCell.imgThumb.delegate = self;
    
     return detailCell;
@@ -986,6 +1081,22 @@
         }
     }
     return PRO_DETAIL_COMMENT_HEADER_HEIGHT;
+}
+
+-(void)replyComment:(UIButton*)sender
+{
+    if(replyIndex == sender.tag) {
+        replyIndex = -1;
+        isReplyToAll = YES;
+    }
+    else{
+        replyIndex = sender.tag;
+        isReplyToAll = NO;
+    }
+    id currentView =  self.paginatorView.currentPage;
+    [[currentView tbComment] reloadData];
+    //[(UIScrollView *)[currentView tbComment].superview scrollRectToVisible:[currentView tbComment].frame animated:TRUE];
+    [self displayCommentInputView:currentView];
 }
 
 #pragma mark - UITEXTFIELD DELEGATE
@@ -1033,6 +1144,134 @@
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
+}
+
+#pragma mark record function
+
+- (void)startToRecord
+{
+    if (!_audioRecoder) {
+        _isRecording = NO;
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
+        {
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            NSError *error;
+            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
+            {
+                if ([audioSession setActive:YES error:&error])
+                {
+                }
+                else
+                {
+                    NSLog(@"Failed to set audio session category: %@", error);
+                }
+            }
+            else
+            {
+                NSLog(@"Failed to set audio session category: %@", error);
+            }
+            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
+        }
+        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
+        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
+            NSLog(@"%@",[error localizedDescription]);
+        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
+            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+        }];
+    }
+    if (_isRecording == NO)
+    {
+        _isRecording = YES;
+        _recordFileName = [NSString stringWithFormat:@"%f.aac", [[NSDate date] timeIntervalSince1970]];
+        _audioRecoder.recorderingFileName = _recordFileName;
+        
+        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+        NSLock* tempLock = [[NSLock alloc]init];
+        [tempLock lock];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:recordAudioFullPath error:nil];
+        }
+        [tempLock unlock];
+        
+        [_audioRecoder startRecord];
+    }
+}
+
+- (void)endRecord
+{
+    _isRecording = NO;
+    dispatch_queue_t stopQueue;
+    stopQueue = dispatch_queue_create("stopQueue", NULL);
+    dispatch_async(stopQueue, ^(void){
+        //run in main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_audioRecoder stopRecord];
+        });
+    });
+    dispatch_release(stopQueue);
+}
+
+-(void)endRecordAndDelete
+{
+    _isRecording = NO;
+    dispatch_queue_t stopQueue;
+    stopQueue = dispatch_queue_create("stopQueue", NULL);
+    dispatch_async(stopQueue, ^(void){
+        //run in main thread
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_audioRecoder stopAndDeleteRecord];
+        });
+    });
+    dispatch_release(stopQueue);
+}
+
+#pragma mark button action
+
+- (IBAction)recordTouchDown:(id)sender
+{
+    if (_recordState == WaitPlay) {
+        return;
+    }
+    _downTime = [NSDate date];
+    [sender setTitle:@"松开 结束" forState:UIControlStateNormal];
+    [self startToRecord];
+    _recordState = Recording;
+}
+
+- (IBAction)recordTouchUpInside:(id)sender
+{
+    [self endTouch:sender];
+}
+
+- (IBAction)recordTouchUpOutside:(id)sender
+{
+    [self endTouch:sender];
+}
+
+-(void)endTouch:(id)sender
+{
+    if (_recordState == WaitPlay) {
+        [self initAudioPlayer];
+        [_player play];
+    }
+    else if(_recordState == Recording){
+        NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
+        if (gap < _minRecordGap) {
+            //显示提示时间太短对话框
+            [self reportError:@"说话时间太短，请重新录入"];
+            //重新设置为起始状态
+            [sender setTitle:@"按住 评论" forState:UIControlStateNormal];
+            _recordState = StartRecord;
+            [self endRecordAndDelete];
+        }
+        else{
+            [sender setTitle:@"点击播放" forState:UIControlStateNormal];
+            _recordState = WaitPlay;
+            [self endRecord];
+        }
+    }
 }
 
 @end

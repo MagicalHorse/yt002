@@ -13,6 +13,8 @@
 #import "FSProDetailViewController.h"
 #import "FSProductListViewController.h"
 #import "FSFeedbackViewController.h"
+#import "FSCommonRequest.h"
+#import "FSBrand.h"
 
 #import "FSTag.h"
 #import "FSCoreTag.h"
@@ -22,6 +24,7 @@
 #import "FSBothItems.h"
 #import "FSModelManager.h"
 #import "FSConfigListRequest.h"
+#import "FSKeyword.h"
 
 #define  PROD_LIST_TAG_CELL @"FSProdListTagCell"
 #define PROD_LIST_DETAIL_CELL @"FSProdListDetailCell"
@@ -42,7 +45,8 @@
             UIButton *btn = (UIButton *)cc;
             [btn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
             btn.backgroundColor = RGBCOLOR(234, 234, 234);
-            [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
         }
         if ([cc isKindOfClass:[UISegmentedControl class]]) {
             UISegmentedControl * seg = (UISegmentedControl*)cc;
@@ -71,6 +75,7 @@
         [lb setFrame:CGRectMake(0, 0, 155, 30)];
         [lb setFont:[UIFont systemFontOfSize:14]];
         lb.textColor = [UIColor grayColor];
+        lb.shadowOffset = CGSizeMake(0, 0);
     }
     NSArray *na = [aView subviews];
     NSEnumerator *ne = [na objectEnumerator];
@@ -108,8 +113,7 @@
 }
 
 @property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
-@property(nonatomic, strong, readwrite) UITableView *searchBarTable;
-@property(nonatomic, strong) UISearchDisplayController *strongSearchDisplayController;
+@property(nonatomic, strong) UITableView *tableSearch;
 
 @end
 
@@ -136,31 +140,57 @@
 
 -(void)onSearch:(UIButton*)sender
 {
-    if (!self.searchBar) {
+    if (!_tableSearch) {
         self.searchBar = [[FSSearchBar alloc] initWithFrame:CGRectMake(0, -0, 0, 0)];
         self.searchBar.placeholder = NSLocalizedString(@"Search Bar PlaceHolder String", nil);
         self.searchBar.delegate = self;
         self.searchBar.showsScopeBar = YES;
-        self.searchBar.selectedScopeButtonIndex = 1;
-        self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:@"热门商品",@"热门品牌", nil];
+        self.searchBar.selectedScopeButtonIndex = 0;
+        self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:NSLocalizedString(@"Hot Keys Desc", nil),NSLocalizedString(@"Hot Brands Desc", nil), nil];
         self.searchBar.tintColor = RGBCOLOR(246, 246, 246);
         self.searchBar.segmentDelegate = self;
+        self.searchBar.showsCancelButton = YES;
         [self.searchBar sizeToFit];
         
-        self.strongSearchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:self.searchBar contentsController:self];
-        [self.strongSearchDisplayController.searchResultsTableView reloadData];
-        self.searchDisplayController.searchResultsDataSource = self;
-        self.searchDisplayController.searchResultsDelegate = self;
-        self.searchDisplayController.delegate = self;
+        CGRect _rect = self.view.bounds;
+        _rect.size.height += NAV_HIGH;
+        _tableSearch = [[UITableView alloc] initWithFrame:_rect];
+        _tableSearch.dataSource = self;
+        _tableSearch.delegate = self;
+        _tableSearch.showsVerticalScrollIndicator = NO;
+        [self.view addSubview:_tableSearch];
+        _tableSearch.bounces = NO;
     }
+    _tableSearch.contentOffset = CGPointMake(0, 0);
     if(!_isSearching){
         [self.navigationController setNavigationBarHidden:YES animated:YES];
-        [self.view addSubview:self.searchBar];
-        [self.searchBar becomeFirstResponder];
+        [self.view addSubview:_tableSearch];
         _isSearching = YES;
     }
     else {
-        [self.searchBar removeFromSuperview];
+        [_tableSearch removeFromSuperview];
+    }
+    
+    if (!_prodKeywords && !_brandKeywords) {
+        _prodKeywords = nil;
+        _brandKeywords = nil;
+        FSCommonRequest *request = [[FSCommonRequest alloc] init];
+        [request setRouteResourcePath:RK_REQUEST_KEYWORD_LIST];
+        __block FSProdListViewController *blockSelf = self;
+        [request send:[FSKeyword class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            if (resp.isSuccess)
+            {
+                FSKeyword *result = resp.responseData;
+                _prodKeywords = [NSMutableArray arrayWithArray:result.keyWords];
+                _brandKeywords = [NSMutableArray arrayWithArray:result.brandWords];
+                [_tableSearch reloadData];
+                [self.searchBar becomeFirstResponder];
+            }
+            else
+            {
+                [blockSelf reportError:resp.errorDescrip];
+            }
+        }];
     }
 }
 
@@ -170,7 +200,6 @@
     {
         if (_tags.count>0)
         {
-
             [_cvTags selectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:TRUE scrollPosition:PSTCollectionViewScrollPositionCenteredHorizontally];
             [self collectionView:_cvTags didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [self resetTagFrameIfNeed];
@@ -186,8 +215,7 @@
 {
     _tags = [@[] mutableCopy];
     _prods = [@[] mutableCopy];
-    _prodKeywords = [NSMutableArray arrayWithObjects:@"a",@"b", nil];
-    _brandKeywords = [NSMutableArray arrayWithObjects:@"阿迪达斯",@"测试",@"衣恋", nil];
+    
      _actualTagWidth = 0;
     [self zeroMemoryBlock];
     [_tags addObjectsFromArray:[FSTag localTags]];
@@ -333,7 +361,6 @@
     [self fillProdInMemory:prods isInsert:isinserted needReload:FALSE];
 }
 
-
 -(void)beginSwitchTag:(FSCoreTag *)tag
 {
     [self zeroMemoryBlock];
@@ -413,7 +440,6 @@
             [blockSelf reportError:resp.errorDescrip];
         }
     }];
-
 }
 
 -(void)loadMore
@@ -445,14 +471,19 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
-    [self loadImagesForOnscreenRows];
-    
-    if (!_noMoreResult && !self.inLoading &&
-        (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
-        && scrollView.contentSize.height>scrollView.frame.size.height
-        &&scrollView.contentOffset.y>0)
-    {
-        [self loadMore];
+    if (scrollView == _tableSearch) {
+        [self.searchBar resignFirstResponder];
+    }
+    else{
+        [self loadImagesForOnscreenRows];
+        
+        if (!_noMoreResult && !self.inLoading &&
+            (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
+            && scrollView.contentSize.height>scrollView.frame.size.height
+            &&scrollView.contentOffset.y>0)
+        {
+            [self loadMore];
+        }
     }
 }
 
@@ -610,12 +641,6 @@
     return FALSE;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)viewDidUnload {
     [self setTagContainer:nil];
     [self setContentContainer:nil];
@@ -624,6 +649,22 @@
 }
 
 #pragma mark - TableView Delegate and DataSource
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (tableView == _tableSearch) {
+        return self.searchBar;
+    }
+    return nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (tableView == _tableSearch) {
+        return 88;
+    }
+    return 0;
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -643,7 +684,8 @@
         cell.textLabel.text = _prodKeywords[indexPath.row];
     }
     else{
-        cell.textLabel.text = _brandKeywords[indexPath.row];
+        FSBrand *brand = _brandKeywords[indexPath.row];
+        cell.textLabel.text = brand.name;
     }
     cell.textLabel.font = FONT(15);
     return cell;
@@ -651,35 +693,49 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self toSearch];
+    [self toSearch:indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Search Delegate
 
-- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self toSearch:-1];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
     if (_isSearching) {
-        [self.searchBar removeFromSuperview];
+        [_tableSearch removeFromSuperview];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         _isSearching = NO;
     }
 }
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+//type<0:搜索文本框中输入的内容
+//type>=0:搜索热门关键词、热门品牌
+-(void)toSearch:(int)type
 {
-    [self toSearch];
-}
-
--(void)toSearch
-{
-//    [self.searchBar removeFromSuperview];
-//    [self.navigationController setNavigationBarHidden:NO animated:YES];
     //跳转搜索界面进行搜索
     FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
-    dr.keyWords = _searchBar.text;
-    dr.pageType = FSPageTypeSearch;
-    dr.titleName = NSLocalizedString(@"Search Result", nil);
+    if (type < 0) {
+        dr.keyWords = _searchBar.text;
+        dr.pageType = FSPageTypeSearch;
+    }
+    else{
+        if (_selectedIndex == 0) {//热门关键字
+            dr.keyWords = _prodKeywords[type];
+            dr.pageType = FSPageTypeSearch;
+        }
+        else{//品牌搜索
+            FSBrand *brand = _brandKeywords[type];
+            dr.pageType = FSPageTypeBrand;
+            dr.brand = brand;
+            dr.keyWords = brand.name;
+        }
+    }
+    dr.titleName = dr.keyWords;
     [self.navigationController presentModalViewController:dr animated:YES];
 }
 
@@ -687,8 +743,12 @@
 
 -(void)segmentValueChanged:(UISegmentedControl*)seg
 {
+    BOOL hasFoucus = self.searchBar.isFirstResponder;
     _selectedIndex = seg.selectedSegmentIndex;
-    [_strongSearchDisplayController.searchResultsTableView reloadData];
+    [_tableSearch reloadData];
+    if (hasFoucus) {
+        [self.searchBar becomeFirstResponder];
+    }
 }
 
 @end

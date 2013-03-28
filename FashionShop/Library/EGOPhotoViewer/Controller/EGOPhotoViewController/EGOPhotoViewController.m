@@ -264,7 +264,6 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-	return interfaceOrientation == UIInterfaceOrientationPortrait;//只能竖屏
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
 	if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
 		return YES;

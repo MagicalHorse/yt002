@@ -32,6 +32,7 @@
 @synthesize isProductBinded;
 @synthesize isPublication;
 @synthesize limitCount;
+@synthesize height;
 
 +(RKObjectMapping *) getRelationDataMap
 {

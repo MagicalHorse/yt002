@@ -24,6 +24,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import <QuartzCore/QuartzCore.h>
+#import <AVFoundation/AVFoundation.h>
 #import "FSConfiguration.h"
 #import "FSAnalysis.h"
 

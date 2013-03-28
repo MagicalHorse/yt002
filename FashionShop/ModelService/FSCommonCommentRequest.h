@@ -22,5 +22,6 @@
 @property(nonatomic,strong) NSNumber* userId;
 @property(nonatomic,strong) NSString * userToken;
 @property(nonatomic,strong) NSString *comment;
+@property(nonatomic,strong) NSNumber *replyuserID;
 
 @end

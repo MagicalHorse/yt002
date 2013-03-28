@@ -38,6 +38,7 @@
 @synthesize pType;
 @synthesize price;
 @synthesize pID;
+@synthesize fileName;
 
 @synthesize routeResourcePath;
 
@@ -59,6 +60,7 @@
     {
         [map mapKeyPath:@"promotionid" toAttribute:@"request.id"];
     }
+    [map mapKeyPath:@"filename" toAttribute:@"request.fileName"];
 }
 
 
@@ -102,6 +104,9 @@
     int i =0;
     for (UIImage* img in imgs) {
         [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
+    }
+    if (fileName) {
+        [params setData:[NSData dataWithContentsOfFile:fileName] MIMEType:@"audio/x-m4a" forParam:@"filename"];
     }
     
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];

@@ -56,6 +56,7 @@ typedef enum{
 
 @property (strong, nonatomic) FSUser *currentUser;
 @property (nonatomic) FSSourceType publishSource;
+@property (nonatomic,strong) NSString *fileName;
 
 -(void) setAvailableFields:(PostFields)fields;
 -(void) setMustFields:(PostFields)fields;

@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblInDate;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
+@property (strong, nonatomic) IBOutlet UIButton *btnComment;
 
 @property (strong, nonatomic) FSComment *data;
 @end

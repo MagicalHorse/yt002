@@ -53,7 +53,6 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointDetailCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_TABLE_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointMemberCardCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_CARD_MEMBER_CELL];
-    [self prepareData];
     [self preparePresent];
 }
 
@@ -69,7 +68,10 @@
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
         [self.navigationItem setRightBarButtonItem:item];
     }
-    
+    else{
+        [self.navigationItem setRightBarButtonItem:nil];
+    }
+    [self prepareData];
 }
 
 -(void)onButtonClick:(UIButton*)sender

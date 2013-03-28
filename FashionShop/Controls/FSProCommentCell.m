@@ -50,7 +50,6 @@
     _lblInDate.text = [_data.indate toLocalizedString];
     _lblInDate.font = ME_FONT(10);
     _lblInDate.textColor = [UIColor colorWithRed:153 green:153 blue:153];
-    
 }
 
 @end

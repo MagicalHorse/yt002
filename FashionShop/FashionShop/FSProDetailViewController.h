@@ -48,5 +48,6 @@
 @property (strong,nonatomic) NSMutableArray *navContext;
 @property (assign,nonatomic) int indexInContext;
 @property (nonatomic) FSSourceType sourceType;
+@property (strong, nonatomic) NSString *recordFileName;
 
 @end

@@ -259,7 +259,8 @@
         {
             _proRequest.title = [(NSArray *)value objectAtIndex:0];
             _proRequest.descrip = [(NSArray *)value objectAtIndex:1];
-            NSString *price = [(NSArray *)value objectAtIndex:2];
+            _proRequest.fileName = [(NSArray *)value objectAtIndex:2];
+            NSString *price = [(NSArray *)value objectAtIndex:3];
             
             _proRequest.price =[NSNumber numberWithInt:[price intValue]];
             break;
@@ -688,7 +689,13 @@
         }
     }
     NSLog(@"desc:%@", _desc);
-    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, viewController.txtPrice.text]];
+    if (viewController.recordFileName) {
+        _fileName = [kRecorderDirectory stringByAppendingPathComponent:viewController.recordFileName];
+    }
+    else{
+        _fileName = nil;
+    }
+    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text]];
     [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
@@ -710,6 +717,16 @@
         } completeCallbck:^{
             [self endProgress];
             [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
+            //如果有上传声音，则删除
+            if (_fileName) {
+                NSLock* tempLock = [[NSLock alloc]init];
+                [tempLock lock];
+                if ([[NSFileManager defaultManager] fileExistsAtPath:_fileName])
+                {
+                    [[NSFileManager defaultManager] removeItemAtPath:_fileName error:nil];
+                }
+                [tempLock unlock];
+            }
         }];
     }
 }

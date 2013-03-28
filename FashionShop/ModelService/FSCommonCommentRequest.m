@@ -21,6 +21,7 @@
 @synthesize sort;
 @synthesize userToken;
 @synthesize routeResourcePath;
+@synthesize replyuserID;
 
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map
 {
@@ -33,8 +34,7 @@
     [map mapKeyPath:@"refreshts" toAttribute:@"request.refreshTime"];
     [map mapKeyPath:@"token" toAttribute:@"request.userToken"];
     [map mapKeyPath:@"content" toAttribute:@"request.comment"];
-    
-    
+    [map mapKeyPath:@"replyuser" toAttribute:@"request.replyuserID"];
 }
 
 @end
