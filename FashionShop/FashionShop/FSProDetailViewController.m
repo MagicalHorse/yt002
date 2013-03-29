@@ -23,6 +23,7 @@
 #import "FSSearchViewController.h"
 #import "FSProPostTitleViewController.h"
 #import "CL_VoiceEngine.h"
+#import "FSAudioButton.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -65,6 +66,8 @@
     NSInteger _minRecordGap;//最小录制时间间隔
     
     AVAudioPlayer * _player;
+    BOOL _isAudio;//是否是语音内容
+    BOOL _isPlaying;//是否正在播放声音
 }
 
 @end
@@ -87,9 +90,17 @@
     [super viewDidLoad];
     [self beginPrepareData];
     
-   
-    
+    _minRecordGap = 1;
 }
+
+-(void)viewDidUnload
+{
+    [super viewDidUnload];
+    if (_player.isPlaying) {
+        [_player stop];
+    }
+}
+
 -(void) beginPrepareData
 {
     [self doBinding:nil];
@@ -295,7 +306,6 @@
         }
         
     }];
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -739,10 +749,12 @@
                 [commentInput.txtComment resignFirstResponder];
                 [commentInput.btnChange setImage:[UIImage imageNamed:@"text_change_icon.png"] forState:UIControlStateNormal];
                 [commentInput updateControls:2];
+                _isAudio = YES;
             }
             else{
                 [commentInput.btnChange setImage:[UIImage imageNamed:@"audio_change_icon.png"] forState:UIControlStateNormal];
                 [commentInput updateControls:1];
+                _isAudio = NO;
             }
         }
         else{
@@ -750,10 +762,12 @@
                 [commentInput.txtComment becomeFirstResponder];
                 [commentInput.btnChange setImage:[UIImage imageNamed:@"audio_change_icon.png"] forState:UIControlStateNormal];
                 [commentInput updateControls:1];
+                _isAudio = NO;
             }
             else{
                 [commentInput.btnChange setImage:[UIImage imageNamed:@"text_change_icon.png"] forState:UIControlStateNormal];
                 [commentInput updateControls:2];
+                _isAudio = YES;
             }
         }
     }
@@ -770,11 +784,13 @@
 {
     FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     [commentView.txtComment resignFirstResponder];
-    NSString *trimedText = [self transformCommentText];
-    if (trimedText.length>40 ||trimedText.length<1)
-    {
-        [self reportError:NSLocalizedString(@"PRO_COMMENT_LENGTH_NOTCORRECT", Nil)];
-        return;
+    if (!_isAudio) {
+        NSString *trimedText = [self transformCommentText];
+        if (trimedText.length>40 ||trimedText.length<1)
+        {
+            [self reportError:NSLocalizedString(@"PRO_COMMENT_LENGTH_NOTCORRECT", Nil)];
+            return;
+        }
     }
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
     if (!isLogined)
@@ -822,6 +838,9 @@
     request.comment = commentText;
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
     request.sourceType = [NSNumber numberWithInt:_sourceType];
+    if (_recordFileName) {
+        request.audioName = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    }
     request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
     //回复特用户
     if (!isReplyToAll) {
@@ -834,25 +853,37 @@
     }
     
     __block FSProDetailViewController *blockSelf = self;
-    [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *respData){
-        if(!respData.isSuccess)
-        {
-            [blockSelf updateProgress:respData.errorDescrip];
-        }
-        else
-        {
-            NSMutableArray *oldComments = [[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments];
-            if (!oldComments)
-                oldComments = [@[] mutableCopy];
-            [oldComments insertObject:respData.responseData atIndex:0];
-            [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
-            [blockSelf hideCommentInputView:self];
-            [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
-            [(id)self.paginatorView.currentPage resetScrollViewSize];
-            replyIndex = -1;
-        }
-        if (callback)
+//    [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *respData){
+//        if(!respData.isSuccess)
+//        {
+//            [blockSelf updateProgress:respData.errorDescrip];
+//        }
+//        else
+//        {
+//            NSMutableArray *oldComments = [[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments];
+//            if (!oldComments)
+//                oldComments = [@[] mutableCopy];
+//            [oldComments insertObject:respData.responseData atIndex:0];
+//            [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
+//            [blockSelf hideCommentInputView:self];
+//            [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
+//            [(id)self.paginatorView.currentPage resetScrollViewSize];
+//            replyIndex = -1;
+//        }
+//        if (callback)
+//            callback();
+//    }];
+    
+    [request upload:^{
+        [self reportError:@"成功"];
+        if (callback) {
             callback();
+        }
+    } error:^{
+        [self reportError:@"失败"];
+        if (callback) {
+            callback();
+        }
     }];
     
     //统计
@@ -1052,6 +1083,11 @@
     else{
         [detailCell.btnComment setImage:[UIImage imageNamed:@"comment_sel_icon.png"] forState:UIControlStateNormal];
     }
+    
+//    FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(150, 20, 100, 25)];
+//    btn.fullPath = _recordFileName;
+//    [detailCell.contentView addSubview:btn];
+    
     detailCell.imgThumb.delegate = self;
    
     return detailCell;
@@ -1183,7 +1219,7 @@
     if (_isRecording == NO)
     {
         _isRecording = YES;
-        _recordFileName = [NSString stringWithFormat:@"%f.aac", [[NSDate date] timeIntervalSince1970]];
+        _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         _audioRecoder.recorderingFileName = _recordFileName;
         
         NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
@@ -1270,6 +1306,11 @@
             [sender setTitle:@"点击播放" forState:UIControlStateNormal];
             _recordState = WaitPlay;
             [self endRecord];
+            id currentView =  self.paginatorView.currentPage;
+            [[currentView tbComment] reloadData];
+            
+            //直接发送
+            [self saveComment:nil];
         }
     }
 }

@@ -76,11 +76,11 @@
 //                                          [NSString stringWithFormat:@"recordAudio.caf"]];
 #else
 //                    NSString *fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-//                                          [NSString stringWithFormat:@"%@.aac",[[self class] stringWithUUID]]];
+//                                          [NSString stringWithFormat:@"%@.m4a",[[self class] stringWithUUID]]];
                     NSString *fullPath;
                     if (!_recorderingFileName) {
                         fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-                                              [NSString stringWithFormat:@"recordAudio.aac"]];
+                                              [NSString stringWithFormat:@"recordAudio.m4a"]];
                     }
                     else{
                         fullPath = [kRecorderDirectory stringByAppendingPathComponent:

@@ -10,7 +10,7 @@
 #define RK_REQUEST_COMMENT_LIST @"/comment/list"
 #define RK_REQUEST_COMMENT_SAVE @"/comment/create"
 
-@interface FSCommonCommentRequest : FSEntityRequestBase
+@interface FSCommonCommentRequest : FSEntityRequestBase<RKRequestDelegate>
 
 @property(nonatomic,strong) NSNumber *id;
 @property(nonatomic,strong) NSNumber *sourceid;
@@ -20,8 +20,11 @@
 @property(nonatomic,strong) NSNumber *sort;
 @property(nonatomic,strong) NSDate *refreshTime;
 @property(nonatomic,strong) NSNumber* userId;
-@property(nonatomic,strong) NSString * userToken;
+@property(nonatomic,strong) NSString *userToken;
 @property(nonatomic,strong) NSString *comment;
 @property(nonatomic,strong) NSNumber *replyuserID;
+@property(nonatomic,strong) NSString *audioName;
+
+- (void)upload:(dispatch_block_t)blockcomplete error:(dispatch_block_t)blockerror;
 
 @end

@@ -381,7 +381,7 @@
 }
 
 - (IBAction)doSuggest:(id)sender {
-    UIActionSheet *suggestSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Publish product", nil),NSLocalizedString(@"Publish promotion", nil),nil];
+    UIActionSheet *suggestSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"Publish product", nil),nil];
     suggestSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     suggestSheet.tag = Actionsheet_Publish_Tag;
     [suggestSheet showInView:_btnSuggest];

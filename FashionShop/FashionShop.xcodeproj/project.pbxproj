@@ -47,6 +47,12 @@
 		021716B116D242390098288A /* EGOPhotoCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169716D242390098288A /* EGOPhotoCaptionView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716B216D242390098288A /* EGOPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169A16D242390098288A /* EGOPhotoImageView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716B316D242390098288A /* EGOPhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169D16D242390098288A /* EGOPhotoScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0229DD6C170526ED00BF02EB /* FSAudioButton.m */; };
+		0229DD751705392300BF02EB /* audio_play1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD721705392300BF02EB /* audio_play1@2x.png */; };
+		0229DD761705392300BF02EB /* audio_play2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD731705392300BF02EB /* audio_play2@2x.png */; };
+		0229DD771705392300BF02EB /* audio_play3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD741705392300BF02EB /* audio_play3@2x.png */; };
+		0229DD7917053A0800BF02EB /* play_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD7817053A0800BF02EB /* play_icon@2x.png */; };
+		0229DD7D1705EEAA00BF02EB /* audio_play0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD7C1705EEAA00BF02EB /* audio_play0@2x.png */; };
 		022A6D2416D4F79600374639 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2016D4F79500374639 /* arrow_left.png */; };
 		022A6D2516D4F79600374639 /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2116D4F79600374639 /* arrow_left@2x.png */; };
 		022A6D2616D4F79600374639 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2216D4F79600374639 /* arrow_right.png */; };
@@ -682,6 +688,13 @@
 		0217169A16D242390098288A /* EGOPhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoImageView.m; sourceTree = "<group>"; };
 		0217169C16D242390098288A /* EGOPhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOPhotoScrollView.h; sourceTree = "<group>"; };
 		0217169D16D242390098288A /* EGOPhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoScrollView.m; sourceTree = "<group>"; };
+		0229DD6B170526ED00BF02EB /* FSAudioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAudioButton.h; sourceTree = "<group>"; };
+		0229DD6C170526ED00BF02EB /* FSAudioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAudioButton.m; sourceTree = "<group>"; };
+		0229DD721705392300BF02EB /* audio_play1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_play1@2x.png"; sourceTree = "<group>"; };
+		0229DD731705392300BF02EB /* audio_play2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_play2@2x.png"; sourceTree = "<group>"; };
+		0229DD741705392300BF02EB /* audio_play3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_play3@2x.png"; sourceTree = "<group>"; };
+		0229DD7817053A0800BF02EB /* play_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play_icon@2x.png"; sourceTree = "<group>"; };
+		0229DD7C1705EEAA00BF02EB /* audio_play0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_play0@2x.png"; sourceTree = "<group>"; };
 		022A6D2016D4F79500374639 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
 		022A6D2116D4F79600374639 /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_left@2x.png"; sourceTree = "<group>"; };
 		022A6D2216D4F79600374639 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
@@ -1488,6 +1501,8 @@
 				02160E451703DB0100D77FE0 /* CL_AudioRecorder.h */,
 				02160E461703DB0100D77FE0 /* CL_AudioRecorder.m */,
 				02160E471703DB0100D77FE0 /* CL_VoiceEngine.h */,
+				0229DD6B170526ED00BF02EB /* FSAudioButton.h */,
+				0229DD6C170526ED00BF02EB /* FSAudioButton.m */,
 			);
 			name = Audio;
 			path = Controls/Audio;
@@ -2170,6 +2185,11 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0229DD7817053A0800BF02EB /* play_icon@2x.png */,
+				0229DD721705392300BF02EB /* audio_play1@2x.png */,
+				0229DD7C1705EEAA00BF02EB /* audio_play0@2x.png */,
+				0229DD731705392300BF02EB /* audio_play2@2x.png */,
+				0229DD741705392300BF02EB /* audio_play3@2x.png */,
 				02E185AB17047040003C918F /* audio_btn_normal@2x.png */,
 				02E185AC17047040003C918F /* audio_btn_sel@2x.png */,
 				02E185A917046E29003C918F /* comment_input_bg@2x.png */,
@@ -3263,6 +3283,11 @@
 				02E185AA17046E29003C918F /* comment_input_bg@2x.png in Resources */,
 				02E185AD17047040003C918F /* audio_btn_normal@2x.png in Resources */,
 				02E185AE17047040003C918F /* audio_btn_sel@2x.png in Resources */,
+				0229DD751705392300BF02EB /* audio_play1@2x.png in Resources */,
+				0229DD761705392300BF02EB /* audio_play2@2x.png in Resources */,
+				0229DD771705392300BF02EB /* audio_play3@2x.png in Resources */,
+				0229DD7917053A0800BF02EB /* play_icon@2x.png in Resources */,
+				0229DD7D1705EEAA00BF02EB /* audio_play0@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3499,6 +3524,7 @@
 				02160E3D1702D07D00D77FE0 /* FSKeyword.m in Sources */,
 				02160E401702D5D900D77FE0 /* FSCommonRequest.m in Sources */,
 				02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */,
+				0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3574,8 +3600,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3606,8 +3632,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3678,8 +3704,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3714,8 +3740,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3730,8 +3756,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3762,8 +3788,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A5E2DEEB-6EBE-4A6B-9638-D7062DC4F54A";
+				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

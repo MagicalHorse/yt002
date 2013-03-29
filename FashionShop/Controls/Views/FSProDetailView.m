@@ -78,14 +78,22 @@
         origFrame.origin.y -= yOff * 2 + 2;
     }
     _lblDescrip.frame = origFrame;
-
+    FSResource *_audioResource = nil;
     if (_data.resource &&
         _data.resource.count>0)
     {
-        FSResource *imgObj = _data.resource[0];
-        CGSize cropSize = CGSizeMake(self.frame.size.width, _imgView.frame.size.height );
-        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
-        _imageURL = imgObj.absoluteUrl320.absoluteString;
+        for (FSResource *imgObj in _data.resource) {
+            CGSize cropSize = CGSizeMake(self.frame.size.width, _imgView.frame.size.height );
+            [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
+            _imageURL = imgObj.absoluteUrl320.absoluteString;
+            break;
+        }
+        for (FSResource *imgObj in _data.resource) {
+            if (imgObj.type == 2) {
+                _audioResource = imgObj;
+                break;
+            }
+        }
     }
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
     imgBG.userInteractionEnabled = FALSE;
@@ -129,6 +137,13 @@
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+yOff;
     _tbComment.frame = commentFrame;
     NSLog(@"new Frame y:%f",_tbComment.frame.origin.y);
+    
+    //设置播放按钮
+    if (_audioResource) {
+        FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
+        btn.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,_audioResource.relativePath];
+        [_svContent addSubview:btn];
+    }
     
     [self updateInteraction];
 }

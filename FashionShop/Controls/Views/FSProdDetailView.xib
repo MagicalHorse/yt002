@@ -76,7 +76,7 @@
 										<string key="NSFrame">{{0, 2}, {320, 300}}</string>
 										<reference key="NSSuperview" ref="619427962"/>
 										<reference key="NSWindow"/>
-										<reference key="NSNextKeyView" ref="1053271981"/>
+										<reference key="NSNextKeyView"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<object class="NSColor" key="IBUIBackgroundColor">
 											<int key="NSColorSpace">3</int>
@@ -879,10 +879,18 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">457</int>
+			<int key="maxID">460</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
+				<object class="IBPartialClassDescription">
+					<string key="className">FSAudioButton</string>
+					<string key="superclassName">UIButton</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/FSAudioButton.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">FSDetailBaseView</string>
 					<string key="superclassName">SYPageView</string>
@@ -944,17 +952,25 @@
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">_thumView</string>
-						<string key="NS.object.0">FSThumView</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">_thumView</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_thumView">FSThumView</string>
+						<string key="arrowLeft">UIImageView</string>
+						<string key="arrowRight">UIImageView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_thumView">
 							<string key="name">_thumView</string>
 							<string key="candidateClassName">FSThumView</string>
 						</object>
-					</object>
+						<object class="IBToOneOutletInfo" key="arrowLeft">
+							<string key="name">arrowLeft</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="arrowRight">
+							<string key="name">arrowRight</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/FSProDetailViewController.h</string>
@@ -964,6 +980,7 @@
 					<string key="className">FSProdDetailView</string>
 					<string key="superclassName">FSDetailBaseView</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="audioButton">FSAudioButton</string>
 						<string key="btnBrand">UIButton</string>
 						<string key="btnCoupon">UIBarButtonItem</string>
 						<string key="btnFavor">UIBarButtonItem</string>
@@ -984,6 +1001,10 @@
 						<string key="tbComment">UITableView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="audioButton">
+							<string key="name">audioButton</string>
+							<string key="candidateClassName">FSAudioButton</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="btnBrand">
 							<string key="name">btnBrand</string>
 							<string key="candidateClassName">UIButton</string>

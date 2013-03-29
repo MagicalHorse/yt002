@@ -216,13 +216,13 @@ static FSModelManager *_modelManager;
     [self enqueueBackgroundBlock:^() {
         [[SDImageCache sharedImageCache] clearMemory];
         [[SDImageCache sharedImageCache] clearDisk];
-        [self clearCache];
+        [self clearAudioFile];
     }];
 }
 
 -(void)clearAudioFile
 {
-    NSString *extension = @".acc";
+    NSString *extension = @"mp3";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *cachesDirectory = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]  stringByAppendingPathComponent:@"Audios"];
     NSArray *contents = [fileManager contentsOfDirectoryAtPath:cachesDirectory error:NULL];

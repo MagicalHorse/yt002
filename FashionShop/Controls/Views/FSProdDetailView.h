@@ -10,6 +10,7 @@
 #import "FSDetailBaseView.h"
 #import "FSProdItemEntity.h"
 #import "FSThumView.h"
+#import "FSAudioButton.h"
 
 @interface FSProdDetailView : FSDetailBaseView
 

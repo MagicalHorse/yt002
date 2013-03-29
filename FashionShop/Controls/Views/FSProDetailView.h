@@ -9,7 +9,7 @@
 #import "SYPageView.h"
 #import "FSDetailBaseView.h"
 #import "FSProItemEntity.h"
-
+#import "FSAudioButton.h"
 
 
 @interface FSProDetailView : FSDetailBaseView

@@ -92,20 +92,31 @@
     _lblDescrip.frame = origFrame;
     yOff += _lblDescrip.frame.size.height + 5;
   
+    FSResource *_audioResource = nil;
     if (_data.resource &&
         _data.resource.count>0)
     {
-        FSResource *imgObj = _data.resource[0];
-        CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
-        [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
-        _imageURL = imgObj.absoluteUrl320.absoluteString;
-        if (_data.resource.count>1)
-        {
-            UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
-            UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
-            moreImages.image = moreInd;
-            [_imgView.superview addSubview:moreImages];
-            [_imgView.superview bringSubviewToFront:moreImages];
+        for (FSResource *imgObj in _data.resource) {
+            if (imgObj.type == 1) {
+                CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
+                [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
+                _imageURL = imgObj.absoluteUrl320.absoluteString;
+                if (_data.resource.count>1)
+                {
+                    UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
+                    UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
+                    moreImages.image = moreInd;
+                    [_imgView.superview addSubview:moreImages];
+                    [_imgView.superview bringSubviewToFront:moreImages];
+                }
+                break;
+            }
+        }
+        for (FSResource *imgObj in _data.resource) {
+            if (imgObj.type == 2) {
+                _audioResource = imgObj;
+                break;
+            }
         }
     }
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
@@ -146,6 +157,16 @@
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height;
     _tbComment.frame = commentFrame;
+    
+    //设置播放按钮
+    if (_audioResource) {
+        FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(20, 50, 100, 30)];
+        NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
+        [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
+        btn.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
+        [_svContent addSubview:btn];
+    }
+    
     [self updateInteraction];
 }
 -(void)registerKVO

@@ -57,6 +57,14 @@
     [_txtTitle becomeFirstResponder];
 }
 
+-(void)viewDidUnload
+{
+    [super viewDidUnload];
+    if (_player.isPlaying) {
+        [_player stop];
+    }
+}
+
 -(void) decorateTapDismissKeyBoard
 {
     backView = [[UIView alloc] initWithFrame:self.view.frame];
@@ -368,7 +376,7 @@
     if (_isRecording == NO)
     {
         _isRecording = YES;
-        _recordFileName = [NSString stringWithFormat:@"%f.aac", [[NSDate date] timeIntervalSince1970]];
+        _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         _audioRecoder.recorderingFileName = _recordFileName;
         [_audioRecoder startRecord];
     }
