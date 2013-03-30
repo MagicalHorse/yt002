@@ -13,10 +13,19 @@
 @synthesize pageSize;
 @synthesize filterType;
 @synthesize previousLatestDate;
+@synthesize routeResourcePath = _routeResourcePath;
 
 -(NSString*)routeResourcePath
 {
     return RK_REQUEST_TOPIC_LIST;
+}
+
+-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
+{
+    _routeResourcePath = aRouteResourcePath;
+    if ([aRouteResourcePath isEqualToString:RK_REQUEST_TOPIC_LIST]) {
+        [self setBaseURL:2];
+    }
 }
 
 -(void)setMappingRequestAttribute:(RKObjectMapping *)map

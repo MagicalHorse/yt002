@@ -41,6 +41,7 @@
         UIView *emptyView = (UIView *)[self viewWithTag:UIVIEW_PROBASE_MASK_IDENTIFER];
         if (!emptyView)
         {
+            /*
             emptyView = [[UIView alloc] initWithFrame:self.frame];
             emptyView.backgroundColor = [UIColor whiteColor];
             UIImageView * loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-20,self.frame.origin.y+50, 40, 40)];
@@ -57,6 +58,20 @@
             [loadMoreView startAnimating];
             
             emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
+             */
+            emptyView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-40,self.frame.origin.y+70, 80, 80)];
+            emptyView.backgroundColor = [UIColor whiteColor];
+            emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
+            UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
+            inView.backgroundColor = [UIColor blackColor];
+            inView.layer.cornerRadius = 10;
+            inView.layer.borderWidth = 0;
+            inView.alpha = 0.7;
+            [emptyView addSubview:inView];
+            UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+            indicatorView.frame = CGRectMake((inView.frame.size.width-inView.frame.size.width)/2, (inView.frame.size.height-inView.frame.size.height)/2, inView.frame.size.width, inView.frame.size.height);
+            [emptyView addSubview:indicatorView];
+            [indicatorView startAnimating];
         }
         [self addSubview:emptyView];
         [self bringSubviewToFront:emptyView];
@@ -65,16 +80,16 @@
         UIView *emptyView =(UIView *)[self viewWithTag:UIVIEW_PROBASE_MASK_IDENTIFER];
         if (emptyView)
         {
-            if (emptyView.subviews.count>0)
-            {
-                UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
-                if (loadMoreView)
-                {
-                    [loadMoreView.layer removeAllAnimations];
-                    loadMoreView.image = nil;
-                    [loadMoreView removeFromSuperview];
-                }
-            }
+//            if (emptyView.subviews.count>0)
+//            {
+//                UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
+//                if (loadMoreView)
+//                {
+//                    [loadMoreView.layer removeAllAnimations];
+//                    loadMoreView.image = nil;
+//                    [loadMoreView removeFromSuperview];
+//                }
+//            }
             [emptyView removeFromSuperview];
         }
 

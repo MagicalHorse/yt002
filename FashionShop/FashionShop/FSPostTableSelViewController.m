@@ -9,6 +9,9 @@
 #import "FSPostTableSelViewController.h"
 #import "UIViewController+Loading.h"
 #import "FSGroupBrand.h"
+#import "FSConfigListRequest.h"
+#import "FSCoreStore.h"
+#import "FSCoreTag.h"
 
 @interface FSPostTableSelViewController ()
 {
@@ -52,12 +55,71 @@
 {
     if (_delegate) {
         _data = _delegate();
-        if (_currentStep == PostStep4Finished) {
-            _nameList = [[NSMutableArray alloc] initWithCapacity:2];
-            for (FSGroupBrand *item in _data) {
-                [_nameList addObject:item.groupName];
+        if (_data && _data.count > 0) {
+            if (_currentStep == PostStep4Finished) {
+                _nameList = [[NSMutableArray alloc] initWithCapacity:2];
+                for (FSGroupBrand *item in _data) {
+                    [_nameList addObject:item.groupName];
+                }
             }
         }
+        else{
+            [self reRequestData];
+        }
+    }
+}
+
+-(void)reRequestData
+{
+    if (_currentStep == PostStep4Finished) {
+        [self beginLoading:self.view];
+        FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_CONFIG_GROUP_BRAND_ALL;
+        [request send:[FSGroupBrand class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                theApp.allBrands = req.responseData;
+                _data = theApp.allBrands;
+                _nameList = [[NSMutableArray alloc] initWithCapacity:2];
+                for (FSGroupBrand *item in _data) {
+                    [_nameList addObject:item.groupName];
+                }
+                [_tbContent reloadData];
+            }
+            else{
+                NSLog(@"groupbrand/all load failed");
+            }
+            [self endLoading:self.view];
+        }];
+    }
+    else if(_currentStep == PostStepStoreFinished) {
+        FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
+        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        request.routeResourcePath = RK_REQUEST_CONFIG_STORE_ALL;
+        [request send:[FSCoreStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                _data = req.responseData;
+                NSLog(@"store/all load success!");
+                [_tbContent reloadData];
+            }
+            else{
+                NSLog(@"store/all load failed!");
+            }
+        }];
+    }
+    else if(_currentStep == PostStepTagFinished) {
+        FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
+        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                _data = req.responseData;
+                [_tbContent reloadData];
+                NSLog(@"tag/all load success!");
+            }
+            else{
+                NSLog(@"tag/all load failed!");
+            }
+        }];
     }
 }
 
@@ -82,10 +144,11 @@
     if (_currentStep == PostStep4Finished) {
         UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
         headView.backgroundColor = [UIColor blackColor];
-        headView.alpha = 0.6;
+        headView.alpha = 0.7;
         UILabel *_lb = [[UILabel alloc] initWithFrame:CGRectInset(headView.frame, 10, 0)];
         _lb.backgroundColor = [UIColor clearColor];
-        _lb.font = ME_FONT(15);
+        _lb.font = BFONT(16);
+        _lb.textColor = [UIColor whiteColor];
         if (_data.count > 0 && section < _data.count) {
             FSGroupBrand *_item =[_data objectAtIndex:section];
             _lb.text = _item.groupName;

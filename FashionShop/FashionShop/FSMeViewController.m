@@ -29,7 +29,6 @@
 #import "FSProPostMainViewController.h"
 #import "FSCommonProRequest.h"
 #import "FSLoadMoreRefreshFooter.h"
-#import "EGORefreshTableHeaderView.h"
 
 #import "FSModelManager.h"
 #import "FSLocationManager.h"
@@ -59,7 +58,7 @@
 @synthesize object;
 @end
 
-@interface FSMeViewController ()<EGORefreshTableHeaderDelegate>
+@interface FSMeViewController ()
 {
     UIView *_loginView;
     UIView *_userProfileView;
@@ -78,7 +77,6 @@
     BOOL _isInPhotoing;
     int _favorPageIndex;
     BOOL _noMoreFavor;
-    EGORefreshTableHeaderView *refreshHeaderView;
     UIActivityIndicatorView *moreIndicator;
     UIImagePickerController *_camera;
 }
@@ -91,8 +89,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
-        
     }
     return self;
 }
@@ -220,9 +216,7 @@
     
     NSArray *views =[[NSBundle mainBundle] loadNibNamed:@"FSLoginView" owner:self options:nil];
     _loginView = [views objectAtIndex:0];
-    
     views = [[NSBundle mainBundle] loadNibNamed:@"FSUserProfileView" owner:self options:nil];
-   
 
     _userProfileView = [views objectAtIndex:0];
     _isFirstLoad = true;
@@ -587,10 +581,6 @@
     _likeView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
-    refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,  -REFRESHINGVIEW_HEIGHT, _likeView.frame.size.width,REFRESHINGVIEW_HEIGHT)];
-    refreshHeaderView.backgroundColor = [UIColor whiteColor];
-    [_likeView addSubview:refreshHeaderView];
-    refreshHeaderView.delegate = self;
 
     [_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
 
@@ -600,6 +590,12 @@
     tap.delegate = self;
     [_likeView addGestureRecognizer:longPress];
     [_likeView addGestureRecognizer:tap];
+    
+    [self prepareRefreshLayout:_likeView withRefreshAction:^(dispatch_block_t action) {
+        [self loadILike:NO nextPage:1 withCallback:^{
+            action();
+        }];
+    }];
   
     _likeView.delegate = self;
     _likeView.dataSource = self;
@@ -1068,7 +1064,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+//    [refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     
     [self loadImagesForOnscreenRows];
     NSLog(@"crollView.contentOffset:%@\nscrollView.contentSize:%@\nscrollView.frame:%@", NSStringFromCGPoint(scrollView.contentOffset), NSStringFromCGSize(scrollView.contentSize), NSStringFromCGRect(scrollView.frame));
@@ -1087,29 +1083,6 @@
 {
     [self loadImagesForOnscreenRows];
 }
-
-#pragma mark - EGORefreshTableHeaderDelegate Methods
-
-- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view
-{
-    if (!_isInLoading &&!_isInRefreshing)
-    {
-        _isInLoading = TRUE;
-        _isInRefreshing = TRUE;
-        [self loadILike:FALSE nextPage:1 withCallback:^{
-            _isInLoading = FALSE;
-            _isInRefreshing = FALSE;
-            [refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_likeView];
-        }];
-    }
-}
-
-- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
-{
-	return _isInLoading; 
-}
-
-
 
 #pragma mark - gesture-recognition action methods
 

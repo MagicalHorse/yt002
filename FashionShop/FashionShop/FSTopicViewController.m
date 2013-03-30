@@ -105,6 +105,7 @@
     FSTopicRequest *request = [[FSTopicRequest alloc] init];
     request.nextPage = page;
     request.pageSize = COMMON_PAGE_SIZE;
+    request.routeResourcePath = RK_REQUEST_TOPIC_LIST;
     return request;
 }
 

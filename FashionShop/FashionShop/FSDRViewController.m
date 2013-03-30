@@ -707,7 +707,6 @@
     {
         __block FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
         FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
-        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
         request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
@@ -738,19 +737,17 @@
                 block(resp.responseData);
             }
         }];
-
     }
-    
 }
 
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return FSSourceProduct;
 }
-//-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
-//{
-//    return [self isDR];
-//}
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return [self isDR] && _segHeader.selectedSegmentIndex == 1;
+}
 
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout
 {

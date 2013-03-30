@@ -395,16 +395,16 @@
     request.routeResourcePath = route;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    if(isRefresh)
-    {
-        request.requestType = 0;
-        request.previousLatestDate = _refreshLatestDate;
-    }
-    else
-    {
-        request.requestType = 1;
-        request.previousLatestDate = _firstLoadDate;
-    }
+//    if(isRefresh)
+//    {
+//        request.requestType = 0;
+//        request.previousLatestDate = _refreshLatestDate;
+//    }
+//    else
+//    {
+//        request.requestType = 1;
+//        request.previousLatestDate = _firstLoadDate;
+//    }
 
     request.tagid =[_currentTag valueForKey:@"id"];
     request.nextPage = page;

@@ -281,6 +281,7 @@ typedef enum {
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.requestType = 1;
+        request.routeResourcePath = RK_REQUEST_PRO_LIST;
         request.filterType = _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
         request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
@@ -315,6 +316,7 @@ typedef enum {
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.filterType= FSProSortByDist;
+    request.routeResourcePath = RK_REQUEST_PRO_LIST;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
     _nearFirstLoadDate = [[NSDate alloc] init];
@@ -396,6 +398,7 @@ typedef enum {
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.nextPage = 1;
+        request.routeResourcePath = RK_REQUEST_PRO_LIST;
         request.filterType= _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
         if (_currentSearchIndex == 1)
             _newFirstLoadDate = [[NSDate alloc] init];
@@ -592,6 +595,7 @@ typedef enum {
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.requestType = 1;
+    request.routeResourcePath = RK_REQUEST_PRO_LIST;
     request.pageSize = COMMON_PAGE_SIZE;
     request.filterType= _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];

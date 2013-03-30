@@ -30,7 +30,7 @@
     [relationMapping mapKeyPath:@"name" toAttribute:@"name"];
     [relationMapping mapKeyPath:@"description" toAttribute:@"descrip"];
     [relationMapping mapKeyPath:@"website" toAttribute:@"homeSite"];
-    [relationMapping mapKeyPath:@"log" toAttribute:@"log"];
+    [relationMapping mapKeyPath:@"log" toAttribute:@"logo"];
     
     return relationMapping;
 }

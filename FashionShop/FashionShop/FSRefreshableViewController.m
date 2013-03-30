@@ -17,6 +17,8 @@
     UIRefreshControl *refreshControlView;
     UIImageView *loadMoreView;
     
+    UIActivityIndicatorView *indicatorView;
+    
     UICallBackWith1Param _action;
 }
 
@@ -44,6 +46,7 @@
     if (_inLoading)
         return;
     _inLoading = TRUE;
+    /*
     loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
     [container.superview addSubview:loadMoreView];
     [loadMoreView.layer removeAllAnimations];
@@ -56,6 +59,13 @@
     animation.repeatCount = 2000;
     [loadMoreView.layer addAnimation:animation forKey:@"animation"];
     [loadMoreView startAnimating];
+     */
+    
+    indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicatorView.frame = CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT);
+    [indicatorView startAnimating];
+    [container.superview addSubview:indicatorView];
+    
     [container.superview setNeedsLayout];
     [container.superview setNeedsDisplay];
 }
@@ -69,10 +79,13 @@
 }
 -(void) endLoadMore:(UIScrollView *)container
 {
-    [loadMoreView.layer removeAllAnimations];
-    loadMoreView.image = nil;
-    loadMoreView = nil;
-    [loadMoreView removeFromSuperview];
+    [indicatorView stopAnimating];
+    [indicatorView removeFromSuperview];
+    
+//    [loadMoreView.layer removeAllAnimations];
+//    loadMoreView.image = nil;
+//    loadMoreView = nil;
+//    [loadMoreView removeFromSuperview];
     _inLoading = FALSE;
     
 }
@@ -103,7 +116,6 @@
     [self startRefresh:sender.superview withCallback:^{
         [refreshControlView endRefreshing];
     }];
-    
 }
 
 -(void)startRefresh:(id)view withCallback:(dispatch_block_t)callback

@@ -16,6 +16,7 @@
 @interface FSEntityRequestBase()
 {
   __strong  FSRequestLoadComplete requestCompleteCallback;
+    int _type;
 }
 
 @end
@@ -31,27 +32,55 @@
     return _rootKeyPath;
 }
 
+-(void)setBaseURL:(int)type
+{
+    _type = type;
+    RKObjectManager *manager = [RKObjectManager sharedManager];
+    if ([manager.baseURL.absoluteString isEqualToString:REST_API_URL] && type == 2) {
+        RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL_OUT];
+        manager.client.baseURL = baseURL;
+    }
+    if([manager.baseURL.absoluteString isEqualToString:REST_API_URL_OUT] && type == 1){
+        RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
+        manager.client.baseURL = baseURL;
+    }
+}
+
 -(NSString *) appendCommonRequestQueryPara:(RKObjectManager *)manager{
     NSMutableDictionary *queryParams = [@{} mutableCopy];
     CommonHeader *comHeader = [[CommonHeader alloc] init];
     [queryParams addEntriesFromDictionary:[comHeader toQueryDic]];
-    RKURL *URL = nil;
-    if (![self.routeResourcePath isEqualToString:RK_REQUEST_PROD_SEARCH_LIST]) {
-        if ([manager.baseURL.absoluteString isEqualToString:@"http://intime-env-hvrevspudb.elasticbeanstalk.com"]) {
-            RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
-            manager.client.baseURL = baseURL;
-        }
-        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+    
+    if (_type  <= 1) {
+        [self setBaseURL:1];
+    }
+    if (_type <= 1) {
+        RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
         return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
     }
     else{
-        RKURL *baseURL = [RKURL URLWithBaseURLString:@"http://intime-env-hvrevspudb.elasticbeanstalk.com"];
-        manager.client.baseURL = baseURL;
-        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+        RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
         return [NSString stringWithFormat:@"%@?", [URL resourcePath]];
     }
-//    URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+    
+//    RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
 //    return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
+    
+//    RKURL *URL = nil;
+//    if (![self.routeResourcePath isEqualToString:RK_REQUEST_PROD_SEARCH_LIST]) {
+//        if ([manager.baseURL.absoluteString isEqualToString:REST_API_URL_OUT]) {
+//            RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
+//            manager.client.baseURL = baseURL;
+//        }
+//        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+//        return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
+//    }
+//    else{
+//        RKURL *baseURL = [RKURL URLWithBaseURLString:@"http://intime-env-hvrevspudb.elasticbeanstalk.com"];
+//        manager.client.baseURL = baseURL;
+//        URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
+//        return [NSString stringWithFormat:@"%@?", [URL resourcePath]];
+//    }
 }
 
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{

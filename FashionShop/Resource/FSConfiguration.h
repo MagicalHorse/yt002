@@ -38,6 +38,10 @@
 #endif
  */
 #define REST_API_URL   @"http://122.226.53.114:7070/api"
+//测试环境 http://intimeservicestage-env-mc26kntmhr.elasticbeanstalk.com
+//生产环境 http://api.youhuiin.com
+//http://intime-env-hvrevspudb.elasticbeanstalk.com
+#define REST_API_URL_OUT @"http://intimeservicestage-env-mc26kntmhr.elasticbeanstalk.com"
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博

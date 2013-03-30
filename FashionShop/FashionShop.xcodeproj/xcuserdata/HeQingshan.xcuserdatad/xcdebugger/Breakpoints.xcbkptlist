@@ -4,16 +4,16 @@
    version = "1.0">
    <FileBreakpoints>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FashionShop/FSProDetailViewController.m"
-         timestampString = "386323350.323599"
+         filePath = "FashionShop/FSDRViewController.m"
+         timestampString = "386351740.886249"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "102"
-         endingLineNumber = "102"
-         landmarkName = "-initAudioPlayer"
+         startingLineNumber = "311"
+         endingLineNumber = "311"
+         landmarkName = "-createListRequest:isRefresh:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

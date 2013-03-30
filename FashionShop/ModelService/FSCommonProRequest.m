@@ -42,6 +42,14 @@
 
 @synthesize routeResourcePath;
 
+//-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
+//{
+//    routeResourcePath = aRouteResourcePath;
+//    if ([routeResourcePath isEqualToString:RK_REQUEST_PRO_DETAIL]) {
+//        [self setBaseURL:2];
+//    }
+//}
+
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map
 {
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];

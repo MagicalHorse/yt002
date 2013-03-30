@@ -7,7 +7,7 @@
 //
 
 #import "FSModelManager.h"
-#import "RestKit.h"
+//#import "RestKit.h"
 #import "FSConfigListRequest.h"
 #import "FSLocalPersist.h"
 #import "FSCoreTag.h"
@@ -116,7 +116,14 @@ static FSModelManager *_modelManager;
     [self enqueueBackgroundBlock:^{
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
-        [request send:[FSCoreTag class] withRequest:request completeCallBack:nil];
+        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                NSLog(@"tag/all load success!");
+            }
+            else{
+                NSLog(@"tag/all load failed!");
+            }
+        }];
     }];
 
 }
@@ -127,7 +134,14 @@ static FSModelManager *_modelManager;
         
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_BRAND_ALL;
-        [request send:[FSCoreBrand class] withRequest:request completeCallBack:nil];
+        [request send:[FSCoreBrand class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                NSLog(@"brand/all load success!");
+            }
+            else{
+                NSLog(@"brand/all load failed!");
+            }
+        }];
     }];
 }
 
@@ -136,13 +150,13 @@ static FSModelManager *_modelManager;
     [self enqueueBackgroundBlock:^{
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_GROUP_BRAND_ALL;
-        [request send:[FSGroupBrandList class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        [request send:[FSGroupBrand class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
-                FSGroupBrandList *allBrands = req.responseData;
-                theApp.allBrands = allBrands.brandList;
+                theApp.allBrands = req.responseData;
+                NSLog(@"groupbrand/all load success");
             }
-            else {
-                //do nothing
+            else{
+                NSLog(@"groupbrand/all load failed");
             }
         }];
     }];
@@ -155,17 +169,20 @@ static FSModelManager *_modelManager;
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.routeResourcePath = RK_REQUEST_CONFIG_STORE_ALL;
-        [request send:[FSCoreStore class] withRequest:request completeCallBack:nil
-         ];
-        
-        
+        [request send:[FSCoreStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                NSLog(@"store/all load success!");
+            }
+            else{
+                NSLog(@"store/all load failed!");
+            }
+        }];
     }];
 }
 
 -(void) initConfig
 {
     [self forceReloadTags];
-    //[self forceReloadBrands];
     [self forceReloadAllBrands];
     [self forceReloadStores];
 

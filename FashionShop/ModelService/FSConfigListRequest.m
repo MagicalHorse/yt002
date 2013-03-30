@@ -16,6 +16,17 @@
 @synthesize lantit;
 @synthesize routeResourcePath;
 
+-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
+{
+    routeResourcePath = aRouteResourcePath;
+    if ([routeResourcePath isEqualToString:RK_REQUEST_CONFIG_GROUP_BRAND_ALL] ||
+        [routeResourcePath isEqualToString:RK_REQUEST_CONFIG_BRAND_ALL] ||
+        [routeResourcePath isEqualToString:RK_REQUEST_CONFIG_STORE_ALL] ||
+        [routeResourcePath isEqualToString:RK_REQUEST_CONFIG_TAG_ALL]) {
+        [self setBaseURL:2];
+    }
+}
+
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map
 {
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];

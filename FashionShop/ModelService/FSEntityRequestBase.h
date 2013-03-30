@@ -29,6 +29,10 @@ typedef void(^DataSourceProviderRequest2Block)(FSEntityRequestBase *,dispatch_bl
 
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map;
 
+//type==1:REST_API_URL
+//type==2:REST_API_URL_OUT
+-(void)setBaseURL:(int)type;
+
 
 
 @end

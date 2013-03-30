@@ -24,11 +24,20 @@
 
 -(NSString *) routeResourcePath
 {
-    if (!_routeResourcePath)
-        _routeResourcePath = RK_REQUEST_PRO_LIST;
+//    if (!_routeResourcePath)
+//        _routeResourcePath = RK_REQUEST_PRO_LIST;
     return _routeResourcePath;
 }
 
+-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
+{
+    _routeResourcePath = aRouteResourcePath;
+    if ([aRouteResourcePath isEqualToString:RK_REQUEST_PROD_SEARCH_LIST] ||
+        [aRouteResourcePath isEqualToString:RK_REQUEST_PROD_LIST] ||
+        [aRouteResourcePath isEqualToString:RK_REQUEST_PRO_LIST]) {
+        [self setBaseURL:2];
+    }
+}
 
 - (RKRequestMethod) requestMethod{
     return RKRequestMethodGET;

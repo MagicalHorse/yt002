@@ -380,11 +380,11 @@
 - (IBAction)doSelBrand:(id)sender {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
     [ tableSelect setDataSource:^id{
-        //return [FSBrand allBrandsLocal];
         return [FSGroupBrandList allBrandsLocal];
     } step:PostStep4Finished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", nil);
-    [self.navigationController pushViewController:tableSelect animated:TRUE];}
+    [self.navigationController pushViewController:tableSelect animated:TRUE];
+}
 
 -(void)doSelTag:(id)sender
 {
@@ -506,6 +506,7 @@
     {
         detailCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"defaultcell"];
     }
+    detailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     detailCell.imageView.image = nil;
     detailCell.textLabel.text = nil;
     id detailText = [_rows objectForKey:[_sections objectAtIndex:indexPath.section]];

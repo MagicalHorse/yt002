@@ -97,14 +97,6 @@
     [self doBinding:nil];
 }
 
--(void)initAudioPlayer
-{
-    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
-    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-    [_player prepareToPlay];
-}
-
 -(void) onButtonCancel
 {
     [self.navigationController dismissViewControllerAnimated:true completion:nil];
@@ -206,7 +198,6 @@
         NSNumber * itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
         FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
         drequest.uToken = [FSModelManager sharedModelManager].loginToken;
-        drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
         drequest.id = itemId;
         drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];

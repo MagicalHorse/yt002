@@ -82,6 +82,23 @@ BOOL networkIsWorking = NO;
     networkIsWorking = YES;
     if (!container)
         container = self.view;
+    
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+40, 80, 80)];
+    view.backgroundColor = [UIColor clearColor];
+    view.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
+    UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
+    inView.backgroundColor = [UIColor blackColor];
+    inView.layer.cornerRadius = 10;
+    inView.layer.borderWidth = 0;
+    inView.alpha = 0.7;
+    [view addSubview:inView];
+    UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    indicatorView.frame = CGRectMake((view.frame.size.width-indicatorView.frame.size.width)/2, (view.frame.size.height-indicatorView.frame.size.height)/2, indicatorView.frame.size.width, indicatorView.frame.size.height);
+    [view addSubview:indicatorView];
+    [indicatorView startAnimating];
+    [container.superview addSubview:view];
+    
+    /*
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
     if(!loadMoreView)
     {
@@ -99,14 +116,18 @@ BOOL networkIsWorking = NO;
     animation.repeatCount = 2000;    
     [loadMoreView.layer addAnimation:animation forKey:@"animation"];
     [loadMoreView startAnimating];
-
-
+    */
 }
 -(void) endLoading:(UIView *)container
 {
     networkIsWorking = NO;
     if (!container)
         container = self.view;
+    
+    UIView *view = [container.superview viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
+    [view removeFromSuperview];
+    
+    /*
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
     if (loadMoreView)
     {
@@ -114,9 +135,8 @@ BOOL networkIsWorking = NO;
         loadMoreView.image = nil;
         [loadMoreView removeFromSuperview];
     }
- 
+     */
 }
-
 
 -(void) showNoResult:(UIView *)container withText:(NSString *)text
 {
