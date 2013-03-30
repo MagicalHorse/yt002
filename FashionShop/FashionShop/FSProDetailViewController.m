@@ -23,7 +23,6 @@
 #import "FSSearchViewController.h"
 #import "FSProPostTitleViewController.h"
 #import "CL_VoiceEngine.h"
-#import "FSAudioButton.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -47,7 +46,6 @@
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
 #define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
-#define PRO_DETAIL_COMMENT_CELL_HEIGHT 74
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
 
 @interface FSProDetailViewController ()
@@ -68,6 +66,7 @@
     AVAudioPlayer * _player;
     BOOL _isAudio;//是否是语音内容
     BOOL _isPlaying;//是否正在播放声音
+    FSAudioButton *lastButton;
 }
 
 @end
@@ -90,15 +89,7 @@
     [super viewDidLoad];
     [self beginPrepareData];
     
-    _minRecordGap = 1;
-}
-
--(void)viewDidUnload
-{
-    [super viewDidUnload];
-    if (_player.isPlaying) {
-        [_player stop];
-    }
+    _minRecordGap = 1.5;
 }
 
 -(void) beginPrepareData
@@ -185,6 +176,7 @@
     }
     [[(id)view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
     
+    [(id)view audioButton].audioDelegate = self;
     [(id)view svContent].delegate = self;
     [(id)view tbComment].delegate = self;
     [(id)view tbComment].dataSource = self;
@@ -835,13 +827,13 @@
     NSString *commentText = [self transformCommentText];
     FSCommonCommentRequest *request = [[FSCommonCommentRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
-    request.comment = commentText;
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
     request.sourceType = [NSNumber numberWithInt:_sourceType];
+    request.comment = commentText;
+    request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
     if (_recordFileName) {
         request.audioName = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
     }
-    request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
     //回复特用户
     if (!isReplyToAll) {
         //获取选中用户的ID；
@@ -850,6 +842,9 @@
         FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
         FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
         request.replyuserID = item.inUser.uid;
+        
+        //此处暂时借用comment对象存储回复对象
+        //request.comment = item.inUser.nickie;
     }
     
     __block FSProDetailViewController *blockSelf = self;
@@ -1083,6 +1078,8 @@
     else{
         [detailCell.btnComment setImage:[UIImage imageNamed:@"comment_sel_icon.png"] forState:UIControlStateNormal];
     }
+    detailCell.audioButton.audioDelegate = self;
+    [detailCell updateFrame];
     
 //    FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(150, 20, 100, 25)];
 //    btn.fullPath = _recordFileName;
@@ -1102,10 +1099,7 @@
         }
     }
     FSProCommentCell *cell = (FSProCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
-    CGFloat totalHeight = 31;
-    totalHeight += [cell.lblComment sizeThatFits:cell.lblComment.frame.size].height;
-    
-    return MAX(PRO_DETAIL_COMMENT_CELL_HEIGHT,totalHeight+10);
+    return cell.cellHeight;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -1155,10 +1149,33 @@
 }
 
 - (void)viewDidUnload {
+    [self stopAllAudio];
     [self set_thumView:nil];
     [self setArrowLeft:nil];
     [self setArrowRight:nil];
     [super viewDidUnload];
+}
+
+-(void)stopAllAudio
+{
+    if (_player.isPlaying) {
+        [_player pause];
+    }
+    if (lastButton) {
+        [lastButton pause];
+    }
+//    //循环停止所有的播放事件
+//    id currentView =  self.paginatorView.currentPage;
+//    UITableView *tbComment =[currentView tbComment];
+//    NSArray *array = [tbComment visibleCells];
+//    for (int i = 0; i < array.count; i++) {
+//        if ([array[i] isKindOfClass:[FSProCommentCell class]]) {
+//            FSProCommentCell *cell = array[i];
+//            if ([cell.audioButton isPlaying]) {
+//                [cell.audioButton pause];
+//            }
+//        }
+//    }
 }
 
 #pragma mark - FSProDetailItemSourceProvider
@@ -1221,16 +1238,6 @@
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         _audioRecoder.recorderingFileName = _recordFileName;
-        
-        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-        NSLock* tempLock = [[NSLock alloc]init];
-        [tempLock lock];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:recordAudioFullPath error:nil];
-        }
-        [tempLock unlock];
-        
         [_audioRecoder startRecord];
     }
 }
@@ -1267,11 +1274,8 @@
 
 - (IBAction)recordTouchDown:(id)sender
 {
-    if (_recordState == WaitPlay) {
-        return;
-    }
     _downTime = [NSDate date];
-    [sender setTitle:@"松开 结束" forState:UIControlStateNormal];
+    [sender setTitle:@"松开结束" forState:UIControlStateNormal];
     [self startToRecord];
     _recordState = Recording;
 }
@@ -1288,23 +1292,18 @@
 
 -(void)endTouch:(id)sender
 {
-    if (_recordState == WaitPlay) {
-        [self initAudioPlayer];
-        [_player play];
-    }
-    else if(_recordState == Recording){
+    if(_recordState == Recording){
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
             [self reportError:@"说话时间太短，请重新录入"];
             //重新设置为起始状态
-            [sender setTitle:@"按住 评论" forState:UIControlStateNormal];
+            [sender setTitle:@"按住评论" forState:UIControlStateNormal];
             _recordState = StartRecord;
             [self endRecordAndDelete];
         }
         else{
-            [sender setTitle:@"点击播放" forState:UIControlStateNormal];
-            _recordState = WaitPlay;
+            [sender setTitle:@"按住评论" forState:UIControlStateNormal];
             [self endRecord];
             id currentView =  self.paginatorView.currentPage;
             [[currentView tbComment] reloadData];
@@ -1313,6 +1312,14 @@
             [self saveComment:nil];
         }
     }
+}
+
+#pragma mark - FSAudioDelegate
+
+-(void)clickAudioButton:(FSAudioButton*)aButton
+{
+    [self stopAllAudio];
+    lastButton = aButton;
 }
 
 @end

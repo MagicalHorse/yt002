@@ -65,9 +65,10 @@
     [params setValue:comment forParam:@"content"];
     [params setValue:replyuserID forParam:@"replyuser"];
     
-    if (audioName) {
+    if (audioName && ![audioName isEqualToString:@""]) {
         NSLog(@"audioName:%@", audioName);
-        [params setData:[NSData dataWithContentsOfFile:audioName] MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
+        [params setData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:audioName]] MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
+        NSLog(@"audio data:%@", [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:audioName]]);
     }
     
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];

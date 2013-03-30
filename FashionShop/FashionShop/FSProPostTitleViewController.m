@@ -11,6 +11,7 @@
 #import "FSProPostMainViewController.h"
 #import "NSString+Extention.h"
 #import "CL_VoiceEngine.h"
+#import "FSAudioButton.h"
 
 @interface FSProPostTitleViewController ()
 {
@@ -55,14 +56,6 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [_txtTitle becomeFirstResponder];
-}
-
--(void)viewDidUnload
-{
-    [super viewDidUnload];
-    if (_player.isPlaying) {
-        [_player stop];
-    }
 }
 
 -(void) decorateTapDismissKeyBoard
@@ -459,6 +452,7 @@
 }
 
 - (void)viewDidUnload {
+    [self stopAllAudio];
     [self setLblName:nil];
     [self setLblDescName:nil];
     [self setLblPrice:nil];
@@ -472,4 +466,12 @@
     [self setBtnRecord:nil];
     [super viewDidUnload];
 }
+
+-(void)stopAllAudio
+{
+    if (_player.isPlaying) {
+        [_player stop];
+    }
+}
+
 @end

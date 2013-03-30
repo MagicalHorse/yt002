@@ -104,7 +104,7 @@
     for (UIImage* img in imgs) {
         [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
     }
-    if (fileName) {
+    if (fileName && ![fileName isEqualToString:@""]) {
         NSLog(@"fileName:%@",fileName);
         [params setData:[NSData dataWithContentsOfFile:fileName] MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
     }

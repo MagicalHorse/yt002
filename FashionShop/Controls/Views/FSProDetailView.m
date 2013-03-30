@@ -64,20 +64,7 @@
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d",_data.favorTotal] forKey:@"text"];
     _lblFavorCount.font = ME_FONT(12);
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
-    _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
-    _lblDescrip.font = ME_FONT(14);
-    _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
-    _lblDescrip.numberOfLines = 0;
-    CGRect origFrame = _lblDescrip.frame;
-    CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
-    int yOff = 4;
-    origFrame.size.height = fitSize.height;
-    origFrame.size.width = fitSize.width;
-    origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+yOff * 2;
-    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
-        origFrame.origin.y -= yOff * 2 + 2;
-    }
-    _lblDescrip.frame = origFrame;
+    
     FSResource *_audioResource = nil;
     if (_data.resource &&
         _data.resource.count>0)
@@ -95,6 +82,26 @@
             }
         }
     }
+    CGRect _rect = _lblDescrip.frame;
+    if (_audioResource) {
+        _rect.size.width -= 50;
+    }
+    
+    _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
+    _lblDescrip.font = ME_FONT(14);
+    _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    _lblDescrip.numberOfLines = 0;
+    CGRect origFrame = _lblDescrip.frame;
+    CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
+    int yOff = 4;
+    origFrame.size.height = fitSize.height;
+    origFrame.size.width = fitSize.width;
+    origFrame.origin.y = _imgFansBG.frame.size.height+_imgFansBG.frame.origin.y+yOff * 2;
+    if ([NSString isNilOrEmpty:_lblDescrip.text]) {
+        origFrame.origin.y -= yOff * 2 + 2;
+    }
+    _lblDescrip.frame = origFrame;
+    
     UIView *imgBG = [[UIView alloc] initWithFrame:CGRectMake(0, _imgView.frame.origin.y, self.frame.size.width, _imgView.frame.size.height)];
     imgBG.userInteractionEnabled = FALSE;
     imgBG.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"prod_detail_bg"]];
@@ -114,13 +121,16 @@
     _btnStore.titleLabel.font = ME_FONT(14);
     
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff*2, storesize.width, storesize.height);
+    _btnStore.frame = CGRectMake(_btnStore.frame.origin.x, _lblDescrip.frame.size.height+_lblDescrip.frame.origin.y+yOff*2, storesize.width, storesize.height + 10);
     if (_data.tagId!=0)
     {
         _btnTag.alpha =1;
         [_btnTag setImage:[UIImage imageNamed:@"pro_tag_bg"] forState:UIControlStateNormal];
         CGSize newsize = CGSizeMake(77, 22);
-        _btnTag.frame = CGRectMake(_imgView.frame.size.width+_imgView.frame.origin.x-newsize.width, _imgView.frame.size.height+_imgView.frame.origin.y-newsize.height, newsize.width, newsize.height);
+        _btnTag.frame = CGRectMake(_imgView.frame.size.width+_imgView.frame.origin.x-newsize.width,
+                                   _imgView.frame.size.height+_imgView.frame.origin.y-newsize.height - 5,
+                                   newsize.width,
+                                   newsize.height);
 
     } else
     {
@@ -140,9 +150,9 @@
     
     //设置播放按钮
     if (_audioResource) {
-        FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(0, 0, 100, 30)];
-        btn.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,_audioResource.relativePath];
-        [_svContent addSubview:btn];
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(245, 332, 60, 30)];
+        _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,_audioResource.relativePath];
+        [_svContent addSubview:_audioButton];
     }
     
     [self updateInteraction];

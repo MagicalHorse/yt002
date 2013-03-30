@@ -16,10 +16,18 @@ typedef enum {
     Pause,
 }AudioState;
 
+@class FSAudioButton;
+@protocol FSAudioDelegate <NSObject>
+
+-(void)clickAudioButton:(FSAudioButton*)aButton;
+
+@end
+
 @interface FSAudioButton : UIButton<AVAudioPlayerDelegate>
 
 @property (nonatomic,strong) NSString *fullPath;//声音文件
 @property (nonatomic,assign) AudioState state;
+@property (nonatomic,assign) id<FSAudioDelegate> audioDelegate;
 
 -(void)play;
 -(void)stop;

@@ -13,15 +13,21 @@
 @synthesize   id;
 @synthesize comment;
 @synthesize indate;
-@synthesize  inUser;
+@synthesize inUser;
+@synthesize resources;
+@synthesize replyUserID;
+@synthesize replyUserName;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
-    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"content",@"comment",@"createddate",@"indate",nil];
-    RKObjectMapping *userRelationMap = [FSUser getRelationDataMap];
-    [relationMapping mapKeyPath:@"customer" toRelationship:@"inUser" withMapping:userRelationMap];
-     return relationMapping;
+    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"content",@"comment",@"createddate",@"indate",@"replycustomer_id",@"replyUserID",@"replycustomer_nickname",@"replyUserName",nil];
+    RKObjectMapping *relationMap = [FSUser getRelationDataMap];
+    [relationMapping mapKeyPath:@"customer" toRelationship:@"inUser" withMapping:relationMap];
+    relationMap = [FSResource getRelationDataMap];
+    [relationMapping mapKeyPath:@"resources" toRelationship:@"resources" withMapping:relationMap];
+    
+    return relationMapping;
 }
 
 

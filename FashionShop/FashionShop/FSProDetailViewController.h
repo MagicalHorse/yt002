@@ -15,6 +15,7 @@
 #import "UIViewController+Loading.h"
 #import "FSThumView.h"
 #import "FSImageSlideViewController.h"
+#import "FSAudioButton.h"
 
 @class FSProDetailViewController;
 
@@ -30,7 +31,7 @@
 
 @end
 
-@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider>
+@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider,FSAudioDelegate>
 - (IBAction)doBack:(id)sender;
 - (IBAction)doComment:(id)sender;
 
@@ -38,6 +39,7 @@
 - (IBAction)doShare:(id)sender;
 - (IBAction)showBrand:(id)sender;
 - (IBAction)goStore:(id)sender;
+-(void)stopAllAudio;
 
 @property (strong, nonatomic) IBOutlet FSThumView *_thumView;
 @property (strong, nonatomic) IBOutlet UIImageView *arrowLeft;

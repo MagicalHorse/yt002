@@ -40,5 +40,7 @@
 
 @property (strong, nonatomic) NSString *imageURL;
 
+@property (nonatomic,strong) FSAudioButton *audioButton;
+
 
 @end

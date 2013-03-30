@@ -693,7 +693,7 @@
         _fileName = [kRecorderDirectory stringByAppendingPathComponent:viewController.recordFileName];
     }
     else{
-        _fileName = nil;
+        _fileName = @"";
     }
     [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text]];
     [viewController dismissViewControllerAnimated:TRUE completion:nil];

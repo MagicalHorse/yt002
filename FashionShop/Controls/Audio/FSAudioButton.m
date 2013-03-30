@@ -41,7 +41,7 @@
     //设置按钮属性
     [self setBackgroundColor:[UIColor clearColor]];
     UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
-    image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
+    //image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0, 30, image.size.height, image.size.width-30)];
     [self setBackgroundImage:image forState:UIControlStateNormal];
     [self setBackgroundImage:image forState:UIControlStateHighlighted];
     
@@ -131,6 +131,9 @@
 
 -(void)clickToPlay:(UIButton*)sender
 {
+    if (_audioDelegate && [_audioDelegate respondsToSelector:@selector(clickAudioButton:)]) {
+        [_audioDelegate clickAudioButton:self];
+    }
     [self play];
 }
 
@@ -189,11 +192,15 @@
 {
     [player stop];
     player.currentTime = 0;
+    state = Stop;
+    [self updateState];
 }
 
 -(void)pause
 {
     [player pause];
+    state = Pause;
+    [self updateState];
 }
 
 -(BOOL)isPlaying
