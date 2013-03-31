@@ -59,8 +59,8 @@
             
             emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
              */
-            emptyView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-40,self.frame.origin.y+70, 80, 80)];
-            emptyView.backgroundColor = [UIColor whiteColor];
+            emptyView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-40,self.frame.origin.y+80, 80, 80)];
+            emptyView.backgroundColor = [UIColor clearColor];
             emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
             UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
             inView.backgroundColor = [UIColor blackColor];

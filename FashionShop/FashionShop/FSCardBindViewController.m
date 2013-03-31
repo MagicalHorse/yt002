@@ -35,8 +35,8 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     self.view.backgroundColor = APP_BACKGROUND_COLOR;
     [self prepareView];
-    _cardNumField.text = @"4367455100790570";
-    _cardPwField.text = @"090027";
+//    _cardNumField.text = @"4367455100790570";
+//    _cardPwField.text = @"090027";
 }
 
 -(void)updateTitle
@@ -51,6 +51,10 @@
 
 -(void)prepareView
 {
+    //设置背景图片
+    _bgImageView.image = [[UIImage imageNamed:@"bind_card_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
+    _bgImageView.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH-NAV_HIGH-TAB_HIGH);
+    
     if (![currentUser.isBindCard boolValue]) {
         _bindView.hidden = NO;
         _resultView.hidden = YES;
@@ -62,7 +66,7 @@
         _bindView.frame = _rect;
         
         UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
-        image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
+        //image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
         [_btnBindCard setBackgroundImage:image forState:UIControlStateNormal];
     }
     else {
@@ -102,10 +106,6 @@
             }];
         }
     }
-    
-    //设置背景图片
-    _bgImageView.image = [[UIImage imageNamed:@"bind_card_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
-    _bgImageView.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH-NAV_HIGH-TAB_HIGH);
 }
 
 - (IBAction)onButtonBack:(id)sender {

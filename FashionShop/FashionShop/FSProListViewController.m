@@ -236,6 +236,15 @@ typedef enum {
         }
     });
 }
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_dataSourceBannerData.count > 0) {
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
+}
+
 -(void)updateFrame
 {
     CGRect rect;
@@ -622,6 +631,7 @@ typedef enum {
             FSStore * store = [_storeSource objectAtIndex:cell.tag];
             FSStoreDetailViewController *storeController = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
             storeController.store = store;
+            [self.navigationController setNavigationBarHidden:NO];
             [self.navigationController pushViewController:storeController animated:YES];
         }
     }
@@ -918,7 +928,7 @@ typedef enum {
     NSURL *url = [(FSResource *)item.resource[0] absoluteUr:APP_WIDTH height:NAV_HIGH];
     UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, NAV_HIGH)];
     view.contentMode = UIViewContentModeScaleAspectFill;
-    [view setImageUrl:url resizeWidth:CGSizeMake(APP_WIDTH, NAV_HIGH)];
+    [view setImageUrl:url resizeWidth:CGSizeMake(APP_WIDTH, NAV_HIGH) placeholderImage:[UIImage imageNamed:@"default_icon320x44.png"]];
     return view;
 }
 

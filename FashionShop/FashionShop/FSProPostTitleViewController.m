@@ -13,6 +13,8 @@
 #import "CL_VoiceEngine.h"
 #import "FSAudioButton.h"
 
+#define TITLE_MAX_LENGTH 15
+
 @interface FSProPostTitleViewController ()
 {
     UIView *backView;
@@ -27,6 +29,8 @@
     NSInteger _minRecordGap;//最小录制时间间隔
     
     AVAudioPlayer * _player;
+    UIImageView *playImageView;
+    UIImageView *animateView;
 }
 
 @end
@@ -49,8 +53,96 @@
     [super viewDidLoad];
     [self decorateTapDismissKeyBoard];
     [self bindControl];
+    [self initAudioRecoder];
+    [self initRecordButton];
     
-    _minRecordGap = 1;
+    _minRecordGap = 4;
+}
+
+-(void)initRecordButton
+{
+    UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
+    [_btnRecord setBackgroundImage:image forState:UIControlStateNormal];
+    image = [UIImage imageNamed:@"audio_btn_sel.png"];
+    [_btnRecord setBackgroundImage:image forState:UIControlStateHighlighted];
+    
+    int height = _btnRecord.frame.size.height/2;
+    CGRect _rect = CGRectMake((_btnRecord.frame.size.width-height)/2 - 40, height/2, height, height);
+    //添加播放图标
+    playImageView = [[UIImageView alloc] initWithFrame:_rect];
+    playImageView.hidden = YES;
+    playImageView.image = [UIImage imageNamed:@"play_icon.png"];
+    playImageView.contentMode = UIViewContentModeCenter;
+    [_btnRecord addSubview:playImageView];
+    
+    //添加播放动画
+    animateView = [[UIImageView alloc] initWithFrame:_rect];
+    animateView.animationImages = [NSArray arrayWithObjects:
+                                   [UIImage imageNamed:@"audio_play0.png"],
+                                   [UIImage imageNamed:@"audio_play1.png"],
+                                   [UIImage imageNamed:@"audio_play2.png"],
+                                   [UIImage imageNamed:@"audio_play3.png"],
+                                   nil];
+    animateView.animationDuration = 1.2;
+    animateView.hidden = YES;
+    animateView.contentMode = UIViewContentModeCenter;
+    [_btnRecord addSubview:animateView];
+}
+
+-(void)showReRecordButton
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        //改变尺寸
+        CGRect _rect = _btnRecord.frame;
+        _rect.size.width -= 80;
+        _btnRecord.frame = _rect;
+        
+        _btnReRecord.alpha = 1.0;
+        _rect = _btnReRecord.frame;
+        _rect.size.width = 75;
+        _rect.origin.x -= 75;
+        _btnReRecord.frame = _rect;
+        
+        //加入播放按钮
+        [_btnRecord setTitle:@"" forState:UIControlStateNormal];
+    } completion:^(BOOL finished) {
+        playImageView.hidden = NO;
+    }];
+}
+
+-(void)hideReRecordButton
+{
+    //设置状态
+    _recordState = PTStartRecord;
+    playImageView.hidden = YES;
+    animateView.hidden = YES;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        //改变尺寸
+        CGRect _rect = _btnRecord.frame;
+        _rect.size.width += 80;
+        _btnRecord.frame = _rect;
+        
+        _btnReRecord.alpha = 0;
+        _rect = _btnReRecord.frame;
+        _rect.size.width = 0;
+        _rect.origin.x += 75;
+        _btnReRecord.frame = _rect;
+    } completion:^(BOOL finished) {
+        //加入播放按钮
+        [_btnRecord setTitle:@"按住开始录音" forState:UIControlStateNormal];
+        //清除文件内容
+        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+        NSLock* tempLock = [[NSLock alloc]init];
+        [tempLock lock];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:recordAudioFullPath error:nil];
+        }
+        [tempLock unlock];
+        _recordFileName = nil;
+        _player = nil;
+    }];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -82,7 +174,7 @@
     [_txtTitle setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtTitle.layer.borderWidth = 0.5;
     _txtTitle.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
-    _txtTitle.placeholder = [NSString stringWithFormat:NSLocalizedString(@"only %d chars allowed", nil), 10];
+    _txtTitle.placeholder = [NSString stringWithFormat:NSLocalizedString(@"only %d chars allowed", nil), TITLE_MAX_LENGTH];
     [_txtDesc setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
     _txtDesc.layer.borderWidth = 2;
     _txtDesc.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
@@ -140,21 +232,51 @@
     _txtDesc.delegate = self;
 }
 
--(void)initAudioPlayer
+-(void)startPlay
 {
-    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
-    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-    [_player prepareToPlay];
+    if (!_player) {
+        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+        NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        _player.delegate = self;
+        [_player prepareToPlay];
+    }
+    _recordState = PTPlaying;
+    [animateView startAnimating];
+    animateView.hidden = NO;
+    playImageView.hidden = YES;
+    [_player play];
+}
+
+-(void)stopPlay
+{
+    _recordState = PTWaitPlay;
+    [animateView stopAnimating];
+    animateView.hidden = YES;
+    playImageView.hidden = NO;
+    _player.currentTime = 0;
+    [_player stop];
+}
+
+-(void)pausePlay
+{
+    animateView.hidden = YES;
+    playImageView.hidden = NO;
+    _recordState = PTWaitPlay;
+    [animateView stopAnimating];
+    [_player pause];
 }
 
 -(BOOL) checkInput
 {
     if (!(_txtTitle.text.length > 0 &&
-        _txtTitle.text.length < 10))
+        _txtTitle.text.length < TITLE_MAX_LENGTH))
     {
-        int titleLength = 10;
-        [self reportError:[NSString stringWithFormat:NSLocalizedString(@"PRO_POST_TITLE_LENGTH_ERROR %d", nil), titleLength]];
+        [self reportError:[NSString stringWithFormat:NSLocalizedString(@"PRO_POST_TITLE_LENGTH_ERROR %d", nil), TITLE_MAX_LENGTH]];
+        return NO;
+    }
+    if ([NSString isNilOrEmpty:_txtDesc.text]) {
+        [self reportError:NSLocalizedString(@"PRO_POST_DESC_INFO", nil)];
         return NO;
     }
     //如果选择了活动描述，则要求一定要输入有效期。
@@ -163,15 +285,7 @@
             [self reportError:NSLocalizedString(@"PRO_POST_DURATION_ERROR", nil)];
             return NO;
         }
-        //有效期合法性判断
-        //...
     }
-    //如果是商品，必须要输入价格
-//    if (_publishSource == FSSourceProduct &&
-//        ([NSString isNilOrEmpty:_txtPrice.text] || _txtPrice.text.intValue <= 0)) {
-//        [self reportError:NSLocalizedString(@"", nil)];
-//        return NO;
-//    }
     if ([_txtProDesc.text isEqualToString:@""]) {
         return YES;
     }
@@ -183,8 +297,6 @@
     }
     return YES;
 }
-
-
 
 - (BOOL)validateDate:(NSMutableString **)errorin
 {
@@ -216,6 +328,28 @@
     {
         [_txtPrice resignFirstResponder];
     }
+}
+
+-(void)cleanData
+{
+    [self hideReRecordButton];
+    NSLock* tempLock = [[NSLock alloc]init];
+    [tempLock lock];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:_recordFileName])
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:_recordFileName error:nil];
+    }
+    [tempLock unlock];
+    
+    _txtTitle.text = @"";
+    _txtDesc.text = @"";
+    _txtPrice.text = @"";
+    _txtProDesc.text = @"";
+    _txtProStartTime.text = @"";
+    _txtProEndTime.text = @"";
+    _btnReRecord = nil;
+    _btnRecord = nil;
+    _audioRecoder = nil;
 }
 
 #pragma mark - TDDatePickerControllerDelegate
@@ -260,11 +394,11 @@
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if (textField == _txtTitle) {
-        if (textField.text.length > 9 && ![string isEqualToString:@""]) {
-            return NO;
-        }
-    }
+//    if (textField == _txtTitle) {
+//        if (textField.text.length > TITLE_MAX_LENGTH-1 && ![string isEqualToString:@""]) {
+//            return NO;
+//        }
+//    }
     if (textField == _txtPrice) {
         if ([string isEqualToString:@""]) {
             return YES;
@@ -313,29 +447,10 @@
     [activityObject resignFirstResponder];
 }
 
-- (IBAction)record:(id)sender {
-    switch (_recordState) {
-        case StartRecord:
-        {
-            
-        }
-            break;
-        case Recording:
-        {
-            
-        }
-            break;
-        default:
-            break;
-    }
-}
-
 #pragma mark record function
 
-- (void)startToRecord
+-(void)initAudioRecoder
 {
-    [activityObject resignFirstResponder];
-    
     if (!_audioRecoder) {
         _isRecording = NO;
         if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
@@ -360,12 +475,19 @@
             AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
         }
         _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
-            } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
-                NSLog(@"%@",[error localizedDescription]);
-            } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
-                NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
+            NSLog(@"%@",[error localizedDescription]);
+        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
+            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
         }];
     }
+}
+
+- (void)startToRecord
+{
+    [activityObject resignFirstResponder];
+    
+    [self initAudioRecoder];
     if (_isRecording == NO)
     {
         _isRecording = YES;
@@ -407,13 +529,14 @@
 
 - (IBAction)recordTouchDown:(id)sender
 {
-    if (_recordState == WaitPlay) {
+    if (_recordState == PTWaitPlay ||
+        _recordState == PTPlaying) {
         return;
     }
     _downTime = [NSDate date];
-    [_btnRecord setTitle:@"松开结束" forState:UIControlStateNormal];
+    [_btnRecord setTitle:@"松开结束录音" forState:UIControlStateNormal];
     [self startToRecord];
-    _recordState = Recording;
+    _recordState = PTRecording;
 }
 
 - (IBAction)recordTouchUpInside:(id)sender
@@ -426,28 +549,36 @@
     [self endTouch];
 }
 
+- (IBAction)reRecordTouchUpInside:(id)sender {
+    [self hideReRecordButton];
+}
+
 -(void)endTouch
 {
-    if (_recordState == WaitPlay) {
-        [self initAudioPlayer];
-        [_player play];
+    if (_recordState == PTWaitPlay) {
+        [self startPlay];
     }
-    else if(_recordState == Recording){
+    else if(_recordState == PTPlaying) {
+        [self pausePlay];
+    }
+    else if(_recordState == PTRecording){
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
-            [self reportError:@"说话时间太短"];
+            [self reportError:@"说话时间太短，请重新录入"];
             //重新设置为起始状态
-            [_btnRecord setTitle:@"按住说话" forState:UIControlStateNormal];
-            _recordState = StartRecord;
+            [_btnRecord setTitle:@"按住开始录音" forState:UIControlStateNormal];
+            _recordState = PTStartRecord;
             [self endRecordAndDelete];
         }
         else{
             [_btnRecord setTitle:@"点击播放" forState:UIControlStateNormal];
-            _recordState = WaitPlay;
+            _recordState = PTWaitPlay;
             [self endRecord];
+            
+            //显示重新录入按钮
+            [self showReRecordButton];
         }
-        NSLog(@"fileName:%@", _recordFileName);
     }
 }
 
@@ -464,6 +595,7 @@
     [self setTxtProStartTime:nil];
     [self setLblDescVoice:nil];
     [self setBtnRecord:nil];
+    [self setBtnReRecord:nil];
     [super viewDidUnload];
 }
 
@@ -471,7 +603,15 @@
 {
     if (_player.isPlaying) {
         [_player stop];
+        _recordState = PTWaitPlay;
     }
+}
+
+#pragma mark - AVAudioPlayDelegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    [self stopPlay];
 }
 
 @end

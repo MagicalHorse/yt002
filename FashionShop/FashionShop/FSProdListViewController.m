@@ -46,11 +46,12 @@
             [btn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
             btn.backgroundColor = RGBCOLOR(234, 234, 234);
             [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
             btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
         }
         if ([cc isKindOfClass:[UISegmentedControl class]]) {
             UISegmentedControl * seg = (UISegmentedControl*)cc;
-            seg.tintColor = RGBCOLOR(222, 222, 222);
+            seg.tintColor = RGBCOLOR(200, 200, 200);
             [seg addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
             [self ChangeSegmentFont:seg];
         }
@@ -74,7 +75,7 @@
         [lb setTextAlignment:UITextAlignmentCenter];
         [lb setFrame:CGRectMake(0, 0, 155, 30)];
         [lb setFont:[UIFont systemFontOfSize:14]];
-        lb.textColor = [UIColor grayColor];
+        lb.textColor = [UIColor blackColor];
         lb.shadowOffset = CGSizeMake(0, 0);
     }
     NSArray *na = [aView subviews];
@@ -151,6 +152,8 @@
         self.searchBar.segmentDelegate = self;
         self.searchBar.showsCancelButton = YES;
         [self.searchBar sizeToFit];
+        _selectedIndex = 0;
+        [self segmentValueChanged:nil];
         
         CGRect _rect = self.view.bounds;
         _rect.size.height += NAV_HIGH;
@@ -736,7 +739,9 @@
         }
     }
     dr.titleName = dr.keyWords;
-    [self.navigationController presentModalViewController:dr animated:YES];
+    dr.isModel = YES;
+    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:dr];
+    [self presentModalViewController:navControl animated:YES];
 }
 
 #pragma mark - MySegmentValueChangedDelegate
@@ -744,7 +749,9 @@
 -(void)segmentValueChanged:(UISegmentedControl*)seg
 {
     BOOL hasFoucus = self.searchBar.isFirstResponder;
-    _selectedIndex = seg.selectedSegmentIndex;
+    if (seg) {
+        _selectedIndex = seg.selectedSegmentIndex;
+    }
     [_tableSearch reloadData];
     if (hasFoucus) {
         [self.searchBar becomeFirstResponder];

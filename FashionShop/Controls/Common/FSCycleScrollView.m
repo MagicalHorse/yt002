@@ -47,27 +47,42 @@
         
         _curPage = 0;
         
-       // NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(showNext:) userInfo:nil repeats:YES];
-        //[timer fire];
+        //启动定时器
+        [self startPageTimer];
     }
+    
     return self;
 }
 
--(void)showNext1:(NSTimer*)timer
+- (void)startPageTimer {
+    [self stopPageTimer];
+    if(!pageTimer)
+    {
+        pageTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(showNext:) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)stopPageTimer {
+    if (pageTimer) {
+        [pageTimer invalidate];
+        [pageTimer release];
+        pageTimer = nil;
+    }
+}
+
+-(void)showNext:(NSTimer*)timer
 {
-    int x = _scrollView.contentOffset.x + APP_WIDTH;
-    
-    //往下翻一张
-    if(x >= (2*self.frame.size.width)) {
+    [UIView animateWithDuration:0.4 animations:^{
+        _scrollView.alpha = 0.2;
+    } completion:^(BOOL finished) {
         _curPage = [self validPageValue:_curPage+1];
         [self loadData];
-    }
-    
-    //往上翻
-    if(x <= 0) {
-        _curPage = [self validPageValue:_curPage-1];
-        [self loadData];
-    }
+        [UIView animateWithDuration:0.4 animations:^{
+            _scrollView.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            
+        }];
+    }];
 }
 
 - (void)setDataource:(id<FSCycleScrollViewDatasource>)datasource
@@ -88,7 +103,6 @@
 
 - (void)loadData
 {
-    
     _pageControl.currentPage = _curPage;
     
     //从scrollView上移除所有的subview

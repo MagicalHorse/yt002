@@ -88,6 +88,7 @@
 {
     [super viewDidLoad];
     [self beginPrepareData];
+    [self initAudioRecoder];
     
     _minRecordGap = 1.5;
 }
@@ -114,11 +115,6 @@
     replyIndex = -1;
     [self.paginatorView reloadData];
     self.currentPageIndex = indexInContext;
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    //[self resetScrollViewSize:self.paginatorView.currentPage];
 }
 
 -(id)itemSource
@@ -168,7 +164,9 @@
     }
     [[(id)view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
     
-    [(id)view audioButton].audioDelegate = self;
+    if (![(id)view audioButton].audioDelegate) {
+        [(id)view audioButton].audioDelegate = self;
+    }
     [(id)view svContent].delegate = self;
     [(id)view tbComment].delegate = self;
     [(id)view tbComment].dataSource = self;
@@ -217,6 +215,7 @@
             if (resp.isSuccess)
             {
                 [blockViewForRefresh setData:resp.responseData];
+                [(FSProDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
                 [blockViewForRefresh updateToolBar:resp.responseData];
                 NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
                 if (blockSelf->_sourceType==FSSourcePromotion)
@@ -246,6 +245,7 @@
     {
         [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
             [blockViewForRefresh setData:input];
+            [(FSProdDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
             [blockViewForRefresh updateToolBar:input];
             blockViewForRefresh.showViewMask= FALSE;
             NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
@@ -700,17 +700,16 @@
         commentInput.txtComment.text = @"";
         [commentInput.txtComment resignFirstResponder];
         [commentInput removeFromSuperview];
-//        if (commentInput.opaque!=0)
-//        {
-//            commentInput.layer.opacity = 1;
-//            [UIView beginAnimations:@"fadeout" context:(__bridge void *)([NSNumber numberWithFloat:commentInput.layer.opacity])];
-//            [UIView setAnimationDuration:0.3];
-//            commentInput.layer.opacity = 0;
-//            [UIView commitAnimations];
-//            [commentInput removeFromSuperview];
-//        }
+        if (commentInput.opaque!=0)
+        {
+            commentInput.layer.opacity = 1;
+            [UIView beginAnimations:@"fadeout" context:(__bridge void *)([NSNumber numberWithFloat:commentInput.layer.opacity])];
+            [UIView setAnimationDuration:0.3];
+            commentInput.layer.opacity = 0;
+            [UIView commitAnimations];
+            [commentInput removeFromSuperview];
+        }
     }
-    
 }
 -(void)clearComment:(UIButton *)sender
 {
@@ -1069,14 +1068,11 @@
     else{
         [detailCell.btnComment setImage:[UIImage imageNamed:@"comment_sel_icon.png"] forState:UIControlStateNormal];
     }
-    detailCell.audioButton.audioDelegate = self;
-    [detailCell updateFrame];
-    
-//    FSAudioButton *btn = [[FSAudioButton alloc] initWithFrame:CGRectMake(150, 20, 100, 25)];
-//    btn.fullPath = _recordFileName;
-//    [detailCell.contentView addSubview:btn];
-    
+    if (!detailCell.audioButton.audioDelegate) {
+        detailCell.audioButton.audioDelegate = self;
+    }
     detailCell.imgThumb.delegate = self;
+    [detailCell updateFrame];
    
     return detailCell;
 }
@@ -1140,33 +1136,13 @@
 }
 
 - (void)viewDidUnload {
-    [self stopAllAudio];
+    if (lastButton) {
+        [lastButton pause];
+    }
     [self set_thumView:nil];
     [self setArrowLeft:nil];
     [self setArrowRight:nil];
     [super viewDidUnload];
-}
-
--(void)stopAllAudio
-{
-    if (_player.isPlaying) {
-        [_player pause];
-    }
-    if (lastButton) {
-        [lastButton pause];
-    }
-//    //循环停止所有的播放事件
-//    id currentView =  self.paginatorView.currentPage;
-//    UITableView *tbComment =[currentView tbComment];
-//    NSArray *array = [tbComment visibleCells];
-//    for (int i = 0; i < array.count; i++) {
-//        if ([array[i] isKindOfClass:[FSProCommentCell class]]) {
-//            FSProCommentCell *cell = array[i];
-//            if ([cell.audioButton isPlaying]) {
-//                [cell.audioButton pause];
-//            }
-//        }
-//    }
 }
 
 #pragma mark - FSProDetailItemSourceProvider
@@ -1192,7 +1168,7 @@
 
 #pragma mark record function
 
-- (void)startToRecord
+-(void)initAudioRecoder
 {
     if (!_audioRecoder) {
         _isRecording = NO;
@@ -1224,6 +1200,11 @@
             NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
         }];
     }
+}
+
+- (void)startToRecord
+{
+    [self initAudioRecoder];
     if (_isRecording == NO)
     {
         _isRecording = YES;
@@ -1268,7 +1249,7 @@
     _downTime = [NSDate date];
     [sender setTitle:@"松开结束" forState:UIControlStateNormal];
     [self startToRecord];
-    _recordState = Recording;
+    _recordState = PTRecording;
 }
 
 - (IBAction)recordTouchUpInside:(id)sender
@@ -1283,14 +1264,14 @@
 
 -(void)endTouch:(id)sender
 {
-    if(_recordState == Recording){
+    if(_recordState == PTRecording){
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
             [self reportError:@"说话时间太短，请重新录入"];
             //重新设置为起始状态
             [sender setTitle:@"按住评论" forState:UIControlStateNormal];
-            _recordState = StartRecord;
+            _recordState = PTStartRecord;
             [self endRecordAndDelete];
         }
         else{
@@ -1309,7 +1290,11 @@
 
 -(void)clickAudioButton:(FSAudioButton*)aButton
 {
-    [self stopAllAudio];
+    if (lastButton) {
+        if (lastButton != aButton) {
+            [lastButton pause];
+        }
+    }
     lastButton = aButton;
 }
 

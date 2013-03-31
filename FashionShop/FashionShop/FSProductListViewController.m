@@ -127,6 +127,17 @@
     
     _productContent.delegate = self;
     _productContent.dataSource = self;
+    
+    UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
+    [self.navigationItem setLeftBarButtonItem:baritemCancel];
+}
+
+- (IBAction)onButtonBack:(id)sender {
+    if (_isModel) {
+        [self dismissModalViewControllerAnimated:YES];
+        return;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted

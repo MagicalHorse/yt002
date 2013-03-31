@@ -30,6 +30,7 @@ BOOL networkIsWorking = NO;
     UIView *emptyView = (UIView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_ENTER_VIEW];
     if (!emptyView)
     {
+        /*
         emptyView = [[UIView alloc] initWithFrame:container.frame];
         emptyView.backgroundColor = [UIColor whiteColor];
         UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_ENTER_VIEW];
@@ -50,6 +51,20 @@ BOOL networkIsWorking = NO;
         [loadMoreView startAnimating];
 
         emptyView.tag = UIVIEWCONTROLLER_CAT_ENTER_VIEW;
+         */
+        emptyView = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+80, 80, 80)];
+        emptyView.backgroundColor = [UIColor clearColor];
+        emptyView.tag = UIVIEWCONTROLLER_CAT_ENTER_VIEW;
+        UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
+        inView.backgroundColor = [UIColor blackColor];
+        inView.layer.cornerRadius = 10;
+        inView.layer.borderWidth = 0;
+        inView.alpha = 0.7;
+        [emptyView addSubview:inView];
+        UIActivityIndicatorView *indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        indicatorView.frame = CGRectMake((inView.frame.size.width-inView.frame.size.width)/2, (inView.frame.size.height-inView.frame.size.height)/2, inView.frame.size.width, inView.frame.size.height);
+        [emptyView addSubview:indicatorView];
+        [indicatorView startAnimating];
     }
     [container addSubview:emptyView];
     [container bringSubviewToFront:emptyView];
@@ -63,16 +78,16 @@ BOOL networkIsWorking = NO;
     UIView *emptyView =(UIView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_ENTER_VIEW];
     if (emptyView)
     {
-        if (emptyView.subviews.count>0)
-        {
-            UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
-            if (loadMoreView)
-            {
-                [loadMoreView.layer removeAllAnimations];
-                loadMoreView.image = nil;
-                [loadMoreView removeFromSuperview];
-            }
-        }
+//        if (emptyView.subviews.count>0)
+//        {
+//            UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
+//            if (loadMoreView)
+//            {
+//                [loadMoreView.layer removeAllAnimations];
+//                loadMoreView.image = nil;
+//                [loadMoreView removeFromSuperview];
+//            }
+//        }
         [emptyView removeFromSuperview];
     }
 }
@@ -83,7 +98,7 @@ BOOL networkIsWorking = NO;
     if (!container)
         container = self.view;
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+40, 80, 80)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+80, 80, 80)];
     view.backgroundColor = [UIColor clearColor];
     view.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
     UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];

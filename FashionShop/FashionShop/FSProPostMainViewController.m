@@ -177,6 +177,9 @@
     _proRequest.imgs = nil;
     [self initActionsSource];
     [self bindControl];
+    
+    //清空_titleSel里的内容
+    [_titleSel cleanData];
 }
 
 -(void) internalDoSave:(dispatch_block_t) cleanup
@@ -702,6 +705,9 @@
 
 - (void)viewDidUnload {
     [self setBtnPhoto:nil];
+    //清空_titleSel里的内容
+    [_titleSel cleanData];
+    
     [super viewDidUnload];
 }
 
@@ -718,16 +724,6 @@
         } completeCallbck:^{
             [self endProgress];
             [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
-            //如果有上传声音，则删除
-            if (_fileName) {
-                NSLock* tempLock = [[NSLock alloc]init];
-                [tempLock lock];
-                if ([[NSFileManager defaultManager] fileExistsAtPath:_fileName])
-                {
-                    [[NSFileManager defaultManager] removeItemAtPath:_fileName error:nil];
-                }
-                [tempLock unlock];
-            }
         }];
     }
 }

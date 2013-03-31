@@ -38,11 +38,11 @@
 #endif
  */
 #define REST_API_URL   @"http://122.226.53.114:7070/api"
-//测试环境 http://intimeservicestage-env-mc26kntmhr.elasticbeanstalk.com
+//测试环境 http://stage.youhuiin.com
 //生产环境 http://api.youhuiin.com
-//http://intime-env-hvrevspudb.elasticbeanstalk.com
-#define REST_API_URL_OUT @"http://intimeservicestage-env-mc26kntmhr.elasticbeanstalk.com"
+#define REST_API_URL_OUT @"http://stage.youhuiin.com"
 #define REST_API_APP_SECRET_KEY @"yintai123456"
+//http://intime-env-hvrevspudb.elasticbeanstalk.com
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
@@ -69,7 +69,7 @@
 #define LN_USER_UPDATED @"LN_USER_UPDATED"
 #define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
 #define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
-#define COMMON_PAGE_SIZE 10
+#define COMMON_PAGE_SIZE 20
 
 #define CollectionView_Default_Height 100.0f
 

@@ -82,12 +82,12 @@
     
     [self addTarget:self action:@selector(clickToPlay:) forControlEvents:UIControlEventTouchUpInside];
     
-    state = Normal;
-    [self updateState];
+    self.state = Normal;
 }
 
--(void)updateState
+-(void)setState:(AudioState)aState
 {
+    state = aState;
     switch (state) {
         case Normal:
         {
@@ -134,32 +134,33 @@
     if (_audioDelegate && [_audioDelegate respondsToSelector:@selector(clickAudioButton:)]) {
         [_audioDelegate clickAudioButton:self];
     }
-    [self play];
+    if (state == Playing) {
+        [self pause];
+    }
+    else{
+        [self play];
+    }
 }
 
 //异步播放歌曲，边缓冲边播放,异步连接
 -(void)play
 {
     if (state == Playing) {
-        state = Pause;
-        [self updateState];
+        self.state = Pause;
         [player pause];
         [animateView stopAnimating];
     }
     else if(state == Loading) {
         [activity stopAnimating];
-        state = Normal;
-        [self updateState];
+        self.state = Normal;
     }
     else if(state == Pause) {
-        state = Playing;
-        [self updateState];
+        self.state = Playing;
         [player play];
         [animateView startAnimating];
     }
     else if(state == Stop) {
-        state = Playing;
-        [self updateState];
+        self.state = Playing;
         [player play];
         [animateView startAnimating];
     }
@@ -173,8 +174,7 @@
             player.delegate = self;
             [player prepareToPlay];
             [player play];
-            state = Playing;
-            [self updateState];
+            self.state = Playing;
             [animateView startAnimating];
         }
         else{
@@ -192,15 +192,13 @@
 {
     [player stop];
     player.currentTime = 0;
-    state = Stop;
-    [self updateState];
+    self.state = Stop;
 }
 
 -(void)pause
 {
     [player pause];
-    state = Pause;
-    [self updateState];
+    self.state = Pause;
 }
 
 -(BOOL)isPlaying
@@ -211,8 +209,7 @@
 #pragma mak - NSURLConnectionDataDelegate
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
     receiveData = [[NSMutableData alloc] init];
-    state = Loading;
-    [self updateState];
+    self.state = Loading;
     [activity startAnimating];
 }
 
@@ -253,8 +250,7 @@
     }
     [player prepareToPlay];
     [player play];
-    state = Playing;
-    [self updateState];
+    self.state = Playing;
     [animateView startAnimating];
 }
 
@@ -265,16 +261,14 @@
     if (error) {
         NSLog(@"%@",[error localizedDescription]);
     }
-    state = Normal;
-    [self updateState];
+    self.state = Normal;
 }
 
 #pragma mark - AVAudioPlayerDelegate
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    state = Stop;
-    [self updateState];
+    self.state = Stop;
 }
 
 @end

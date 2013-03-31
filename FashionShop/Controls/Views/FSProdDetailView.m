@@ -110,7 +110,7 @@
     
     CGRect _rect = _lblDescrip.frame;
     if (_audioResource) {
-        _rect.size.width -= 50;
+        _rect.size.width = 240;
     }
     _lblDescrip.frame = _rect;
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];

@@ -29,5 +29,6 @@ typedef enum {
 @property (nonatomic, strong) NSString *titleName;
 @property (nonatomic) FSPageType pageType;
 @property (nonatomic, strong) NSString *keyWords;
+@property (nonatomic, assign) BOOL isModel;
 
 @end

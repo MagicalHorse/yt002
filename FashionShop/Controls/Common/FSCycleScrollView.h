@@ -23,6 +23,7 @@
     NSInteger _curPage;
     
     NSMutableArray *_curViews;
+    NSTimer*    pageTimer;    //切换焦点图的定时器
 }
 
 @property (nonatomic,readonly) UIScrollView *scrollView;
