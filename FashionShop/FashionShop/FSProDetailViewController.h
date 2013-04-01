@@ -51,5 +51,6 @@
 @property (assign,nonatomic) int indexInContext;
 @property (nonatomic) FSSourceType sourceType;
 @property (strong, nonatomic) NSString *recordFileName;
+@property (assign, nonatomic) BOOL fromBanner;
 
 @end

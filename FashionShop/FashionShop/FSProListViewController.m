@@ -937,6 +937,7 @@ typedef enum {
     NSMutableArray *rows = NULL;
     rows = _dataSourceBannerData;
     detailViewController.navContext = rows;
+    detailViewController.fromBanner = YES;
     detailViewController.dataProviderInContext = self;
     detailViewController.indexInContext = index;
     detailViewController.sourceType = FSSourcePromotion;

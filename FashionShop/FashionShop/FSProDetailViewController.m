@@ -75,7 +75,6 @@
 @implementation FSProDetailViewController
 @synthesize dataProviderInContext,navContext,indexInContext;
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -196,7 +195,13 @@
     if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)] &&
         [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex]==TRUE)
     {
-        NSNumber * itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
+        NSNumber * itemId = nil;
+        if (_fromBanner) {
+            itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"promotionid"];
+        }
+        else{
+            itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
+        }
         FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
         drequest.uToken = [FSModelManager sharedModelManager].loginToken;
         drequest.id = itemId;

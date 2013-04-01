@@ -39,5 +39,6 @@
 @property (nonatomic,assign) BOOL isPublication;
 @property (nonatomic,strong) NSNumber *limitCount;
 @property (nonatomic,assign) int height;//单元格高度，可合理利用
+@property (nonatomic,strong) NSNumber *promotionid;
 
 @end
