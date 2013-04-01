@@ -26,6 +26,8 @@
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;
+    self.layer.borderWidth = 1;
+    self.layer.borderColor = [UIColor lightGrayColor].CGColor;
     
     if (_data.price &&
         [_data.price intValue]>0)

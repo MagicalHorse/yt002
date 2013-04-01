@@ -139,7 +139,6 @@ typedef enum {
             }
             if (uicallback)
                 uicallback();
-            
         }];
         
     } forKey:PRO_LIST_FILTER_NEAREST];

@@ -31,6 +31,7 @@
 @property (nonatomic,strong) NSNumber *price;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
+@property (nonatomic,assign) BOOL promotionFlag;
 @property (nonatomic,readonly) BOOL hasPromotion;
 
 

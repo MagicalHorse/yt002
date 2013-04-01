@@ -108,9 +108,6 @@
     if (flag) {
         height += _lblReplyDesc.frame.size.height + 5;
     }
-    if (_audioButton) {
-        height = 16;
-    }
     yOffset = (_cellHeight - height)/2;
     
     CGRect _rect = _lblComment.frame;

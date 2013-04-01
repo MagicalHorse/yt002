@@ -101,6 +101,39 @@ void uncaughtExceptionHandler(NSException *exception)
     [self.window makeKeyAndVisible];
 }
 
+-(void)initAudioRecoder
+{
+    if (!_audioRecoder) {
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
+        {
+            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+            NSError *error;
+            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
+            {
+                if ([audioSession setActive:YES error:&error])
+                {
+                }
+                else
+                {
+                    NSLog(@"Failed to set audio session category: %@", error);
+                }
+            }
+            else
+            {
+                NSLog(@"Failed to set audio session category: %@", error);
+            }
+            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
+        }
+        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
+        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
+            NSLog(@"%@",[error localizedDescription]);
+        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
+            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+        }];
+    }
+}
+
 
 +(FSAppDelegate *)app{
     return (FSAppDelegate *)[UIApplication sharedApplication];

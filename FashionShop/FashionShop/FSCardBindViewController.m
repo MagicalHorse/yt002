@@ -90,7 +90,7 @@
             [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
                 if (!resp.isSuccess)
                 {
-                    [self reportError:resp.description];
+                    [self reportError:resp.message];
                 }
                 else
                 {
@@ -137,7 +137,7 @@
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (!resp.isSuccess)
             {
-                [self reportError:resp.description];
+                [self reportError:resp.errorDescrip];
             }
             else
             {

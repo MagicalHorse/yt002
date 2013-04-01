@@ -84,7 +84,7 @@
     }
     CGRect _rect = _lblDescrip.frame;
     if (_audioResource) {
-        _rect.size.width -= 50;
+        _rect.size.width = 233;
     }
     
     _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
@@ -140,7 +140,8 @@
     //隐藏该按钮
     _btnTag.alpha = 0;
 
-    CGRect superFrame =   _btnStore.superview.frame;
+    _btnStore.superview.hidden = NO;
+    CGRect superFrame = _btnStore.superview.frame;
     superFrame.size.height = _btnStore.frame.size.height +_btnStore.frame.origin.y+yOff;
     _btnStore.superview.frame = superFrame;
     CGRect commentFrame = _tbComment.frame;
@@ -150,9 +151,16 @@
     
     //设置播放按钮
     if (_audioResource) {
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(245, 332, 60, 30)];
-        _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,_audioResource.relativePath];
-        [_svContent addSubview:_audioButton];
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(260, (superFrame.size.height-21 - 40)/2 + 21, 40, 40)];
+        [_audioButton setBackgroundImage:nil forState:UIControlStateNormal];
+        [_audioButton setBackgroundImage:nil forState:UIControlStateHighlighted];
+        [_audioButton setBackgroundColor:[UIColor lightGrayColor]];
+        _audioButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
+        _audioButton.layer.borderWidth = 2;
+        NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
+        [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
+        _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
+        [_btnStore.superview addSubview:_audioButton];
     }
     
     [self updateInteraction];

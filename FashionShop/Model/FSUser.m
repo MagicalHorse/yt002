@@ -103,7 +103,6 @@
 {
     if (!thumnail)
         return nil;
-    NSLog(@"thumnail:%@", thumnail);
     if (isRetina) {
         return [NSURL URLWithString:[NSString stringWithFormat:@"%@_100x100.jpg",thumnail]];
     }

@@ -34,7 +34,8 @@
     _routeResourcePath = aRouteResourcePath;
     if ([aRouteResourcePath isEqualToString:RK_REQUEST_PROD_SEARCH_LIST] ||
         [aRouteResourcePath isEqualToString:RK_REQUEST_PROD_LIST] ||
-        [aRouteResourcePath isEqualToString:RK_REQUEST_PRO_LIST]) {
+        [aRouteResourcePath isEqualToString:RK_REQUEST_PRO_LIST] ||
+        [aRouteResourcePath isEqualToString:RK_REQUEST_PRO_BANNER_LIST]) {
         [self setBaseURL:2];
     }
 }
@@ -53,20 +54,9 @@
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];
     [map mapKeyPath:@"lat" toAttribute:@"request.lantit"];
-    
     [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
     [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
     [map mapKeyPath:@"sort" toAttribute:@"request.filterType"];
-    
-//    if (_pageType == FSPageTypeSearch) {
-//        [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
-//        [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
-//    }
-//    else {
-//        [map mapKeyPath:@"page" toAttribute:@"request.nextPage"];
-//        [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
-//        [map mapKeyPath:@"sort" toAttribute:@"request.filterType"];
-//    }
     [map mapKeyPath:@"refreshts" toAttribute:@"request.previousLatestDate"];
     [map mapKeyPath:@"type" toAttribute:@"request.requestTypeName"];
     [map mapKeyPath:@"tagid" toAttribute:@"request.tagid"];

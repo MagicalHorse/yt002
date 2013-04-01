@@ -66,11 +66,15 @@
     [params setValue:replyuserID forParam:@"replyuser"];
     
     if (audioName && ![audioName isEqualToString:@""]) {
-    //        NSLog(@"audioName:%@", audioName);
-        NSData *data = [NSData dataWithContentsOfFile:audioName];
-        if (data) {
-            [params setData:data MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
-        //        NSLog(@"audio data:%@", [NSData dataWithContentsOfFile:audioName]);
+        NSFileManager *fm = [NSFileManager defaultManager];
+        if ([fm fileExistsAtPath:audioName]) {
+            NSData *data = [NSData dataWithContentsOfFile:audioName];
+            if (data) {
+                [params setData:data MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
+            }
+        }
+        else{
+            NSLog(@"file not exist!");
         }
     }
     

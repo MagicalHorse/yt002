@@ -179,6 +179,7 @@
         _brandKeywords = nil;
         FSCommonRequest *request = [[FSCommonRequest alloc] init];
         [request setRouteResourcePath:RK_REQUEST_KEYWORD_LIST];
+        [self beginLoading:_tableSearch];
         __block FSProdListViewController *blockSelf = self;
         [request send:[FSKeyword class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
@@ -193,6 +194,7 @@
             {
                 [blockSelf reportError:resp.errorDescrip];
             }
+            [self endLoading:_tableSearch];
         }];
     }
 }
@@ -236,7 +238,8 @@
             [blockSelf->_tags addObjectsFromArray:[FSTag localTags]];
             [blockSelf endPrepareData];
         }];
-    } else
+    }
+    else
     {
         [self endPrepareData];
     }
@@ -254,8 +257,6 @@
 {
     _prodPageIndex = 0;
     _noMoreResult= FALSE;
-   
- 
 }
 
 -(void)resetTagFrameIfNeed

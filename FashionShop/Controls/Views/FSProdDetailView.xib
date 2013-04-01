@@ -76,6 +76,7 @@
 										<string key="NSFrame">{{0, 2}, {320, 300}}</string>
 										<reference key="NSSuperview" ref="619427962"/>
 										<reference key="NSWindow"/>
+										<reference key="NSNextKeyView" ref="1053271981"/>
 										<string key="NSReuseIdentifierKey">_NS:9</string>
 										<object class="NSColor" key="IBUIBackgroundColor">
 											<int key="NSColorSpace">3</int>
@@ -87,7 +88,7 @@
 									</object>
 									<object class="IBUIView" id="715521046">
 										<reference key="NSNextResponder" ref="619427962"/>
-										<int key="NSvFlags">292</int>
+										<int key="NSvFlags">-2147483356</int>
 										<array class="NSMutableArray" key="NSSubviews">
 											<object class="IBUILabel" id="533280302">
 												<reference key="NSNextResponder" ref="715521046"/>
@@ -395,6 +396,7 @@
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="467063917"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -878,7 +880,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">460</int>
+			<int key="maxID">461</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -976,6 +978,7 @@
 						<string key="btnFavor">UIBarButtonItem</string>
 						<string key="btnPrice">UIButton</string>
 						<string key="btnStore">UIButton</string>
+						<string key="descView">UIView</string>
 						<string key="fixibleItem1">UIBarButtonItem</string>
 						<string key="fixibleItem2">UIBarButtonItem</string>
 						<string key="fixibleItem3">UIBarButtonItem</string>
@@ -1010,6 +1013,10 @@
 						<object class="IBToOneOutletInfo" key="btnStore">
 							<string key="name">btnStore</string>
 							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="descView">
+							<string key="name">descView</string>
+							<string key="candidateClassName">UIView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="fixibleItem1">
 							<string key="name">fixibleItem1</string>

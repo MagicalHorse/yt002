@@ -202,16 +202,16 @@
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
     }
     
-//    if(isRefresh)
-//    {
-//        request.requestType = 0;
-//        request.previousLatestDate = _refreshLatestDate;
-//    }
-//    else
-//    {
-//        request.requestType = 1;
-//        request.previousLatestDate = _firstLoadDate;
-//    }
+    if(isRefresh)
+    {
+        request.requestType = 0;
+        request.previousLatestDate = _refreshLatestDate;
+    }
+    else
+    {
+        request.requestType = 1;
+        request.previousLatestDate = _firstLoadDate;
+    }
 
     request.nextPage = page;
     request.pageSize = COMMON_PAGE_SIZE;

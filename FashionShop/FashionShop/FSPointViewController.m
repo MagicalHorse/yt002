@@ -299,9 +299,9 @@
             return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         }
         FSPointMemberCardCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_POINT_CARD_MEMBER_CELL];
-        detailCell.cardType.text = [NSString stringWithFormat:@"会员卡类型: %@-%@", currentUser.cardInfo.type,currentUser.cardInfo.cardLevel];
-        detailCell.cardNumber.text = [NSString stringWithFormat:@"会员卡卡号: %@", currentUser.cardInfo.cardNo];
-        detailCell.totalPoint.text = [NSString stringWithFormat:@"会员卡积点: %@", [currentUser.cardInfo.amount stringValue]];
+        detailCell.cardType.text = [NSString stringWithFormat:NSLocalizedString(@"Member Card Type:%@-%@", nil), currentUser.cardInfo.type,currentUser.cardInfo.cardLevel];
+        detailCell.cardNumber.text = [NSString stringWithFormat:NSLocalizedString(@"Member Card Number:%@", nil), currentUser.cardInfo.cardNo];
+        detailCell.totalPoint.text = [NSString stringWithFormat:NSLocalizedString(@"Member Card Point:%@", nil), [currentUser.cardInfo.amount stringValue]];
         return detailCell;
     }
     else{
@@ -358,7 +358,7 @@
     title.font = BFONT(14);
     title.textColor = [UIColor whiteColor];
     if (section == 0) {
-        title.text = @"会员卡积点信息";
+        title.text = NSLocalizedString(@"Member Card Point Desc", nil);
         UILabel *total = [[UILabel alloc] initWithFrame:CGRectMake(APP_WIDTH-10-100, 0, 100, 30)];
         total.textAlignment = UITextAlignmentRight;
         total.backgroundColor = [UIColor clearColor];
@@ -367,7 +367,7 @@
         [view addSubview:total];
     }
     else{
-        title.text = @"APP积点信息";
+        title.text = NSLocalizedString(@"App Point Desc", nil);
     }
     [view addSubview:title];
     return view;

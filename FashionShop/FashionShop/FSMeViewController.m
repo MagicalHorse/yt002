@@ -440,9 +440,9 @@
                 removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
                 request = removeRequest;
             }
-            [self beginLoading:cell];
+            [self beginLoading:_likeView];
             [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
-                [self endLoading:cell];
+                [self endLoading:_likeView];
                 if (!resp.isSuccess)
                 {
                     [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
@@ -1064,10 +1064,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    [refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
-    
     [self loadImagesForOnscreenRows];
-    NSLog(@"crollView.contentOffset:%@\nscrollView.contentSize:%@\nscrollView.frame:%@", NSStringFromCGPoint(scrollView.contentOffset), NSStringFromCGSize(scrollView.contentSize), NSStringFromCGRect(scrollView.frame));
     if (!_noMoreFavor &&
         !_isInLoading &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height

@@ -13,7 +13,7 @@
 #define RK_REQUEST_PROD_LIST @"/product/list"
 #define RK_REQUEST_PROD_DR_LIST @"/product/daren/list"
 #define RK_REQUEST_PROD_SEARCH_LIST @"/product/search"
-#define RK_REQUEST_PRO_BANNER_LIST @"/promotion/banner/list"
+#define RK_REQUEST_PRO_BANNER_LIST @"/banner/list"
 
 @interface FSProListRequest : FSEntityRequestBase
 

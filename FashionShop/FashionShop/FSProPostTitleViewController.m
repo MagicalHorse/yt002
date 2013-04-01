@@ -23,7 +23,6 @@
     id activityObject;
     
     RecordState _recordState;
-    CL_AudioRecorder* _audioRecoder;
     BOOL              _isRecording;
     NSDate* _downTime;//按下时间
     NSInteger _minRecordGap;//最小录制时间间隔
@@ -53,7 +52,9 @@
     [super viewDidLoad];
     [self decorateTapDismissKeyBoard];
     [self bindControl];
-    [self initAudioRecoder];
+    if (!theApp.audioRecoder) {
+        [theApp initAudioRecoder];
+    }
     [self initRecordButton];
     
     _minRecordGap = 4;
@@ -349,7 +350,6 @@
     _txtProEndTime.text = @"";
     _btnReRecord = nil;
     _btnRecord = nil;
-    _audioRecoder = nil;
 }
 
 #pragma mark - TDDatePickerControllerDelegate
@@ -357,7 +357,7 @@
 - (void)datePickerSetDate:(TDDatePickerController *)viewController
 {
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
-    [formater setDateFormat:@"yyyy年MM月dd日 HH时mm分"];
+    [formater setDateFormat:NSLocalizedString(@"Year Month Day H&M", nil)];
     if (viewController == _datePicker)
     {
         _txtProStartTime.text = [formater stringFromDate:_datePicker.datePicker.date];
@@ -449,51 +449,19 @@
 
 #pragma mark record function
 
--(void)initAudioRecoder
-{
-    if (!_audioRecoder) {
-        _isRecording = NO;
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
-        {
-            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-            NSError *error;
-            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
-            {
-                if ([audioSession setActive:YES error:&error])
-                {
-                }
-                else
-                {
-                    NSLog(@"Failed to set audio session category: %@", error);
-                }
-            }
-            else
-            {
-                NSLog(@"Failed to set audio session category: %@", error);
-            }
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
-        }
-        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
-        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
-            NSLog(@"%@",[error localizedDescription]);
-        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
-            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
-        }];
-    }
-}
-
 - (void)startToRecord
 {
     [activityObject resignFirstResponder];
     
-    [self initAudioRecoder];
+    if (!theApp.audioRecoder) {
+        [theApp initAudioRecoder];
+    }
     if (_isRecording == NO)
     {
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
-        _audioRecoder.recorderingFileName = _recordFileName;
-        [_audioRecoder startRecord];
+        theApp.audioRecoder.recorderingFileName = _recordFileName;
+        [theApp.audioRecoder startRecord];
     }
 }
 
@@ -505,7 +473,7 @@
     dispatch_async(stopQueue, ^(void){
         //run in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_audioRecoder stopRecord];
+            [theApp.audioRecoder stopRecord];
         });
     });
     dispatch_release(stopQueue);
@@ -519,7 +487,7 @@
     dispatch_async(stopQueue, ^(void){
         //run in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_audioRecoder stopAndDeleteRecord];
+            [theApp.audioRecoder stopAndDeleteRecord];
         });
     });
     dispatch_release(stopQueue);
@@ -534,7 +502,7 @@
         return;
     }
     _downTime = [NSDate date];
-    [_btnRecord setTitle:@"松开结束录音" forState:UIControlStateNormal];
+    [_btnRecord setTitle:NSLocalizedString(@"Up To End Record", nil) forState:UIControlStateNormal];
     [self startToRecord];
     _recordState = PTRecording;
 }
@@ -565,14 +533,14 @@
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
-            [self reportError:@"说话时间太短，请重新录入"];
+            [self reportError:NSLocalizedString(@"Speak Too Short, Please Say Again", nil)];
             //重新设置为起始状态
-            [_btnRecord setTitle:@"按住开始录音" forState:UIControlStateNormal];
+            [_btnRecord setTitle:NSLocalizedString(@"Down To Start Record", nil) forState:UIControlStateNormal];
             _recordState = PTStartRecord;
             [self endRecordAndDelete];
         }
         else{
-            [_btnRecord setTitle:@"点击播放" forState:UIControlStateNormal];
+            [_btnRecord setTitle:NSLocalizedString(@"Click To Play", nil) forState:UIControlStateNormal];
             _recordState = PTWaitPlay;
             [self endRecord];
             

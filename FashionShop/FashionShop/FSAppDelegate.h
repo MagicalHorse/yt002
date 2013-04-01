@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSLocationManager.h"
 #import "FSModelManager.h"
+#import "CL_VoiceEngine.h"
 
 @interface FSAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -19,9 +20,11 @@
 @property (strong,nonatomic) FSLocationManager *locationManager;
 
 @property (strong,nonatomic) NSMutableArray *allBrands;
+@property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
 
 +(FSAppDelegate *)app;
 -(void)entryMain;
+-(void)initAudioRecoder;
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName;
 -(NSString*)readFromFile:(NSString *)aFileName;

@@ -37,12 +37,20 @@
 
 #endif
  */
+
+//正式库
+//#define REST_API_URL   @"http://itoo.yintai.com/api"
+//#define REST_API_URL_OUT @"http://api.youhuiin.com"
+//#define REST_API_APP_SECRET_KEY @"yintai123456"
+
+//预生产库
 #define REST_API_URL   @"http://122.226.53.114:7070/api"
-//测试环境 http://stage.youhuiin.com
-//生产环境 http://api.youhuiin.com
 #define REST_API_URL_OUT @"http://stage.youhuiin.com"
 #define REST_API_APP_SECRET_KEY @"yintai123456"
-//http://intime-env-hvrevspudb.elasticbeanstalk.com
+
+//测试环境 http://stage.youhuiin.com
+//生产环境 http://api.youhuiin.com
+//其他 http://intime-env-hvrevspudb.elasticbeanstalk.com
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"

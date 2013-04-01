@@ -58,7 +58,6 @@
     BOOL isReplyToAll;//是否是回复给所有人
     
     RecordState _recordState;
-    CL_AudioRecorder* _audioRecoder;
     BOOL              _isRecording;
     NSDate* _downTime;//按下时间
     NSInteger _minRecordGap;//最小录制时间间隔
@@ -67,6 +66,8 @@
     BOOL _isAudio;//是否是语音内容
     BOOL _isPlaying;//是否正在播放声音
     FSAudioButton *lastButton;
+    
+    BOOL _isNeedScroll;
 }
 
 @end
@@ -88,7 +89,9 @@
 {
     [super viewDidLoad];
     [self beginPrepareData];
-    [self initAudioRecoder];
+    if (!theApp.audioRecoder) {
+        [theApp initAudioRecoder];
+    }
     
     _minRecordGap = 1.5;
 }
@@ -224,16 +227,17 @@
                 blockViewForRefresh.showViewMask= FALSE;
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
                 
+                //左右箭头
                 //_arrowRight.hidden = [self hasNextPage]?NO:YES;
-                [self.view bringSubviewToFront:_arrowRight];
-                CGRect _rect = _arrowRight.frame;
-                _rect.size.height = 15;
-                _arrowRight.frame = _rect;
-                //_arrowLeft.hidden = [self hasPrePage]?NO:YES;
-                [self.view bringSubviewToFront:_arrowLeft];
-                _rect = _arrowLeft.frame;
-                _rect.size.height = 15;
-                _arrowLeft.frame = _rect;
+//                [self.view bringSubviewToFront:_arrowRight];
+//                CGRect _rect = _arrowRight.frame;
+//                _rect.size.height = 15;
+//                _arrowRight.frame = _rect;
+//                //_arrowLeft.hidden = [self hasPrePage]?NO:YES;
+//                [self.view bringSubviewToFront:_arrowLeft];
+//                _rect = _arrowLeft.frame;
+//                _rect.size.height = 15;
+//                _arrowLeft.frame = _rect;
             } else
             {
                 [self onButtonCancel];
@@ -282,13 +286,25 @@
             replyIndex = -1;
             if (blockViewForRefresh && blockSelf)
                 [[(id)blockViewForRefresh tbComment] reloadData];
+            if (_isNeedScroll) {
+//                [self scrollToTableTop:blockViewForRefresh];
+                [self performSelector:@selector(scrollToTableTop:) withObject:blockViewForRefresh afterDelay:0.5];
+            }
         }
         else
         {
             NSLog(@"comment list failed");
+            _isNeedScroll = NO;
         }
-        
     }];
+}
+
+-(void)scrollToTableTop:(FSDetailBaseView*)blockViewForRefresh
+{
+    CGRect _rect = [(id)blockViewForRefresh tbComment].frame;
+    _rect.size.height = 100;
+    [[(id)blockViewForRefresh svContent] scrollRectToVisible:_rect animated:YES];
+    _isNeedScroll = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -770,6 +786,7 @@
         NSString *trimedText = [self transformCommentText];
         if (trimedText.length>40 ||trimedText.length<1)
         {
+            [self clearComment:nil];
             [self reportError:NSLocalizedString(@"PRO_COMMENT_LENGTH_NOTCORRECT", Nil)];
             return;
         }
@@ -793,7 +810,6 @@
                         [self internalDoComent:callback];
                     } completeCallbck:^{
                         [self endProgress];
-                        
                     }];
                 }
             }];
@@ -819,60 +835,58 @@
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
     request.sourceType = [NSNumber numberWithInt:_sourceType];
-    request.comment = commentText;
     request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
-    if (_recordFileName) {
+    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
+    if (_recordFileName && ![_recordFileName isEqualToString:@""]) {
         request.audioName = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    }
+    else{
+        request.comment = commentText;
     }
     //回复特用户
     if (!isReplyToAll) {
         //获取选中用户的ID；
-        //获得对应的评论内容
         id currentView =  self.paginatorView.currentPage;
         FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
         FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
         request.replyuserID = item.inUser.uid;
-        
-        //此处暂时借用comment对象存储回复对象
-        //request.comment = item.inUser.nickie;
     }
     
     __block FSProDetailViewController *blockSelf = self;
-//    [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *respData){
-//        if(!respData.isSuccess)
-//        {
-//            [blockSelf updateProgress:respData.errorDescrip];
-//        }
-//        else
-//        {
-//            NSMutableArray *oldComments = [[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments];
-//            if (!oldComments)
-//                oldComments = [@[] mutableCopy];
-//            [oldComments insertObject:respData.responseData atIndex:0];
-//            [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
-//            [blockSelf hideCommentInputView:self];
-//            [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
-//            [(id)self.paginatorView.currentPage resetScrollViewSize];
-//            replyIndex = -1;
-//        }
-//        if (callback)
-//            callback();
-//    }];
-    
+    FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
     [request upload:^{
-        [self reportError:@"成功"];
+        [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
+        //删除评论语音文件
+        NSLock* tempLock = [[NSLock alloc]init];
+        [tempLock lock];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:_recordFileName])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:_recordFileName error:nil];
+        }
+        [tempLock unlock];
+        replyIndex = -1;
+        _recordFileName = @"";
         if (callback) {
             callback();
         }
+        
+        //重新请求数据
+        view.showViewMask= FALSE;
+        _isNeedScroll = YES;
+//        [self delayLoadComments:[view.data valueForKey:@"id"]];
+        [self performSelector:@selector(delayLoadComments:) withObject:[view.data valueForKey:@"id"] afterDelay:0.8];
+        
+        //隐藏输入框
+        [self clearComment:nil];
+        
     } error:^{
-        [self reportError:@"失败"];
+        [blockSelf updateProgress:NSLocalizedString(@"upload failed!", nil)];
         if (callback) {
             callback();
         }
     }];
     
     //统计
-    FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
     NSString *_name;
     if (_sourceType == FSSourceProduct) {
         _name = [NSString stringWithFormat:@"商品-评论  %@", [view.data valueForKey:@"title"]];
@@ -979,7 +993,7 @@
                 //去商品列表
                 FSProItemEntity *_item = parentView.data;
                 FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
-                dr.titleName = @"商品列表";
+                dr.titleName = NSLocalizedString(@"Product List", nil);
                 dr.commonID = _item.id;
                 dr.pageType = FSPageTypeCommon;
                 [self.navigationController pushViewController:dr animated:TRUE];
@@ -1168,49 +1182,17 @@
 
 #pragma mark record function
 
--(void)initAudioRecoder
-{
-    if (!_audioRecoder) {
-        _isRecording = NO;
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
-        {
-            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-            NSError *error;
-            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
-            {
-                if ([audioSession setActive:YES error:&error])
-                {
-                }
-                else
-                {
-                    NSLog(@"Failed to set audio session category: %@", error);
-                }
-            }
-            else
-            {
-                NSLog(@"Failed to set audio session category: %@", error);
-            }
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
-        }
-        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
-        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
-            NSLog(@"%@",[error localizedDescription]);
-        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
-            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
-        }];
-    }
-}
-
 - (void)startToRecord
 {
-    [self initAudioRecoder];
+    if (!theApp.audioRecoder) {
+        [theApp initAudioRecoder];
+    }
     if (_isRecording == NO)
     {
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
-        _audioRecoder.recorderingFileName = _recordFileName;
-        [_audioRecoder startRecord];
+        theApp.audioRecoder.recorderingFileName = _recordFileName;
+        [theApp.audioRecoder startRecord];
     }
 }
 
@@ -1222,7 +1204,7 @@
     dispatch_async(stopQueue, ^(void){
         //run in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_audioRecoder stopRecord];
+            [theApp.audioRecoder stopRecord];
         });
     });
     dispatch_release(stopQueue);
@@ -1236,7 +1218,7 @@
     dispatch_async(stopQueue, ^(void){
         //run in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_audioRecoder stopAndDeleteRecord];
+            [theApp.audioRecoder stopAndDeleteRecord];
         });
     });
     dispatch_release(stopQueue);
@@ -1247,9 +1229,12 @@
 - (IBAction)recordTouchDown:(id)sender
 {
     _downTime = [NSDate date];
-    [sender setTitle:@"松开结束" forState:UIControlStateNormal];
+    [sender setTitle:NSLocalizedString(@"Up To End Record", nil) forState:UIControlStateNormal];
     [self startToRecord];
     _recordState = PTRecording;
+    if (lastButton) {
+        [lastButton pause];
+    }
 }
 
 - (IBAction)recordTouchUpInside:(id)sender
@@ -1268,22 +1253,27 @@
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
-            [self reportError:@"说话时间太短，请重新录入"];
+            [self reportError:NSLocalizedString(@"Speak Too Short, Please Say Again", nil)];
             //重新设置为起始状态
-            [sender setTitle:@"按住评论" forState:UIControlStateNormal];
+            [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
             _recordState = PTStartRecord;
             [self endRecordAndDelete];
         }
         else{
-            [sender setTitle:@"按住评论" forState:UIControlStateNormal];
+            [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
             [self endRecord];
             id currentView =  self.paginatorView.currentPage;
             [[currentView tbComment] reloadData];
             
-            //直接发送
-            [self saveComment:nil];
+            [self performSelector:@selector(sendToService) withObject:nil afterDelay:1.];
         }
     }
+}
+
+-(void)sendToService
+{
+    //直接发送
+    [self saveComment:nil];
 }
 
 #pragma mark - FSAudioDelegate
