@@ -34,8 +34,6 @@ void uncaughtExceptionHandler(NSException *exception)
 
 @synthesize modelManager,locationManager;
 
-
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.

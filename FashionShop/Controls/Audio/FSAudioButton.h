@@ -28,6 +28,7 @@ typedef enum {
 @property (nonatomic,strong) NSString *fullPath;//声音文件
 @property (nonatomic,assign) AudioState state;
 @property (nonatomic,assign) id<FSAudioDelegate> audioDelegate;
+@property (nonatomic,strong) NSString *audioTime;
 
 -(void)play;
 -(void)stop;
@@ -35,5 +36,8 @@ typedef enum {
 
 -(void)initControl;
 -(BOOL)isPlaying;
+
+-(void)setTitleFrame:(CGRect)_rect;
+-(void)setPlayButtonFrame:(CGRect)_rect;
 
 @end

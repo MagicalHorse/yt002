@@ -299,7 +299,7 @@ BOOL networkIsWorking = NO;
     MBProgressHUD * statusReport =(MBProgressHUD *)[self.view viewWithTag:UIVIEWCONTROLLER_CAT_PROGRESS_ID];
     if (!statusReport)
         return;
-    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.2];
+    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 }
 
 

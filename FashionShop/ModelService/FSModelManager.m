@@ -38,9 +38,10 @@ static FSModelManager *_modelManager;
     
     RKManagedObjectStore *objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"FSShop.sqlite"];
     objectManager.objectStore = objectStore;
-    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
    
-
+#ifdef ENVIRONMENT_DEV
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+#endif
 }
 
 -(id) init
@@ -239,15 +240,14 @@ static FSModelManager *_modelManager;
 
 -(void)clearAudioFile
 {
-    NSString *extension = @"mp3";
+    NSArray *extensions = [NSArray arrayWithObjects:@"mp3",@"m4a",@"aac", nil];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *cachesDirectory = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]  stringByAppendingPathComponent:@"Audios"];
-    NSArray *contents = [fileManager contentsOfDirectoryAtPath:cachesDirectory error:NULL];
+    NSArray *contents = [fileManager contentsOfDirectoryAtPath:kRecorderDirectory error:NULL];
     NSEnumerator *e = [contents objectEnumerator];
     NSString *filename;
     while ((filename = [e nextObject])) {
-        if ([[filename pathExtension] isEqualToString:extension]) {
-            [fileManager removeItemAtPath:[cachesDirectory stringByAppendingPathComponent:filename] error:NULL];
+        if ([extensions containsObject:[filename pathExtension]]) {
+            [fileManager removeItemAtPath:[kRecorderDirectory stringByAppendingPathComponent:filename] error:NULL];
         }
     }
 }

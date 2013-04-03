@@ -27,7 +27,7 @@
     NSDate* _downTime;//按下时间
     NSInteger _minRecordGap;//最小录制时间间隔
     
-    AVAudioPlayer * _player;
+    //AVAudioPlayer * _player;
     UIImageView *playImageView;
     UIImageView *animateView;
 }
@@ -142,7 +142,7 @@
         }
         [tempLock unlock];
         _recordFileName = nil;
-        _player = nil;
+    //    _player = nil;
     }];
 }
 
@@ -235,18 +235,32 @@
 
 -(void)startPlay
 {
-    if (!_player) {
-        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-        NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
-        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-        _player.delegate = self;
-        [_player prepareToPlay];
+//    if (!_player) {
+//        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+//        NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+//        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+//        _player.delegate = self;
+//        [_player prepareToPlay];
+//    }
+//    _recordState = PTPlaying;
+//    [animateView startAnimating];
+//    animateView.hidden = NO;
+//    playImageView.hidden = YES;
+//    [_player play];
+    
+    if (theApp.audioPlayer) {
+        [self pausePlay];
     }
+    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+    theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    theApp.audioPlayer.delegate = self;
+    [theApp.audioPlayer prepareToPlay];
     _recordState = PTPlaying;
     [animateView startAnimating];
     animateView.hidden = NO;
     playImageView.hidden = YES;
-    [_player play];
+    [theApp.audioPlayer play];
 }
 
 -(void)stopPlay
@@ -255,8 +269,8 @@
     [animateView stopAnimating];
     animateView.hidden = YES;
     playImageView.hidden = NO;
-    _player.currentTime = 0;
-    [_player stop];
+    theApp.audioPlayer.currentTime = 0;
+    [theApp.audioPlayer stop];
 }
 
 -(void)pausePlay
@@ -265,7 +279,7 @@
     playImageView.hidden = NO;
     _recordState = PTWaitPlay;
     [animateView stopAnimating];
-    [_player pause];
+    [theApp.audioPlayer pause];
 }
 
 -(BOOL) checkInput
@@ -569,8 +583,8 @@
 
 -(void)stopAllAudio
 {
-    if (_player.isPlaying) {
-        [_player stop];
+    if (theApp.audioPlayer.isPlaying) {
+        [theApp.audioPlayer stop];
         _recordState = PTWaitPlay;
     }
 }

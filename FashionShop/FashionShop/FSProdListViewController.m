@@ -48,6 +48,7 @@
             [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
             btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
+            cancel = btn;
         }
         if ([cc isKindOfClass:[UISegmentedControl class]]) {
             UISegmentedControl * seg = (UISegmentedControl*)cc;
@@ -57,7 +58,27 @@
         }
 	}
     
+    [self setCancelButtonEnable:YES];
 	[super layoutSubviews];
+}
+
+-(void)setCancelButtonEnable:(BOOL)_enable
+{
+    if (cancel) {
+        [cancel setEnabled:_enable];
+    }
+    else{
+        NSUInteger numViews = [self.subviews count];
+        for(int i = 0; i < numViews; i++) {
+            id cc = [self.subviews objectAtIndex:i];
+            if([cc isKindOfClass:[UIButton class]])
+            {
+                UIButton *btn = (UIButton *)cc;
+                [btn setEnabled:_enable];
+                cancel = btn;
+            }
+        }
+    }
 }
 
 -(void)valueChanged:(UISegmentedControl *)sender
@@ -371,6 +392,7 @@
     [self beginLoading:_cvContent];
     _prodPageIndex = 0;
     _currentTag = tag;
+    _refreshLatestDate = _firstLoadDate = [NSDate date];
     FSProListRequest *request =
     [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
     __block FSProdListViewController *blockSelf = self;
@@ -399,16 +421,16 @@
     request.routeResourcePath = route;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-//    if(isRefresh)
-//    {
-//        request.requestType = 0;
-//        request.previousLatestDate = _refreshLatestDate;
-//    }
-//    else
-//    {
-//        request.requestType = 1;
-//        request.previousLatestDate = _firstLoadDate;
-//    }
+    if(isRefresh)
+    {
+        request.requestType = 0;
+        request.previousLatestDate = _refreshLatestDate;
+    }
+    else
+    {
+        request.requestType = 1;
+        request.previousLatestDate = _firstLoadDate;
+    }
 
     request.tagid =[_currentTag valueForKey:@"id"];
     request.nextPage = page;
@@ -477,6 +499,9 @@
     [super scrollViewDidScroll:scrollView];
     if (scrollView == _tableSearch) {
         [self.searchBar resignFirstResponder];
+        [UIView animateWithDuration:0.4 animations:nil completion:^(BOOL finished) {
+            [self.searchBar setCancelButtonEnable:YES];
+        }];
     }
     else{
         [self loadImagesForOnscreenRows];
@@ -711,6 +736,7 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
     if (_isSearching) {
+        self.searchBar.text = @"";
         [_tableSearch removeFromSuperview];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         _isSearching = NO;

@@ -595,10 +595,6 @@ typedef enum {
 -(void)loadMore{
     if (_inLoading)
         return;
-    //UIActivityIndicatorView *loadMore = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    
-    //_contentView.tableFooterView = loadMore;
-    //[loadMore startAnimating];
     [self beginLoadMoreLayout:_contentView];
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
@@ -613,7 +609,6 @@ typedef enum {
     _state = BeginLoadingMore;
     _inLoading = TRUE;
     block(request,^(){
-        //_contentView.tableFooterView = nil;
         [self endLoadMore:_contentView];
         _state = EndLoadingMore;
         _inLoading = FALSE;
@@ -689,9 +684,21 @@ typedef enum {
             FSStore * store = [_storeSource objectAtIndex:section];
             header.lblTitle.text =[NSString stringWithFormat:NSLocalizedString(@"%@", nil),store.name];
             [header.lblTitle sizeToFit];
-            header.lblDistance.frame = CGRectMake(header.lblTitle.frame.origin.x + header.lblTitle.frame.size.width, header.lblTitle.frame.origin.y + 2, 200, header.frame.size.height);
-            header.lblDistance.text = [NSString stringWithFormat:@"(%@)",[NSString stringMetersFromDouble:store.distance]];
-            [header.lblDistance sizeToFit];
+            if (store.distance <= 0) {
+                header.lblDistance.hidden = YES;
+            }
+            else{
+                header.lblDistance.hidden = NO;
+                header.lblDistance.frame = CGRectMake(header.lblTitle.frame.origin.x + header.lblTitle.frame.size.width, header.lblTitle.frame.origin.y + 2, 200, header.frame.size.height);
+                if (store.distance >= 100) {
+                    header.lblDistance.text = [NSString stringWithFormat:@"(约%.0f公里)",store.distance];
+                }
+                else{
+                    header.lblDistance.text = [NSString stringWithFormat:@"(约%.2f公里)",store.distance];
+                }
+                [header.lblDistance sizeToFit];
+            }
+            
             UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickToStore:)];
             [header addGestureRecognizer:tapGesture];
             return header;

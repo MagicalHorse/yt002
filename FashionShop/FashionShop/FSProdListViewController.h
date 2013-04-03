@@ -19,8 +19,11 @@
 @end
 
 @interface FSSearchBar : UISearchBar {
+    UIButton *cancel;
 }
 @property (nonatomic,assign) id<MySegmentValueChangedDelegate> segmentDelegate;
+
+-(void)setCancelButtonEnable:(BOOL)_enable;
 
 @end
 

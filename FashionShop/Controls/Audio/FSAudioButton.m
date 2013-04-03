@@ -17,7 +17,6 @@
     UIImageView *animateView;
     
     NSMutableData * receiveData;
-    AVAudioPlayer * player;
     NSString *fileName;
 }
 
@@ -26,6 +25,20 @@
 @implementation FSAudioButton
 @synthesize fullPath;
 @synthesize state;
+
+-(void)setTitleFrame:(CGRect)_rect
+{
+    timeLb.frame = _rect;
+    timeLb.font = [UIFont boldSystemFontOfSize:12];
+    timeLb.textAlignment = UITextAlignmentCenter;
+}
+
+-(void)setPlayButtonFrame:(CGRect)_rect
+{
+    activity.frame = _rect;
+    playImageView.frame = _rect;
+    animateView.frame = _rect;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -41,19 +54,19 @@
     //设置按钮属性
     [self setBackgroundColor:[UIColor clearColor]];
     UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
-    //image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0, 30, image.size.height, image.size.width-30)];
     [self setBackgroundImage:image forState:UIControlStateNormal];
-    [self setBackgroundImage:image forState:UIControlStateHighlighted];
     
     //添加时间标签
-//    timeLb = [[UILabel alloc] initWithFrame:CGRectMake(9, 0, 0, 0)];
-//    timeLb.font = [UIFont boldSystemFontOfSize:10];
-//    timeLb.backgroundColor = [UIColor clearColor];
-//    timeLb.textColor = RGBCOLOR(0, 0, 0);
-//    [self addSubview:timeLb];
+    timeLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width/2, self.frame.size.height)];
+    timeLb.font = [UIFont boldSystemFontOfSize:10];
+    timeLb.backgroundColor = [UIColor clearColor];
+    timeLb.textAlignment = UITextAlignmentCenter;
+    timeLb.textColor = RGBCOLOR(0, 0, 0);
+    [self addSubview:timeLb];
     
-    int height = self.frame.size.height/2;
-    CGRect _rect = CGRectMake((self.frame.size.width-height)/2, height/2, height, height);
+    double xOffset = self.frame.size.width / 3 * 2;
+    double height = self.frame.size.height/2;
+    CGRect _rect = CGRectMake(xOffset, height/2, height/5*4, height);
     
     //添加加载
     activity = [[UIActivityIndicatorView alloc] initWithFrame:_rect];
@@ -64,7 +77,6 @@
     //添加播放图标
     playImageView = [[UIImageView alloc] initWithFrame:_rect];
     playImageView.image = [UIImage imageNamed:@"play_icon.png"];
-    playImageView.contentMode = UIViewContentModeCenter;
     [self addSubview:playImageView];
     
     //添加播放动画
@@ -77,12 +89,17 @@
                                    nil];
     animateView.animationDuration = 1.2;
     animateView.hidden = YES;
-    animateView.contentMode = UIViewContentModeCenter;
     [self addSubview:animateView];
     
     [self addTarget:self action:@selector(clickToPlay:) forControlEvents:UIControlEventTouchUpInside];
     
     self.state = Normal;
+}
+
+-(void)setAudioTime:(NSString *)audioTime
+{
+    _audioTime = audioTime;
+    timeLb.text = audioTime;
 }
 
 -(void)setState:(AudioState)aState
@@ -147,7 +164,7 @@
 {
     if (state == Playing) {
         self.state = Pause;
-        [player pause];
+        [theApp.audioPlayer pause];
         [animateView stopAnimating];
     }
     else if(state == Loading) {
@@ -156,54 +173,62 @@
     }
     else if(state == Pause) {
         self.state = Playing;
-        [player play];
+        [theApp.audioPlayer play];
         [animateView startAnimating];
     }
     else if(state == Stop) {
+//        self.state = Playing;
+//        [theApp.audioPlayer play];
+//        [animateView startAnimating];
+        [self startPlay];
+    }
+    else{
+        [self startPlay];
+    }
+}
+
+-(void)startPlay
+{
+    //首先检测该文件是否已经存在缓存列表中，如果存在，则直接使用播放
+    fileName = [fullPath lastPathComponent];
+    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:fileName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
+    {
+        NSLog(@"recordAudioFullPath:%@", recordAudioFullPath);
+        theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:recordAudioFullPath] error:nil];
+        theApp.audioPlayer.delegate = self;
+        [theApp.audioPlayer prepareToPlay];
+        [theApp.audioPlayer play];
         self.state = Playing;
-        [player play];
         [animateView startAnimating];
     }
     else{
-        //首先检测该文件是否已经存在缓存列表中，如果存在，则直接使用播放
-        fileName = [fullPath lastPathComponent];
-        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:fileName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
-        {
-            player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:recordAudioFullPath] error:nil];
-            player.delegate = self;
-            [player prepareToPlay];
-            [player play];
-            self.state = Playing;
-            [animateView startAnimating];
-        }
-        else{
-            NSURL * url = [[NSURL alloc] initWithString:fullPath];
-            NSURLRequest * urlRequest = [[NSURLRequest alloc] initWithURL:url];
-            //异步请求数据
-            [NSURLConnection connectionWithRequest:urlRequest delegate:self];
-            //给状态栏加菊花
-            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        }
+        NSLog(@"fullPath:%@", fullPath);
+        NSURL * url = [[NSURL alloc] initWithString:fullPath];
+        NSURLRequest * urlRequest = [[NSURLRequest alloc] initWithURL:url];
+        //异步请求数据
+        [NSURLConnection connectionWithRequest:urlRequest delegate:self];
+        //给状态栏加菊花
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     }
 }
 
 -(void)stop
 {
-    [player stop];
-    player.currentTime = 0;
+    [theApp.audioPlayer stop];
+    theApp.audioPlayer.currentTime = 0;
     self.state = Stop;
 }
 
 -(void)pause
 {
-    [player pause];
+    [theApp.audioPlayer pause];
     self.state = Pause;
 }
 
 -(BOOL)isPlaying
 {
-    return [player isPlaying];
+    return [theApp.audioPlayer isPlaying];
 }
 
 #pragma mak - NSURLConnectionDataDelegate
@@ -243,13 +268,13 @@
     //以该路径初始化一个url,然后以url初始化player
     NSError * error;
     NSURL * url = [NSURL fileURLWithPath:filePath];
-    player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    player.delegate = self;
+    theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    theApp.audioPlayer.delegate = self;
     if (error) {
         NSLog(@"%@",[error localizedDescription]);
     }
-    [player prepareToPlay];
-    [player play];
+    [theApp.audioPlayer prepareToPlay];
+    [theApp.audioPlayer play];
     self.state = Playing;
     [animateView startAnimating];
 }

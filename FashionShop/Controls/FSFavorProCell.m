@@ -102,11 +102,19 @@
     {
         if ([_data resources] && [_data resources].count>0)
         {
-            FSResource *resource = [[_data resources] objectAtIndex:0];
-            NSURL *url = [resource absoluteUrl];
-            if (url)
-            {
-                [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+            FSResource *resource = nil;
+            for (FSResource *res in [_data resources]) {
+                if (res.type == 1) {
+                    resource = res;
+                    break;
+                }
+            }
+            if (resource) {
+                NSURL *url = [resource absoluteUrl];
+                if (url)
+                {
+                    [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+                }
             }
         }
        

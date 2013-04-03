@@ -50,23 +50,21 @@
 
 @interface FSProDetailViewController ()
 {
-    MBProgressHUD *statusReport;
-    id proItem;
-    int currentPageIndex;
+    MBProgressHUD   *statusReport;
+    id              proItem;
+    int             currentPageIndex;
     
-    int replyIndex;//回复索引
-    BOOL isReplyToAll;//是否是回复给所有人
+    int             replyIndex;//回复索引
+    BOOL            isReplyToAll;//是否是回复给所有人
     
-    RecordState _recordState;
-    BOOL              _isRecording;
-    NSDate* _downTime;//按下时间
-    NSInteger _minRecordGap;//最小录制时间间隔
+    RecordState     _recordState;
+    BOOL            _isRecording;
+    NSDate*         _downTime;//按下时间
+    NSInteger       _minRecordGap;//最小录制时间间隔
     
-    AVAudioPlayer * _player;
-    BOOL _isAudio;//是否是语音内容
-    BOOL _isPlaying;//是否正在播放声音
-    FSAudioButton *lastButton;
-    
+    BOOL            _isAudio;//是否是语音内容
+    BOOL            _isPlaying;//是否正在播放声音
+    FSAudioButton   *lastButton;
     BOOL _isNeedScroll;
 }
 
@@ -505,7 +503,7 @@
 
 - (IBAction)doGetCoupon:(id)sender {
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    if (!isLogined)
+    if (!isLogined && [FSModelManager sharedModelManager].loginToken)
     {
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
         FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
@@ -645,16 +643,14 @@
 {
     if ([self numberOfImagesInSlides:nil]<=0)
         return;
-//    FSImageSlideViewController *slide = [[FSImageSlideViewController alloc] initWithNibName:@"FSImageSlideViewController" bundle:nil];
-//    slide.source = self;
-//    slide.wantsFullScreenLayout = YES;
-//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:slide];
-//    [self presentViewController:nav animated:TRUE completion:nil];
     
     NSMutableArray *photoArray=[NSMutableArray arrayWithCapacity:[[self itemSource] resource].count];
-    for(NSString *res in [[self itemSource] resource])
+    for(FSResource *res in [[self itemSource] resource])
     {
-        MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[(FSResource *)res absoluteUrl320] name:nil];
+        if (res.type == 2) {
+            continue;
+        }
+        MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[res absoluteUrl320] name:nil];
         [photoArray addObject:photo];
     }
     MyPhotoSource *source = [[MyPhotoSource alloc] initWithPhotos:photoArray];
@@ -859,7 +855,7 @@
     
     __block FSProDetailViewController *blockSelf = self;
     FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
-    [request upload:^{
+    [request upload:^(id data){
         [blockSelf updateProgress:NSLocalizedString(@"COMM_OPERATE_COMPL",nil)];
         //删除评论语音文件
         NSLock* tempLock = [[NSLock alloc]init];
@@ -869,23 +865,71 @@
             [[NSFileManager defaultManager] removeItemAtPath:_recordFileName error:nil];
         }
         [tempLock unlock];
+        
         replyIndex = -1;
         _recordFileName = @"";
         if (callback) {
             callback();
         }
         
-        //重新请求数据
-        view.showViewMask= FALSE;
-        _isNeedScroll = YES;
-//        [self delayLoadComments:[view.data valueForKey:@"id"]];
-        [self performSelector:@selector(delayLoadComments:) withObject:[view.data valueForKey:@"id"] afterDelay:0.8];
+        if (data) {
+            //创建FSComment对象
+            NSMutableArray *oldComments = [[(FSDetailBaseView *)blockSelf.paginatorView.currentPage data] comments];
+            if (!oldComments)
+                oldComments = [@[] mutableCopy];
+            FSComment *_comment = [[FSComment alloc] init];
+            _comment.id = [[data objectForKey:@"commentid"] intValue];
+            if (isReplyToAll) {
+                _comment.replyUserID = nil;
+                _comment.replyUserName = nil;
+            }
+            else{
+                _comment.replyUserName = [data objectForKey:@"replycustomer_nickname"];
+                _comment.replyUserID = [[data objectForKey:@"replycustomer_id"] intValue];
+            }
+            FSUser *user = [[FSUser alloc] init];
+            id customer = [data objectForKey:@"customer"];
+            if (customer) {
+                user.uid = [NSNumber numberWithInt:[[customer objectForKey:@"id"] intValue]];
+                user.thumnail = [customer objectForKey:@"logo"];
+                user.nickie = [customer objectForKey:@"nickname"];
+                user.userLevelId = [[customer objectForKey:@"level"] intValue];
+                _comment.inUser = user;
+            }
+            
+            _comment.indate = [NSDate date];
+            if (_isAudio) {
+                _comment.comment = nil;
+                id items = [data objectForKey:@"resources"];
+                NSLog(@"items:%@", items);
+                if ([items count] > 0) {
+                    id resources = [items objectAtIndex:0];
+                    NSLog(@"resources:%@", resources);
+                    FSResource *_resource = [[FSResource alloc] init];
+                    _resource.domain = [resources objectForKey:@"domain"];
+                    _resource.relativePath = [resources objectForKey:@"name"];
+                    _resource.width = [[resources objectForKey:@"width"] intValue];
+                    _resource.type = [[resources objectForKey:@"type"] intValue];
+                    _comment.resources = [[NSMutableArray alloc] initWithObjects:_resource, nil];
+                }
+            }
+            else{
+                _comment.comment = [self transformCommentText];
+            }
+            [oldComments insertObject:_comment atIndex:0];
+        }
+        
+        [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
+        __block FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)self.paginatorView.currentPage;
+        CGRect _rect = [(id)blockViewForRefresh tbComment].frame;
+        _rect.size.height = 120;
+        [[(id)blockViewForRefresh svContent] scrollRectToVisible:_rect animated:YES];
         
         //隐藏输入框
         [self clearComment:nil];
         
-    } error:^{
-        [blockSelf updateProgress:NSLocalizedString(@"upload failed!", nil)];
+    } error:^(id error){
+        [blockSelf updateProgress:error];//NSLocalizedString(@"upload failed!", nil)
         if (callback) {
             callback();
         }
@@ -1156,7 +1200,7 @@
 
 - (void)viewDidUnload {
     if (lastButton) {
-        [lastButton pause];
+        [lastButton stop];
     }
     [self set_thumView:nil];
     [self setArrowLeft:nil];
@@ -1287,7 +1331,7 @@
 {
     if (lastButton) {
         if (lastButton != aButton) {
-            [lastButton pause];
+            [lastButton stop];
         }
     }
     lastButton = aButton;

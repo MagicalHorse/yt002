@@ -14,8 +14,8 @@
 
 @interface FSCommonCommentRequest()
 {
-    dispatch_block_t completeBlock;
-    dispatch_block_t errorBlock;
+    FSCommentCompleteBlock completeBlock;
+    FSCommentCompleteBlock errorBlock;
     BOOL isClientRequest;
 }
 
@@ -51,7 +51,7 @@
     [map mapKeyPath:@"replyuser" toAttribute:@"request.replyuserID"];
 }
 
-- (void)upload:(dispatch_block_t)blockcomplete error:(dispatch_block_t)blockerror
+- (void)upload:(FSCommentCompleteBlock)blockcomplete error:(FSCommentCompleteBlock)blockerror
 {
     RKParams *params = [RKParams params];
     [params setValue:sourceid forParam:@"sourceid"];
@@ -102,19 +102,19 @@
         NSError *error = NULL;
         NSDictionary *result = [parser objectFromString:response.bodyAsString error:&error];
         if (!error && [[result objectForKey:@"statusCode"] intValue]==200) {
-            completeBlock();
+            completeBlock([result objectForKey:@"data"]);
         }
         else
-            errorBlock();
+            errorBlock([result objectForKey:@"message"]);
     } else if (errorBlock && isClientRequest){
-        errorBlock();
+        errorBlock(nil);
     }
 }
 
 - (void)request:(RKRequest *)request didFailLoadWithError:(NSError *)error
 {
     if (errorBlock)
-        errorBlock();
+        errorBlock(error.description);
 }
 
 @end

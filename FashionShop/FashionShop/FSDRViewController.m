@@ -613,8 +613,6 @@
     }
     id item = [_items objectAtIndex:indexPath.row];
     [(id)cell setData:item];
-//    cell.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//    cell.layer.borderWidth = 0.5;
     if (_segHeader.selectedSegmentIndex == 0) {
         if ([item isKindOfClass:[FSFavor class]]) {
             FSFavor *_fav = (FSFavor*)item;

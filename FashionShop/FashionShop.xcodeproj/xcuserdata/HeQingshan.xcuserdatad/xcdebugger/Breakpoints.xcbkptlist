@@ -7,13 +7,26 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FashionShop/FSMeViewController.m"
-         timestampString = "386496984.048658"
+         filePath = "Controls/Audio/FSAudioButton.m"
+         timestampString = "386664037.832394"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "998"
-         endingLineNumber = "998"
-         landmarkName = "-collectionView:cellForItemAtIndexPath:"
+         startingLineNumber = "284"
+         endingLineNumber = "284"
+         landmarkName = "-connection:didFailWithError:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "FashionShop/FSMeViewController.m"
+         timestampString = "386697752.031753"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "667"
+         endingLineNumber = "667"
+         landmarkName = "-loadMore"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -95,14 +95,12 @@
                 CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgView.frame.size.height );
                 [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
                 _imageURL = imgObj.absoluteUrl320.absoluteString;
-                if (_data.resource.count>1)
-                {
-                    UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
-                    UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
-                    moreImages.image = moreInd;
-                    [_imgView.superview addSubview:moreImages];
-                    [_imgView.superview bringSubviewToFront:moreImages];
-                }
+                //显示更多图片标识
+                UIImage *moreInd = [UIImage imageNamed:@"more_img_icon"];
+                UIImageView *moreImages = [[UIImageView alloc] initWithFrame:CGRectMake(_imgView.frame.size.width/2-moreInd.size.width/2, _imgView.frame.size.height+_imgView.frame.origin.y-moreInd.size.height, moreInd.size.width, moreInd.size.height)];
+                moreImages.image = moreInd;
+                [_imgView.superview addSubview:moreImages];
+                [_imgView.superview bringSubviewToFront:moreImages];
                 break;
             }
         }
@@ -131,7 +129,7 @@
     [_imgView.superview addSubview:imgBG];
     [_imgView.superview sendSubviewToBack:imgBG];
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
-    if (distanceString.length>0)
+    if (distanceString.length > 0)
     {
         [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%@)",_data.store.name,distanceString] forState:UIControlStateNormal];
     } else
@@ -170,15 +168,14 @@
     
     //设置播放按钮
     if (_audioResource) {
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(260, (superFrame.size.height-21 - 40)/2 + 21, 40, 40)];
-        [_audioButton setBackgroundImage:nil forState:UIControlStateNormal];
-        [_audioButton setBackgroundImage:nil forState:UIControlStateHighlighted];
-        [_audioButton setBackgroundColor:[UIColor lightGrayColor]];
-        _audioButton.layer.borderColor = [UIColor darkGrayColor].CGColor;
-        _audioButton.layer.borderWidth = 2;
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(260, (superFrame.size.height-21 - 50)/2 + 21, 50, 50)];
+        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_100x100.png"] forState:UIControlStateNormal];
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
+        _audioButton.audioTime = [NSString stringWithFormat:@"%d''", (_audioResource.width>0?_audioResource.width:1)];
+        [_audioButton setTitleFrame:CGRectMake(0, 10, _audioButton.frame.size.width/7*4, _audioButton.frame.size.height - 20)];
+        [_audioButton setPlayButtonFrame:CGRectMake(_audioButton.frame.size.width/7*4 + 1, (_audioButton.frame.size.height-12)/2, 12, 12)];
         [_btnStore.superview addSubview:_audioButton];
     }
     

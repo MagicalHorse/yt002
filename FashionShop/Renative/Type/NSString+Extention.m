@@ -87,12 +87,17 @@ const NSString* REG_PHONE = @"^(([0\\+]\\d{2,3}-?)?(0\\d{2,3})-?)?(\\d{7,8})";
 
 +(NSString *)stringMetersFromDouble:(double)input
 {
-    if (input <=0)
+    if (input <= 0)
         return @"";
     int kilos = 1000;
-    int numberOfKilos = (int)input/kilos;
-    if (input>=1)
-        return [NSString stringWithFormat:NSLocalizedString(@"%dkiloes", nil),numberOfKilos];
+    double numberOfKilos = input/kilos;
+    if (numberOfKilos >= 1)
+        if (numberOfKilos >= 100) {
+            return [NSString stringWithFormat:NSLocalizedString(@"%.0fkiloes", nil), numberOfKilos];
+        }
+        else{
+            return [NSString stringWithFormat:NSLocalizedString(@"%.2fkiloes", nil), numberOfKilos];
+        }
     else
         return [NSString stringWithFormat:NSLocalizedString(@"%dmeters", nil),(int)input];
 }

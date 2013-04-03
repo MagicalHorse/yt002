@@ -11,4 +11,12 @@
 @implementation FSCommonRequest
 @synthesize routeResourcePath;
 
+-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
+{
+    routeResourcePath = aRouteResourcePath;
+    if ([routeResourcePath isEqualToString:RK_REQUEST_KEYWORD_LIST]) {
+        [self setBaseURL:2];
+    }
+}
+
 @end

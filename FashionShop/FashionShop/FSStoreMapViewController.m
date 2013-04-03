@@ -40,7 +40,12 @@
 		self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
 	}
     self.locationManager.delegate = self;
-	[self.locationManager startUpdatingLocation];
+	//[self.locationManager startUpdatingLocation];
+    
+    CLLocationCoordinate2D center;
+    center.latitude = [_store.lantit floatValue];
+    center.longitude = [_store.longit floatValue];
+    [self searchPositon:center title:_store.name subTitle:_store.descrip];
 }
 
 - (IBAction)onButtonBack:(id)sender {
@@ -51,7 +56,7 @@
 - (void)searchPositon:(CLLocationCoordinate2D)position title:(NSString *)aTitle subTitle:(NSString*)aSubTitle {
     _currentCoordinate = position;
     [self animateToPlace:_currentCoordinate];
-    PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:_currentCoordinate title:aTitle subTitle:aSubTitle];
+    PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:_currentCoordinate title:aTitle subTitle:nil];
 //    [self.mapView selectAnnotation:annotation animated:YES];
     [self.mapView addAnnotation:annotation];
 }
@@ -110,13 +115,13 @@
 	[self.locationManager stopUpdatingLocation];
 	self.locationManager.delegate = nil;
     
-    [self searchPositon:newLocation.coordinate title:@"当前位置" subTitle:nil];
+//    [self searchPositon:newLocation.coordinate title:@"当前位置" subTitle:nil];
     
     //再定位当前位置
-    CLLocationCoordinate2D center;
-    center.latitude = [_store.lantit floatValue];
-    center.longitude = [_store.longit floatValue];
-    [self searchPositon:center title:_store.name subTitle:_store.descrip];
+//    CLLocationCoordinate2D center;
+//    center.latitude = [_store.lantit floatValue];
+//    center.longitude = [_store.longit floatValue];
+//    [self searchPositon:center title:_store.name subTitle:_store.descrip];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {

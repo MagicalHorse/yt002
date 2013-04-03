@@ -21,6 +21,7 @@
 
 @property (strong,nonatomic) NSMutableArray *allBrands;
 @property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
+@property (strong,nonatomic) AVAudioPlayer *audioPlayer;
 
 +(FSAppDelegate *)app;
 -(void)entryMain;
