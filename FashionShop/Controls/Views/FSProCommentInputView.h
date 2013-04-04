@@ -21,7 +21,5 @@
 //type==1:评论文字
 //type==2:评论语音
 -(void)updateControls:(int)type;
--(void)showReplyLabel:(NSString *)_title;
--(void)hidenReplyLabel;
 
 @end

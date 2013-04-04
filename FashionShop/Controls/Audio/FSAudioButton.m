@@ -259,6 +259,10 @@
     /*
      将下载好的数据写入沙盒的cache目录下
      */
+    NSFileManager *fm = [NSFileManager defaultManager];
+    if (![fm fileExistsAtPath:kRecorderDirectory]) {
+        [fm createDirectoryAtPath:kRecorderDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+    }
     NSString *filePath=[kRecorderDirectory  stringByAppendingPathComponent:fileName];
     [receiveData writeToFile:filePath atomically:YES];
     [self performSelector:@selector(showPlay:) withObject:filePath afterDelay:1.5];

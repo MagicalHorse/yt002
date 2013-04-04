@@ -138,6 +138,11 @@
         self.contentMode = UIViewContentModeScaleAspectFit;
     }
     
+    self.alpha = 0.4;
+    [UIView animateWithDuration:0.4 animations:^{
+        self.alpha = 1.0f;
+    } completion:nil];
+    
     if ([isLazyInt boolValue])
     {
         UIImage *cropImage = image;
@@ -161,6 +166,11 @@
     if (self.image != image) {
         self.contentMode = UIViewContentModeScaleAspectFit;
     }
+    
+    self.alpha = 0.4;
+    [UIView animateWithDuration:0.4 animations:^{
+        self.alpha = 1.0f;
+    } completion:nil];
     
     if ([isLazyInt boolValue])
     {

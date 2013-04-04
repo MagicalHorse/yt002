@@ -207,8 +207,9 @@ typedef enum {
     [self prepareLayout];
     [self setFilterType];
     [self initContentView];
-    [self loadBannerData];
+    [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
 }
+
 -(void)loadBannerData
 {
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:PRO_LIST_BANNER];

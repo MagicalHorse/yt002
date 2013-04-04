@@ -578,7 +578,7 @@
     rect.size.height = APP_HIGH>480?353:265;
     _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
-    _likeView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    //_likeView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
 

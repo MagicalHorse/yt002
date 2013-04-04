@@ -770,14 +770,14 @@
             }
         }
         if (isReplyToAll) {
-            commentInput.replyLabel.text = @"回复 所有人";
+            commentInput.replyLabel.text = NSLocalizedString(@"Reply All", nil);
         }
         else{
             //获取选中用户的ID；
             id currentView =  self.paginatorView.currentPage;
             FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
             FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
-            commentInput.replyLabel.text = [NSString stringWithFormat:@"回复 %@", item.inUser.nickie];
+            commentInput.replyLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Reply %@", nil), item.inUser.nickie];
         }
     }
 }

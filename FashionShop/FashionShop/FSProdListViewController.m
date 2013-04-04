@@ -47,7 +47,9 @@
             btn.backgroundColor = RGBCOLOR(234, 234, 234);
             [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-            btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
+            if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000) {
+                btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
+            }
             cancel = btn;
         }
         if ([cc isKindOfClass:[UISegmentedControl class]]) {
@@ -183,9 +185,9 @@
         _tableSearch.delegate = self;
         _tableSearch.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableSearch];
-        _tableSearch.bounces = NO;
     }
     _tableSearch.contentOffset = CGPointMake(0, 0);
+    [self.searchBar becomeFirstResponder];
     if(!_isSearching){
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [self.view addSubview:_tableSearch];
@@ -499,7 +501,7 @@
     [super scrollViewDidScroll:scrollView];
     if (scrollView == _tableSearch) {
         [self.searchBar resignFirstResponder];
-        [UIView animateWithDuration:0.4 animations:nil completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.8 animations:nil completion:^(BOOL finished) {
             [self.searchBar setCancelButtonEnable:YES];
         }];
     }
@@ -724,6 +726,18 @@
 {
     [self toSearch:indexPath.row];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (scrollView == _tableSearch) {
+        return;
+    }
+    else{
+        [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
+    }
 }
 
 #pragma mark - Search Delegate

@@ -43,21 +43,4 @@
     }
 }
 
-
--(void)showReplyLabel:(NSString *)_title
-{
-    _replyLabel.text = _title;
-    CGRect _rect = self.frame;
-    _rect.size.height = 50;
-    self.frame = _rect;
-}
-
--(void)hidenReplyLabel
-{
-    _replyLabel.text = @"";
-    CGRect _rect = self.frame;
-    _rect.size.height = 35;
-    self.frame = _rect;
-}
-
 @end

@@ -39,6 +39,7 @@
 {
     if (!container)
         container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    /*
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
     if(!loadMoreView)
     {
@@ -56,10 +57,29 @@
     animation.repeatCount = 2000;
     [loadMoreView.layer addAnimation:animation forKey:@"animation"];
     [loadMoreView startAnimating];
+     */
+    
+    UIActivityIndicatorView *indicatorView = (UIActivityIndicatorView*)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
+    if (!indicatorView) {
+        indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        indicatorView.frame = CGRectMake(container.frame.size.width/2-50,container.frame.origin.y+85, 20, 20);
+        [container addSubview:indicatorView];
+        indicatorView.tag = UIVIEW_CAT_LOADING_ID;
+    }
+    [indicatorView startAnimating];
 }
 
 -(void)endLoading:(UIView*)container
 {
+    if (!container) {
+        container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    }
+    UIActivityIndicatorView *indicatorView = (UIActivityIndicatorView*)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
+    if (indicatorView) {
+        [indicatorView stopAnimating];
+        [indicatorView removeFromSuperview];
+    }
+    /*
     if (!container)
         container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEW_CAT_LOADING_ID];
@@ -69,6 +89,7 @@
         loadMoreView.image = nil;
         [loadMoreView removeFromSuperview];
     }
+     */
 }
 
 @end

@@ -66,7 +66,6 @@
         _bindView.frame = _rect;
         
         UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
-        //image = [image resizableImageWithCapInsets:UIEdgeInsetsMake(10, 50, image.size.height, image.size.width-50)];
         [_btnBindCard setBackgroundImage:image forState:UIControlStateNormal];
     }
     else {
@@ -98,6 +97,12 @@
                     _cardNumField.text = @"";
                     _cardPwField.text = @"";
                     currentUser.isBindCard = @YES;
+                    if ([_cardNumField isFirstResponder]) {
+                        [_cardNumField resignFirstResponder];
+                    }
+                    if ([_cardPwField isFirstResponder]) {
+                        [_cardPwField resignFirstResponder];
+                    }
                     [self updateResultView:resp.responseData];
                     [self updateTitle];
                     [self prepareView];
