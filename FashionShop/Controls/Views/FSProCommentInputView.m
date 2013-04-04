@@ -24,6 +24,7 @@
 {
     self.layer.borderWidth = 0.5;
     self.layer.borderColor = [UIColor colorWithRed:102 green:102 blue:102].CGColor;
+    self.clipsToBounds = YES;
 }
 
 //type==1:评论文字
@@ -40,6 +41,23 @@
         _btnAudio.hidden = NO;
         _btnComment.hidden = YES;
     }
+}
+
+
+-(void)showReplyLabel:(NSString *)_title
+{
+    _replyLabel.text = _title;
+    CGRect _rect = self.frame;
+    _rect.size.height = 50;
+    self.frame = _rect;
+}
+
+-(void)hidenReplyLabel
+{
+    _replyLabel.text = @"";
+    CGRect _rect = self.frame;
+    _rect.size.height = 35;
+    self.frame = _rect;
 }
 
 @end

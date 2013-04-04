@@ -45,7 +45,7 @@
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
-#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
+#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 63
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
 
 @interface FSProDetailViewController ()
@@ -768,6 +768,16 @@
                 [commentInput updateControls:2];
                 _isAudio = YES;
             }
+        }
+        if (isReplyToAll) {
+            commentInput.replyLabel.text = @"回复 所有人";
+        }
+        else{
+            //获取选中用户的ID；
+            id currentView =  self.paginatorView.currentPage;
+            FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
+            FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
+            commentInput.replyLabel.text = [NSString stringWithFormat:@"回复 %@", item.inUser.nickie];
         }
     }
 }

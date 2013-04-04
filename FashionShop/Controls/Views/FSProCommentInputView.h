@@ -16,9 +16,12 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnChange;//切换状态按钮
 @property (strong, nonatomic) IBOutlet UIButton *btnAudio;
 @property (strong, nonatomic) IBOutlet UIView *txtView;
+@property (strong, nonatomic) IBOutlet UILabel *replyLabel;
 
 //type==1:评论文字
 //type==2:评论语音
 -(void)updateControls:(int)type;
+-(void)showReplyLabel:(NSString *)_title;
+-(void)hidenReplyLabel;
 
 @end

@@ -13,7 +13,7 @@
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
-#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
+#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 63
 #define PRO_DETAIL_COMMENT_CELL_HEIGHT 73
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
 
@@ -263,7 +263,7 @@
     
     CGSize originContent = self.svContent.contentSize;
    
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_btnStore.superview.frame.size.height+ 10;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_btnStore.superview.frame.size.height+ 10;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
 

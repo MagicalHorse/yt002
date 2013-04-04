@@ -16,7 +16,7 @@
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
-#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 45
+#define PRO_DETAIL_COMMENT_INPUT_HEIGHT 63
 #define PRO_DETAIL_COMMENT_CELL_HEIGHT 73
 #define PRO_DETAIL_COMMENT_HEADER_HEIGHT 30
 
@@ -293,7 +293,7 @@
     origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.hasPromotion?40:0);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;//+PRO_DETAIL_COMMENT_INPUT_HEIGHT+4;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
     
