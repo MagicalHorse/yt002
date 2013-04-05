@@ -159,7 +159,6 @@
     }
 }
 
-//异步播放歌曲，边缓冲边播放,异步连接
 -(void)play
 {
     if (state == Playing) {
@@ -175,12 +174,6 @@
         self.state = Playing;
         [theApp.audioPlayer play];
         [animateView startAnimating];
-    }
-    else if(state == Stop) {
-//        self.state = Playing;
-//        [theApp.audioPlayer play];
-//        [animateView startAnimating];
-        [self startPlay];
     }
     else{
         [self startPlay];
@@ -231,7 +224,8 @@
     return [theApp.audioPlayer isPlaying];
 }
 
-#pragma mak - NSURLConnectionDataDelegate
+#pragma mark - NSURLConnectionDataDelegate
+
 -(void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response{
     receiveData = [[NSMutableData alloc] init];
     self.state = Loading;
@@ -240,17 +234,6 @@
 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     [receiveData  appendData:data];
-    /*
-    if ([receiveData length] > 20000) {
-        if (player == nil) {
-            player = [[AVAudioPlayer alloc] initWithData:receiveData error:nil];
-            [player prepareToPlay];
-        }else if (player.isPlaying == NO){
-            [player play];
-            state = Playing;
-        }
-    }
-     */
 }
 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{

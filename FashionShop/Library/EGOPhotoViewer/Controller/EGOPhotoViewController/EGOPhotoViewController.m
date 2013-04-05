@@ -100,6 +100,7 @@
 	self.view.backgroundColor = [UIColor blackColor];
 	self.wantsFullScreenLayout = YES;
     self.navigationItem.leftBarButtonItem = [self createPlainBarButtonItem:@"goback_icon" target:self action:@selector(close)];
+    self.navigationItem.rightBarButtonItem =  [self createPlainBarButtonItem:@"share_icon.png" target:self action:@selector(actionButtonHit:)];
 	
 	if (!_scrollView) {
 		
@@ -348,7 +349,7 @@
 	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
 #endif
 	
-	UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
+	//UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
 	UIBarButtonItem *flex = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 	
 	if ([self.photoSource numberOfPhotos] > 1) {
@@ -368,7 +369,7 @@
 		UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"egopv_left.png"] style:UIBarButtonItemStylePlain target:self action:@selector(moveBack:)];
 		UIBarButtonItem *right = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"egopv_right.png"] style:UIBarButtonItemStylePlain target:self action:@selector(moveForward:)];
 		
-		[self setToolbarItems:[NSArray arrayWithObjects:fixedLeft, flex, left, fixedCenter, right, flex, action, nil]];
+		[self setToolbarItems:[NSArray arrayWithObjects:fixedLeft, flex, left, fixedCenter, right, flex, nil]];
 		
 		_rightButton = right;
 		_leftButton = left;
@@ -379,12 +380,12 @@
 		[left release];
 		
 	} else {
-		[self setToolbarItems:[NSArray arrayWithObjects:flex, action, nil]];
+		[self setToolbarItems:[NSArray arrayWithObjects:flex, nil]];
 	}
 	
-	_actionButton=action;
+	//_actionButton=action;
 	
-	[action release];
+	//[action release];
 	[flex release];
 	
 }

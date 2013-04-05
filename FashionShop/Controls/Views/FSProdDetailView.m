@@ -145,7 +145,8 @@
     if (_data.price &&
         [_data.price intValue]>0)
     {
-        _btnPrice.alpha =1;
+       // _btnPrice.alpha =1;
+        _btnPrice.hidden = NO;
         [_btnPrice setTitle:[NSString stringWithFormat:@"¥%lld",[_data.price longLongValue]] forState:UIControlStateNormal];
         [_btnPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:14];
@@ -156,7 +157,8 @@
                                      newsize.height);
     } else
     {
-        _btnPrice.alpha = 0;
+        //_btnPrice.alpha = 0;
+        _btnPrice.hidden = YES;
     }
     _btnStore.superview.hidden = NO;
     CGRect superFrame = _btnStore.superview.frame;

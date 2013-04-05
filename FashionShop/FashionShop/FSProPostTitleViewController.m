@@ -17,19 +17,16 @@
 
 @interface FSProPostTitleViewController ()
 {
-    UIView *backView;
-    TDDatePickerController* _datePicker;
-    TDDatePickerController* _dateEndPicker;
-    id activityObject;
-    
-    RecordState _recordState;
-    BOOL              _isRecording;
-    NSDate* _downTime;//按下时间
-    NSInteger _minRecordGap;//最小录制时间间隔
-    
-    //AVAudioPlayer * _player;
-    UIImageView *playImageView;
-    UIImageView *animateView;
+    UIView                  *backView;
+    TDDatePickerController  *_datePicker;
+    TDDatePickerController  *_dateEndPicker;
+    id                      activityObject;
+    RecordState             _recordState;
+    BOOL                    _isRecording;
+    NSDate                  *_downTime;//按下时间
+    NSInteger               _minRecordGap;//最小录制时间间隔
+    UIImageView             *playImageView;
+    UIImageView             *animateView;
 }
 
 @end
@@ -60,6 +57,44 @@
     _minRecordGap = 4;
 }
 
+- (void)viewDidUnload {
+    [self stopAllAudio];
+    [self setLblName:nil];
+    [self setLblDescName:nil];
+    [self setLblPrice:nil];
+    [self setTxtPrice:nil];
+    [self setLbProDesc:nil];
+    [self setTxtProDesc:nil];
+    [self setLbProTime:nil];
+    [self setTxtProEndTime:nil];
+    [self setTxtProStartTime:nil];
+    [self setLblDescVoice:nil];
+    [self setBtnRecord:nil];
+    [self setBtnReRecord:nil];
+    [super viewDidUnload];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [_txtTitle becomeFirstResponder];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self stopAllAudio];
+}
+
+#pragma mark - selfdef method
+
+-(void)stopAllAudio
+{
+    if (theApp.audioPlayer.isPlaying) {
+        [theApp.audioPlayer stop];
+        _recordState = PTWaitPlay;
+    }
+}
+
 -(void)initRecordButton
 {
     UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
@@ -88,67 +123,6 @@
     animateView.hidden = YES;
     animateView.contentMode = UIViewContentModeCenter;
     [_btnRecord addSubview:animateView];
-}
-
--(void)showReRecordButton
-{
-    [UIView animateWithDuration:0.3 animations:^{
-        //改变尺寸
-        CGRect _rect = _btnRecord.frame;
-        _rect.size.width -= 80;
-        _btnRecord.frame = _rect;
-        
-        _btnReRecord.alpha = 1.0;
-        _rect = _btnReRecord.frame;
-        _rect.size.width = 75;
-        _rect.origin.x -= 75;
-        _btnReRecord.frame = _rect;
-        
-        //加入播放按钮
-        [_btnRecord setTitle:@"" forState:UIControlStateNormal];
-    } completion:^(BOOL finished) {
-        playImageView.hidden = NO;
-    }];
-}
-
--(void)hideReRecordButton
-{
-    //设置状态
-    _recordState = PTStartRecord;
-    playImageView.hidden = YES;
-    animateView.hidden = YES;
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        //改变尺寸
-        CGRect _rect = _btnRecord.frame;
-        _rect.size.width += 80;
-        _btnRecord.frame = _rect;
-        
-        _btnReRecord.alpha = 0;
-        _rect = _btnReRecord.frame;
-        _rect.size.width = 0;
-        _rect.origin.x += 75;
-        _btnReRecord.frame = _rect;
-    } completion:^(BOOL finished) {
-        //加入播放按钮
-        [_btnRecord setTitle:@"按住开始录音" forState:UIControlStateNormal];
-        //清除文件内容
-        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-        NSLock* tempLock = [[NSLock alloc]init];
-        [tempLock lock];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
-        {
-            [[NSFileManager defaultManager] removeItemAtPath:recordAudioFullPath error:nil];
-        }
-        [tempLock unlock];
-        _recordFileName = nil;
-    //    _player = nil;
-    }];
-}
-
--(void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [_txtTitle becomeFirstResponder];
 }
 
 -(void) decorateTapDismissKeyBoard
@@ -231,55 +205,6 @@
     }
     _txtTitle.delegate = self;
     _txtDesc.delegate = self;
-}
-
--(void)startPlay
-{
-//    if (!_player) {
-//        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-//        NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
-//        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-//        _player.delegate = self;
-//        [_player prepareToPlay];
-//    }
-//    _recordState = PTPlaying;
-//    [animateView startAnimating];
-//    animateView.hidden = NO;
-//    playImageView.hidden = YES;
-//    [_player play];
-    
-    if (theApp.audioPlayer) {
-        [self pausePlay];
-    }
-    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
-    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
-    theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-    theApp.audioPlayer.delegate = self;
-    [theApp.audioPlayer prepareToPlay];
-    _recordState = PTPlaying;
-    [animateView startAnimating];
-    animateView.hidden = NO;
-    playImageView.hidden = YES;
-    [theApp.audioPlayer play];
-}
-
--(void)stopPlay
-{
-    _recordState = PTWaitPlay;
-    [animateView stopAnimating];
-    animateView.hidden = YES;
-    playImageView.hidden = NO;
-    theApp.audioPlayer.currentTime = 0;
-    [theApp.audioPlayer stop];
-}
-
--(void)pausePlay
-{
-    animateView.hidden = YES;
-    playImageView.hidden = NO;
-    _recordState = PTWaitPlay;
-    [animateView stopAnimating];
-    [theApp.audioPlayer pause];
 }
 
 -(BOOL) checkInput
@@ -366,6 +291,42 @@
     _btnRecord = nil;
 }
 
+- (IBAction)doSave:(id)sender {
+    if ([self checkInput])
+    {
+        if ([delegate respondsToSelector:@selector(titleViewControllerSetTitle:)])
+        {
+            [delegate titleViewControllerSetTitle:self];
+        }
+    }
+}
+
+- (IBAction)doCancel:(id)sender {
+    if([delegate respondsToSelector:@selector(titleViewControllerCancel:)])
+    {
+        [delegate titleViewControllerCancel:self];
+    }
+}
+
+- (IBAction)selDuration:(id)sender {
+    UIButton* btn = (UIButton*)sender;
+    if (btn.tag == 1) {
+        if (!_datePicker) {
+            _datePicker = [[TDDatePickerController alloc] init];
+            _datePicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_datePicker];
+    }
+    else {
+        if (!_dateEndPicker) {
+            _dateEndPicker = [[TDDatePickerController alloc] init];
+            _dateEndPicker.delegate = self;
+        }
+        [self presentSemiModalViewController:_dateEndPicker];
+    }
+    [activityObject resignFirstResponder];
+}
+
 #pragma mark - TDDatePickerControllerDelegate
 
 - (void)datePickerSetDate:(TDDatePickerController *)viewController
@@ -425,43 +386,7 @@
     return YES;
 }
 
-- (IBAction)doSave:(id)sender {
-    if ([self checkInput])
-    {
-        if ([delegate respondsToSelector:@selector(titleViewControllerSetTitle:)])
-        {
-            [delegate titleViewControllerSetTitle:self];
-        }
-    }
-}
-
-- (IBAction)doCancel:(id)sender {
-    if([delegate respondsToSelector:@selector(titleViewControllerCancel:)])
-    {
-        [delegate titleViewControllerCancel:self];
-    }
-}
-
-- (IBAction)selDuration:(id)sender {
-    UIButton* btn = (UIButton*)sender;
-    if (btn.tag == 1) {
-        if (!_datePicker) {
-            _datePicker = [[TDDatePickerController alloc] init];
-            _datePicker.delegate = self;
-        }
-        [self presentSemiModalViewController:_datePicker];
-    }
-    else {
-        if (!_dateEndPicker) {
-            _dateEndPicker = [[TDDatePickerController alloc] init];
-            _dateEndPicker.delegate = self;
-        }
-        [self presentSemiModalViewController:_dateEndPicker];
-    }
-    [activityObject resignFirstResponder];
-}
-
-#pragma mark record function
+#pragma mark - record function
 
 - (void)startToRecord
 {
@@ -507,7 +432,98 @@
     dispatch_release(stopQueue);
 }
 
-#pragma mark button action
+-(void)startPlay
+{
+    if (theApp.audioPlayer) {
+        [self pausePlay];
+    }
+    NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+    NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+    theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    theApp.audioPlayer.delegate = self;
+    [theApp.audioPlayer prepareToPlay];
+    _recordState = PTPlaying;
+    [animateView startAnimating];
+    animateView.hidden = NO;
+    playImageView.hidden = YES;
+    [theApp.audioPlayer play];
+}
+
+-(void)stopPlay
+{
+    _recordState = PTWaitPlay;
+    [animateView stopAnimating];
+    animateView.hidden = YES;
+    playImageView.hidden = NO;
+    theApp.audioPlayer.currentTime = 0;
+    [theApp.audioPlayer stop];
+}
+
+-(void)pausePlay
+{
+    animateView.hidden = YES;
+    playImageView.hidden = NO;
+    _recordState = PTWaitPlay;
+    [animateView stopAnimating];
+    [theApp.audioPlayer pause];
+}
+
+-(void)showReRecordButton
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        //改变尺寸
+        CGRect _rect = _btnRecord.frame;
+        _rect.size.width -= 80;
+        _btnRecord.frame = _rect;
+        
+        _btnReRecord.alpha = 1.0;
+        _rect = _btnReRecord.frame;
+        _rect.size.width = 75;
+        _rect.origin.x -= 75;
+        _btnReRecord.frame = _rect;
+        
+        //加入播放按钮
+        [_btnRecord setTitle:@"" forState:UIControlStateNormal];
+    } completion:^(BOOL finished) {
+        playImageView.hidden = NO;
+    }];
+}
+
+-(void)hideReRecordButton
+{
+    //设置状态
+    _recordState = PTStartRecord;
+    playImageView.hidden = YES;
+    animateView.hidden = YES;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        //改变尺寸
+        CGRect _rect = _btnRecord.frame;
+        _rect.size.width += 80;
+        _btnRecord.frame = _rect;
+        
+        _btnReRecord.alpha = 0;
+        _rect = _btnReRecord.frame;
+        _rect.size.width = 0;
+        _rect.origin.x += 75;
+        _btnReRecord.frame = _rect;
+    } completion:^(BOOL finished) {
+        //加入播放按钮
+        [_btnRecord setTitle:@"按住开始录音" forState:UIControlStateNormal];
+        //清除文件内容
+        NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
+        NSLock* tempLock = [[NSLock alloc]init];
+        [tempLock lock];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
+        {
+            [[NSFileManager defaultManager] removeItemAtPath:recordAudioFullPath error:nil];
+        }
+        [tempLock unlock];
+        _recordFileName = nil;
+    }];
+}
+
+#pragma mark - button action
 
 - (IBAction)recordTouchDown:(id)sender
 {
@@ -561,31 +577,6 @@
             //显示重新录入按钮
             [self showReRecordButton];
         }
-    }
-}
-
-- (void)viewDidUnload {
-    [self stopAllAudio];
-    [self setLblName:nil];
-    [self setLblDescName:nil];
-    [self setLblPrice:nil];
-    [self setTxtPrice:nil];
-    [self setLbProDesc:nil];
-    [self setTxtProDesc:nil];
-    [self setLbProTime:nil];
-    [self setTxtProEndTime:nil];
-    [self setTxtProStartTime:nil];
-    [self setLblDescVoice:nil];
-    [self setBtnRecord:nil];
-    [self setBtnReRecord:nil];
-    [super viewDidUnload];
-}
-
--(void)stopAllAudio
-{
-    if (theApp.audioPlayer.isPlaying) {
-        [theApp.audioPlayer stop];
-        _recordState = PTWaitPlay;
     }
 }
 

@@ -237,6 +237,7 @@ static SDWebImageManager *instance;
         return;
     }
 
+    _isFromCache = YES;
     if ([delegate respondsToSelector:@selector(webImageManager:didFinishWithImage:)])
     {
         [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:image];
@@ -357,6 +358,7 @@ static SDWebImageManager *instance;
 
             if (image)
             {
+                _isFromCache = NO;
                 if ([delegate respondsToSelector:@selector(webImageManager:didFinishWithImage:)])
                 {
                     [delegate performSelector:@selector(webImageManager:didFinishWithImage:) withObject:self withObject:image];

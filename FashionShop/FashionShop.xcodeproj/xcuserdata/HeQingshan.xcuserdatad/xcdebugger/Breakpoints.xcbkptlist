@@ -7,26 +7,52 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Controls/Audio/FSAudioButton.m"
-         timestampString = "386782508.105492"
+         filePath = "Controls/SDImageView/UIImageView+WebCache.m"
+         timestampString = "386859237.686035"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "288"
-         endingLineNumber = "288"
-         landmarkName = "-connection:didFailWithError:"
+         startingLineNumber = "141"
+         endingLineNumber = "141"
+         landmarkName = "-webImageManager:didProgressWithPartialImage:forURL:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FashionShop/FSMeViewController.m"
-         timestampString = "386697752.031753"
+         filePath = "FashionShop/FSProDetailViewController.m"
+         timestampString = "386865629.285281"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "667"
-         endingLineNumber = "667"
-         landmarkName = "-loadMore"
+         startingLineNumber = "244"
+         endingLineNumber = "244"
+         landmarkName = "-paginatorView:didScrollToPageAtIndex:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "FashionShop/FSProDetailViewController.m"
+         timestampString = "386865633.140194"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "265"
+         endingLineNumber = "265"
+         landmarkName = "-paginatorView:didScrollToPageAtIndex:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "FashionShop/FSProDetailViewController.m"
+         timestampString = "386865638.862765"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "219"
+         endingLineNumber = "219"
+         landmarkName = "-paginatorView:didScrollToPageAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

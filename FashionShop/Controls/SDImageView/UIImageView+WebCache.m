@@ -167,10 +167,13 @@
         self.contentMode = UIViewContentModeScaleAspectFit;
     }
     
-    self.alpha = 0.4;
-    [UIView animateWithDuration:0.4 animations:^{
-        self.alpha = 1.0f;
-    } completion:nil];
+    if (!imageManager.isFromCache) {
+        self.alpha = 0.4;
+        [UIView animateWithDuration:0.4 animations:^{
+            self.alpha = 1.0f;
+        } completion:nil];
+        imageManager.isFromCache = YES;
+    }
     
     if ([isLazyInt boolValue])
     {

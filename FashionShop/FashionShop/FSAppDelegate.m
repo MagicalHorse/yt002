@@ -17,6 +17,7 @@
 #import "SplashViewController.h"
 #import "FSStoreMapViewController.h"
 #import <TencentOpenAPI/TencentOAuth.h>
+#import "FSAudioHelper.h"
 
 @interface FSAppDelegate(){
     NSString *localToken;
@@ -52,11 +53,12 @@ void uncaughtExceptionHandler(NSException *exception)
     [self setupAnalys];
 #endif
     
-    //set global layout
+    FSAudioHelper *help = [[FSAudioHelper alloc] init];
+    [help initSession];
+    
     [self setGlobalLayout];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
-    //goto splash
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     NSString *content = [self readFromFile:@"hasLaunched"];
     if (!content || ![content isEqualToString:@"hasLaunched"]) {
@@ -72,20 +74,15 @@ void uncaughtExceptionHandler(NSException *exception)
     return YES;
 }
 
-//HeQingshan
 -(void)entryMain
 {
-    //launch story board
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UITabBarController *root = [storyBoard instantiateInitialViewController];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
     //添加背景色
     NSArray *array = [root.view subviews];
     UITabBar *_tabbar = [array objectAtIndex:1];
-    //id item = [_tabbar.subviews objectAtIndex:0];
-    //[item removeFromSuperview];
     UIImageView *_vImage = [[UIImageView alloc] init];
     _vImage.backgroundColor = [UIColor blackColor];
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
@@ -98,40 +95,6 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     [self.window makeKeyAndVisible];
 }
-
--(void)initAudioRecoder
-{
-    if (!_audioRecoder) {
-        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
-        {
-            AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-            NSError *error;
-            if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
-            {
-                if ([audioSession setActive:YES error:&error])
-                {
-                }
-                else
-                {
-                    NSLog(@"Failed to set audio session category: %@", error);
-                }
-            }
-            else
-            {
-                NSLog(@"Failed to set audio session category: %@", error);
-            }
-            UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
-            AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
-        }
-        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
-        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
-            NSLog(@"%@",[error localizedDescription]);
-        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
-            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
-        }];
-    }
-}
-
 
 +(FSAppDelegate *)app{
     return (FSAppDelegate *)[UIApplication sharedApplication];
@@ -174,8 +137,6 @@ void uncaughtExceptionHandler(NSException *exception)
     }
     return YES;
 }
-
-
 
 #pragma mark - Push Notification
 - (void)registerPushNotification
@@ -239,49 +200,14 @@ void uncaughtExceptionHandler(NSException *exception)
             {
                 [FSUser saveDeviceToken:token];
             }
-        }];
-        
+        }]; 
     }];
-	
-	     
-}
-
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
-{
-	DLog(@"Failed to get token, error: %@", error);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)data
 {
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     //goto the badge page:todo
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-}
-
-- (void)applicationDidEnterBackground:(UIApplication *)application
-{
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
-
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName
@@ -298,6 +224,46 @@ void uncaughtExceptionHandler(NSException *exception)
     //NSString *path = NSTemporaryDirectory();
     NSString *fileName=[path stringByAppendingPathComponent:aFileName];
     return [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil];
+}
+
+#pragma mark - Audio Method
+
+-(void)initAudioRecoder
+{
+    if (!_audioRecoder) {
+        [self initAudioProperty];
+        _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
+        } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
+            NSLog(@"%@",[error localizedDescription]);
+        } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
+            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+        }];
+    }
+}
+
+-(void)initAudioProperty
+{
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone || UIUserInterfaceIdiomPad)
+    {
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        NSError *error;
+        if ([audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:&error])
+        {
+            if ([audioSession setActive:YES error:&error])
+            {
+            }
+            else
+            {
+                NSLog(@"Failed to set audio session category: %@", error);
+            }
+        }
+        else
+        {
+            NSLog(@"Failed to set audio session category: %@", error);
+        }
+        UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
+        AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
+    }
 }
 
 @end

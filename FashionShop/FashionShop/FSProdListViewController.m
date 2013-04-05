@@ -202,7 +202,6 @@
         _brandKeywords = nil;
         FSCommonRequest *request = [[FSCommonRequest alloc] init];
         [request setRouteResourcePath:RK_REQUEST_KEYWORD_LIST];
-        [self beginLoading:_tableSearch];
         __block FSProdListViewController *blockSelf = self;
         [request send:[FSKeyword class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
@@ -217,7 +216,6 @@
             {
                 [blockSelf reportError:resp.errorDescrip];
             }
-            [self endLoading:_tableSearch];
         }];
     }
 }

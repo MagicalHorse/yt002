@@ -63,15 +63,16 @@
 {
     _prods = [@[] mutableCopy];
     [self zeroMemoryBlock];
-    [self beginLoading:_productContent];
     _prodPageIndex = 0;
+    _refreshLatestDate = _firstLoadDate = [NSDate date];
     FSProListRequest *request = nil;
     if (_pageType == FSPageTypeSearch) {
-        request = [self buildListRequest:RK_REQUEST_PROD_SEARCH_LIST nextPage:1 isRefresh:FALSE];
+        request = [self buildListRequest:RK_REQUEST_PROD_SEARCH_LIST nextPage:1 isRefresh:NO];
     }
     else {
-        request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
+        request = [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:NO];
     }
+    [self beginLoading:_productContent];
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:_productContent];
         if (resp.isSuccess)
@@ -80,7 +81,7 @@
             if (result.totalPageCount <= _prodPageIndex+1)
                 _noMoreResult = TRUE;
             [_prods removeAllObjects];
-            [self fillProdInMemory:result.prodItems isInsert:FALSE];
+            [self fillProdInMemory:result.prodItems isInsert:NO];
         }
         else
         {
@@ -119,7 +120,7 @@
     _productContent.backgroundColor = [UIColor whiteColor];
     [_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_productContent withRefreshAction:^(dispatch_block_t action) {
-        [self refreshContent:TRUE withCallback:^(){
+        [self refreshContent:YES withCallback:^(){
             action();
         }];
         
@@ -260,7 +261,7 @@
     [self beginLoadMoreLayout:_productContent];
     __block FSProductListViewController *blockSelf = self;
     _isLoading = YES;
-    [self refreshContent:FALSE withCallback:^{
+    [self refreshContent:NO withCallback:^{
          [blockSelf endLoadMore:_productContent];
         _isLoading = NO;
     }];

@@ -10,6 +10,7 @@
 #import "UIViewController+Loading.h"
 #import "FSCardRequest.h"
 #import "FSCardInfo.h"
+#import "NSString+Extention.h"
 
 @interface FSCardBindViewController ()
 
@@ -52,7 +53,13 @@
 -(void)prepareView
 {
     //设置背景图片
-    _bgImageView.image = [[UIImage imageNamed:@"bind_card_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
+    if (APP_HIGH > 480) {
+        _bgImageView.image = [[UIImage imageNamed:@"bind_card__5_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
+    }
+    else{
+        _bgImageView.image = [[UIImage imageNamed:@"bind_card_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
+    }
+    
     _bgImageView.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH-NAV_HIGH-TAB_HIGH);
     
     if (![currentUser.isBindCard boolValue]) {
@@ -172,6 +179,15 @@
 
 -(BOOL) checkInput
 {
+    if ([NSString isNilOrEmpty:_cardNumField.text])
+    {
+        [self reportError:NSLocalizedString(@"Member Card Num Input Tip", nil)];
+        return NO;
+    }
+    if ([NSString isNilOrEmpty:_cardPwField.text]) {
+        [self reportError:NSLocalizedString(@"Member Card Pwd Input Tip", nil)];
+        return NO;
+    }
     return YES;
 }
 

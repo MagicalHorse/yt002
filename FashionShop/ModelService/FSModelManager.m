@@ -186,7 +186,6 @@ static FSModelManager *_modelManager;
     [self forceReloadTags];
     [self forceReloadAllBrands];
     [self forceReloadStores];
-
 }
 
 -(SinaWeibo *)instantiateWeiboClient:(id<SinaWeiboDelegate>)delegate

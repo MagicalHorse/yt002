@@ -43,22 +43,22 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet UITextField *txtProEndTime;
 @property (strong, nonatomic) IBOutlet UIButton *btnReRecord;
 
+@property (strong,nonatomic) id delegate;
+@property (nonatomic) FSSourceType publishSource;
+@property (strong, nonatomic) NSString *recordFileName;
+
 - (IBAction)doSave:(id)sender;
 - (IBAction)doCancel:(id)sender;
 - (IBAction)selDuration:(id)sender;
-
--(void)cleanData;
-
 - (IBAction)recordTouchDown:(id)sender;
 - (IBAction)recordTouchUpInside:(id)sender;
 - (IBAction)recordTouchUpOutside:(id)sender;
 - (IBAction)reRecordTouchUpInside:(id)sender;
 
-@property (strong,nonatomic) id delegate;
-@property (nonatomic) FSSourceType publishSource;
-@property (strong, nonatomic) NSString *recordFileName;
+-(void)cleanData;
 
 @end
+
 
 @interface NSObject (FSProPostTitleViewControllerDelegate)
 -(void)titleViewControllerSetTitle:(FSProPostTitleViewController*)viewController;

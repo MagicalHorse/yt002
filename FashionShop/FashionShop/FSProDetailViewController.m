@@ -61,11 +61,9 @@
     BOOL            _isRecording;
     NSDate*         _downTime;//按下时间
     NSInteger       _minRecordGap;//最小录制时间间隔
-    
     BOOL            _isAudio;//是否是语音内容
     BOOL            _isPlaying;//是否正在播放声音
     FSAudioButton   *lastButton;
-    BOOL _isNeedScroll;
 }
 
 @end
@@ -245,7 +243,6 @@
             {
                 [self onButtonCancel];
             }
-            
         }];
 
     } else
@@ -265,7 +262,7 @@
             [self onButtonCancel];
         }];
     }
-  [self hideCommentInputView:nil];
+    [self hideCommentInputView:nil];
 }
 
 -(void)delayLoadComments:(NSNumber *)proId
@@ -289,15 +286,10 @@
             replyIndex = -1;
             if (blockViewForRefresh && blockSelf)
                 [[(id)blockViewForRefresh tbComment] reloadData];
-            if (_isNeedScroll) {
-//                [self scrollToTableTop:blockViewForRefresh];
-                [self performSelector:@selector(scrollToTableTop:) withObject:blockViewForRefresh afterDelay:0.5];
-            }
         }
         else
         {
             NSLog(@"comment list failed");
-            _isNeedScroll = NO;
         }
     }];
 }
@@ -307,7 +299,6 @@
     CGRect _rect = [(id)blockViewForRefresh tbComment].frame;
     _rect.size.height = 100;
     [[(id)blockViewForRefresh svContent] scrollRectToVisible:_rect animated:YES];
-    _isNeedScroll = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -1216,6 +1207,14 @@
     [self setArrowLeft:nil];
     [self setArrowRight:nil];
     [super viewDidUnload];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    if (lastButton) {
+        [lastButton stop];
+    }
 }
 
 #pragma mark - FSProDetailItemSourceProvider

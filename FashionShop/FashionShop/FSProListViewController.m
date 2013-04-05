@@ -131,8 +131,7 @@ typedef enum {
                 } else if(blockSelf->_state == BeginLoadingLatest){
                     blockSelf->_nearestPageIndex = 1;
                     [blockSelf renewLastUpdateTime];
-                    //[blockSelf fillFetchResultInMemory:response isInsert:true];
-                    [blockSelf fillFetchResultInMemory:response isInsert:false];
+                    [blockSelf fillFetchResultInMemory:response isInsert:YES];
                 }
                 blockSelf->_noMoreNearest = blockSelf->_nearestPageIndex+1>response.totalPageCount;
                 [blockSelf reloadTableView];
@@ -308,7 +307,6 @@ typedef enum {
     }];
     _state = NormalList;
     //load data first time;
-    [self beginLoading:_contentView];
     if ([FSLocationManager sharedLocationManager].locationAwared)
     {
         [self loadFirstTime];
@@ -334,6 +332,7 @@ typedef enum {
     request.pageSize = COMMON_PAGE_SIZE;
     request.requestType = 1;
     
+    [self beginLoading:_contentView];
     _state = BeginLoadingMore;
     _inLoading = TRUE;
     block(request,^(){
@@ -446,19 +445,19 @@ typedef enum {
         return;
     //计算高度
     [self calculateHeight:pros];
-    if (inserted)
-    {
-        [tmpPros removeAllObjects];
-        if (_currentSearchIndex==0)
-        {
-            [_storeIndexSource removeAllObjects];
-            [_storeSource removeAllObjects];
-        } else
-        {
-            [_dateIndexedSource removeAllObjects];
-            [_dateSource removeAllObjects];
-        }
-    }
+//    if (inserted)
+//    {
+//        [tmpPros removeAllObjects];
+//        if (_currentSearchIndex==0)
+//        {
+//            [_storeIndexSource removeAllObjects];
+//            [_storeSource removeAllObjects];
+//        } else
+//        {
+//            [_dateIndexedSource removeAllObjects];
+//            [_dateSource removeAllObjects];
+//        }
+//    }
     @synchronized(tmpPros)
     {
         [pros.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

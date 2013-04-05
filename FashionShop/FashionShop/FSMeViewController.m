@@ -60,23 +60,23 @@
 
 @interface FSMeViewController ()
 {
-    UIView *_loginView;
-    UIView *_userProfileView;
-    SinaWeibo *_weibo;
-    TCWBEngine *_qq;
+    UIView          *_loginView;
+    UIView          *_userProfileView;
+    SinaWeibo       *_weibo;
+    TCWBEngine      *_qq;
     FSQQConnectActivity *_qqConnect;
     NSMutableDictionary *_dataSourceProvider;
-    bool _isLogined;
+    bool            _isLogined;
     
-    FSUser *_userProfile;
-    NSMutableArray *_likePros;
-    bool _isFirstLoad;
-    BOOL isDeletionModeActive;
-    BOOL _isInLoading;
-    BOOL _isInRefreshing;
-    BOOL _isInPhotoing;
-    int _favorPageIndex;
-    BOOL _noMoreFavor;
+    FSUser          *_userProfile;
+    NSMutableArray  *_likePros;
+    bool            _isFirstLoad;
+    BOOL            isDeletionModeActive;
+    BOOL            _isInLoading;
+    BOOL            _isInRefreshing;
+    BOOL            _isInPhotoing;
+    int             _favorPageIndex;
+    BOOL            _noMoreFavor;
     UIActivityIndicatorView *moreIndicator;
     UIImagePickerController *_camera;
 }
@@ -85,6 +85,7 @@
 
 @implementation FSMeViewController
 @synthesize completeCallBack;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -189,7 +190,6 @@
     
     [_dataSourceProvider setValue:^(FSFavorRequest *request,dispatch_block_t uicallback){
         [request send:[FSPagedItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
-            
             if (!response.isSuccess)
             {
                 if (blockSelf->completeCallBack!=nil)
@@ -223,6 +223,23 @@
     [self switchView];
 }
 
+-(void)dealloc
+{
+    [self unregisterKVO];
+    [self unregisterLocalNotification];
+}
+
+- (void)viewDidUnload {
+    [self setLikeView:nil];
+    [self setLikeContainer:nil];
+    [self setThumbImg:nil];
+    [self setImgLevel:nil];
+    [self setSegHeader:nil];
+    [super viewDidUnload];
+}
+
+#pragma mark - Self Define Method
+
 -(void) switchView
 {
     if (_isFirstLoad)
@@ -240,49 +257,13 @@
             FSUserProfileRequest *request = [[FSUserProfileRequest alloc] init];
             request.userToken = [FSModelManager sharedModelManager].loginToken;
             ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_GET_USER_PROFILE])(request);
-            
         } else
         {
             [self displayUserProfile];
-
         }
-        
     }
+}
 
-}
-#pragma KVO & Notification
--(void)registerLocalNotification
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didCustomerChanged:) name:LN_USER_UPDATED object:nil];
-    if (_userProfile.userLevelId==FSDARENUser)
-    {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didItemPublished:) name:LN_ITEM_UPDATED object:nil];
-    } else
-    {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
-    }
-
-}
--(void)unregisterLocalNotification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
--(void)registerKVO
-{
-    [_userProfile addObserver:self forKeyPath:@"nickie" options:NSKeyValueObservingOptionNew context:NULL];
-    [_userProfile addObserver:self forKeyPath:@"pointsTotal" options:NSKeyValueObservingOptionNew context:NULL];
-    [_userProfile addObserver:self forKeyPath:@"couponsTotal" options:NSKeyValueObservingOptionNew context:NULL];
-    [_userProfile addObserver:self forKeyPath:@"likeTotal" options:NSKeyValueObservingOptionNew context:NULL];
-    [_userProfile addObserver:self forKeyPath:@"fansTotal" options:NSKeyValueObservingOptionNew context:NULL];
-}
--(void)unregisterKVO
-{
-    [_userProfile removeObserver:self forKeyPath:@"nickie"];
-    [_userProfile removeObserver:self forKeyPath:@"pointsTotal"];
-    [_userProfile removeObserver:self forKeyPath:@"couponsTotal"];
-    [_userProfile removeObserver:self forKeyPath:@"likeTotal"];
-    [_userProfile removeObserver:self forKeyPath:@"fansTotal"];
-}
 -(void)didFavorRemoved:(id)favorValue
 {
     FSFavor *favor =[favorValue valueForKey:@"object"];
@@ -335,7 +316,7 @@
         _imgLevel.frame = origFrame;
     }
     else if ([keyPath isEqualToString:@"pointsTotal"]) {
-        [_btnPoints setTitle:[NSString stringWithFormat:@"%d",_userProfile.pointsTotal] forState:UIControlStateNormal];
+        //   [_btnPoints setTitle:[NSString stringWithFormat:@"%d",_userProfile.pointsTotal] forState:UIControlStateNormal];
     }
     else if ([keyPath isEqualToString:@"couponsTotal"]) {
         [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
@@ -369,7 +350,7 @@
 
 
 - (IBAction)doLogin:(id)sender {
-     _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
+    _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
     [_weibo logIn];
     
 }
@@ -379,84 +360,22 @@
     suggestSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
     suggestSheet.tag = Actionsheet_Publish_Tag;
     [suggestSheet showInView:_btnSuggest];
-   
 }
 
--(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet.tag == Actionsheet_Publish_Tag) {
-        switch (buttonIndex) {
-            case 0:
-            {
-                FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
-                uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
-                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
-                [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
-                uploadController.publishSource = FSSourceProduct;
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
-                uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
-                [self presentViewController:navController animated:TRUE completion:nil];
-                break;
-            }
-            case 1:
-            {
-                FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
-                uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|DurationField|StoreField];
-                [uploadController setMustFields:ImageField|TitleField|DurationField|StoreField];
-                [uploadController setRoute:RK_REQUEST_PRO_UPLOAD];
-                uploadController.publishSource = FSSourcePromotion;
-                uploadController.navigationItem.title = NSLocalizedString(@"Publish promotion", nil);
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
-                [self presentViewController:navController animated:TRUE completion:nil];
-                break;
-            }
-            default:
-                break;
-        }
-    }
-    else if (actionSheet.tag == Actionsheet_Delete_Tag && buttonIndex == 0) {
-        MyActionSheet *sheet = (MyActionSheet*)actionSheet;
-        UIButton *sender = (UIButton*)sheet.object;
-        FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
-        if (cell)
-        {
-            FSEntityRequestBase *request = nil;
-            if (_userProfile.userLevelId == FSDARENUser) {
-                FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
-                removeRequest.uToken = _userProfile.uToken;
-                removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
-                
-                removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
-                removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
-                request = removeRequest;
-                
-            } else
-            {
-                FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
-                removeRequest.userToken = _userProfile.uToken;
-                removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
-                removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
-                request = removeRequest;
-            }
-            [self beginLoading:_likeView];
-            [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
-                [self endLoading:_likeView];
-                if (!resp.isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {
-                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
-                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
-                    
-                }
-            }];
-            
-        }
-    }
+- (IBAction)doShowLikes:(id)sender {
+    [self filterAccount:0];
+}
+
+- (IBAction)doShowFans:(id)sender {
+    [self filterAccount:1];
+}
+
+- (IBAction)doShowPoints:(id)sender {
+    [self filterAccount:3];
+}
+
+- (IBAction)doShowCoupons:(id)sender {
+    [self filterAccount:2];
 }
 
 - (IBAction)doLoginQQWeiBo:(id)sender {
@@ -476,11 +395,6 @@
         _qqConnect.qqDelegate = self;
     }
     [_qqConnect authorize];
-}
-
-- (void)removeAuthData
-{
-    [[FSModelManager sharedModelManager] removeWeiboAuthCache];
 }
 
 - (void) displayUserProfile{
@@ -508,9 +422,9 @@
         [_segHeader insertSegmentWithTitle:NSLocalizedString(@"i shared", nil) atIndex:1 animated:FALSE];
         _segHeader.selectedSegmentIndex = 1;
     }
-    else        
+    else
         _segHeader.selectedSegmentIndex = 0;
-
+    
     [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
     [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     _isInRefreshing = NO;
@@ -552,7 +466,7 @@
     _thumbImg.ownerUser = _userProfile;
     _thumbImg.showCamera = true;
     _thumbImg.delegate = self;
-  
+    
     _btnLike.titleLabel.font = ME_FONT(9);
     _btnLike.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnLike setTitle:[NSString stringWithFormat:@"%d",_userProfile.likeTotal] forState:UIControlStateNormal];
@@ -560,9 +474,6 @@
     _btnFans.titleLabel.font = ME_FONT(9);
     _btnFans.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnFans setTitle:[NSString stringWithFormat:@"%d",_userProfile.fansTotal] forState:UIControlStateNormal];
-    _btnPoints.titleLabel.font = ME_FONT(9);
-    _btnPoints.titleLabel.textAlignment = NSTextAlignmentCenter;
-    [_btnPoints setTitle:[NSString stringWithFormat:@"%d",_userProfile.pointsTotal] forState:UIControlStateNormal];
     _btnCoupons.titleLabel.font = ME_FONT(12);
     _btnCoupons.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
@@ -578,12 +489,11 @@
     rect.size.height = APP_HIGH>480?353:265;
     _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
-    //_likeView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
-
+    
     [_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
-
+    
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateDeletionMode:)];
     longPress.delegate = self;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(endDeletionMode:)];
@@ -596,7 +506,7 @@
             action();
         }];
     }];
-  
+    
     _likeView.delegate = self;
     _likeView.dataSource = self;
 }
@@ -609,7 +519,7 @@
     _favorPageIndex = 1;
     _isInLoading = YES;
     _isInRefreshing = YES;
-    [self loadILike:true nextPage:_favorPageIndex  withCallback:^{
+    [self loadILike:YES nextPage:_favorPageIndex  withCallback:^{
         _isInLoading = NO;
         _isInRefreshing = NO;
         [_likeView setContentOffset:CGPointMake(0, 0) animated:NO];
@@ -623,14 +533,13 @@
     _favorPageIndex = pageIndex;
     FSEntityRequestBase *request = [self createRequest:pageIndex];
     NSString *blockKey = _segHeader.selectedSegmentIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
-    NSLog(@"blockKey:%@", blockKey);
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
         if (showProgress)
             [self endLoading:_likeView];
         if (callback)
             callback();
     });
- 
+    
 }
 
 -(FSEntityRequestBase *)createRequest:(int)page
@@ -668,29 +577,28 @@
         [blockSelf endLoadMore:blockSelf->_likeView];
         _isInLoading = NO;
     }];
-    
 }
 -(void)doChangeSetting:(UITapGestureRecognizer *)gesture
 {
-
-       _camera = [[UIImagePickerController alloc] init];
-        _camera.delegate = self;
-
-        if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-        {
-            _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-            _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-            _camera.allowsEditing = false;
-            _isInPhotoing = true;
-            [self decorateOverlayToCamera:_camera];
-            [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
-                [self presentViewController:_camera animated:YES completion:nil];
-            }];
-            
-        } else
-        {
-            [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
-        }
+    
+    _camera = [[UIImagePickerController alloc] init];
+    _camera.delegate = self;
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+    {
+        _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+        _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        _camera.allowsEditing = false;
+        _isInPhotoing = true;
+        [self decorateOverlayToCamera:_camera];
+        [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
+            [self presentViewController:_camera animated:YES completion:nil];
+        }];
+        
+    } else
+    {
+        [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
+    }
     
     
 }
@@ -763,6 +671,9 @@
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
+                //                else{
+                //                    [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                //                }
             }
         }];
         if (isInsert)
@@ -802,19 +713,19 @@
         {
             //just goto passbook here, we can embed the custom url schema in pass, so user can return back.
             /*
-            if ([PKPass class])
-            {
-            NSString *passUrl = @"shoebox://card";
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:passUrl]];
-            }
-            else
+             if ([PKPass class])
+             {
+             NSString *passUrl = @"shoebox://card";
+             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:passUrl]];
+             }
+             else
              */
             {
-            
-            FSCouponViewController *couponView = [[FSCouponViewController alloc] initWithNibName:@"FSCouponViewController" bundle:nil];
-            couponView.currentUser = _userProfile;
-            [self.navigationController pushViewController:couponView animated:true];
-             
+                
+                FSCouponViewController *couponView = [[FSCouponViewController alloc] initWithNibName:@"FSCouponViewController" bundle:nil];
+                couponView.currentUser = _userProfile;
+                [self.navigationController pushViewController:couponView animated:true];
+                
             }
             break;
         }
@@ -825,11 +736,11 @@
             [self.navigationController pushViewController:pointView animated:TRUE];
             break;
         }
-        
+            
         default:
             break;
-    } 
-
+    }
+    
 }
 
 -(void) bindContentView
@@ -856,14 +767,14 @@
         [self internalUploadThumnail:image CallBack:callback];
     } completeCallbck:^{
         [self endProgress];
-
+        
     }];
-
+    
 }
 
 -(void)internalUploadThumnail:(UIImage *)image CallBack:(dispatch_block_t)callback
 {
-     FSThumnailRequest *request = [[FSThumnailRequest alloc] init];
+    FSThumnailRequest *request = [[FSThumnailRequest alloc] init];
     request.uToken = _userProfile.uToken;
     request.image = image;
     request.routeResourcePath = RK_REQUEST_THUMNAIL_UPLOAD;
@@ -917,6 +828,110 @@
 -(UIImagePickerController *)inUserCamera
 {
     return _camera;
+}
+
+#pragma mark - KVO & Notification
+
+-(void)registerLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didCustomerChanged:) name:LN_USER_UPDATED object:nil];
+    if (_userProfile.userLevelId==FSDARENUser)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didItemPublished:) name:LN_ITEM_UPDATED object:nil];
+    } else
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
+    }
+
+}
+
+-(void)unregisterLocalNotification
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)registerKVO
+{
+    [_userProfile addObserver:self forKeyPath:@"nickie" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"pointsTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"couponsTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"likeTotal" options:NSKeyValueObservingOptionNew context:NULL];
+    [_userProfile addObserver:self forKeyPath:@"fansTotal" options:NSKeyValueObservingOptionNew context:NULL];
+}
+
+-(void)unregisterKVO
+{
+    [_userProfile removeObserver:self forKeyPath:@"nickie"];
+    [_userProfile removeObserver:self forKeyPath:@"pointsTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"couponsTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"likeTotal"];
+    [_userProfile removeObserver:self forKeyPath:@"fansTotal"];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (actionSheet.tag == Actionsheet_Publish_Tag) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
+                uploadController.currentUser = _userProfile;
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
+                uploadController.publishSource = FSSourceProduct;
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
+                uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
+                [self presentViewController:navController animated:TRUE completion:nil];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    else if (actionSheet.tag == Actionsheet_Delete_Tag && buttonIndex == 0) {
+        MyActionSheet *sheet = (MyActionSheet*)actionSheet;
+        UIButton *sender = (UIButton*)sheet.object;
+        FSFavorProCell * cell = (FSFavorProCell *)sender.superview.superview;
+        if (cell)
+        {
+            FSEntityRequestBase *request = nil;
+            if (_userProfile.userLevelId == FSDARENUser) {
+                FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
+                removeRequest.uToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
+                
+                removeRequest.pType = [(FSItemBase *)[(FSFavorProCell *)cell data] sourceType];
+                removeRequest.routeResourcePath = removeRequest.pType==FSSourceProduct?RK_REQUEST_PROD_REMOVE:RK_REQUEST_PRO_REMOVE;
+                request = removeRequest;
+                
+            } else
+            {
+                FSFavorRequest * removeRequest = [[FSFavorRequest alloc] init];
+                removeRequest.userToken = _userProfile.uToken;
+                removeRequest.id = [NSNumber numberWithInt:[(FSFavor *)[(FSFavorProCell *)cell data] id]];
+                removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
+                request = removeRequest;
+            }
+            [self beginLoading:_likeView];
+            [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
+                [self endLoading:_likeView];
+                if (!resp.isSuccess)
+                {
+                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                }
+                else
+                {
+                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
+                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+                    
+                }
+            }];
+            
+        }
+    }
 }
 
 #pragma mark - FSQQConnectActivityDelegate
@@ -1246,7 +1261,8 @@
     return YES;
 }
 
-#pragma FSThumbView Delegate
+#pragma mark - FSThumbView Delegate
+
 -(void)didTapThumView:(id)sender
 {
     [self doChangeSetting:nil];
@@ -1326,8 +1342,10 @@
     [self removeAuthData];
 }
 
-
-
+- (void)removeAuthData
+{
+    [[FSModelManager sharedModelManager] removeWeiboAuthCache];
+}
 
 #pragma mark - SinaWeiboRequest Delegate
 
@@ -1358,12 +1376,10 @@
         request.thirdPartyUid = _weibo.userID;
         request.thumnail = [weiboUserProfile objectForKey:@"profile_image_url"];
         ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
-        
     }
-    
 }
 
-#pragma FSSettingViewCompleteDelegate
+#pragma mark - FSSettingViewCompleteDelegate
 
 -(void)settingView:(FSSettingViewController *)view didLogOut:(BOOL)flag
 {
@@ -1373,41 +1389,6 @@
         [self ensureDataContext];
         [self displayUserLogin];
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    
-}
-
-- (IBAction)doShowLikes:(id)sender {
-    [self filterAccount:0];
-}
-
-- (IBAction)doShowFans:(id)sender {
-    [self filterAccount:1];
-}
-
-- (IBAction)doShowPoints:(id)sender {
-    [self filterAccount:3];
-}
-
-- (IBAction)doShowCoupons:(id)sender {
-    [self filterAccount:2];
-}
--(void)dealloc
-{
-    [self unregisterKVO];
-    [self unregisterLocalNotification];
-}
-- (void)viewDidUnload {
-    [self setLikeView:nil];
-    [self setLikeContainer:nil];
-    [self setThumbImg:nil];
-    [self setImgLevel:nil];
-    [self setSegHeader:nil];
-    [super viewDidUnload];
 }
 
 @end
