@@ -236,7 +236,7 @@ void uncaughtExceptionHandler(NSException *exception)
         } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
             NSLog(@"%@",[error localizedDescription]);
         } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
-            NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
+            //NSLog(@"%f,%f,%f",peakPower,averagePower,currentTime);
         }];
     }
 }

@@ -23,6 +23,7 @@
 #import "FSSearchViewController.h"
 #import "FSProPostTitleViewController.h"
 #import "CL_VoiceEngine.h"
+#import "FSAudioShowView.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -64,6 +65,8 @@
     BOOL            _isAudio;//是否是语音内容
     BOOL            _isPlaying;//是否正在播放声音
     FSAudioButton   *lastButton;
+    NSTimer         *_timer;
+    FSAudioShowView *_audioShowView;//音量检测视图
 }
 
 @end
@@ -113,6 +116,13 @@
     replyIndex = -1;
     [self.paginatorView reloadData];
     self.currentPageIndex = indexInContext;
+    
+    if (!_audioShowView) {
+        int height = 120;
+        _audioShowView = [[FSAudioShowView alloc] initWithFrame:CGRectMake((APP_WIDTH - height)/2, (APP_HIGH - height)/2 - 60, height, height)];
+        [self.view addSubview:_audioShowView];
+        _audioShowView.hidden = YES;
+    }
 }
 
 -(id)itemSource
@@ -494,7 +504,8 @@
 
 - (IBAction)doGetCoupon:(id)sender {
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    if (!isLogined && [FSModelManager sharedModelManager].loginToken)
+    NSString *_loginToken = [FSModelManager sharedModelManager].loginToken;
+    if (!isLogined || !_loginToken)
     {
          UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
         FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
@@ -817,7 +828,7 @@
             }];
         };
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:false completion:nil];
+        [self presentViewController:navController animated:YES completion:nil];
         
     }
     else
@@ -832,7 +843,8 @@
 
 -(void) internalDoComent:(dispatch_block_t)callback
 {
-    NSString *commentText = [self transformCommentText];
+    FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
+    NSString *commentText = commentView.txtComment.text;//[self transformCommentText];
     FSCommonCommentRequest *request = [[FSCommonCommentRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
@@ -923,7 +935,12 @@
         [[(id)blockSelf.paginatorView.currentPage tbComment] reloadData];
         __block FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)self.paginatorView.currentPage;
         CGRect _rect = [(id)blockViewForRefresh tbComment].frame;
-        _rect.size.height = 120;
+        if ([self IsBindPromotionOrProduct:blockViewForRefresh.data]) {
+            _rect.size.height = 160;
+        }
+        else{
+            _rect.size.height = 120;
+        }
         [[(id)blockViewForRefresh svContent] scrollRectToVisible:_rect animated:YES];
         
         //隐藏输入框
@@ -1293,6 +1310,7 @@
     if (lastButton) {
         [lastButton pause];
     }
+    [self startShowAnimation];
 }
 
 - (IBAction)recordTouchUpInside:(id)sender
@@ -1307,6 +1325,7 @@
 
 -(void)endTouch:(id)sender
 {
+    [self endShowAnimation];
     if(_recordState == PTRecording){
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
@@ -1344,6 +1363,54 @@
         }
     }
     lastButton = aButton;
+}
+
+#pragma mark - Record Animation
+
+-(void)startShowAnimation
+{
+    //开启音量检测
+    theApp.audioRecoder.audioRecorder.meteringEnabled = YES;
+    //设置定时检测
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval: 0.1
+                                         target: self
+                                       selector: @selector( levelTimerCallback:)
+                                       userInfo: nil
+                                        repeats: YES];
+    }
+    [_timer fire];
+    _audioShowView.hidden = NO;
+}
+
+#define AudioLabel_Height 47
+
+//音量检测
+- (void)levelTimerCallback:(NSTimer *)timer
+{
+    //刷新音量数据
+    [theApp.audioRecoder.audioRecorder updateMeters];
+    //获取音量的平均值
+    CGFloat averagePower = [theApp.audioRecoder.audioRecorder averagePowerForChannel:0];
+    averagePower = abs(averagePower);
+    if (averagePower > AudioLabel_Height) {
+        averagePower = AudioLabel_Height;
+    }
+    averagePower = AudioLabel_Height - averagePower;
+    if (averagePower < 5) {
+        averagePower = 5;
+    }
+    
+    NSLog(@"averagePower:%.2f", averagePower);
+    //更改UI的图形效果
+    [_audioShowView updateAudioLabelFrame:averagePower];
+}
+
+-(void)endShowAnimation
+{
+    [_timer invalidate];
+    _timer = nil;
+    _audioShowView.hidden = YES;
 }
 
 @end

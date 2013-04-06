@@ -12,6 +12,7 @@
 #import "NSString+Extention.h"
 #import "CL_VoiceEngine.h"
 #import "FSAudioButton.h"
+#import "FSAudioShowView.h"
 
 #define TITLE_MAX_LENGTH 15
 
@@ -27,6 +28,8 @@
     NSInteger               _minRecordGap;//最小录制时间间隔
     UIImageView             *playImageView;
     UIImageView             *animateView;
+    NSTimer                 *_timer;
+    FSAudioShowView         *_audioShowView;//音量检测视图
 }
 
 @end
@@ -123,6 +126,13 @@
     animateView.hidden = YES;
     animateView.contentMode = UIViewContentModeCenter;
     [_btnRecord addSubview:animateView];
+    
+    if (!_audioShowView) {
+        int height = 120;
+        _audioShowView = [[FSAudioShowView alloc] initWithFrame:CGRectMake((APP_WIDTH - height)/2, (APP_HIGH - height)/2 - 60, height, height)];
+        [self.view addSubview:_audioShowView];
+        _audioShowView.hidden = YES;
+    }
 }
 
 -(void) decorateTapDismissKeyBoard
@@ -535,6 +545,8 @@
     [_btnRecord setTitle:NSLocalizedString(@"Up To End Record", nil) forState:UIControlStateNormal];
     [self startToRecord];
     _recordState = PTRecording;
+    
+    [self startShowAnimation];
 }
 
 - (IBAction)recordTouchUpInside:(id)sender
@@ -560,6 +572,7 @@
         [self pausePlay];
     }
     else if(_recordState == PTRecording){
+        [self endShowAnimation];
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
             //显示提示时间太短对话框
@@ -585,6 +598,54 @@
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
     [self stopPlay];
+}
+
+#pragma mark - Record Animation
+
+-(void)startShowAnimation
+{
+    //开启音量检测
+    theApp.audioRecoder.audioRecorder.meteringEnabled = YES;
+    //设置定时检测
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval: 0.1
+                                                  target: self
+                                                selector: @selector( levelTimerCallback:)
+                                                userInfo: nil
+                                                 repeats: YES];
+    }
+    [_timer fire];
+    _audioShowView.hidden = NO;
+}
+
+#define AudioLabel_Height 47
+
+//音量检测
+- (void)levelTimerCallback:(NSTimer *)timer
+{
+    //刷新音量数据
+    [theApp.audioRecoder.audioRecorder updateMeters];
+    //获取音量的平均值
+    CGFloat averagePower = [theApp.audioRecoder.audioRecorder averagePowerForChannel:0];
+    averagePower = abs(averagePower);
+    if (averagePower > AudioLabel_Height) {
+        averagePower = AudioLabel_Height;
+    }
+    averagePower = AudioLabel_Height - averagePower;
+    if (averagePower < 5) {
+        averagePower = 5;
+    }
+    
+    NSLog(@"averagePower:%.2f", averagePower);
+    //更改UI的图形效果
+    [_audioShowView updateAudioLabelFrame:averagePower];
+}
+
+-(void)endShowAnimation
+{
+    [_timer invalidate];
+    _timer = nil;
+    _audioShowView.hidden = YES;
 }
 
 @end

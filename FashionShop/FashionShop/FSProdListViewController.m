@@ -551,7 +551,7 @@
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL forIndexPath:indexPath];
         FSProdItemEntity *_data = [_prods objectAtIndex:indexPath.row];
         [(FSProdDetailCell *)cell setData:_data];
-        if (_data.hasPromotion) {
+        if (_data.promotionFlag) {
             [(FSProdDetailCell *)cell showProIcon];
         }
         else {

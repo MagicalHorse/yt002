@@ -216,14 +216,13 @@
 
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if(!_inLoading &&
-       (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
-       &&scrollView.contentOffset.y>0
-       && !_noMore)
-        
+    [super scrollViewDidScroll:scrollView];
+    if (!_inLoading &&
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
+        &&scrollView.contentOffset.y>0
+        && !_noMore)
     {
         _inLoading = TRUE;
         FSCommonUserRequest *request = [self createRequest:_currentPage+1];
@@ -242,11 +241,7 @@
                 [self reportError:resp.errorDescrip];
             }
         }];
-        
-        
     }
-    
-    
 }
 
 - (void)didReceiveMemoryWarning

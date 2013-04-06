@@ -51,7 +51,6 @@ static FSLocalPersist *_singleonPersist;
 - (void) removeObjectInDisk:(NSString *)key
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
-
 }
 
 - (void) setObjectInDisk:(id)instance toKey:(NSString *)key

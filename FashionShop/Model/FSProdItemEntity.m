@@ -60,8 +60,8 @@
 
 -(BOOL)hasPromotion
 {
-    return promotionFlag;
-    /*
+//    return promotionFlag;
+    
     if (!promotions) {
         return NO;
     }
@@ -74,7 +74,6 @@
         return NO;
     }
     return NO;
-     */
 }
 
 @end

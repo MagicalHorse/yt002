@@ -103,11 +103,14 @@
 {
     if (!thumnail)
         return nil;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_100x100.jpg",thumnail]];
+    /*
     if (isRetina) {
         return [NSURL URLWithString:[NSString stringWithFormat:@"%@_100x100.jpg",thumnail]];
     }
     else
         return [NSURL URLWithString:[NSString stringWithFormat:@"%@_50x50.jpg",thumnail]];
+     */
 }
 
 @end

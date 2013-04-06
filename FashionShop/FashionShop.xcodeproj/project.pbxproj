@@ -103,6 +103,8 @@
 		02FB0CC616BAB04B00396287 /* FSTopic.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB0CC516BAB04B00396287 /* FSTopic.m */; };
 		02FB0CC916BAB4D000396287 /* FSPagedTopic.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB0CC816BAB4D000396287 /* FSPagedTopic.m */; };
 		02FB0CCC16BAB64B00396287 /* FSTopicRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB0CCB16BAB64B00396287 /* FSTopicRequest.m */; };
+		02FB6294170FE442002F29B3 /* FSAudioShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02FB6293170FE442002F29B3 /* FSAudioShowView.m */; };
+		02FB629A170FE71A002F29B3 /* audio_speaker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02FB6299170FE71A002F29B3 /* audio_speaker@2x.png */; };
 		7414A1FB169AF57300D2549F /* refresh-spinner-dark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */; };
 		741571CA16684309006A7B58 /* FSSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 741571C816684309006A7B58 /* FSSettingViewController.m */; };
 		741571CB16684309006A7B58 /* FSSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 741571C916684309006A7B58 /* FSSettingViewController.xib */; };
@@ -675,6 +677,9 @@
 		02FB0CC816BAB4D000396287 /* FSPagedTopic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedTopic.m; path = Model/FSPagedTopic.m; sourceTree = "<group>"; };
 		02FB0CCA16BAB64B00396287 /* FSTopicRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSTopicRequest.h; path = ModelService/FSTopicRequest.h; sourceTree = "<group>"; };
 		02FB0CCB16BAB64B00396287 /* FSTopicRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSTopicRequest.m; path = ModelService/FSTopicRequest.m; sourceTree = "<group>"; };
+		02FB6292170FE442002F29B3 /* FSAudioShowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAudioShowView.h; sourceTree = "<group>"; };
+		02FB6293170FE442002F29B3 /* FSAudioShowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAudioShowView.m; sourceTree = "<group>"; };
+		02FB6299170FE71A002F29B3 /* audio_speaker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_speaker@2x.png"; sourceTree = "<group>"; };
 		7414A1F9169AF57300D2549F /* refresh-spinner-dark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refresh-spinner-dark@2x.png"; sourceTree = "<group>"; };
 		741571C716684309006A7B58 /* FSSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSSettingViewController.h; sourceTree = "<group>"; };
 		741571C816684309006A7B58 /* FSSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSSettingViewController.m; sourceTree = "<group>"; };
@@ -1334,6 +1339,8 @@
 				0229DD6C170526ED00BF02EB /* FSAudioButton.m */,
 				02DFCB1C170E7D540032F9BB /* FSAudioHelper.h */,
 				02DFCB1D170E7D540032F9BB /* FSAudioHelper.m */,
+				02FB6292170FE442002F29B3 /* FSAudioShowView.h */,
+				02FB6293170FE442002F29B3 /* FSAudioShowView.m */,
 			);
 			name = Audio;
 			path = Controls/Audio;
@@ -2008,6 +2015,7 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				02FB6299170FE71A002F29B3 /* audio_speaker@2x.png */,
 				02DFCB24170E85A20032F9BB /* vip_label_bg@2x.png */,
 				02EC2FE1170BF8F500C6B641 /* audio_btn_100x100@2x.png */,
 				02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */,
@@ -2945,6 +2953,7 @@
 				02EC2FE6170BF8F500C6B641 /* audio_btn_270x70@2x.png in Resources */,
 				02DFCB25170E85A20032F9BB /* vip_label_bg@2x.png in Resources */,
 				02DFCB2B170E87BD0032F9BB /* bind_card__5_bg@2x.png in Resources */,
+				02FB629A170FE71A002F29B3 /* audio_speaker@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3183,6 +3192,7 @@
 				02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */,
 				0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */,
 				02DFCB1E170E7D540032F9BB /* FSAudioHelper.m in Sources */,
+				02FB6294170FE442002F29B3 /* FSAudioShowView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3362,8 +3372,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3398,8 +3408,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "35A298A2-E9F3-4117-9C9B-84658BB06758";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35A298A2-E9F3-4117-9C9B-84658BB06758";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3414,7 +3424,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3446,7 +3456,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "35A298A2-E9F3-4117-9C9B-84658BB06758";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35A298A2-E9F3-4117-9C9B-84658BB06758";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
