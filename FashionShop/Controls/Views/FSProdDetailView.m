@@ -111,7 +111,7 @@
         _rect.size.width = 233;
     }
     _lblDescrip.frame = _rect;
-    _lblDescrip.text = [_data.descrip trimReturnEmptyChar];
+    _lblDescrip.text = _data.descrip;//[_data.descrip trimReturnEmptyChar];
     _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 0;

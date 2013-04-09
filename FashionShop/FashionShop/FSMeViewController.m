@@ -944,7 +944,6 @@
     if (_qqConnect.tencentOAuth.accessToken
         && 0 != [_qqConnect.tencentOAuth.accessToken length])
     {
-        [self beginLoading:self.view];
         [_qqConnect.tencentOAuth getUserInfo];
     }
 }
@@ -966,9 +965,6 @@
         request.thirdPartyUid = _qqConnect.tencentOAuth.openId;
         request.thumnail = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
         ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
-    }
-    else {
-        [self endLoading:self.view];
     }
 }
 

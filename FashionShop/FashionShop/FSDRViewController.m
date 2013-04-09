@@ -368,16 +368,16 @@
         FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
         __block FSMeViewController *blockMeController = loginController;
         loginController.completeCallBack=^(BOOL isSuccess){
-            
+            __block FSMeViewController *blockMe = blockMeController;
             [blockMeController dismissViewControllerAnimated:true completion:^{
                 if (!isSuccess)
                 {
                     [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
                 }
                 else
-                {
-                    
+                {   
                     [self internalDoLike:isRemove];
+                    blockMe.completeCallBack = nil;
                     /*
                     [self startProgress:NSLocalizedString(@"Do liking...",nil)withExeBlock:^(dispatch_block_t callback){
                         [self internalDoLike:isRemove withCallback:callback];

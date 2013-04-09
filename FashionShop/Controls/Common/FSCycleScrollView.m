@@ -72,17 +72,19 @@
 
 -(void)showNext:(NSTimer*)timer
 {
-    [UIView animateWithDuration:0.4 animations:^{
-        _scrollView.alpha = 0.2;
-    } completion:^(BOOL finished) {
-        _curPage = [self validPageValue:_curPage+1];
-        [self loadData];
+    if (_datasource && [_datasource numberOfPages] > 1) {
         [UIView animateWithDuration:0.4 animations:^{
-            _scrollView.alpha = 1.0;
+            _scrollView.alpha = 0.2;
         } completion:^(BOOL finished) {
-            
+            _curPage = [self validPageValue:_curPage+1];
+            [self loadData];
+            [UIView animateWithDuration:0.4 animations:^{
+                _scrollView.alpha = 1.0;
+            } completion:^(BOOL finished) {
+                
+            }];
         }];
-    }];
+    }
 }
 
 - (void)setDataource:(id<FSCycleScrollViewDatasource>)datasource
