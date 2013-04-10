@@ -25,6 +25,7 @@
 @synthesize encodeErrorRecordingBlock = _encodeErrorRecordingBlock;
 @synthesize deletedRecording = _deletedRecording;
 @synthesize m_audioFileCount;
+@synthesize clAudioDelegate = _clAudioDelegate;
 
 - (id)initWithFinishRecordingBlock:(void (^)(CL_AudioRecorder *recorder,BOOL success))finishRecordingBlock 
          encodeErrorRecordingBlock:(void (^)(CL_AudioRecorder *recorder,NSError *error))encodeErrorRecordingBlock
@@ -131,9 +132,13 @@
     double delayInSeconds = 0.1; //0629 0.1
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        NSLog(@"4:%@",[NSDate date]);
         if(_recordTimer){[_recordTimer invalidate]; _recordTimer=nil;}
         if (_audioRecorder.recording) {
             [_audioRecorder stop];
+            if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopRecorderEnd:)]) {
+                [_clAudioDelegate stopRecorderEnd:self];
+            }
         }
         else NSLog(@"AVAudioRecorder  in  not in recording.");
     });
@@ -147,6 +152,9 @@
         
         if (_audioRecorder.recording) {
             [_audioRecorder stop];
+            if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopAndDelRecorderEnd:)]) {
+                [_clAudioDelegate stopAndDelRecorderEnd:self];
+            }
         }
         if (!_deletedRecording) {
             _deletedRecording = [_audioRecorder deleteRecording];
@@ -172,6 +180,9 @@
                                       withIntermediateDirectories:YES 
                                                        attributes:nil 
                                                             error:nil];
+        }
+        if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopAndDelAllRecorderEnd:)]) {
+            [_clAudioDelegate stopAndDelAllRecorderEnd:self];
         }
     });
 }

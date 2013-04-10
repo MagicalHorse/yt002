@@ -92,6 +92,7 @@
     }
     
     _minRecordGap = 1.5;
+    theApp.audioRecoder.clAudioDelegate = self;
 }
 
 -(void) beginPrepareData
@@ -1220,6 +1221,7 @@
     if (lastButton) {
         [lastButton stop];
     }
+    theApp.audioRecoder.clAudioDelegate = nil;
     [self set_thumView:nil];
     [self setArrowLeft:nil];
     [self setArrowRight:nil];
@@ -1273,11 +1275,13 @@
 
 - (void)endRecord
 {
+    NSLog(@"1:%@",[NSDate date]);
     _isRecording = NO;
     dispatch_queue_t stopQueue;
     stopQueue = dispatch_queue_create("stopQueue", NULL);
     dispatch_async(stopQueue, ^(void){
         //run in main thread
+        NSLog(@"2:%@",[NSDate date]);
         dispatch_async(dispatch_get_main_queue(), ^{
             [theApp.audioRecoder stopRecord];
         });
@@ -1341,8 +1345,6 @@
             [self endRecord];
             id currentView =  self.paginatorView.currentPage;
             [[currentView tbComment] reloadData];
-            
-            [self performSelector:@selector(sendToService) withObject:nil afterDelay:1.];
         }
     }
 }
@@ -1411,6 +1413,13 @@
     [_timer invalidate];
     _timer = nil;
     _audioShowView.hidden = YES;
+}
+
+#pragma mark - FSCL_AudioDelegate
+
+-(void)stopRecorderEnd:(CL_AudioRecorder *)_record
+{
+    [self sendToService];
 }
 
 @end
