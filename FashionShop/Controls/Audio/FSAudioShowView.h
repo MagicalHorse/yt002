@@ -12,4 +12,7 @@
 
 -(void)updateAudioLabelFrame:(double)aRate;
 
+-(void)showAudioView;
+-(void)showTrashView;
+
 @end

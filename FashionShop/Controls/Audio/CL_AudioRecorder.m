@@ -138,6 +138,7 @@
             [_audioRecorder stop];
             if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopRecorderEnd:)]) {
                 [_clAudioDelegate stopRecorderEnd:self];
+                NSLog(@"I am first!");
             }
         }
         else NSLog(@"AVAudioRecorder  in  not in recording.");
@@ -191,11 +192,15 @@
     if (_finishRecordingBlock) {
         _finishRecordingBlock(self,flag);
     }
+    NSLog(@"I am Second");
 }
 - (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError *)error {
     if(_recordTimer){[_recordTimer invalidate]; _recordTimer=nil;}
     if (_encodeErrorRecordingBlock) {
         _encodeErrorRecordingBlock(self,error);
+    }
+    if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(errorRecorderDidOccur:)]) {
+        [_clAudioDelegate errorRecorderDidOccur:self];
     }
 }
 - (void)audioRecorderReceivedRecordingCallBack:(NSTimer*)timer

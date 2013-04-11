@@ -70,6 +70,7 @@
 		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
 		025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E962D16ED9FE10031B68C /* FSCardRequest.m */; };
 		025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E963416EDA1CE0031B68C /* FSCardInfo.m */; };
+		029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 029371B717165819000B4ACE /* audio_trash_icon@2x.png */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
@@ -635,6 +636,7 @@
 		025E962D16ED9FE10031B68C /* FSCardRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardRequest.m; path = ModelService/FSCardRequest.m; sourceTree = "<group>"; };
 		025E963316EDA1CE0031B68C /* FSCardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardInfo.h; path = Model/FSCardInfo.h; sourceTree = "<group>"; };
 		025E963416EDA1CE0031B68C /* FSCardInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardInfo.m; path = Model/FSCardInfo.m; sourceTree = "<group>"; };
+		029371B717165819000B4ACE /* audio_trash_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_trash_icon@2x.png"; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
 		0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSStoreMapViewController.xib; sourceTree = "<group>"; };
@@ -2015,12 +2017,13 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				025A543716BBA5DE001919EA /* blankimages */,
 				02FB6299170FE71A002F29B3 /* audio_speaker@2x.png */,
+				029371B717165819000B4ACE /* audio_trash_icon@2x.png */,
 				02DFCB24170E85A20032F9BB /* vip_label_bg@2x.png */,
 				02EC2FE1170BF8F500C6B641 /* audio_btn_100x100@2x.png */,
 				02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */,
 				02EC2FE3170BF8F500C6B641 /* audio_btn_270x70@2x.png */,
-				025A543716BBA5DE001919EA /* blankimages */,
 				02ED4633170805A70064D95B /* public_button_normal@2x.png */,
 				0229DD7817053A0800BF02EB /* play_icon@2x.png */,
 				0229DD721705392300BF02EB /* audio_play1@2x.png */,
@@ -2954,6 +2957,7 @@
 				02DFCB25170E85A20032F9BB /* vip_label_bg@2x.png in Resources */,
 				02DFCB2B170E87BD0032F9BB /* bind_card__5_bg@2x.png in Resources */,
 				02FB629A170FE71A002F29B3 /* audio_speaker@2x.png in Resources */,
+				029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3268,7 +3272,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3300,7 +3304,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "35A298A2-E9F3-4117-9C9B-84658BB06758";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35A298A2-E9F3-4117-9C9B-84658BB06758";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;

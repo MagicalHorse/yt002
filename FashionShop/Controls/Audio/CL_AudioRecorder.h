@@ -16,6 +16,8 @@
 -(void)stopAndDelRecorderEnd:(CL_AudioRecorder*)_record;
 //录音结束，删除所有录音文件
 -(void)stopAndDelAllRecorderEnd:(CL_AudioRecorder*)_record;
+//出错处理
+-(void)errorRecorderDidOccur:(CL_AudioRecorder*)_record;
 @end
 
 @interface CL_AudioRecorder : NSObject<AVAudioRecorderDelegate>{

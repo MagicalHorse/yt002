@@ -120,7 +120,7 @@
     
     if (!_audioShowView) {
         int height = 120;
-        _audioShowView = [[FSAudioShowView alloc] initWithFrame:CGRectMake((APP_WIDTH - height)/2, (APP_HIGH - height)/2 - 60, height, height)];
+        _audioShowView = [[FSAudioShowView alloc] initWithFrame:CGRectMake((APP_WIDTH - height)/2, (APP_HIGH - height)/2 - 70, height, height)];
         [self.view addSubview:_audioShowView];
         _audioShowView.hidden = YES;
     }
@@ -675,6 +675,7 @@
         [commentInput.btnComment addTarget:self action:@selector(saveComment:) forControlEvents:UIControlEventTouchUpInside];
         [commentInput.btnCancel addTarget:self action:@selector(clearComment:) forControlEvents:UIControlEventTouchUpInside];
         [commentInput.btnChange addTarget:self action:@selector(changeCommentType:) forControlEvents:UIControlEventTouchUpInside];
+        commentInput.btnChange.showsTouchWhenHighlighted = YES;
         
         //设置按钮背景图片
         UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
@@ -688,6 +689,8 @@
         [commentInput.btnAudio addTarget:self action:@selector(recordTouchDown:) forControlEvents:UIControlEventTouchDown];
         [commentInput.btnAudio addTarget:self action:@selector(recordTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [commentInput.btnAudio addTarget:self action:@selector(recordTouchUpOutside:) forControlEvents:UIControlEventTouchUpOutside];
+        [commentInput.btnAudio addTarget:self action:@selector(recordTouchDragEnter:) forControlEvents:UIControlEventTouchDragEnter];
+        [commentInput.btnAudio addTarget:self action:@selector(recordTouchDragExit:) forControlEvents:UIControlEventTouchDragExit];
     
         [self.view addSubview:commentInput];
         
@@ -1314,6 +1317,7 @@
     if (lastButton) {
         [lastButton pause];
     }
+    [_audioShowView showAudioView];
     [self startShowAnimation];
 }
 
@@ -1324,12 +1328,26 @@
 
 - (IBAction)recordTouchUpOutside:(id)sender
 {
-    [self endTouch:sender];
+    //删除录音
+    [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
+    _recordState = PTStartRecord;
+    [self endRecordAndDelete];
+}
+
+- (IBAction)recordTouchDragEnter:(id)sender
+{
+    //显示语音动画按钮，隐藏回收按钮
+    [_audioShowView showAudioView];
+}
+
+- (IBAction)recordTouchDragExit:(id)sender
+{
+    //显示回收按钮，隐藏语音动画按钮
+    [_audioShowView showTrashView];
 }
 
 -(void)endTouch:(id)sender
 {
-    [self endShowAnimation];
     if(_recordState == PTRecording){
         NSInteger gap = [[NSDate date] timeIntervalSinceDate:_downTime];
         if (gap < _minRecordGap) {
@@ -1419,7 +1437,18 @@
 
 -(void)stopRecorderEnd:(CL_AudioRecorder *)_record
 {
+    [self endShowAnimation];
     [self sendToService];
+}
+
+-(void)stopAndDelRecorderEnd:(CL_AudioRecorder *)_record
+{
+    [self endShowAnimation];
+}
+
+-(void)errorRecorderDidOccur:(CL_AudioRecorder*)_record
+{
+    [self endShowAnimation];
 }
 
 @end
