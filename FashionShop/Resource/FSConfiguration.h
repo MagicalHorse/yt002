@@ -12,7 +12,7 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.1.0"
+#define REST_API_CLIENT_VERSION @"2.1.1"
 
 /*
 #if defined ENVIRONMENT_DEV

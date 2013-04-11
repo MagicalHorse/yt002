@@ -9,7 +9,7 @@
 #import "FSProDetailView.h"
 #import "UIImageView+WebCache.h"
 #import "NSString+Extention.h"
-
+#import "FSProdItemEntity.h"
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
@@ -96,7 +96,7 @@
         _rect.size.width = 233;
     }
     
-    _lblDescrip.text = _data.descrip;//[_data.descrip trimReturnEmptyChar];
+    _lblDescrip.text = _data.descrip;
     _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblDescrip.numberOfLines = 0;
@@ -156,7 +156,6 @@
     CGRect commentFrame = _tbComment.frame;
     commentFrame.origin.y = superFrame.origin.y+superFrame.size.height+yOff;
     _tbComment.frame = commentFrame;
-    NSLog(@"new Frame y:%f",_tbComment.frame.origin.y);
     
     //设置播放按钮
     if (_audioResource) {
@@ -237,7 +236,6 @@
     if (!_btnFavor.customView)
     {
         UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        //[sheepButton addTarget:targ action:action forControlEvents:UIControlEventTouchUpInside];
         [sheepButton setShowsTouchWhenHighlighted:YES];
         [sheepButton addTarget:_tbComment.delegate
                         action:@selector(doFavor:)
@@ -256,17 +254,33 @@
     CGFloat totalHeight = 0;
     int commentCount = _data.comments.count;
     while (--commentCount >=0) {
-        totalHeight+= [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:0]];
+        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:([self IsBindPromotionOrProduct:_data]?1:0)]];
+        totalHeight+= _height;
     }
-    origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.isProductBinded?40:0);
+    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + (_data.isProductBinded?40:0) + (commentCount>0?0:50);
     [table setFrame:origiFrame];
     
     CGSize originContent = self.svContent.contentSize;
-   
-    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_btnStore.superview.frame.size.height+ 10;
+    originContent.height = origiFrame.size.height +self.imgView.frame.size.height +_btnStore.superview.frame.size.height+ 4;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
+}
 
+-(BOOL)IsBindPromotionOrProduct:(id)_item
+{
+    if (!_item) {
+        return NO;
+    }
+    if ([_item isKindOfClass:[FSProdItemEntity class]]) {
+        if (((FSProdItemEntity*)_item).promotions.count > 0) {
+            return YES;
+        }
+    }
+    else if([_item isKindOfClass:[FSProItemEntity class]]) {
+        return [((FSProItemEntity*)_item).isProductBinded boolValue];
+    }
+    
+    return NO;
 }
 
 -(void) willRemoveFromSuper

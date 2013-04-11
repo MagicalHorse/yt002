@@ -58,6 +58,13 @@
         _lblComment.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
         [_lblComment sizeToFit];
+        
+        if (_lblComment.frame.size.height > 50) {
+            CGRect _rect = _lblComment.frame;
+            _rect.size.height = 50;
+            _lblComment.frame = _rect;
+        }
+        
         int _width = _lblComment.frame.size.width;
         _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _lblComment.frame.origin.y, _width>xOffset?xOffset:_width, _lblComment.frame.size.height);
         
@@ -74,6 +81,7 @@
     else
     {
         _lblComment.text = [NSString stringWithFormat:@"%@: %@", _data.inUser.nickie, _data.comment];
+        _lblComment.lineBreakMode = NSLineBreakByTruncatingTail;
         _lblComment.font = BFONT(13);
         _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
         _lblComment.numberOfLines = 0;

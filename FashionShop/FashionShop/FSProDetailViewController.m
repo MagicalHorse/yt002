@@ -800,7 +800,7 @@
     FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     [commentView.txtComment resignFirstResponder];
     if (!_isAudio) {
-        NSString *trimedText = [self transformCommentText];
+        NSString *trimedText = commentView.txtComment.text;//[self transformCommentText];
         if (trimedText.length>40 ||trimedText.length<1)
         {
             [self clearComment:nil];
@@ -848,7 +848,7 @@
 -(void) internalDoComent:(dispatch_block_t)callback
 {
     FSProCommentInputView *commentView = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
-    NSString *commentText = commentView.txtComment.text;//[self transformCommentText];
+    NSString *commentText = commentView.txtComment.text;
     FSCommonCommentRequest *request = [[FSCommonCommentRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.sourceid = [[(FSDetailBaseView *)self.paginatorView.currentPage data] valueForKey:@"id"];
@@ -931,7 +931,7 @@
                 }
             }
             else{
-                _comment.comment = [self transformCommentText];
+                _comment.comment = commentView.txtComment.text;//[self transformCommentText];
             }
             [oldComments insertObject:_comment atIndex:0];
         }
@@ -1332,6 +1332,7 @@
     [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
     _recordState = PTStartRecord;
     [self endRecordAndDelete];
+    [self endShowAnimation];
 }
 
 - (IBAction)recordTouchDragEnter:(id)sender
@@ -1421,15 +1422,16 @@
         averagePower = 5;
     }
     
-    NSLog(@"averagePower:%.2f", averagePower);
     //更改UI的图形效果
     [_audioShowView updateAudioLabelFrame:averagePower];
 }
 
 -(void)endShowAnimation
 {
-    [_timer invalidate];
-    _timer = nil;
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;
+    }
     _audioShowView.hidden = YES;
 }
 

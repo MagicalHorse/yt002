@@ -12,7 +12,8 @@
 #import "FSResource.h"
 #import "FSConfiguration.h"
 #import "NSString+Extention.h"
-
+#import "FSProdItemEntity.h"
+#import "FSProItemEntity.h"
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
@@ -289,16 +290,33 @@
     CGFloat totalHeight = 0;
     int commentCount = _data.comments.count;
     while (--commentCount >=0) {
-        totalHeight+= [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:0]];
+        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:([self IsBindPromotionOrProduct:_data]?1:0)]];
+        totalHeight+= _height;
     }
-    //origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.hasPromotion?40:0);
-    origiFrame.size.height = PRO_DETAIL_COMMENT_CELL_HEIGHT * _data.comments.count+PRO_DETAIL_COMMENT_HEADER_HEIGHT + PRO_DETAIL_COMMENT_CELL_HEIGHT + (_data.hasPromotion?40:0);
+    origiFrame.size.height = totalHeight+PRO_DETAIL_COMMENT_HEADER_HEIGHT + (_data.hasPromotion?40:0) + (commentCount>0?0:50);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height +self.imgView.frame.size.height + _btnStore.superview.frame.size.height+4;
     originContent.width = MAX(originContent.width, self.frame.size.width);
     self.svContent.contentSize = originContent;
     
+}
+
+-(BOOL)IsBindPromotionOrProduct:(id)_item
+{
+    if (!_item) {
+        return NO;
+    }
+    if ([_item isKindOfClass:[FSProdItemEntity class]]) {
+        if (((FSProdItemEntity*)_item).promotions.count > 0) {
+            return YES;
+        }
+    }
+    else if([_item isKindOfClass:[FSProItemEntity class]]) {
+        return [((FSProItemEntity*)_item).isProductBinded boolValue];
+    }
+    
+    return NO;
 }
 
 -(void) willRemoveFromSuper

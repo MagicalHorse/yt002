@@ -12,10 +12,12 @@
 #define AudioLabel_Height 47
 
 @interface FSAudioShowView(){
-    UIImageView *audioView;
-    UIImageView *trashView;
-    UILabel *audioLabel;
-    UIView *_view;
+    UIImageView     *audioView;//音频view
+    UILabel         *audioLabel;//音频展示
+    UIView          *_view;//音频展示view
+    UIImageView     *trashView;//删除view
+    UILabel         *_cancelDesc;//提示取消方法
+    UILabel         *_deleteDesc;//提示伤处方法
 }
 
 @end
@@ -57,6 +59,26 @@
     audioLabel.backgroundColor = [UIColor greenColor];
     [_view addSubview:audioLabel];
     
+    CGRect _rect = CGRectMake(5, self.frame.size.height - 25, self.frame.size.width - 10, 20);
+    
+    _cancelDesc = [[UILabel alloc] initWithFrame:_rect];
+    _cancelDesc.backgroundColor = [UIColor clearColor];
+    _cancelDesc.text = @"手指上滑,取消评论";
+    _cancelDesc.textAlignment = UITextAlignmentCenter;
+    _cancelDesc.font = ME_FONT(12);
+    _cancelDesc.textColor = [UIColor whiteColor];
+    [self addSubview:_cancelDesc];
+    
+    _deleteDesc = [[UILabel alloc] initWithFrame:_rect];
+    _deleteDesc.backgroundColor = [UIColor redColor];
+    _deleteDesc.layer.cornerRadius = 6;
+    _deleteDesc.text = @"松开手指,取消评论";
+    _deleteDesc.textAlignment = UITextAlignmentCenter;
+    _deleteDesc.font = ME_FONT(12);
+    _deleteDesc.textColor = [UIColor whiteColor];
+    _deleteDesc.hidden = YES;
+    [self addSubview:_deleteDesc];
+    
     [self updateAudioLabelFrame:0];
 }
 
@@ -75,6 +97,8 @@
     audioView.hidden = NO;
     _view.hidden = NO;
     trashView.hidden = YES;
+    _cancelDesc.hidden = NO;
+    _deleteDesc.hidden = YES;
 }
 
 -(void)showTrashView
@@ -82,6 +106,8 @@
     audioView.hidden = YES;
     _view.hidden = YES;
     trashView.hidden = NO;
+    _cancelDesc.hidden = YES;
+    _deleteDesc.hidden = NO;
 }
 
 @end
