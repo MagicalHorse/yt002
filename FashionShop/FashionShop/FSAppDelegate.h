@@ -11,6 +11,8 @@
 #import "FSModelManager.h"
 #import "CL_VoiceEngine.h"
 
+@class PKRevealController;
+
 @interface FSAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
@@ -22,6 +24,10 @@
 @property (strong,nonatomic) NSMutableArray *allBrands;
 @property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
+
+@property (strong,nonatomic) UIViewController *root;
+
+@property (nonatomic, strong, readwrite) PKRevealController *revealController;
 
 +(FSAppDelegate *)app;
 -(void)entryMain;

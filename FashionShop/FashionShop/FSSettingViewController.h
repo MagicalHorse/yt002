@@ -14,6 +14,7 @@
 @interface FSSettingViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
+@property (nonatomic, assign) BOOL isFromSideView;
 
 @property(nonatomic,strong) FSUser *currentUser;
 

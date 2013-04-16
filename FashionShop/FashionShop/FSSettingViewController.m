@@ -12,6 +12,7 @@
 #import "FSModelManager.h"
 #import "UIViewController+Loading.h"
 #import "FSCardBindViewController.h"
+#import "PKRevealController.h"
 
 @interface FSSettingViewController ()
 {
@@ -49,7 +50,15 @@
 }
 
 - (IBAction)onButtonBack:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (_isFromSideView) {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController animated:YES completion:^(BOOL finished) {
+            self.navigationController.revealController.frontViewController = theApp.root;
+        }];
+    }
+    else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 
 -(void) bindAction

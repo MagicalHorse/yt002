@@ -19,6 +19,15 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "FSAudioHelper.h"
 
+#import "PKRevealController.h"
+#import "LeftDemoViewController.h"
+
+//UMTrack
+#include <sys/socket.h>
+#include <sys/sysctl.h>
+#include <net/if.h>
+#include <net/if_dl.h>
+
 @interface FSAppDelegate(){
     NSString *localToken;
 }
@@ -79,6 +88,7 @@ void uncaughtExceptionHandler(NSException *exception)
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UITabBarController *root = [storyBoard instantiateInitialViewController];
     self.window.backgroundColor = [UIColor whiteColor];
+    self.root = root;
     
     //添加背景色
     NSArray *array = [root.view subviews];
@@ -88,11 +98,16 @@ void uncaughtExceptionHandler(NSException *exception)
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
     [_tabbar insertSubview:_vImage atIndex:1];
     
-    self.window.rootViewController = root;
+    UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:leftViewController];
+    self.revealController = [PKRevealController revealControllerWithFrontViewController:root
+                                                                     leftViewController:nav
+                                                                    rightViewController:nil
+                                                                                options:nil];
+    
+    self.window.rootViewController = self.revealController;
+    
     [[FSAnalysis instance] autoTrackPages:root];
-    for (UIViewController *item in root.viewControllers) {
-        [[FSAnalysis instance] autoTrackPages:item];
-    }
     [self.window makeKeyAndVisible];
 }
 
@@ -264,6 +279,55 @@ void uncaughtExceptionHandler(NSException *exception)
         UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;
         AudioSessionSetProperty (kAudioSessionProperty_OverrideAudioRoute,sizeof(audioRouteOverride),&audioRouteOverride);
     }
+}
+
+#pragma mark - UMTrack
+
+-(void)initUMTrack
+{
+    NSString * appKey = @"ebfc9b31ddfaf25bc3d526cefd48758f";
+    NSString * deviceName = [[[UIDevice currentDevice] name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString * mac = [self macString];
+    NSString * urlString = [NSString stringWithFormat:@"http://log.umtrack.com/ping/%@/?devicename=%@&mac=%@", appKey,deviceName,mac];
+    [NSURLConnection connectionWithRequest:[NSURLRequest requestWithURL: [NSURL URLWithString:urlString]] delegate:nil];
+}
+
+- (NSString * )macString{
+    int                 mib[6];
+    size_t              len;
+    char                *buf;
+    unsigned char       *ptr;
+    struct if_msghdr    *ifm;
+    struct sockaddr_dl  *sdl;
+    mib[0] = CTL_NET;
+    mib[1] = AF_ROUTE;
+    mib[2] = 0;
+    mib[3] = AF_LINK;
+    mib[4] = NET_RT_IFLIST;
+    if ((mib[5] = if_nametoindex("en0")) == 0) {
+        printf("Error: if_nametoindex error\n");
+        return NULL;
+    }
+    if (sysctl(mib, 6, NULL, &len, NULL, 0) < 0) {
+        printf("Error: sysctl, take 1\n");
+        return NULL;
+    }
+    if ((buf = malloc(len)) == NULL) {
+        printf("Could not allocate memory. error!\n");
+        return NULL;
+    }
+    if (sysctl(mib, 6, buf, &len, NULL, 0) < 0) {
+        printf("Error: sysctl, take 2");
+        free(buf);
+        return NULL;
+    }
+    ifm = (struct if_msghdr *)buf;
+    sdl = (struct sockaddr_dl *)(ifm + 1);
+    ptr = (unsigned char *)LLADDR(sdl);
+    NSString *macString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
+                           *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
+    free(buf);
+    return macString;
 }
 
 @end

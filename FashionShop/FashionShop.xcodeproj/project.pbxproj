@@ -70,6 +70,11 @@
 		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
 		025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E962D16ED9FE10031B68C /* FSCardRequest.m */; };
 		025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E963416EDA1CE0031B68C /* FSCardInfo.m */; };
+		02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */; };
+		02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */; };
+		02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8D171AF21D0050D7C7 /* PKRevealController.m */; };
+		02779B95171AF21D0050D7C7 /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8F171AF21D0050D7C7 /* PKRevealControllerContainerView.m */; };
+		02779B96171AF21D0050D7C7 /* UIViewController+PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B91171AF21D0050D7C7 /* UIViewController+PKRevealController.m */; };
 		029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 029371B717165819000B4ACE /* audio_trash_icon@2x.png */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
@@ -636,6 +641,15 @@
 		025E962D16ED9FE10031B68C /* FSCardRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardRequest.m; path = ModelService/FSCardRequest.m; sourceTree = "<group>"; };
 		025E963316EDA1CE0031B68C /* FSCardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardInfo.h; path = Model/FSCardInfo.h; sourceTree = "<group>"; };
 		025E963416EDA1CE0031B68C /* FSCardInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardInfo.m; path = Model/FSCardInfo.m; sourceTree = "<group>"; };
+		02779B89171AF21D0050D7C7 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
+		02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
+		02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
+		02779B8C171AF21D0050D7C7 /* PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKRevealController.h; sourceTree = "<group>"; };
+		02779B8D171AF21D0050D7C7 /* PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRevealController.m; sourceTree = "<group>"; };
+		02779B8E171AF21D0050D7C7 /* PKRevealControllerContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKRevealControllerContainerView.h; sourceTree = "<group>"; };
+		02779B8F171AF21D0050D7C7 /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRevealControllerContainerView.m; sourceTree = "<group>"; };
+		02779B90171AF21D0050D7C7 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
+		02779B91171AF21D0050D7C7 /* UIViewController+PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PKRevealController.m"; sourceTree = "<group>"; };
 		029371B717165819000B4ACE /* audio_trash_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_trash_icon@2x.png"; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
@@ -1510,6 +1524,23 @@
 				025A544316BBA5F2001919EA /* blank_specialtopic@2x.png */,
 			);
 			name = blankimages;
+			sourceTree = "<group>";
+		};
+		02779B88171AF21D0050D7C7 /* SideViewController */ = {
+			isa = PBXGroup;
+			children = (
+				02779B89171AF21D0050D7C7 /* LeftDemoViewController.h */,
+				02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */,
+				02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */,
+				02779B8C171AF21D0050D7C7 /* PKRevealController.h */,
+				02779B8D171AF21D0050D7C7 /* PKRevealController.m */,
+				02779B8E171AF21D0050D7C7 /* PKRevealControllerContainerView.h */,
+				02779B8F171AF21D0050D7C7 /* PKRevealControllerContainerView.m */,
+				02779B90171AF21D0050D7C7 /* UIViewController+PKRevealController.h */,
+				02779B91171AF21D0050D7C7 /* UIViewController+PKRevealController.m */,
+			);
+			name = SideViewController;
+			path = Controls/SideViewController;
 			sourceTree = "<group>";
 		};
 		741A1F82165CBD5A00289BE2 /* qqweixin */ = {
@@ -2586,6 +2617,7 @@
 		74CD91FE1643B20F00970F55 /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				02779B88171AF21D0050D7C7 /* SideViewController */,
 				02160E441703DB0100D77FE0 /* Audio */,
 				743EBBCC166CCC9300673882 /* Common */,
 				74B48BA616548DED00777CC8 /* MBProgress */,
@@ -2958,6 +2990,7 @@
 				02DFCB2B170E87BD0032F9BB /* bind_card__5_bg@2x.png in Resources */,
 				02FB629A170FE71A002F29B3 /* audio_speaker@2x.png in Resources */,
 				029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */,
+				02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3197,6 +3230,10 @@
 				0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */,
 				02DFCB1E170E7D540032F9BB /* FSAudioHelper.m in Sources */,
 				02FB6294170FE442002F29B3 /* FSAudioShowView.m in Sources */,
+				02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */,
+				02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */,
+				02779B95171AF21D0050D7C7 /* PKRevealControllerContainerView.m in Sources */,
+				02779B96171AF21D0050D7C7 /* UIViewController+PKRevealController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3304,8 +3341,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "35A298A2-E9F3-4117-9C9B-84658BB06758";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35A298A2-E9F3-4117-9C9B-84658BB06758";
+				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3376,8 +3413,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3412,8 +3449,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3428,7 +3465,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3460,8 +3497,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "35A298A2-E9F3-4117-9C9B-84658BB06758";
+				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

@@ -314,7 +314,6 @@ typedef enum {
     {
         [self registerKVO];
     }
-        
 }
 
 -(void)loadFirstTime
