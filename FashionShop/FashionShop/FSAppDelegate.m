@@ -104,9 +104,9 @@ void uncaughtExceptionHandler(NSException *exception)
                                                                      leftViewController:nav
                                                                     rightViewController:nil
                                                                                 options:nil];
-    
-    self.window.rootViewController = self.revealController;
-    
+    //侧边栏设置，暂时保留
+//    self.window.rootViewController = self.revealController;
+    self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
     [self.window makeKeyAndVisible];
 }
@@ -182,12 +182,12 @@ void uncaughtExceptionHandler(NSException *exception)
         if (locationManager.locationAwared)
         {
             [self registerDevicePushNotification:token];
-        } else
+        }
+        else
         {
             [locationManager addObserver:self forKeyPath:@"locationAwared" options:NSKeyValueObservingOptionNew context:nil];
         }
 	}
-
 }
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {

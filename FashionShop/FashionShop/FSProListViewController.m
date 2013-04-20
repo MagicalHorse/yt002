@@ -683,7 +683,7 @@ typedef enum {
             FSStore * store = [_storeSource objectAtIndex:section];
             header.lblTitle.text =[NSString stringWithFormat:NSLocalizedString(@"%@", nil),store.name];
             [header.lblTitle sizeToFit];
-            if (store.distance <= 0) {
+            if (store.distance <= 0 || store.distance > 10000) {
                 header.lblDistance.hidden = YES;
             }
             else{

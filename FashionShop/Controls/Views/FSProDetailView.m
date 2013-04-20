@@ -10,6 +10,8 @@
 #import "UIImageView+WebCache.h"
 #import "NSString+Extention.h"
 #import "FSProdItemEntity.h"
+#import "FSLocationManager.h"
+#import <CoreLocation/CLGeocoder.h>
 
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44

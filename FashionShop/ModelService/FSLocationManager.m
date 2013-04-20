@@ -8,6 +8,7 @@
 
 #import "FSLocationManager.h"
 #import <CoreLocation/CLGeocoder.h>
+
 static FSLocationManager *_locationManager;
 
 @interface FSLocationManager()
@@ -21,17 +22,17 @@ static FSLocationManager *_locationManager;
 
 - (void) initLocationManager{
     // if location services are restricted do nothing
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
-        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)
-    {
-        self.locationAwared = TRUE;
-        if (_locationDelegate)
-        {
-            
-            [_locationDelegate performSelector:@selector(didLocationFailAwared:) withObject:self];
-        }
-        return;
-    }
+//    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied ||
+//        [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted)
+//    {
+//        self.locationAwared = TRUE;
+//        if (_locationDelegate)
+//        {
+//            
+//            [_locationDelegate performSelector:@selector(didLocationFailAwared:) withObject:self];
+//        }
+//        return;
+//    }
     
     // if locationManager does not currently exist, create it
     if (!_innerLocation)
@@ -78,7 +79,21 @@ static FSLocationManager *_locationManager;
     // since we got an error, set selected location to invalid location
     _currentCoord = kCLLocationCoordinate2DInvalid;
     self.locationAwared = TRUE;
-    
+    id isShow = [[NSUserDefaults standardUserDefaults] objectForKey:@"NoShow"];
+    if (!isShow || (isShow && [isShow boolValue])) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Open Location Desc", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK", nil) otherButtonTitles:NSLocalizedString(@"No Show", nil), nil];
+        [alert show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 1) {
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"NoShow"];
+    }
+    else{
+        [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"NoShow"];
+    }
 }
 
 + (FSLocationManager *)sharedLocationManager{

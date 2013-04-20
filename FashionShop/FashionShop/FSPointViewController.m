@@ -212,7 +212,7 @@
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likes indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([(FSUser *)obj1 valueForKey:@"id"] == [(FSUser *)obj valueForKey:@"id"])
+                if ([[(FSPoint *)obj1 valueForKey:@"id"] intValue] == [[(FSPoint *)obj valueForKey:@"id"] intValue])
                 {
                     return TRUE;
                     *stop1 = TRUE;

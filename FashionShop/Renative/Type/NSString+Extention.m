@@ -91,6 +91,9 @@ const NSString* REG_PHONE = @"^(([0\\+]\\d{2,3}-?)?(0\\d{2,3})-?)?(\\d{7,8})";
         return @"";
     int kilos = 1000;
     double numberOfKilos = input/kilos;
+    if (numberOfKilos > 10000) {
+        return @"";
+    }
     if (numberOfKilos >= 1)
         if (numberOfKilos >= 100) {
             return [NSString stringWithFormat:NSLocalizedString(@"%.0fkiloes", nil), numberOfKilos];
