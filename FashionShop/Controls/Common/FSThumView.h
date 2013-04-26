@@ -18,6 +18,9 @@
 
 -(FSThumView *)initWithFrame:(CGRect)frame ownerUser:(FSUser *)user;
 -(void) reloadThumb:(NSURL *)image;
+-(void) setImage:(UIImage*)image;
+-(UIImage*)getThumbImage;
+
 @property(nonatomic,strong) FSUser *ownerUser;
 @property(nonatomic,strong) id<FSThumViewDelegate> delegate;
 @property(nonatomic) BOOL showCamera;

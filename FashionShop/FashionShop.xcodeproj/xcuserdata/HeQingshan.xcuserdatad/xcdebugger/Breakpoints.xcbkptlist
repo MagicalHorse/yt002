@@ -7,19 +7,6 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Controls/SDImageView/UIImageView+WebCache.m"
-         timestampString = "386859237.686035"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "141"
-         endingLineNumber = "141"
-         landmarkName = "-webImageManager:didProgressWithPartialImage:forURL:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
          filePath = "FashionShop/FSPointViewController.m"
          timestampString = "388112418.199871"
          startingColumnNumber = "9223372036854775807"

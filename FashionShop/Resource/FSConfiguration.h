@@ -44,9 +44,16 @@
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库
-//#define REST_API_URL   @"http://122.226.53.114:7070/api"
+//#define REST_API_URL   @"http://apis.youhuiin.com/api"
 //#define REST_API_URL_OUT @"http://stage.youhuiin.com"
 //#define REST_API_APP_SECRET_KEY @"yintai123456"
+
+/*
+ 预生产环境的地址切换了，原有的地址失效，使用新的地址：
+ api的访问域： apis.youhuiin.com
+ 后台管理的访问域: apis.youhuiin.com:8080
+ 原有的itoo.yintai.com:7050,7070都无法访问了。
+ */
 
 //测试环境 http://stage.youhuiin.com
 //生产环境 http://api.youhuiin.com

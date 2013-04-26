@@ -24,6 +24,7 @@
 #import "FSProPostTitleViewController.h"
 #import "CL_VoiceEngine.h"
 #import "FSAudioShowView.h"
+#import "FSImageBrowserView.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -658,8 +659,45 @@
     }
     MyPhotoSource *source = [[MyPhotoSource alloc] initWithPhotos:photoArray];
     EGOPhotoViewController *photoController = [[EGOPhotoViewController alloc] initWithPhotoSource:source];
-    [self.navigationController pushViewController:photoController animated:YES];
+    int width = 100;
+    photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
     photoController.source = self;
+    //[self.navigationController pushViewController:photoController animated:NO];
+    [self presentModalViewController:photoController animated:YES];
+    
+    
+    return;
+    /*
+    FSImageBrowserView *view = [[FSImageBrowserView alloc] initWithFrame:self.view.frame];
+    view.photos = [[self itemSource] resource];
+    [self.view addSubview:view];
+    [self.view bringSubviewToFront:view];
+    UITapGestureRecognizer * tap = (UITapGestureRecognizer*)sender;
+    view.scrollView.frame = tap.view.frame;//CGRectMake(self.view.center.x, self.view.center.y, 0, 0);
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        view.scrollView.frame = view.frame;
+    } completion:^(BOOL finished) {
+        ;
+    }];
+    
+    UITapGestureRecognizer *imgTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapImages:)];
+    imgTap.numberOfTapsRequired = 1;
+    [view addGestureRecognizer:imgTap];
+     */
+}
+
+-(void)didTapImages:(id) sender
+{
+    UITapGestureRecognizer * tap = (UITapGestureRecognizer*)sender;
+    FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
+    UIImageView *prodImage = (UIImageView *)[(id)view imgView];
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [UIView animateWithDuration:0.3 animations:^{
+        tap.view.frame = prodImage.frame;
+    } completion:^(BOOL finished) {
+        [tap.view removeFromSuperview];
+    }];
 }
 
 - (void) displayCommentInputView:(id)parent

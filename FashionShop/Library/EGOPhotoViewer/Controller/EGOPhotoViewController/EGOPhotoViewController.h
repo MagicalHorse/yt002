@@ -87,6 +87,7 @@
 @property(nonatomic,retain) UIScrollView *scrollView;
 @property(nonatomic,assign) BOOL _fromPopover;
 @property (nonatomic) id<FSImageSlideDataSource> source;
+@property (nonatomic) CGRect beginRect;
 
 - (NSInteger)currentPhotoIndex;
 - (void)moveToPhotoAtIndex:(NSInteger)index animated:(BOOL)animated;

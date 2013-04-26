@@ -47,9 +47,17 @@
 		self.backgroundColor = [UIColor blackColor];
 		self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
 		self.decelerationRate = UIScrollViewDecelerationRateFast;
-		
+        
+        UILongPressGestureRecognizer *ges = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showSaveAction:)];
+        [self addGestureRecognizer:ges];
+        [ges release];
     }
     return self;
+}
+
+-(void)showSaveAction:(UIGestureRecognizer*)gesture
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoViewLongPress" object:gesture];
 }
 
 - (void)zoomRectWithCenter:(CGPoint)center{

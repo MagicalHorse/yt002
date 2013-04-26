@@ -353,7 +353,6 @@ BOOL networkIsWorking = NO;
 
 -(void)decorateOverlayToCamera:(UIImagePickerController *)camera
 {
-    
     if (camera &&
         camera.sourceType== UIImagePickerControllerSourceTypeCamera)
     {

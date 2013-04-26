@@ -38,6 +38,8 @@
 #import "FSConfiguration.h"
 #import <PassKit/PassKit.h>
 
+#import "FSImageEditViewController.h"
+
 #define LOGIN_FROM_3RDPARTY_ACTION @"LOGIN_FROM_3RDPARTY"
 #define LOGIN_GET_USER_PROFILE @"LOGIN_GET_USERPROFILE"
 #define LOGIN_GET_USER_LIKE @"LOGIN_GET_USERLIKEPRO"
@@ -788,18 +790,21 @@
         [self updateProgress:error];
     }];
 }
+
 #pragma UIImagePicker delegate
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
-    [picker dismissViewControllerAnimated:YES completion:nil];
+//    if (picker != _camera) {
+//        [picker dismissViewControllerAnimated:YES completion:nil];
+//    }
+    _camera = picker;
 	NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
 	
 	if([mediaType isEqualToString:@"public.image"])
 	{
 		UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        
-        [NSThread detachNewThreadSelector:@selector(cropImage:) toTarget:self withObject:image];
+        [NSThread detachNewThreadSelector:@selector(showController:) toTarget:self withObject:image];
     }
 	else
 	{
@@ -807,6 +812,14 @@
 		return;
 	}
 }
+
+-(void)showController:(UIImage *)image {
+    FSImageEditViewController *controller = [[FSImageEditViewController alloc] initWithNibName:@"FSImageEditViewController" bundle:nil];
+    controller.image = image;
+    controller.delegate = self;
+    [_camera pushViewController:controller animated:YES];
+}
+
 - (void)cropImage:(UIImage *)image {
     // Create a graphics image context
     int whSize = 200;
@@ -1385,6 +1398,14 @@
         [self ensureDataContext];
         [self displayUserLogin];
     }
+}
+
+-(void)editImageViewControllerSetImage:(FSImageEditViewController*)viewController
+{
+  //  [NSThread detachNewThreadSelector:@selector(cropImage:) toTarget:self withObject:viewController.editView.output];
+    //[self cropImage:viewController.editView.output];
+    [self uploadThumnail:viewController.editView.output];
+    [viewController dismissModalViewControllerAnimated:YES];
 }
 
 @end

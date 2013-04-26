@@ -26,6 +26,7 @@
 @property (nonatomic,strong) NSString *userLevelName;
 @property (nonatomic,strong) NSString *thumnail;
 @property (nonatomic,readonly) NSURL *thumnailUrl;
+@property (nonatomic,readonly) NSURL *thumnailUrl200;
 @property (nonatomic,assign) BOOL isLiked;
 @property (nonatomic,assign) int couponsTotal;
 @property (nonatomic,strong) NSMutableArray *coupons;

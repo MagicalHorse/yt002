@@ -53,6 +53,7 @@
 		022A6D2716D4F79600374639 /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2316D4F79600374639 /* arrow_right@2x.png */; };
 		023734C216B8FF9600CECCF3 /* promotion_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 023734C116B8FF9600CECCF3 /* promotion_icon@2x.png */; };
 		023734C516B90A8E00CECCF3 /* FSPlaceHoldTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 023734C416B90A8E00CECCF3 /* FSPlaceHoldTextView.m */; };
+		0238D4D7172A337F00117A93 /* FSAvatarHDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0238D4D5172A337F00117A93 /* FSAvatarHDViewController.m */; };
 		023EFC7316BE3B2F00E96E30 /* Toolbar_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 023EFC7116BE3B2F00E96E30 /* Toolbar_bg@2x.png */; };
 		023EFC7A16BE402800E96E30 /* FSTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 023EFC7916BE402800E96E30 /* FSTabBar.m */; };
 		0240874E16D0DEB8005DCF0A /* weixin_friends_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0240874C16D0DEB8005DCF0A /* weixin_friends_icon@2x.png */; };
@@ -70,11 +71,16 @@
 		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
 		025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E962D16ED9FE10031B68C /* FSCardRequest.m */; };
 		025E963516EDA1CE0031B68C /* FSCardInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E963416EDA1CE0031B68C /* FSCardInfo.m */; };
+		02660A9317223FB800156566 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02660A9217223FB800156566 /* AGSimpleImageEditorView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		02660A971722411700156566 /* FSImageEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02660A951722411700156566 /* FSImageEditViewController.m */; };
+		02660A981722411700156566 /* FSImageEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02660A961722411700156566 /* FSImageEditViewController.xib */; };
 		02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */; };
 		02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */; };
 		02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8D171AF21D0050D7C7 /* PKRevealController.m */; };
 		02779B95171AF21D0050D7C7 /* PKRevealControllerContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8F171AF21D0050D7C7 /* PKRevealControllerContainerView.m */; };
 		02779B96171AF21D0050D7C7 /* UIViewController+PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B91171AF21D0050D7C7 /* UIViewController+PKRevealController.m */; };
+		028C9E641722CC0200FCBD02 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 028C9E631722CC0200FCBD02 /* MRZoomScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		028C9E6B1722CC5400FCBD02 /* FSImageBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */; };
 		029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 029371B717165819000B4ACE /* audio_trash_icon@2x.png */; };
 		0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */; };
 		0298BA4016C379EA00BB2C29 /* FSStoreMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0298BA3E16C379EA00BB2C29 /* FSStoreMapViewController.xib */; };
@@ -618,6 +624,8 @@
 		023734C116B8FF9600CECCF3 /* promotion_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "promotion_icon@2x.png"; sourceTree = "<group>"; };
 		023734C316B90A8E00CECCF3 /* FSPlaceHoldTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPlaceHoldTextView.h; path = Controls/Common/FSPlaceHoldTextView.h; sourceTree = "<group>"; };
 		023734C416B90A8E00CECCF3 /* FSPlaceHoldTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPlaceHoldTextView.m; path = Controls/Common/FSPlaceHoldTextView.m; sourceTree = "<group>"; };
+		0238D4D5172A337F00117A93 /* FSAvatarHDViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAvatarHDViewController.m; sourceTree = "<group>"; };
+		0238D4D6172A337F00117A93 /* FSAvatarHDViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAvatarHDViewController.h; sourceTree = "<group>"; };
 		023EFC7116BE3B2F00E96E30 /* Toolbar_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Toolbar_bg@2x.png"; sourceTree = "<group>"; };
 		023EFC7816BE402800E96E30 /* FSTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSTabBar.h; path = Controls/Common/FSTabBar.h; sourceTree = "<group>"; };
 		023EFC7916BE402800E96E30 /* FSTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSTabBar.m; path = Controls/Common/FSTabBar.m; sourceTree = "<group>"; };
@@ -641,6 +649,11 @@
 		025E962D16ED9FE10031B68C /* FSCardRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardRequest.m; path = ModelService/FSCardRequest.m; sourceTree = "<group>"; };
 		025E963316EDA1CE0031B68C /* FSCardInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardInfo.h; path = Model/FSCardInfo.h; sourceTree = "<group>"; };
 		025E963416EDA1CE0031B68C /* FSCardInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCardInfo.m; path = Model/FSCardInfo.m; sourceTree = "<group>"; };
+		02660A9117223FB800156566 /* AGSimpleImageEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGSimpleImageEditorView.h; path = Controls/Common/AGSimpleImageEditorView.h; sourceTree = "<group>"; };
+		02660A9217223FB800156566 /* AGSimpleImageEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AGSimpleImageEditorView.m; path = Controls/Common/AGSimpleImageEditorView.m; sourceTree = "<group>"; };
+		02660A941722411700156566 /* FSImageEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSImageEditViewController.h; sourceTree = "<group>"; };
+		02660A951722411700156566 /* FSImageEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSImageEditViewController.m; sourceTree = "<group>"; };
+		02660A961722411700156566 /* FSImageEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSImageEditViewController.xib; sourceTree = "<group>"; };
 		02779B89171AF21D0050D7C7 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
 		02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
 		02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -650,6 +663,10 @@
 		02779B8F171AF21D0050D7C7 /* PKRevealControllerContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PKRevealControllerContainerView.m; sourceTree = "<group>"; };
 		02779B90171AF21D0050D7C7 /* UIViewController+PKRevealController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PKRevealController.h"; sourceTree = "<group>"; };
 		02779B91171AF21D0050D7C7 /* UIViewController+PKRevealController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PKRevealController.m"; sourceTree = "<group>"; };
+		028C9E621722CC0200FCBD02 /* MRZoomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRZoomScrollView.h; path = Controls/Common/MRZoomScrollView.h; sourceTree = "<group>"; };
+		028C9E631722CC0200FCBD02 /* MRZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRZoomScrollView.m; path = Controls/Common/MRZoomScrollView.m; sourceTree = "<group>"; };
+		028C9E691722CC5400FCBD02 /* FSImageBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSImageBrowserView.h; sourceTree = "<group>"; };
+		028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSImageBrowserView.m; sourceTree = "<group>"; };
 		029371B717165819000B4ACE /* audio_trash_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_trash_icon@2x.png"; sourceTree = "<group>"; };
 		0298BA3C16C379EA00BB2C29 /* FSStoreMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreMapViewController.h; sourceTree = "<group>"; };
 		0298BA3D16C379EA00BB2C29 /* FSStoreMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSStoreMapViewController.m; sourceTree = "<group>"; };
@@ -1624,6 +1641,10 @@
 		743EBBCC166CCC9300673882 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				028C9E621722CC0200FCBD02 /* MRZoomScrollView.h */,
+				028C9E631722CC0200FCBD02 /* MRZoomScrollView.m */,
+				02660A9117223FB800156566 /* AGSimpleImageEditorView.h */,
+				02660A9217223FB800156566 /* AGSimpleImageEditorView.m */,
 				0206AB6D16FB5D27008ADFBC /* FSCycleScrollView.h */,
 				0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */,
 				0211778916CF54E700559653 /* PositionAnnotation.h */,
@@ -1974,6 +1995,8 @@
 		74B773CD1665A2DE000F4389 /* User */ = {
 			isa = PBXGroup;
 			children = (
+				0238D4D5172A337F00117A93 /* FSAvatarHDViewController.m */,
+				0238D4D6172A337F00117A93 /* FSAvatarHDViewController.h */,
 				02992D5816ED789D007ACF62 /* FSCardBindViewController.h */,
 				02992D5916ED789E007ACF62 /* FSCardBindViewController.m */,
 				02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */,
@@ -2003,6 +2026,9 @@
 				74B8674916846F21001E1C97 /* FSDRViewController.h */,
 				74B8674A16846F21001E1C97 /* FSDRViewController.m */,
 				74B8674B16846F22001E1C97 /* FSDRViewController.xib */,
+				02660A941722411700156566 /* FSImageEditViewController.h */,
+				02660A951722411700156566 /* FSImageEditViewController.m */,
+				02660A961722411700156566 /* FSImageEditViewController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2198,6 +2224,8 @@
 				74B6F6D6166B5A91003ACB90 /* TPKeyboardAvoidingScrollView.m */,
 				74B6F6D7166B5A91003ACB90 /* TPKeyboardAvoidingTableView.h */,
 				74B6F6D8166B5A91003ACB90 /* TPKeyboardAvoidingTableView.m */,
+				028C9E691722CC5400FCBD02 /* FSImageBrowserView.h */,
+				028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */,
 				741A1F76165C917F00289BE2 /* FSWeiboActivity.h */,
 				741A1F77165C917F00289BE2 /* FSWeiboActivity.m */,
 				741A1F7F165CBCCE00289BE2 /* FSWeixinActivity.h */,
@@ -2991,6 +3019,7 @@
 				02FB629A170FE71A002F29B3 /* audio_speaker@2x.png in Resources */,
 				029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */,
 				02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */,
+				02660A981722411700156566 /* FSImageEditViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3234,6 +3263,11 @@
 				02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */,
 				02779B95171AF21D0050D7C7 /* PKRevealControllerContainerView.m in Sources */,
 				02779B96171AF21D0050D7C7 /* UIViewController+PKRevealController.m in Sources */,
+				02660A9317223FB800156566 /* AGSimpleImageEditorView.m in Sources */,
+				02660A971722411700156566 /* FSImageEditViewController.m in Sources */,
+				028C9E641722CC0200FCBD02 /* MRZoomScrollView.m in Sources */,
+				028C9E6B1722CC5400FCBD02 /* FSImageBrowserView.m in Sources */,
+				0238D4D7172A337F00117A93 /* FSAvatarHDViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

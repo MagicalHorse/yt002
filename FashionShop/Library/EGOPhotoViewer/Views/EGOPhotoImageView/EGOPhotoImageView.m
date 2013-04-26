@@ -66,6 +66,7 @@
 		
 		EGOPhotoScrollView *scrollView = [[EGOPhotoScrollView alloc] initWithFrame:self.bounds];
 		scrollView.backgroundColor = [UIColor blackColor];
+        scrollView.autoresizesSubviews = YES;
 		scrollView.opaque = YES;
 		scrollView.delegate = self;
 		[self addSubview:scrollView];
@@ -74,6 +75,7 @@
 
 		UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.bounds];
 		imageView.opaque = YES;
+        imageView.autoresizesSubviews = YES;
 		imageView.contentMode = UIViewContentModeScaleAspectFit;
 		imageView.tag = ZOOM_VIEW_TAG;
 		[_scrollView addSubview:imageView];

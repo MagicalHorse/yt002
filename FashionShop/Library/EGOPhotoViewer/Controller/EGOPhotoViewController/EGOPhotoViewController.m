@@ -66,12 +66,12 @@
 		
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleBarsNotification:) name:@"EGOPhotoViewToggleBars" object:nil];
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoViewDidFinishLoading:) name:@"EGOPhotoDidFinishLoading" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSaveAction:) name:@"EGOPhotoViewLongPress" object:nil];
 		
 		self.hidesBottomBarWhenPushed = YES;
-		self.wantsFullScreenLayout = YES;		
+		self.wantsFullScreenLayout = YES;
 		_photoSource = [aSource retain];
 		_pageIndex=0;
-		
 	}
 	
 	return self;
@@ -109,6 +109,7 @@
 		_scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 		_scrollView.multipleTouchEnabled=YES;
 		_scrollView.scrollEnabled=YES;
+        _scrollView.autoresizesSubviews = YES;
 		_scrollView.directionalLockEnabled=YES;
 		_scrollView.canCancelContentTouches=YES;
 		_scrollView.delaysContentTouches=YES;
@@ -120,7 +121,6 @@
 		_scrollView.showsHorizontalScrollIndicator=NO;
 		_scrollView.backgroundColor = self.view.backgroundColor;
 		[self.view addSubview:_scrollView];
-
 	}
 	
 	if (!_captionView) {
@@ -130,6 +130,9 @@
 		_captionView=view;
 		[view release];
 		
+//        UILongPressGestureRecognizer *ges = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showSaveAction:)];
+//        [_captionView addGestureRecognizer:ges];
+//        [ges release];
 	}
 	
 	//  load photoviews lazily
@@ -152,8 +155,19 @@
 		
 	}
 #endif
-	
 
+}
+
+-(void)showSaveAction:(UIGestureRecognizer*)gesture
+{
+    if ([self.view viewWithTag:101]) {
+        return;
+    }
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:nil otherButtonTitles:@"保存图片到相册", nil];
+    sheet.tag = 101;
+    sheet.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+    [sheet showInView:self.view];
+    [sheet release];
 }
 
 -(void)close
@@ -183,9 +197,9 @@
 		}
 		
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 30200
-		if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad && _popover==nil) {
-			[self.navigationController setNavigationBarHidden:NO animated:NO];
-		}
+//		if (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad && _popover==nil) {
+//			[self.navigationController setNavigationBarHidden:NO animated:NO];
+//		}
 #endif
 		
 	} else {
@@ -207,7 +221,7 @@
 		_oldToolBarHidden = [self.navigationController isToolbarHidden];
 		
 		_storedOldStyles = YES;
-	}	
+	}
 	
 	if ([self.navigationController isToolbarHidden] && (!_popover || ([self.photoSource numberOfPhotos] > 1))) {
 		[self.navigationController setToolbarHidden:NO animated:YES];
@@ -231,9 +245,20 @@
 	if (_popover) {
 		[self addObserver:self forKeyPath:@"contentSizeForViewInPopover" options:NSKeyValueObservingOptionNew context:NULL];
 	}
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+	[self.navigationController setToolbarHidden:YES animated:NO];
+    [self enterAnimation];
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    
 	[super viewWillDisappear:animated];
 	
 	self.navigationController.navigationBar.barStyle = _oldNavBarStyle;
@@ -261,7 +286,15 @@
 	if (_popover) {
 		[self removeObserver:self forKeyPath:@"contentSizeForViewInPopover"];
 	}
-	
+    
+	[self.navigationController setNavigationBarHidden:NO animated:NO];
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
+}
+
+-(void)setControlHiden:(BOOL)_hiden animated:(BOOL)_animated
+{
+    [self.navigationController setNavigationBarHidden:_hiden animated:_animated];
+	[self.navigationController setToolbarHidden:_hiden animated:_animated];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -343,10 +376,10 @@
 			[doneButton release];
 		}
 	} else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-		[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
+	//	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
 	}
 #else 
-	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
+//	[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:YES];
 #endif
 	
 	//UIBarButtonItem *action = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonHit:)];
@@ -470,13 +503,11 @@
 	if (_captionView) {
 		[_captionView setCaptionHidden:hidden];
 	}
-	
 	_barsHidden=hidden;
-	
 }
 
 - (void)toggleBarsNotification:(NSNotification*)notification{
-	[self setBarsHidden:!_barsHidden animated:YES];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 
@@ -649,7 +680,7 @@
 		if ([[[notification object] objectForKey:@"failed"] boolValue]) {
 			if (_barsHidden) {
 				//  image failed loading
-				[self setBarsHidden:NO animated:YES];
+			//	[self setBarsHidden:NO animated:YES];
 			}
 		} 
 		[self setViewState];
@@ -733,9 +764,9 @@
 	
 	[self.scrollView scrollRectToVisible:((EGOPhotoImageView*)[self.photoViews objectAtIndex:index]).frame animated:animated];
 	
-	if ([[self.photoSource photoAtIndex:_pageIndex] didFail]) {
-		[self setBarsHidden:NO animated:YES];
-	}
+//	if ([[self.photoSource photoAtIndex:_pageIndex] didFail]) {
+//		[self setBarsHidden:NO animated:YES];
+//	}
 	
 	//  reset any zoomed side views
 	if (index + 1 < [self.photoSource numberOfPhotos] && (NSNull*)[self.photoViews objectAtIndex:index+1] != [NSNull null]) {
@@ -853,6 +884,7 @@
 	if (photoView == nil || (NSNull*)photoView == [NSNull null]) {
 		
 		photoView = [[EGOPhotoImageView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.scrollView.bounds.size.width, self.scrollView.bounds.size.height)];
+        photoView.autoresizesSubviews = YES;
 		[self.photoViews replaceObjectAtIndex:page withObject:photoView];
 		[photoView release];
 		
@@ -892,7 +924,7 @@
 	
 	if (_pageIndex != _index && !_rotating) {
 
-		[self setBarsHidden:YES animated:YES];
+	//	[self setBarsHidden:YES animated:YES];
 		_pageIndex = _index;
 		[self setViewState];
 		
@@ -1021,7 +1053,7 @@
 	actionSheet.delegate = self;
 	
 	[actionSheet showInView:self.view];
-	[self setBarsHidden:YES animated:YES];
+	//[self setBarsHidden:YES animated:YES];
 	
 	[actionSheet release];
 	
@@ -1029,7 +1061,13 @@
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
 	
-	[self setBarsHidden:NO animated:YES];
+    if (actionSheet.tag == 101) {
+        if (buttonIndex == actionSheet.firstOtherButtonIndex) {
+            [self savePhoto];
+        }
+        return;
+    }
+	//[self setBarsHidden:NO animated:YES];
 	
 	if (buttonIndex == actionSheet.cancelButtonIndex) {
 		return;
@@ -1042,7 +1080,6 @@
 	}
 }
 
-
 #pragma mark -
 #pragma mark Memory
 
@@ -1051,7 +1088,6 @@
 }
 
 - (void)viewDidUnload{
-	
 	self.photoViews=nil;
 	self.scrollView=nil;
 	_captionView=nil;
@@ -1070,6 +1106,13 @@
 	[_oldNavBarTintColor release], _oldNavBarTintColor = nil;
 	
     [super dealloc];
+}
+
+- (void)enterAnimation{
+//    _scrollView.frame = self.beginRect;
+//    [UIView animateWithDuration:0.5 animations:^{
+//        _scrollView.frame = self.view.bounds;
+//    } completion:nil];
 }
 
 

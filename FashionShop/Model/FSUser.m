@@ -113,4 +113,11 @@
      */
 }
 
+-(NSURL *)thumnailUrl200
+{
+    if (!thumnail)
+        return nil;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_200x200.jpg",thumnail]];
+}
+
 @end

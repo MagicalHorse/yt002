@@ -116,10 +116,17 @@
         [self indicatorViewUpdate:@"camera.png"];
     }
 }
+
+-(UIImage*)getThumbImage
+{
+    return _imgView.image;
+}
+
 -(void) reloadThumb:(NSURL *)image
 {
     [_imgView setImageWithURL:image placeholderImage:[UIImage imageNamed:@"default_icon50.png"]];
 }
+
 -(void)doTapThumb:(id)sender
 {
     if ([_delegate respondsToSelector:@selector(didTapThumView:)])

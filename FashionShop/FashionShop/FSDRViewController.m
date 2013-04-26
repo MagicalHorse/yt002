@@ -150,6 +150,7 @@
         self.navigationItem.rightBarButtonItem.enabled = FALSE;
     }
     _thumLogo.ownerUser = _daren;
+    _thumLogo.delegate = self;
     _lblNickie.text = _daren.nickie;
     _lblNickie.font = ME_FONT(18);
     [_lblNickie sizeToFit];
@@ -782,4 +783,41 @@
     likeView.navigationItem.title = NSLocalizedString(@"Ta fans", nil);
     [self.navigationController pushViewController:likeView animated:TRUE];
 }
+
+#pragma mark - FSThumbView Delegate
+
+-(void)didTapThumView:(id)sender
+{
+    FSAvatarHDViewController *controller = [[FSAvatarHDViewController alloc] init];
+    [controller setImageURL:_thumLogo.ownerUser.thumnailUrl200];
+    controller.avatarImg = [_thumLogo getThumbImage];
+    CGRect _rect = _thumLogo.frame;
+    _rect.origin.y += NAV_HIGH;
+    controller.beginRect = _rect;
+    controller.delegate = self;
+    [self presentViewController:controller animated:NO completion:nil];
+}
+
+#pragma mark - FSAvatarHDViewDelegate
+
+-(void)hiddenHDUserImg:(FSAvatarHDViewController*)controller
+{
+    [controller dismissViewControllerAnimated:NO completion:nil];
+    UIImageView *_imgV = [[UIImageView alloc] initWithImage:controller.avatarImg];
+    _imgV.contentMode = UIViewContentModeScaleAspectFill;
+    _imgV.clipsToBounds = YES;
+    CGRect _rect = controller.avatarImgV.frame;
+    _rect.origin.y -= NAV_HIGH;
+    _imgV.frame = _rect;
+    [self.view addSubview:_imgV];
+    _rect = controller.beginRect;
+    _rect.origin.y -= NAV_HIGH;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        _imgV.frame = _rect;
+    } completion:^(BOOL finished) {
+        [_imgV removeFromSuperview];
+    }];
+}
+
 @end

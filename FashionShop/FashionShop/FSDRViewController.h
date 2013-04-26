@@ -12,8 +12,9 @@
 #import "FSProDetailViewController.h"
 #import "FSThumView.h"
 #import "FSSegmentControl.h"
+#import "FSAvatarHDViewController.h"
 
-@interface FSDRViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
+@interface FSDRViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,FSThumViewDelegate,FSAvatarHDViewDelegate>
 
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumLogo;
