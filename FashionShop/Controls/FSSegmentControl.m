@@ -73,7 +73,7 @@
 - (void)commonInit
 {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    _selectedSegmentIndex = -1;
+    _selectedSegmentIndex = 0;
     self._items = NSMutableArray.array;
     _arrowSize = 8;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;

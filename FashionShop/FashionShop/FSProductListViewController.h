@@ -18,12 +18,14 @@ typedef enum {
     FSPageTypeBrand = 1,
     FSPageTypeTopic = 2,
     FSPageTypeSearch = 3,
+    FSPageTypeStore = 4,
     FSPageTypeCommon,
 }FSPageType;
 
 @interface FSProductListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
 @property (strong, nonatomic) IBOutlet PSUICollectionView *productContent;
 @property (strong, nonatomic) FSBrand *brand;
+@property (strong, nonatomic) FSStore *store;
 @property (strong, nonatomic) FSTopic *topic;
 @property (nonatomic, assign) NSInteger commonID;
 @property (nonatomic, strong) NSString *titleName;

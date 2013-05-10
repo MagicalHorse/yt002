@@ -7,7 +7,18 @@
 //
 
 #import "FSPagedExchangeList.h"
+#import "FSExchange.h"
 
 @implementation FSPagedExchangeList
+
++(NSString*)pagedKeyPath
+{
+    return @"items";
+}
+
++(Class)pagedModel
+{
+    return [FSExchange class];
+}
 
 @end

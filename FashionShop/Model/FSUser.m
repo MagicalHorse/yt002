@@ -87,7 +87,6 @@
 {
     [[FSLocalPersist sharedPersist] setObjectInDisk:device
                 toKey:LOCAL_STORE_DEVICE_TOKEN];
-
 }
 
 - (void) save
@@ -95,7 +94,6 @@
     [[FSLocalPersist sharedPersist] setObjectInMemory:self toKey:LOCAL_STORE_USER_KEY];
     [[FSLocalPersist sharedPersist] setObjectInDisk:self.uToken toKey:LOCAL_STORE_USER_LOGIN_TOKEN];
     [[FSLocalPersist sharedPersist] setObjectInDisk:self.uid toKey:LOCAL_STORE_USER_LOGIN_UID];
-
 }
 
 

@@ -183,9 +183,10 @@ static FSModelManager *_modelManager;
 
 -(void) initConfig
 {
-    [self forceReloadTags];
-    [self forceReloadAllBrands];
-    [self forceReloadStores];
+    //延迟加载
+    [self performSelector:@selector(forceReloadTags) withObject:nil afterDelay:1];
+    [self performSelector:@selector(forceReloadAllBrands) withObject:nil afterDelay:3];
+    [self performSelector:@selector(forceReloadStores) withObject:nil afterDelay:5];
 }
 
 -(SinaWeibo *)instantiateWeiboClient:(id<SinaWeiboDelegate>)delegate

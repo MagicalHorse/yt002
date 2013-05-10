@@ -7,7 +7,6 @@
 //
 
 #import "FSPointViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSPointDetailCell.h"
 #import "FSCommonUserRequest.h"
 #import "FSPagedPoint.h"
@@ -17,6 +16,8 @@
 #import "FSCardRequest.h"
 #import "FSCardInfo.h"
 #import "FSPointMemberCardCell.h"
+#import "FSPointExchangeListViewController.h"
+#import "FSMeViewController.h"
 
 @interface FSPointViewController ()
 {
@@ -24,16 +25,13 @@
     int _currentPage;
     BOOL _noMore;
     BOOL _inLoading;
-    UIRefreshControl *_refreshControl;
-    
-    NSDate *_refreshLatestDate;
-    NSDate * _firstLoadDate;
 }
 
 @end
 
 #define USER_POINT_TABLE_CELL @"userpointtablecell"
 #define USER_POINT_CARD_MEMBER_CELL @"userpointmembercardcell"
+
 @implementation FSPointViewController
 @synthesize currentUser;
 
@@ -102,6 +100,7 @@
             {
                 [self reportError:resp.errorDescrip];
             }
+            _contentView.tableFooterView= [self createTableFooterView];
             _inLoading = NO;
         }];
     }
@@ -164,13 +163,8 @@
         if (resp.isSuccess)
         {
             FSPagedPoint *innerResp = resp.responseData;
-            if (isRefresh)
-                blockSelf->_refreshLatestDate = [[NSDate alloc] init];
-            else
-            {
-                if (innerResp.totalPageCount <= blockSelf->_currentPage+1)
-                    blockSelf-> _noMore = TRUE;
-            }
+            if (innerResp.totalPageCount <= blockSelf->_currentPage+1)
+                blockSelf-> _noMore = YES;
             [self mergeLike:innerResp isInsert:isRefresh];
         }
         else
@@ -202,6 +196,53 @@
     _contentView.tableHeaderView = view;
 }
 
+-(UIView*)createTableFooterView
+{
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+    view.backgroundColor = [UIColor clearColor];
+    
+    int xOffset = 30;
+    int yOffset = 35;
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
+    [btn setTitle:NSLocalizedString(@"Point Exchange", nil) forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(pointExchange:) forControlEvents:UIControlEventTouchUpInside];
+    btn.titleLabel.font = [UIFont boldSystemFontOfSize:20];
+    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [view addSubview:btn];
+    return view;
+}
+
+-(void)pointExchange:(UIButton*)sender
+{
+    if (!currentUser.isBindCard) {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
+        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
+        __block FSMeViewController *blockMeController = loginController;
+        loginController.completeCallBack=^(BOOL isSuccess){
+            [blockMeController dismissViewControllerAnimated:true completion:^{
+                if (!isSuccess)
+                {
+                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                }
+                else
+                {
+                    FSPointExchangeListViewController *controller = [[FSPointExchangeListViewController alloc] initWithNibName:@"FSPointExchangeListViewController" bundle:nil];
+                    [self.navigationController pushViewController:controller animated:YES];
+                }
+            }];
+        };
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+        [self presentViewController:navController animated:true completion:nil] ;
+    }
+    else{
+        FSPointExchangeListViewController *controller = [[FSPointExchangeListViewController alloc] initWithNibName:@"FSPointExchangeListViewController" bundle:nil];
+        [self.navigationController pushViewController:controller animated:YES];
+    }
+}
+
 -(void) mergeLike:(FSPagedPoint *)response isInsert:(BOOL)isinsert
 {
     if (!_likes)
@@ -229,15 +270,6 @@
             
         }];
     }
-    if (_likes.count<1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:nil  originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView];
-    }
     [_contentView reloadData];
 }
 
@@ -249,16 +281,7 @@
     request.pageIndex =[NSNumber numberWithInt:page];
     request.sort = @0;
     request.routeResourcePath = route;
-    if(isRefresh)
-    {
-        request.requestType = 0;
-        request.previousLatestDate = _refreshLatestDate;
-    }
-    else
-    {
-        request.requestType = 1;
-        request.previousLatestDate = _firstLoadDate;
-    }
+    request.requestType = 1;
     return request;
 }
 -(void) presentData
@@ -346,6 +369,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (_likes.count <= 0) {
+        return 0;
+    }
     return 30;
 }
 
@@ -373,11 +399,6 @@
     return view;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
@@ -401,32 +422,5 @@
         _inLoading = NO;
     }];
 }
-
-//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-//{
-//    if(!_inLoading &&
-//       (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
-//       &&scrollView.contentOffset.y>0
-//       && !_noMore)
-//    {
-//        _inLoading = TRUE;
-//        FSCommonUserRequest *request = [self createRequest:_currentPage+1];
-//        [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-//            _inLoading = FALSE;
-//            if (resp.isSuccess)
-//            {
-//                FSPagedPoint *innerResp = resp.responseData;
-//                if (innerResp.totalPageCount<=_currentPage+1)
-//                    _noMore = true;
-//                _currentPage ++;
-//                [self mergeLike:innerResp isInsert:FALSE];
-//            }
-//            else
-//            {
-//                [self reportError:resp.errorDescrip];
-//            }
-//        }];   
-//    }
-//}
 
 @end

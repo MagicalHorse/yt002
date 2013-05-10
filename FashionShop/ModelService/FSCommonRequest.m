@@ -14,7 +14,8 @@
 -(void)setRouteResourcePath:(NSString *)aRouteResourcePath
 {
     routeResourcePath = aRouteResourcePath;
-    if ([routeResourcePath isEqualToString:RK_REQUEST_KEYWORD_LIST]) {
+    if ([routeResourcePath isEqualToString:RK_REQUEST_KEYWORD_LIST] ||
+        [routeResourcePath isEqualToString:RK_REQUEST_CHECK_VERSION]) {
         [self setBaseURL:2];
     }
 }

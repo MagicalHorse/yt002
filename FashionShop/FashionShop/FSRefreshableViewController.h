@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIViewController+Loading.h"
 #import "EGORefreshTableHeaderView.h"
 
 @interface FSRefreshableViewController : UIViewController<EGORefreshTableHeaderDelegate,UIScrollViewDelegate>

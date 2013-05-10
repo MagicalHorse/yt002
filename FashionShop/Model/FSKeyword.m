@@ -8,10 +8,11 @@
 
 #import "FSKeyword.h"
 #import "FSBrand.h"
+#import "FSStore.h"
 
 @implementation FSKeyword
 
-@synthesize brandWords,keyWords;
+@synthesize brandWords,keyWords,stores;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -21,11 +22,12 @@
     RKObjectMapping *promRelationMap = [FSBrand getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"brandWords" withMapping:promRelationMap];
     
-    NSString *relationpKeyPath = @"words";
-//    RKObjectMapping *prodRelationMap = [FSBrand getRelationDataMap];
-//    [relationMap mapKeyPath:relationpKeyPath toRelationship:@"keyWords" withMapping:prodRelationMap];
+    relationKeyPath = @"words";
+    [relationMap mapKeyPath:relationKeyPath toAttribute:@"keyWords"];
     
-    [relationMap mapKeyPath:relationpKeyPath toAttribute:@"keyWords"];
+    relationKeyPath = @"stores";
+    promRelationMap = [FSStore getRelationDataMap];
+    [relationMap mapKeyPath:relationKeyPath toRelationship:@"stores" withMapping:promRelationMap];
     
     return relationMap;
 }

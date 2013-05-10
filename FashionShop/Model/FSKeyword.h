@@ -12,5 +12,6 @@
 
 @property (nonatomic,strong) NSMutableArray *brandWords;
 @property (nonatomic,strong) NSMutableArray *keyWords;
+@property (nonatomic,strong) NSMutableArray *stores;
 
 @end

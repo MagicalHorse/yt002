@@ -10,7 +10,6 @@
 #import "SinaWeiboRequest.h"
 #import "SinaWeibo.h"
 #import "SinaWeiboConstants.h"
-#import "UIViewController+Loading.h"
 
 @interface SinaWeiboAuthorizeViewController ()
 

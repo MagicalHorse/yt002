@@ -70,7 +70,7 @@
 -(void) showProIcon
 {
     _btnPro.hidden = NO;
-    _btnPro.frame = CGRectMake(0, 0, _btnPro.frame.size.width, _btnPro.frame.size.height);
+    _btnPro.frame = CGRectMake(3, 3, 17, 17);
 }
 
 -(void) hidenProIcon

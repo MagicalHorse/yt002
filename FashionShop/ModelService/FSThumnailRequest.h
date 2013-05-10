@@ -23,6 +23,7 @@ typedef void (^FSThumnailCompleteBlock)(id);
 
 @property(nonatomic,strong) UIImage *image;
 @property(nonatomic,strong) NSString *uToken;
+@property(nonatomic) int type;
 
 - (void)upload:(FSThumnailCompleteBlock)blockcomplete error:(FSThumnailCompleteBlock)blockerror;
 @end

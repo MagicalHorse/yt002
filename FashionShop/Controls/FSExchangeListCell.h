@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FSExchange.h"
 
-@interface FSExchangeListCell : UIViewController
+@interface FSExchangeListCell : UITableViewCell
+
+@property (strong, nonatomic) IBOutlet UILabel *titleView;
+@property (strong, nonatomic) IBOutlet UILabel *desc;
+@property (strong, nonatomic) IBOutlet UILabel *activityTime;
+
+@property (nonatomic, strong) FSExchange* data;
 
 @end

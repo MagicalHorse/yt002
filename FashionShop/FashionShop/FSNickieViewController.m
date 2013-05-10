@@ -7,7 +7,6 @@
 //
 
 #import "FSNickieViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSUserProfileRequest.h"
 #import "NSString+Extention.h"
 
@@ -149,6 +148,8 @@
     self.title = NSLocalizedString(@"USER_SETTING_EDITNGINFO", nil);
     
     [self bindControl];
+    _tbAction.backgroundView = nil;
+    _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

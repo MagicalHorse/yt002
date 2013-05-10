@@ -8,8 +8,6 @@
 
 #import "FSTopicViewController.h"
 #import "FSTopicListCell.h"
-
-#import "UIViewController+Loading.h"
 #import "FSTopicRequest.h"
 #import "FSModelManager.h"
 #import "FSResource.h"
@@ -53,6 +51,9 @@
     
     [self prepareData];
     [self prepareLayout];
+    
+    tbAction.backgroundView = nil;
+    tbAction.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 -(void)viewWillAppear:(BOOL)animated

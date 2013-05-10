@@ -14,11 +14,13 @@
 @synthesize image;
 @synthesize uToken;
 @synthesize routeResourcePath;
+@synthesize type;
 
 - (void)upload:(FSThumnailCompleteBlock)blockcomplete error:(FSThumnailCompleteBlock)blockerror
 {
     RKParams *params = [RKParams params];
     [params setValue:uToken forParam:@"token"];
+    [params setValue:[NSNumber numberWithInt:type] forParam:@"type"];
     [params setData:UIImageJPEGRepresentation(image, 0.8) MIMEType:@"image/jpeg" forParam:@"resource.jpeg"];
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
     completeBlock = blockcomplete;

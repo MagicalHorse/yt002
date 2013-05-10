@@ -29,6 +29,10 @@
 #import "FSAnalysis.h"
 
 #import "PSTCollectionView.h"
+#import "UIViewController+Loading.h"
+
+#import "FSConfiguration+Fonts.h"
+#import "FSConfiguration.h"
 
 
 #endif

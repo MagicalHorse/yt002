@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RTLabel.h"
 
-@interface FSExchangeDetailViewController : UIViewController
+@interface FSExchangeDetailViewController : UIViewController<RTLabelDelegate,UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate,UIAlertViewDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
+@property (nonatomic) int requestID;
 
 @end

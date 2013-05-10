@@ -10,10 +10,14 @@
 #import "FSLocationManager.h"
 #import "FSModelManager.h"
 #import "CL_VoiceEngine.h"
+#import "FSStartViewController.h"
 
 @class PKRevealController;
 
-@interface FSAppDelegate : UIResponder <UIApplicationDelegate>
+@interface FSAppDelegate : UIResponder <UIApplicationDelegate> {
+    FSStartViewController *_startController;
+    NSDictionary    *_launch;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 

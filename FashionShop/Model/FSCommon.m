@@ -10,4 +10,18 @@
 
 @implementation FSCommon
 
++(RKObjectMapping *) getRelationDataMap
+{
+    RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
+    [relationMap mapKeyPath:@"rangefrom" toAttribute:@"rangefrom"];
+    [relationMap mapKeyPath:@"rangeto" toAttribute:@"rangeto"];
+    [relationMap mapKeyPath:@"ratio" toAttribute:@"ratio"];
+    
+    [relationMap mapKeyPath:@"excludes" toAttribute:@"excludes"];
+    [relationMap mapKeyPath:@"storeid" toAttribute:@"storeid"];
+    [relationMap mapKeyPath:@"storename" toAttribute:@"storename"];
+    
+    return relationMap;
+}
+
 @end

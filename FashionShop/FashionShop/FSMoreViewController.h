@@ -7,7 +7,35 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FSUser.h"
 
-@interface FSMoreViewController : UIViewController
+enum FSMorePageStatus {
+    FSMoreOrder = 0,
+    FSMoreEdit = 10,
+    FSMoreBindCard,
+    FSMoreAddress,
+    FSMoreFeedback = 20,
+    FSMoreAbout,
+    FSMoreCheckVersion,
+    FSMoreLike,
+    FSMoreClear,
+    FSMoreOther,
+};
+
+@protocol FSMoreCompleteDelegate;
+
+@interface FSMoreViewController : UIViewController<UITableViewDataSource,UITableViewDelegate> {
+    
+}
+
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
+@property(nonatomic,strong) FSUser *currentUser;
+@property(nonatomic) id<FSMoreCompleteDelegate> delegate;
+
+@end
+
+@protocol FSMoreCompleteDelegate <NSObject>
+
+-(void)settingView:(FSMoreViewController*)view didLogOut:(BOOL)flag;
 
 @end

@@ -19,7 +19,6 @@
 #import "FSProNearDetailCell.h"
 #import "FSProListTableCell.h"
 #import "FSProDetailViewController.h"
-#import "UIViewController+Loading.h"
 #import "NSString+Extention.h"
 #import "NSDate+Locale.h"
 #import "UIColor+RGB.h"
@@ -30,30 +29,14 @@
 
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
+#define PRO_LIST_FILTER_WILLPUBLISH @"willpublish"
 #define PRO_LIST_BANNER @"banner"
 #define PRO_LIST_NEAREST_HEADER_CELL @"ProNearestHeaderTableCell"
 #define PRO_LIST_NEAREST_CELL @"ProTableCell"
 
-typedef enum {
-    NormalList = 0,
-    BeginLoadingMore = 1,
-    EndLoadingMore = 2,
-    BeginLoadingLatest = 3,
-    EndLoadingLatest = 4
-}ListSearchState;
-
-typedef enum {
-    SortByNone = -1,
-    SortByDistance = 0,
-    SortByDate = 1,
-    SortByPre = 2
-}FSProSortBy;
-
 @interface FSProListViewController ()
 {
-    FSProSortBy _currentSearchIndex;
     NSMutableDictionary *_dataSourceProvider;
-    NSMutableDictionary *_dataSourcePro;
     NSMutableArray *_dataSourceBannerData;
     NSMutableArray *_storeSource;
     NSMutableArray *_dateSource;
@@ -61,18 +44,13 @@ typedef enum {
     NSMutableDictionary *_dateIndexedSource;
     NSMutableArray *_cities;
     
-    ListSearchState _state;
-    
-    int _nearestPageIndex;
-    int _newestPageIndex;
-    NSDate *_nearLatestDate;
-    NSDate *_newLatestDate;
-    NSDate * _nearFirstLoadDate;
-    NSDate * _newFirstLoadDate;
-    
-    bool _noMoreNearest;
-    bool _noMoreNewest;
-    bool _inLoading;
+    FSProSortBy _currentSearchIndex;
+    NSMutableArray *_dataSourceList;
+    NSMutableArray *_noMoreList;
+    NSMutableArray *_pageIndexList;
+    NSMutableArray *_refreshTimeList;
+    NSMutableArray *_firstTimeList;
+    BOOL _inLoading;
 }
 
 @end
@@ -83,8 +61,6 @@ typedef enum {
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
-        
     }
     return self;
 }
@@ -92,26 +68,20 @@ typedef enum {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Do any additional setup after loading the view
-    _nearestPageIndex = 0;
-    _newestPageIndex = 0;
+    self.navigationItem.title = NSLocalizedString(@"Promotions", nil);
 
-    _dataSourceProvider = [@{} mutableCopy];
-    _dataSourcePro = [@{} mutableCopy];
-    _dataSourceBannerData = [@[] mutableCopy];
-    _storeSource =[@[] mutableCopy];
-    _dateSource = [@[] mutableCopy];
-    _storeIndexSource = [@{} mutableCopy];
-    _dateIndexedSource = [@{} mutableCopy];
-    [_dataSourcePro setObject:[@[] mutableCopy] forKey:PRO_LIST_FILTER_NEWEST];
-    [_dataSourcePro setObject:[@[] mutableCopy] forKey:PRO_LIST_FILTER_NEAREST];
-    __block FSProListViewController *blockSelf = self;
-    _currentSearchIndex=SortByDistance;
+    _currentSearchIndex = SortByDistance;
+    _contentView.backgroundView = nil;
+    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
+    _contentView.separatorColor = [UIColor clearColor];
+    [_contentView registerNib:[UINib nibWithNibName:@"FSProNearestHeaderTableCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_HEADER_CELL];
     
+    [self initArray];
+    __block FSProListViewController *blockSelf = self;    
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
-        
+        blockSelf->_inLoading = YES;
         [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            blockSelf->_inLoading = NO;
             if (blockSelf->_currentSearchIndex != SortByDistance)
             {
                 uicallback();
@@ -123,17 +93,11 @@ typedef enum {
             }
             else
             {
+                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
                 FSProItems *response = (FSProItems *) respData.responseData;
-                if (blockSelf->_state == BeginLoadingMore)
-                {
-                    blockSelf->_nearestPageIndex++;
-                    [blockSelf fillFetchResultInMemory:response];
-                } else if(blockSelf->_state == BeginLoadingLatest){
-                    blockSelf->_nearestPageIndex = 1;
-                    [blockSelf renewLastUpdateTime];
-                    [blockSelf fillFetchResultInMemory:response isInsert:YES];
-                }
-                blockSelf->_noMoreNearest = blockSelf->_nearestPageIndex+1>response.totalPageCount;
+                if (response.totalPageCount <= currentPage)
+                    [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                [blockSelf fillFetchResultInMemory:response];
                 [blockSelf reloadTableView];
             }
             if (uicallback)
@@ -143,7 +107,9 @@ typedef enum {
     } forKey:PRO_LIST_FILTER_NEAREST];
     
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
+        blockSelf->_inLoading = YES;
         [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            blockSelf->_inLoading = NO;
             if (blockSelf->_currentSearchIndex != SortByDate)
             {
                 uicallback();
@@ -156,22 +122,11 @@ typedef enum {
             }
             else
             {
-                FSProItems *response = (FSProItems *)respData.responseData;
-                if (blockSelf->_state == BeginLoadingMore)
-                {
-                    
-                    blockSelf->_newestPageIndex++;
-                    [blockSelf fillFetchResultInMemory:response];
-                    
-                } else if(blockSelf->_state == BeginLoadingLatest){
-                    blockSelf->_newestPageIndex =1;
-                    [blockSelf renewLastUpdateTime];
-                    
-                    //[blockSelf fillFetchResultInMemory:response isInsert:true];
-                    [blockSelf fillFetchResultInMemory:response isInsert:false];
-                }
-                blockSelf->_noMoreNewest = blockSelf->_newestPageIndex+1>response.totalPageCount;
-               
+                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
+                FSProItems *response = (FSProItems *) respData.responseData;
+                if (response.totalPageCount <= currentPage)
+                    [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                [blockSelf fillFetchResultInMemory:response];
                 [blockSelf reloadTableView];
             }
             if (uicallback)
@@ -180,6 +135,36 @@ typedef enum {
         }];
         
     } forKey:PRO_LIST_FILTER_NEWEST];
+    
+    [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
+        blockSelf->_inLoading = YES;
+        [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            blockSelf->_inLoading = NO;
+            if (blockSelf->_currentSearchIndex != SortByPre)
+            {
+                uicallback();
+                return;
+            }
+            if (!respData.isSuccess)
+            {
+                [blockSelf reportError:respData.errorDescrip];
+                
+            }
+            else
+            {
+                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
+                FSProItems *response = (FSProItems *) respData.responseData;
+                if (response.totalPageCount <= currentPage)
+                    [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                [blockSelf fillFetchResultInMemory:response];
+                [blockSelf reloadTableView];
+            }
+            if (uicallback)
+                uicallback();
+            
+        }];
+        
+    } forKey:PRO_LIST_FILTER_WILLPUBLISH];
     
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
         [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
@@ -200,13 +185,26 @@ typedef enum {
         }];
     } forKey:PRO_LIST_BANNER];
     
-    [_contentView registerNib:[UINib nibWithNibName:@"FSProNearDetailCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_CELL];
-    [_contentView registerNib:[UINib nibWithNibName:@"FSProNearestHeaderTableCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_HEADER_CELL];
-
-    [self prepareLayout];
     [self setFilterType];
     [self initContentView];
     [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (_dataSourceBannerData.count > 0) {
+        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
+}
+
+-(void)dealloc
+{
+    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
 }
 
 -(void)loadBannerData
@@ -218,9 +216,7 @@ typedef enum {
     request.pageSize = COMMON_PAGE_SIZE;
     request.nextPage = 1;
     request.filterType = FSProSortByDate;
-    _inLoading = TRUE;
     block(request,^(){
-        _inLoading = FALSE;
         if (_dataSourceBannerData.count > 0) {
             [self.navigationController setNavigationBarHidden:YES animated:YES];
             FSCycleScrollView *csView = [[FSCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, NAV_HIGH)];
@@ -236,12 +232,50 @@ typedef enum {
     });
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void)initArray
 {
-    [super viewWillAppear:animated];
-    if (_dataSourceBannerData.count > 0) {
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
+    _dataSourceList = [@[] mutableCopy];
+    _pageIndexList = [@[] mutableCopy];
+    _noMoreList = [@[] mutableCopy];
+    _refreshTimeList = [@[] mutableCopy];
+    _firstTimeList = [@[] mutableCopy];
+    
+    for (int i = 0; i < 3; i++) {
+        [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
+        [_pageIndexList insertObject:@1 atIndex:i];
+        [_noMoreList insertObject:@NO atIndex:i];
+        [_refreshTimeList insertObject:[NSDate date] atIndex:i];
+        [_firstTimeList insertObject:[NSDate date] atIndex:i];
     }
+    
+    _dataSourceProvider = [@{} mutableCopy];
+    _dataSourceBannerData = [@[] mutableCopy];
+    _storeSource =[@[] mutableCopy];
+    _dateSource = [@[] mutableCopy];
+    _storeIndexSource = [@{} mutableCopy];
+    _dateIndexedSource = [@{} mutableCopy];
+}
+
+-(void)setPageIndex:(int)_index selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    NSNumber * nsNum = [NSNumber numberWithInt:_index];
+    [_pageIndexList replaceObjectAtIndex:_selIndexSegment withObject:nsNum];
+}
+
+-(void)setNoMore:(BOOL)_more selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    NSNumber * nsNum = [NSNumber numberWithBool:_more];
+    [_noMoreList replaceObjectAtIndex:_selIndexSegment withObject:nsNum];
+}
+
+-(void)setRefreshTime:(NSDate*)_date selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    [_refreshTimeList replaceObjectAtIndex:_selIndexSegment withObject:_date];
+}
+
+-(void)setFirstTime:(NSDate*)_date selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    [_firstTimeList replaceObjectAtIndex:_selIndexSegment withObject:_date];
 }
 
 -(void)updateFrame
@@ -266,17 +300,15 @@ typedef enum {
         self.segFilters.frame = rect;
     }
 }
--(void) prepareLayout
-{
-    self.navigationItem.title = NSLocalizedString(@"Promotions", nil);
-}
+
 -(void) setFilterType
 {
     [_segFilters removeAllSegments];
     [_segFilters insertSegmentWithTitle:NSLocalizedString(@"Nearest", nil) atIndex:0 animated:FALSE];
     [_segFilters insertSegmentWithTitle:NSLocalizedString(@"Newest", nil) atIndex:1 animated:FALSE];
+    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"WillPublish", nil) atIndex:2 animated:FALSE];
     [_segFilters addTarget:self action:@selector(filterSearch:) forControlEvents:UIControlEventValueChanged];
-    _segFilters.selectedSegmentIndex = 0;
+    _segFilters.selectedSegmentIndex = SortByDistance;
 }
 
 -(void) initContentView{
@@ -288,25 +320,29 @@ typedef enum {
         }
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
-        request.requestType = 1;
+        request.requestType = 0;
         request.routeResourcePath = RK_REQUEST_PRO_LIST;
-        request.filterType = _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
+        FSProSortType type = FSProSortDefault;
+        if (_currentSearchIndex == SortByDistance) {
+            type = FSProSortByDist;
+        }
+        else if(_currentSearchIndex == SortByDate) {
+            type = FSProSortByDate;
+        }
+        else if(_currentSearchIndex == SortByPre) {
+            type = FSProSortByPre;
+        }
+        request.filterType = type;
         request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.previousLatestDate = [[NSDate alloc] init];
+        request.previousLatestDate = [_refreshTimeList objectAtIndex:_currentSearchIndex];
         request.pageSize = COMMON_PAGE_SIZE;
-        request.nextPage = 1;
-        _state = BeginLoadingLatest;
-        _inLoading = TRUE;
         block(request,^(){
             action();
-            _state = EndLoadingLatest;
-            _inLoading = FALSE;
         });
-
+        
+        [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
     }];
-    _state = NormalList;
-    //load data first time;
     if ([FSLocationManager sharedLocationManager].locationAwared)
     {
         [self loadFirstTime];
@@ -320,26 +356,21 @@ typedef enum {
 {
     _currentSearchIndex = SortByDistance;
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
+    [self setFirstTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
+    [self setPageIndex:1 selectedSegmentIndex:_currentSearchIndex];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.filterType= FSProSortByDist;
     request.routeResourcePath = RK_REQUEST_PRO_LIST;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    _nearFirstLoadDate = [[NSDate alloc] init];
-    request.previousLatestDate = _nearFirstLoadDate;
     request.nextPage = 1;
     request.pageSize = COMMON_PAGE_SIZE;
     request.requestType = 1;
-    
+    request.previousLatestDate = [_firstTimeList objectAtIndex:_currentSearchIndex];
     [self beginLoading:_contentView];
-    _state = BeginLoadingMore;
-    _inLoading = TRUE;
     block(request,^(){
-        _state = EndLoadingMore;
         [self endLoading:_contentView];
-        _inLoading = FALSE;
     });
- 
 }
 
 -(void)registerKVO
@@ -351,6 +382,7 @@ typedef enum {
     }
     [[FSLocationManager sharedLocationManager] addObserver:self forKeyPath:@"locationAwared" options:NSKeyValueObservingOptionNew context:nil];
 }
+
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 	if (![NSThread isMainThread]) {
@@ -363,13 +395,6 @@ typedef enum {
 {
     [self loadFirstTime];
 }
--(void) renewLastUpdateTime
-{
-    if (_currentSearchIndex == 0)
-        _nearLatestDate = [[NSDate alloc] init];
-    else
-        _newLatestDate =[[NSDate alloc] init];
-}
 
 -(NSString *)getKeyFromSelectedIndex
 {
@@ -379,6 +404,8 @@ typedef enum {
             return PRO_LIST_FILTER_NEAREST;
         case SortByDate:
             return PRO_LIST_FILTER_NEWEST;
+        case SortByPre:
+            return PRO_LIST_FILTER_WILLPUBLISH;
         default:
             break;
     }
@@ -389,36 +416,44 @@ typedef enum {
 {
     [_contentView reloadData];
 }
+
 -(void)filterSearch:(UISegmentedControl *) segmentedControl
 {
     int index = segmentedControl.selectedSegmentIndex;
-    if(_currentSearchIndex==index ||
-       _inLoading)
+    if(_currentSearchIndex == index || _inLoading)
     {
         return;
     }
     _currentSearchIndex = index;
-    //check whether have data in memory, if yes, just let it be;
-    NSMutableArray *source = [_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
+    NSMutableArray *source = [_dataSourceList objectAtIndex:_currentSearchIndex];
     if (source == nil || source.count<=0)
     {
+        [self setFirstTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
+        [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
+        
         DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.nextPage = 1;
         request.routeResourcePath = RK_REQUEST_PRO_LIST;
-        request.filterType= _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
-        if (_currentSearchIndex == 1)
-            _newFirstLoadDate = [[NSDate alloc] init];
-        request.previousLatestDate = _currentSearchIndex==0?_nearFirstLoadDate: _newFirstLoadDate;
+        FSProSortType type = FSProSortDefault;
+        if (_currentSearchIndex == SortByDistance) {
+            type = FSProSortByDist;
+        }
+        else if(_currentSearchIndex == SortByDate) {
+            type = FSProSortByDate;
+        }
+        else if(_currentSearchIndex == SortByPre) {
+            type = FSProSortByPre;
+        }
+        request.filterType = type;
+        request.previousLatestDate = [NSDate date];
         request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.pageSize = COMMON_PAGE_SIZE;
+        request.requestType = 1;
+        
         [self beginLoading:_contentView];
-        _state = BeginLoadingMore;
-        _inLoading = TRUE;
         block(request,^(){
-            _state = EndLoadingMore;
-            _inLoading = FALSE;
             [self endLoading:_contentView];
             [_contentView setContentOffset:CGPointZero];
             [self reloadTableView];
@@ -437,26 +472,12 @@ typedef enum {
     }
 }
 
--(void)fillFetchResultInMemory:(FSProItems *)pros isInsert:(bool)inserted
+-(void)fillFetchResultInMemory:(FSProItems *)pros isInsert:(BOOL)inserted
 {
-    NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
+    NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
     if (pros.items==nil || pros.items.count<=0)
         return;
-    //计算高度
     [self calculateHeight:pros];
-//    if (inserted)
-//    {
-//        [tmpPros removeAllObjects];
-//        if (_currentSearchIndex==0)
-//        {
-//            [_storeIndexSource removeAllObjects];
-//            [_storeSource removeAllObjects];
-//        } else
-//        {
-//            [_dateIndexedSource removeAllObjects];
-//            [_dateSource removeAllObjects];
-//        }
-//    }
     @synchronized(tmpPros)
     {
         [pros.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -468,7 +489,7 @@ typedef enum {
                 }
                 return FALSE;
             }];
-            if (index==NSNotFound)
+            if (index == NSNotFound)
             {
                 if (inserted)
                 {
@@ -486,6 +507,7 @@ typedef enum {
                         [self mergeByDate:obj isInserted:inserted];
                         break;
                     case 2:
+                        //[self mergeByPre:obj isInserted:inserted];
                         break;
                     default:
                         break;
@@ -493,8 +515,8 @@ typedef enum {
             }
         }];
     }
-    
 }
+
 -(void) mergeByDate:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
 {
     int dateIndex = [_dateSource indexOfObjectPassingTest:^BOOL(id obj2, NSUInteger idx, BOOL *stop) {
@@ -528,7 +550,7 @@ typedef enum {
         [indexDates addObject:obj];
     }
     
-    if (_dateSource.count<1)
+    if (_dateSource.count < 1)
     {
         //加载空视图
         [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
@@ -538,6 +560,7 @@ typedef enum {
         [self hideNoResultImage:_contentView ];
     }
 }
+
 -(void) mergeByStore:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
 {
     int storeIndex = [_storeSource indexOfObjectPassingTest:^BOOL(id obj2, NSUInteger idx, BOOL *stop) {
@@ -579,38 +602,72 @@ typedef enum {
         [self hideNoResultImage:_contentView ];
     }
 }
+
+-(void) mergeByPre:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
+{
+    if (_currentSearchIndex != SortByPre) {
+        return;
+    }
+    NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
+    int storeIndex = [tmpPros indexOfObjectPassingTest:^BOOL(id obj2, NSUInteger idx, BOOL *stop) {
+        if ([[(FSProItemEntity *)obj2 valueForKey:@"id"] isEqualToValue:[obj valueForKey:@"id"]])
+        {
+            *stop = TRUE;
+            return TRUE;
+        }
+        return  FALSE;
+    }];
+    if (storeIndex ==NSNotFound) {
+        if (isInsert) {
+            [tmpPros insertObject:obj atIndex:0];
+        }
+        else{
+            [tmpPros addObject:obj];
+        }
+    }
+    
+    if (tmpPros.count<1)
+    {
+        //加载空视图
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
+    }
+    else
+    {
+        [self hideNoResultImage:_contentView ];
+    }
+}
+
 -(void)fillFetchResultInMemory:(FSProItems *)pros
 {
     [self fillFetchResultInMemory:pros isInsert:false];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-
 -(void)loadMore{
     if (_inLoading)
         return;
-    [self beginLoadMoreLayout:_contentView];
     DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.requestType = 1;
     request.routeResourcePath = RK_REQUEST_PRO_LIST;
     request.pageSize = COMMON_PAGE_SIZE;
-    request.filterType= _currentSearchIndex ==0?FSProSortByDist:FSProSortByDate;
+    FSProSortType type = FSProSortDefault;
+    if (_currentSearchIndex == SortByDistance) {
+        type = FSProSortByDist;
+    }
+    else if(_currentSearchIndex == SortByDate) {
+        type = FSProSortByDate;
+    }
+    else if(_currentSearchIndex == SortByPre) {
+        type = FSProSortByPre;
+    }
+    request.filterType = type;
     request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    request.previousLatestDate =_currentSearchIndex==0?_nearFirstLoadDate:_newFirstLoadDate;
-    request.nextPage = (_currentSearchIndex==0?_nearestPageIndex:_newestPageIndex)+1;
-    _state = BeginLoadingMore;
-    _inLoading = TRUE;
+    request.previousLatestDate = [_firstTimeList objectAtIndex:_currentSearchIndex];
+    request.nextPage = [[_pageIndexList objectAtIndex:_currentSearchIndex] intValue] + 1;
+    [self beginLoadMoreLayout:_contentView];
     block(request,^(){
         [self endLoadMore:_contentView];
-        _state = EndLoadingMore;
-        _inLoading = FALSE;
     });
     
 }
@@ -640,11 +697,12 @@ typedef enum {
             break;
         case SortByDate:
             return _dateSource.count;
+        case SortByPre:
+            return 1;
         default:
             break;
     }
     return 1;
-    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -665,6 +723,13 @@ typedef enum {
             NSMutableArray *rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
             return rows.count;
             break;
+        }
+        case SortByPre:
+        {
+            if (_dataSourceList.count > _currentSearchIndex) {
+                NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
+                return tmpPros.count;
+            }
         }
         default:
             break;
@@ -705,12 +770,11 @@ typedef enum {
         }
         case SortByDate:
         {
-            FSProNewHeaderView_1 *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNewHeaderView" owner:self options:nil] objectAtIndex:1];
+            FSProNewHeaderView_1 *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNewHeaderView" owner:self options:nil] objectAtIndex:0];
             NSDate * date = [_dateSource objectAtIndex:section];
             header.data = date;
             return header;
             break;
-
         }
         default:
             break;
@@ -720,24 +784,21 @@ typedef enum {
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 40;
-    
     switch (_currentSearchIndex) {
         case SortByDistance:
         {
             return 40;
-            break;
         }
+            break;
         case SortByDate:
         {
-            return 55;
-            break;
-            
+            return 40;
         }
+            break;
         default:
             break;
     }
-    return 65;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -746,50 +807,77 @@ typedef enum {
         case SortByDistance:
         {
             FSProNearDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL];
+            if (listCell == nil) {
+                NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearDetailCell" owner:self options:nil];
+                if (_array.count > 0) {
+                    listCell = (FSProNearDetailCell*)_array[0];
+                }
+                else{
+                    listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PRO_LIST_NEAREST_CELL];
+                }
+            }
+            listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
+            listCell.lblTitle.textColor = [UIColor whiteColor];
+            listCell.lblSubTitle.textColor = RGBCOLOR(179, 179, 179);
+            listCell.line.backgroundColor = RGBCOLOR(160, 160, 160);
+            listCell.line2.backgroundColor = RGBCOLOR(143, 143, 143);
             int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
-          
             FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
+            
             NSDateFormatter *smdf = [[NSDateFormatter alloc]init];
             [smdf setDateFormat:@"yyyy.MM.dd"];
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
-            [emdf setDateFormat:@"MM.dd"];
-            int _height = 0;
-            CGRect _rect = listCell.lblTitle.frame;
-            _rect.size.height = proData.height;
-            _height = _rect.size.height;
-            listCell.lblTitle.frame = _rect;
-            listCell.lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
-            listCell.lblTitle.text = proData.title;
-            _rect = listCell.lblSubTitle.frame;
-            _rect.origin.y = (_height - _rect.size.height)/2;
-            listCell.lblSubTitle.frame = _rect;
-            listCell.lblSubTitle.text = [NSString stringWithFormat:NSLocalizedString(@"%@~%@", nil),[smdf stringFromDate:proData.startDate],[emdf stringFromDate:proData.endDate]];
+            [emdf setDateFormat:@"yyyy.MM.dd"];
+            
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#CBd2a8'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#CBd2a8'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
+            
             return listCell;
+            
             break;
         }
         case SortByDate:
-        {
-            FSProNearDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL ];
-            NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
-            NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
-            [mdf setDateFormat:@"yyyy-MM-dd"];
-            NSMutableArray *rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+        case SortByPre:
+        {   
+            FSProDateDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL];
+            if (listCell == nil) {
+                NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearDetailCell" owner:self options:nil];
+                if (_array.count > 1) {
+                    listCell = (FSProDateDetailCell*)_array[1];
+                }
+                else{
+                    listCell = [[FSProDateDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PRO_LIST_NEAREST_CELL];
+                }
+            }
+            listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
+            listCell.titleView.textColor = [UIColor whiteColor];
+            listCell.descView.textColor = RGBCOLOR(179, 179, 179);
+            listCell.address.textColor = RGBCOLOR(179, 179, 179);
+            listCell.line.backgroundColor = RGBCOLOR(160, 160, 160);
+            listCell.line2.backgroundColor = RGBCOLOR(143, 143, 143);
+            
+            NSMutableArray *rows = nil;
+            if (_currentSearchIndex == SortByDate) {
+                NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
+                NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
+                [mdf setDateFormat:@"yyyy-MM-dd"];
+                rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+            }
+            else{
+                rows = [_dataSourceList objectAtIndex:_currentSearchIndex];
+            }
             FSProItemEntity * proData = [rows objectAtIndex:indexPath.row];
             
-            int _height = 0;
-            CGRect _rect = listCell.lblTitle.frame;
-            _rect.origin.y = 0;
-            _rect.size.height = proData.height;
-            _height = _rect.size.height;
-            listCell.lblTitle.frame = _rect;
-            listCell.lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
-            listCell.lblTitle.text = proData.title;
+            NSDateFormatter *smdf = [[NSDateFormatter alloc]init];
+            [smdf setDateFormat:@"yyyy.MM.dd"];
+            NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
+            [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            _rect = listCell.lblSubTitle.frame;
-            _rect.origin.y = (_height - _rect.size.height)/2;
-            listCell.lblSubTitle.frame = _rect;
-            listCell.lblSubTitle.text = proData.store.name;
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#CBd2a8'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#CBd2a8'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            
+            [listCell setTitle:proData.title desc:proData.descrip address:proData.store.name dateString:str];
+            
             return listCell;
         }
         default:
@@ -800,48 +888,16 @@ typedef enum {
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *rows;
-    if (_currentSearchIndex==SortByDistance) {
-        if (indexPath.section >= _storeSource.count) {
-            return 0;
-        }
-        int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
-        rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
+    if (_currentSearchIndex == SortByDistance) {
+        FSProNearDetailCell *cell = (FSProNearDetailCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }
     else{
-        if (indexPath.section >= _dateSource.count) {
-            return 0;
-        }
-        NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
-        NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
-        [mdf setDateFormat:@"yyyy-MM-dd"];
-        rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+        FSProDateDetailCell *cell = (FSProDateDetailCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
     }
-    if (indexPath.row >= rows.count) {
-        return 0;
-    }
-    FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
-    return proData.height;
-}
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row %2==0)
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL1_BGCOLOR;
-        [(FSProNearDetailCell *)cell lblTitle].textColor = PRO_LIST_NEAR_CELL_LCOLOR;
-        [(FSProNearDetailCell *)cell lblTitle].font = [UIFont systemFontOfSize:PRO_LIST_NEAR_CELL_LFONTSZ];
-        [(FSProNearDetailCell *)cell lblSubTitle].textColor = PRO_LIST_NEAR_CELL_RCOLOR;
-        [(FSProNearDetailCell *)cell lblSubTitle].font = [UIFont systemFontOfSize:PRO_LIST_NEAR_CELL_RFONTSZ];
-        
-    } else
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL2_BGCOLOR;
-        [(FSProNearDetailCell *)cell lblTitle].textColor = PRO_LIST_NEAR_CELL_LCOLOR;
-        [(FSProNearDetailCell *)cell lblTitle].font = [UIFont systemFontOfSize:PRO_LIST_NEAR_CELL_LFONTSZ];
-        [(FSProNearDetailCell *)cell lblSubTitle].textColor = PRO_LIST_NEAR_CELL_RCOLOR;
-        [(FSProNearDetailCell *)cell lblSubTitle].font = [UIFont systemFontOfSize:PRO_LIST_NEAR_CELL_RFONTSZ];
-    }
+    
+    return 0;
 }
 
 #pragma mark - Table view delegate
@@ -854,13 +910,16 @@ typedef enum {
     {
         int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
         rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
-    } else
+    }
+    else if(_currentSearchIndex==SortByDistance)
     {
         NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
         NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
         [mdf setDateFormat:@"yyyy-MM-dd"];
-       rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
-
+        rows = [_dateIndexedSource objectForKey:[mdf stringFromDate:sectionDate]];
+    }
+    else{
+        rows = [_dataSourceList objectAtIndex:_currentSearchIndex];
     }
     detailViewController.navContext = rows;
     detailViewController.dataProviderInContext = self;
@@ -872,7 +931,7 @@ typedef enum {
     
     //统计
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-    NSMutableArray *tmpPros =[_dataSourcePro objectForKey:[self getKeyFromSelectedIndex]];
+    NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
     FSProItemEntity *_item = [tmpPros objectAtIndex:indexPath.row];
     if (_currentSearchIndex == (int)PRO_LIST_FILTER_NEAREST) {
         [_dic setValue:@"最近距离" forKey:@"查看方式"];
@@ -888,11 +947,10 @@ typedef enum {
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
-    bool cannotLoadMore = _currentSearchIndex==0?_noMoreNearest:_noMoreNewest;
-    if(_state!=BeginLoadingMore
-       && !_inLoading
+    bool cannotLoadMore = [_noMoreList objectAtIndex:_currentSearchIndex];
+    if(!_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
-       &&scrollView.contentOffset.y>0
+       && scrollView.contentOffset.y>0
        && !cannotLoadMore)
     {
         [self loadMore];
@@ -951,13 +1009,4 @@ typedef enum {
     [self presentViewController:navControl animated:YES completion:nil];
 }
 
--(void)dealloc
-{
-    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
-}
-
-- (void)viewDidUnload {
-    [self setLblTitle:nil];
-    [super viewDidUnload];
-}
 @end

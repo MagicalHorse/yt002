@@ -6,7 +6,6 @@
 //  Copyright (c) 2012 Fashion. All rights reserved.
 //
 
-#import "UIViewController+Loading.h"
 #import "MBProgressHUD.h"
 #import "FSConfiguration.h"
 #import "FSOverlayView.h"
@@ -391,8 +390,8 @@ BOOL networkIsWorking = NO;
 
 -(void) doTakePhotoExtend:(UIView *)sender
 {
-    UIImagePickerController *camera = [self inUserCamera];
-    [camera takePicture];
+    //UIImagePickerController *camera = [self inUserCamera];
+    //[camera takePicture];
 }
 -(void) doGoGalary:(UIView *)sender
 {
@@ -405,7 +404,7 @@ BOOL networkIsWorking = NO;
         {
             galary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             galary.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-            galary.allowsEditing = false;
+            galary.allowsEditing = YES;
             [self presentViewController:galary animated:YES completion:nil];
             
         }

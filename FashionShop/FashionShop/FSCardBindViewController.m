@@ -7,7 +7,6 @@
 //
 
 #import "FSCardBindViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSCardRequest.h"
 #import "FSCardInfo.h"
 #import "NSString+Extention.h"
@@ -46,7 +45,7 @@
         self.title = NSLocalizedString(@"Card Info Query", nil);
     }
     else {
-        self.title = NSLocalizedString(@"Bind Card", nil);
+        self.title = NSLocalizedString(@"Bind Member Card", nil);
     }
 }
 

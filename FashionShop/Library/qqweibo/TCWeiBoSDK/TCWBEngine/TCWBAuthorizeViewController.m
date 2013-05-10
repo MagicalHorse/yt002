@@ -8,7 +8,6 @@
 
 #import "TCWBAuthorizeViewController.h"
 #import "key.h"
-#import "UIViewController+Loading.h"
 
 
 @implementation TCWBAuthorizeViewController

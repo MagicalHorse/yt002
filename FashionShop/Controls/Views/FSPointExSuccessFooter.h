@@ -7,7 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RTLabel.h"
+#import "FSExchange.h"
 
-@interface FSPointView : UIView
+@interface FSPointExSuccessFooter : UIView
+
+@property (strong, nonatomic) IBOutlet UIButton *continueBtn;
+@property (strong, nonatomic) IBOutlet UIButton *backHomeBtn;
+@property (strong, nonatomic) IBOutlet RTLabel *infomationDesc;
+
+-(void)initView:(FSExchangeSuccess*)data;
 
 @end

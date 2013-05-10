@@ -37,7 +37,6 @@
 #import "FSShareView.h"
 #import "AWActionSheet.h"
 #import "UIBarButtonItem+Title.h"
-#import "UIViewController+Loading.h"
 #import <PassKit/PassKit.h>
 #import "NSData+Base64.h"
 

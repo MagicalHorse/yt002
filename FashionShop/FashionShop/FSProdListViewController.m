@@ -7,7 +7,6 @@
 //
 
 #import "FSProdListViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSProdDetailCell.h"
 #import "FSProdTagCell.h"
 #import "FSProDetailViewController.h"
@@ -32,6 +31,8 @@
 #define LOADINGVIEW_HEIGHT 44
 #define ITEM_CELL_WIDTH 100
 #define DEFAULT_TAG_WIDTH 50
+#define Tag_Swip_View_Tag 200
+#define Default_SearchBar_Tag 201
 
 @implementation FSSearchBar
 
@@ -44,19 +45,15 @@
         {
             UIButton *btn = (UIButton *)cc;
             [btn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
-            btn.backgroundColor = RGBCOLOR(234, 234, 234);
-            [btn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-            [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-            if (__IPHONE_OS_VERSION_MIN_REQUIRED >= 60000) {
-                btn.titleLabel.shadowOffset = CGSizeMake(0, 0);
-            }
+            [btn setBackgroundImage:[UIImage imageNamed:@"btn_normal.png"] forState:UIControlStateNormal];
+            [btn setBackgroundImage:[UIImage imageNamed:@"btn_select.png"] forState:UIControlStateHighlighted];
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [btn setTitleShadowColor:[UIColor clearColor] forState:UIControlStateNormal];
             cancel = btn;
         }
         if ([cc isKindOfClass:[UISegmentedControl class]]) {
-            UISegmentedControl * seg = (UISegmentedControl*)cc;
-            seg.tintColor = RGBCOLOR(200, 200, 200);
+            UISegmentedControl *seg = (UISegmentedControl*)cc;
             [seg addTarget:self action:@selector(valueChanged:) forControlEvents:UIControlEventValueChanged];
-            [self ChangeSegmentFont:seg];
         }
 	}
     
@@ -85,7 +82,6 @@
 
 -(void)valueChanged:(UISegmentedControl *)sender
 {
-    [self ChangeSegmentFont:sender];
     if (_segmentDelegate && [_segmentDelegate respondsToSelector:@selector(segmentValueChanged:)]) {
         [_segmentDelegate segmentValueChanged:sender];
     }
@@ -96,7 +92,9 @@
     if ([aView isKindOfClass:[UILabel class]]) {
         UILabel *lb = (UILabel*)aView;
         [lb setTextAlignment:UITextAlignmentCenter];
-        [lb setFrame:CGRectMake(0, 0, 155, 30)];
+        CGRect _rect = lb.frame;
+        _rect.size.width = 103;
+        lb.frame = _rect;
         [lb setFont:[UIFont systemFontOfSize:14]];
         lb.textColor = [UIColor blackColor];
         lb.shadowOffset = CGSizeMake(0, 0);
@@ -117,6 +115,7 @@
     NSMutableArray *_prods;
     NSMutableArray *_prodKeywords;
     NSMutableArray *_brandKeywords;
+    NSMutableArray *_stores;
     
     UIActivityIndicatorView * moreIndicator;
     BOOL _isInLoading;
@@ -134,6 +133,10 @@
     BOOL _isSearching;
     
     UIView *searchFilterView;
+    BOOL isSwipToUp;
+    BOOL isAnimating;
+    
+    UIImageView *imageTagBgV;
 }
 
 @property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
@@ -142,6 +145,28 @@
 @end
 
 @implementation FSProdListViewController
+
+-(void)initSearchBar
+{
+    //字体
+    NSDictionary *textAttibutesUnSelected = [NSDictionary dictionaryWithObjectsAndKeys:
+                                             [UIFont systemFontOfSize:14],UITextAttributeFont,
+                                             [UIColor blackColor],UITextAttributeTextColor,
+                                             [NSValue valueWithCGSize:CGSizeMake(0, 0)],UITextAttributeTextShadowOffset,nil];
+    NSDictionary *textAttibutesSelected = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [UIFont systemFontOfSize:18],UITextAttributeFont,
+                                           [UIColor redColor],UITextAttributeTextColor,
+                                           [NSValue valueWithCGSize:CGSizeMake(0, 0)],UITextAttributeTextShadowOffset,nil];
+    [self.searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"list_title_bg.png"]];
+    //[self.searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"tab_normal.png"] forState:UIControlStateNormal];
+    [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesUnSelected forState:UIControlStateNormal];
+    [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesSelected forState:UIControlStateSelected];
+    
+    self.searchBar.backgroundImage = [UIImage imageNamed:@"top_title_bg.png"];
+    self.searchBar.backgroundColor = [UIColor blackColor];
+    
+    [self.searchBar setSearchFieldBackgroundImage:[UIImage imageNamed:@"search_input.png"] forState:UIControlStateNormal];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -155,11 +180,21 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self prepareLayout];
     [self prepareData];
+    [self prepareLayout];
     
-    UIBarButtonItem *baritemSearch = [self createPlainBarButtonItem:@"search.png" target:self action:@selector(onSearch:)];
-    [self.navigationItem setRightBarButtonItem:baritemSearch];
+    UISearchBar *_bar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 10, 320, 24)];
+    _bar.placeholder = NSLocalizedString(@"Search Bar PlaceHolder String", nil);
+    _bar.backgroundColor = [UIColor clearColor];
+    _bar.delegate = self;
+    _bar.tag = Default_SearchBar_Tag;
+    [self.navigationItem setTitleView:_bar];
+    for (UIView *subview in _bar.subviews) {
+		if ([subview isKindOfClass:NSClassFromString(@"UISearchBarBackground")]) {
+			[subview removeFromSuperview];
+			break;
+		}
+	}
 }
 
 -(void)onSearch:(UIButton*)sender
@@ -170,17 +205,21 @@
         self.searchBar.delegate = self;
         self.searchBar.showsScopeBar = YES;
         self.searchBar.selectedScopeButtonIndex = 0;
-        self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:NSLocalizedString(@"Hot Keys Desc", nil),NSLocalizedString(@"Hot Brands Desc", nil), nil];
+        self.searchBar.scopeButtonTitles = [NSArray arrayWithObjects:NSLocalizedString(@"Hot Keys Desc", nil),NSLocalizedString(@"Hot Brands Desc", nil),NSLocalizedString(@"Stores", nil), nil];
         self.searchBar.tintColor = RGBCOLOR(246, 246, 246);
         self.searchBar.segmentDelegate = self;
         self.searchBar.showsCancelButton = YES;
         [self.searchBar sizeToFit];
         _selectedIndex = 0;
+        [self initSearchBar];
         [self segmentValueChanged:nil];
         
         CGRect _rect = self.view.bounds;
         _rect.size.height += NAV_HIGH;
         _tableSearch = [[UITableView alloc] initWithFrame:_rect];
+        _tableSearch.backgroundView = nil;
+        _tableSearch.separatorColor = [UIColor lightGrayColor];
+        _tableSearch.backgroundColor = APP_TABLE_BG_COLOR;
         _tableSearch.dataSource = self;
         _tableSearch.delegate = self;
         _tableSearch.showsVerticalScrollIndicator = NO;
@@ -200,6 +239,7 @@
     if (!_prodKeywords && !_brandKeywords) {
         _prodKeywords = nil;
         _brandKeywords = nil;
+        _stores = nil;
         FSCommonRequest *request = [[FSCommonRequest alloc] init];
         [request setRouteResourcePath:RK_REQUEST_KEYWORD_LIST];
         __block FSProdListViewController *blockSelf = self;
@@ -209,6 +249,7 @@
                 FSKeyword *result = resp.responseData;
                 _prodKeywords = [NSMutableArray arrayWithArray:result.keyWords];
                 _brandKeywords = [NSMutableArray arrayWithArray:result.brandWords];
+                _stores = [NSMutableArray arrayWithArray:result.stores];
                 [_tableSearch reloadData];
                 [self.searchBar becomeFirstResponder];
             }
@@ -290,14 +331,21 @@
         [_cvTags setFrame:origiFrame];
     }
 }
+
 -(void) prepareLayout
 {
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
     layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
-    layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
-    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-     _cvTags = [[PSUICollectionView alloc] initWithFrame:_tagContainer.bounds collectionViewLayout:layout];
+    layout.sectionInset = UIEdgeInsetsMake(5,5,5,5);
+    
+    int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
+    int height = (lineCount) * 34;
+    CGRect _rect = _tagContainer.bounds;
+    _rect.size.height = height;
+     _cvTags = [[PSUICollectionView alloc] initWithFrame:_rect collectionViewLayout:layout];
+    _cvTags.scrollEnabled = NO;
+    _tagContainer.clipsToBounds = YES;
     [_tagContainer addSubview:_cvTags];
     _tagContainer.backgroundColor = [UIColor whiteColor];//RGBCOLOR(242, 242, 242);
     [_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
@@ -306,8 +354,116 @@
     _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
     _cvTags.dataSource = self;
+    _cvTags.backgroundColor = APP_TABLE_BG_COLOR;
     [self reCreateContentView];
+    
+    //add iamgeView
+    imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
+    imageTagBgV.image = [[UIImage imageNamed:@"tag_bg.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
+    imageTagBgV.contentMode = UIViewContentModeScaleAspectFill;
+    [_tagContainer insertSubview:imageTagBgV belowSubview:_cvTags];
+    
+    [self addSwipView];
 }
+
+-(void)addSwipView
+{
+    CGRect _rect = _tagContainer.bounds;
+    _rect.size.height = 10;
+    _rect.origin.y = _tagContainer.frame.size.height - 10;
+    
+    UIView *view = [[UIView alloc] initWithFrame:_rect];
+    view.backgroundColor = [UIColor clearColor];
+    UIImageView *imageV = [[UIImageView alloc] initWithFrame:view.bounds];
+    imageV.image = [UIImage imageNamed:@"arrow_down.png"];
+    imageV.tag = Tag_Swip_View_Tag + 10;
+    [view addSubview:imageV];
+    view.tag = Tag_Swip_View_Tag;
+    UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
+    gesture.direction = UISwipeGestureRecognizerDirectionUp;
+    [_tagContainer addGestureRecognizer:gesture];
+    gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
+    gesture.direction = UISwipeGestureRecognizerDirectionDown;
+    [_tagContainer addGestureRecognizer:gesture];
+    
+    UITapGestureRecognizer *viewGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
+    [view addGestureRecognizer:viewGesture];
+    
+    [_tagContainer addSubview:view];
+    [self.view bringSubviewToFront:_tagContainer];
+}
+
+-(void)handleSwipeFrom:(UISwipeGestureRecognizer*)gesture
+{
+    if (gesture.direction == UISwipeGestureRecognizerDirectionUp) {
+        if (isSwipToUp) {
+            [self dealTagViewShow];
+        }
+    }
+    else if (gesture.direction == UISwipeGestureRecognizerDirectionDown) {
+        if (!isSwipToUp) {
+            [self dealTagViewShow];
+        }
+    }
+}
+
+-(void)handleTapFrom:(UITapGestureRecognizer*)gesture
+{
+    [self dealTagViewShow];
+}
+
+-(void)dealTagViewShow
+{
+    if (isAnimating) {
+        return;
+    }
+    UIView *view = [_tagContainer viewWithTag:Tag_Swip_View_Tag];
+    int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
+    int height = (lineCount - 1) * 44;
+    NSString *strImage = nil;
+    if (isSwipToUp) {
+        isAnimating = YES;
+        strImage = @"arrow_down.png";
+        [UIView animateWithDuration:0.33 animations:^{
+            CGRect _rect = view.frame;
+            _rect.origin.y -= height;
+            view.frame = _rect;
+            
+            _rect = _tagContainer.frame;
+            _rect.size.height -= height;
+            _tagContainer.frame = _rect;
+            
+            imageTagBgV.frame = _tagContainer.bounds;
+            //_cvTags.frame = _tagContainer.bounds;
+        } completion:^(BOOL finished) {
+            isAnimating = NO;
+            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+10];
+            imageV.image = [UIImage imageNamed:strImage];
+        }];
+    }
+    else{
+        isAnimating = YES;
+        strImage = @"arrow_up.png";
+        [UIView animateWithDuration:0.33 animations:^{
+            CGRect _rect = view.frame;
+            _rect.origin.y += height;
+            view.frame = _rect;
+            
+            _rect = _tagContainer.frame;
+            _rect.size.height += height;
+            _tagContainer.frame = _rect;
+            
+            imageTagBgV.frame = _tagContainer.bounds;
+            //_cvTags.frame = _tagContainer.bounds;
+        } completion:^(BOOL finished) {
+            isAnimating = NO;
+            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+10];
+            imageV.image = [UIImage imageNamed:strImage];
+        }];
+    }
+    isSwipToUp = !isSwipToUp;
+}
+
 -(void)reCreateContentView
 {
     if (_cvContent)
@@ -571,7 +727,7 @@
     if(collectionView == _cvTags)
     {
         [[collectionView cellForItemAtIndexPath:indexPath] setSelected:TRUE];
-        [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:TRUE];
+        [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:TRUE];
         FSCoreTag *tag = [_tags objectAtIndex:indexPath.row];
         [self beginSwitchTag:tag];
         
@@ -618,7 +774,7 @@
         CGSize actualSize = [[(FSTag *)[_tags objectAtIndex:indexPath.row] name] sizeWithFont:ME_FONT(12)];
         CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);
         _actualTagWidth+=width+5;
-        return CGSizeMake(width, MAX(actualSize.height, 34));
+        return CGSizeMake(width, MAX(actualSize.height, 30));
     }
     return  CGSizeMake(ITEM_CELL_WIDTH, ITEM_CELL_WIDTH);
 }
@@ -700,8 +856,11 @@
     if (_selectedIndex == 0) {
         return _prodKeywords.count;
     }
-    else{
+    else if(_selectedIndex == 1){
         return _brandKeywords.count;
+    }
+    else{
+        return _stores.count;
     }
 }
 
@@ -712,9 +871,13 @@
     if (_selectedIndex == 0) {
         cell.textLabel.text = _prodKeywords[indexPath.row];
     }
-    else{
+    else if(_selectedIndex == 1){
         FSBrand *brand = _brandKeywords[indexPath.row];
         cell.textLabel.text = brand.name;
+    }
+    else{
+        FSStore *store = _stores[indexPath.row];
+        cell.textLabel.text = store.name;
     }
     cell.textLabel.font = FONT(15);
     return cell;
@@ -740,14 +903,24 @@
 
 #pragma mark - Search Delegate
 
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    if (searchBar.tag == Default_SearchBar_Tag) {
+        [searchBar resignFirstResponder];
+        [self onSearch:nil];
+    }
+}
+
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self toSearch:-1];
+    if (searchBar.tag != Default_SearchBar_Tag) {
+        [self toSearch:-1];
+    }
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
-    if (_isSearching) {
+    if (_isSearching && searchBar.tag != Default_SearchBar_Tag) {
         self.searchBar.text = @"";
         [_tableSearch removeFromSuperview];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -770,11 +943,17 @@
             dr.keyWords = _prodKeywords[type];
             dr.pageType = FSPageTypeSearch;
         }
-        else{//品牌搜索
+        else if(_selectedIndex == 1){//品牌搜索
             FSBrand *brand = _brandKeywords[type];
             dr.pageType = FSPageTypeBrand;
             dr.brand = brand;
             dr.keyWords = brand.name;
+        }
+        else{
+            FSStore *store = _stores[type];
+            dr.store = store;
+            dr.keyWords = store.name;
+            dr.pageType = FSPageTypeStore;
         }
     }
     dr.titleName = dr.keyWords;

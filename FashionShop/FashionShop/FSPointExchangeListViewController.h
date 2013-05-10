@@ -9,5 +9,6 @@
 #import "FSRefreshableViewController.h"
 
 @interface FSPointExchangeListViewController : FSRefreshableViewController
+@property (strong, nonatomic) IBOutlet UITableView *contentView;
 
 @end

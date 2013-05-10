@@ -9,7 +9,6 @@
 #import "FSStoreDetailViewController.h"
 #import <MapKit/MapKit.h>
 #import "FSLocationManager.h"
-#import "UIViewController+Loading.h"
 #import "UIImageView+WebCache.h"
 #import "FSStoreMapViewController.h"
 #import "PositionAnnotation.h"

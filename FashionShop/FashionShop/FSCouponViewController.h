@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
-#import "FSDeviceRegisterRequest.h"
 #import "FSRefreshableViewController.h"
 #import "FSProDetailViewController.h"
+#import "FSSegmentControl.h"
 
-@interface FSCouponViewController : FSRefreshableViewController<UITableViewDataSource, UITableViewDelegate,FSProDetailItemSourceProvider>
+@interface FSCouponViewController : FSRefreshableViewController<FSProDetailItemSourceProvider>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
-
+@property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
 @property (strong,nonatomic) FSUser *currentUser;
 
 @end

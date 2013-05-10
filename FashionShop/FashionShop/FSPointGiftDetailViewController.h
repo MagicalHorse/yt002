@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface FSPointGiftDetailViewController : UIViewController
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
 
 @end

@@ -68,19 +68,43 @@ void uncaughtExceptionHandler(NSException *exception)
     [self setGlobalLayout];
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
+    //加载启动图
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    NSString *content = [self readFromFile:@"hasLaunched"];
-    if (!content || ![content isEqualToString:@"hasLaunched"]) {
-		SplashViewController *SVCtrl = [[SplashViewController alloc] init];
-        SVCtrl.view.alpha = 1.0f;
-        self.window.backgroundColor = [UIColor whiteColor];
-		self.window.rootViewController =  SVCtrl;
+    _startController = [[FSStartViewController alloc] init];
+    _startController.view.alpha = 0.4f;
+    [UIView animateWithDuration:0.3 animations:^{
+        _startController.view.alpha = 1.0f;
+        [self.window addSubview:_startController.view];
         [self.window makeKeyAndVisible];
-	} else {
-        [self entryMain];
-	}
+    } completion:^(BOOL finished) {}];
+    
+    _launch = launchOptions;
+    
+    //三秒钟后关闭
+    [self performSelector:@selector(loadMainView) withObject:nil afterDelay:3];
 
     return YES;
+}
+
+-(void)loadMainView {
+    [UIView animateWithDuration:0.3 animations:^{
+        _startController.view.alpha = 0.8f;
+    } completion:^(BOOL finished) {
+        //删除_startController
+        [_startController.view removeFromSuperview];
+        
+        //先判断是否是第一次使用
+        NSString *content = [self readFromFile:@"hasLaunched"];
+        if (!content || ![content isEqualToString:@"hasLaunched"]) {
+            SplashViewController *SVCtrl = [[SplashViewController alloc] init];
+            SVCtrl.view.alpha = 1.0f;
+            self.window.backgroundColor = [UIColor whiteColor];
+            self.window.rootViewController =  SVCtrl;
+            [self.window makeKeyAndVisible];
+        } else {
+            [self entryMain];
+        }
+    }];
 }
 
 -(void)entryMain
@@ -94,9 +118,19 @@ void uncaughtExceptionHandler(NSException *exception)
     NSArray *array = [root.view subviews];
     UITabBar *_tabbar = [array objectAtIndex:1];
     UIImageView *_vImage = [[UIImageView alloc] init];
-    _vImage.backgroundColor = [UIColor blackColor];
+    _vImage.image = [UIImage imageNamed:@"Toolbar_bg.png"];
     _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
     [_tabbar insertSubview:_vImage atIndex:1];
+    for (int i = 0; i < _tabbar.items.count; i++) {
+        UITabBarItem *item = _tabbar.items[i];
+        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
+        UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
+        [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        
+        [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
+        [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
+    }
+    
     
     UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:leftViewController];
@@ -117,9 +151,12 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void) setGlobalLayout
 {
-    [[UINavigationBar appearance] setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
-    [[UINavigationBar appearance] setTitleTextAttributes:@{UITextAttributeFont:[UIFont boldSystemFontOfSize:18],UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
-        [[UINavigationBar appearance] setTitleVerticalPositionAdjustment:0 forBarMetrics:UIBarMetricsDefault];
+    UINavigationBar *nav = [UINavigationBar appearance];
+    [nav setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+    [nav setTitleTextAttributes:@{UITextAttributeFont:[UIFont boldSystemFontOfSize:18],UITextAttributeTextColor:APP_NAV_TITLE_COLOR}];
+    [nav setTitleVerticalPositionAdjustment:0 forBarMetrics:UIBarMetricsDefault];
+    nav.tintColor = [UIColor blackColor];
+    nav.backgroundColor = [UIColor blackColor];
 }
 
 -(void) setupAnalys

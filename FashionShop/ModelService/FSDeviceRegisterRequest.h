@@ -11,7 +11,6 @@
 
 @interface FSDeviceRegisterRequest : FSEntityRequestBase
 
-
 @property(nonatomic,strong) NSNumber* longit;
 @property(nonatomic,strong) NSNumber *lantit;
 @property(nonatomic,strong) NSString * deviceToken;

@@ -7,7 +7,6 @@
 //
 
 #import "FSSearchViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSProdDetailCell.h"
 #import "FSProDetailViewController.h"
 

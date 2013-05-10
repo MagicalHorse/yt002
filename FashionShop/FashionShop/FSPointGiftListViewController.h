@@ -1,5 +1,5 @@
 //
-//  FSPointExchangeListViewController.h
+//  FSPointGiftListViewController.h
 //  FashionShop
 //
 //  Created by HeQingshan on 13-4-28.
@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FSSegmentControl.h"
+#import "FSRefreshableViewController.h"
+#import "FSUser.h"
 
-@interface FSPointExchangeListViewController : UIViewController
+@interface FSPointGiftListViewController : FSRefreshableViewController
+
+@property (strong, nonatomic) IBOutlet UITableView *contentView;
+@property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
+@property (strong,nonatomic) FSUser *currentUser;
 
 @end

@@ -28,8 +28,14 @@
 
 #define APP_BACKGROUND_COLOR RGBCOLOR(255,255,255)//RGBCOLOR(220,220,220)
 #define APP_NAV_TITLE_COLOR [UIColor whiteColor]//[UIColor colorWithRed:127 green:127 blue:127]
+#define APP_TABLE_BG_COLOR RGBCOLOR(241,241,234)
+#define APP_COMMON_FONT_COLOR RGBCOLOR(102,102,102)
+#define APP_COMMON_FONT_COLOR_STRING @"666666"
 
 #define ME_FONT(x)  [UIFont systemFontOfSize:x]//[UIFont fontWithName:@"HiraginoSansGB-W3" size:x]
 #define ME_FONT_NICKIE 18
+
+#define Font_Name_Normal [UIFont systemFontOfSize:12].fontName
+#define Font_Name_Bold [UIFont boldSystemFontOfSize:12].fontName
 
 #endif

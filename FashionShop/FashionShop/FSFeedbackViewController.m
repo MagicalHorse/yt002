@@ -7,7 +7,6 @@
 //
 
 #import "FSFeedbackViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSFeedbackRequest.h"
 #import "NSString+Extention.h"
 
@@ -44,6 +43,8 @@
     
     [self decorateTapDismissKeyBoard];
     [self bindControl];
+    
+    self.view.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 -(void) bindControl

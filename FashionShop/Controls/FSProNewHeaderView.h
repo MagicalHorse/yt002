@@ -23,7 +23,6 @@
 
 @interface FSProNewHeaderView_1 : UIView
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
-@property (strong, nonatomic) IBOutlet UILabel *lblStartDate;
 
 @property (nonatomic,strong) NSDate *data;
 

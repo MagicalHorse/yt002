@@ -7,7 +7,6 @@
 //
 
 #import "FSLikeViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSLikeDetailCell.h"
 #import "FSCommonUserRequest.h"
 #import "FSPagedLike.h"

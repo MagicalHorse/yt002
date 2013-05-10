@@ -12,7 +12,6 @@
 #import "MBProgressHUD.h"
 #import "RestKit.h"
 #import "SYPaginator.h"
-#import "UIViewController+Loading.h"
 #import "FSThumView.h"
 #import "FSImageSlideViewController.h"
 #import "FSAudioButton.h"
@@ -25,8 +24,8 @@
 
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock;
 
--(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index ;
 @optional
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index;
 -(BOOL)proDetailViewShouldPostNotification:(FSProDetailViewController *)view;
 
 @end

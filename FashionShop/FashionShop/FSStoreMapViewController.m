@@ -8,7 +8,6 @@
 
 #import "FSStoreMapViewController.h"
 #import <CoreLocation/CoreLocation.h>
-#import "UIViewController+Loading.h"
 #import "PositionAnnotation.h"
 
 #define kMKCoordinateSpan 0.007

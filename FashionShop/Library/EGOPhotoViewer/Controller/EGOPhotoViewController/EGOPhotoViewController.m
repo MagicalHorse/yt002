@@ -25,7 +25,6 @@
 //
 
 #import "EGOPhotoViewController.h"
-#import "UIViewController+Loading.h"
 
 @interface EGOPhotoViewController (Private)
 - (void)loadScrollViewWithPage:(NSInteger)page;

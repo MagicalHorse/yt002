@@ -9,8 +9,6 @@
 #import "LeftDemoViewController.h"
 #import "PKRevealController.h"
 
-#import "FSSettingViewController.h"
-
 @implementation LeftDemoViewController
 
 #pragma mark - View Lifecycle
@@ -27,6 +25,7 @@
 
 - (IBAction)showOppositeView:(id)sender
 {
+    /*
   //  [self.revealController showViewController:self.revealController.rightViewController];
     
     FSSettingViewController *controller = [[FSSettingViewController alloc] initWithNibName:@"FSSettingViewController" bundle:nil];
@@ -41,6 +40,7 @@
     
     self.revealController.frontViewController = controller;//[[UINavigationController alloc] initWithRootViewController:controller];
     [self.revealController showViewController:self.revealController.frontViewController animated:YES completion:nil];
+     */
 }
 
 - (IBAction)togglePresentationMode:(id)sender

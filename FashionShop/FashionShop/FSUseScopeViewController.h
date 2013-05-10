@@ -10,4 +10,7 @@
 
 @interface FSUseScopeViewController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UITableView *tbAction;
+@property (strong, nonatomic) NSMutableArray *stores;
+
 @end

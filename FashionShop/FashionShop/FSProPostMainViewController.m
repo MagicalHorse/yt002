@@ -16,7 +16,6 @@
 #import "FSCoreTag.h"
 #import "FSProPostTitleViewController.h"
 #import "FSPostTableSelViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSProItemEntity.h"
 #import "FSCoreStore.h"
 #import "FSImageUploadCell.h"

@@ -7,7 +7,6 @@
 //
 
 #import "FSCouponViewController.h"
-#import "UIViewController+Loading.h"
 #import "FSCouponDetailCell.h"
 #import "FSCouponProDetailCell.h"
 #import "FSCommonUserRequest.h"
@@ -15,22 +14,24 @@
 #import "FSModelManager.h"
 #import "FSCommonProRequest.h"
 #import "FSLocationManager.h"
-
 #import "FSDRViewController.h"
 
 @interface FSCouponViewController ()
 {
-    NSMutableArray *_likes;
-    int _currentPage;
-    BOOL _noMore;
+    FSGiftSortBy _currentSelIndex;
+    
+    NSMutableArray *_dataSourceList;
+    NSMutableArray *_noMoreList;
+    NSMutableArray *_pageIndexList;
+    NSMutableArray *_refreshTimeList;
     BOOL _inLoading;
-
 }
 
 @end
 
 #define USER_COUPON_TABLE_CELL @"usercoupontablecell"
 #define USER_COUPON_PRO_TABLE_CELL @"usercouponprotablecell"
+
 @implementation FSCouponViewController
 @synthesize currentUser;
 
@@ -46,79 +47,140 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"My Promotion List",nil);
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
+    
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_TABLE_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
-    [self prepareData];
-    [self preparePresent];
-}
-
--(void) prepareData
-{
-    if (!_likes)
-    {
-        [self beginLoading:_contentView];
-        _currentPage = 1;
-        FSCommonUserRequest *request = [self createRequest:_currentPage];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_contentView];
-            if (resp.isSuccess)
-            {
-                FSPagedCoupon *innerResp = resp.responseData;
-                if (innerResp.totalPageCount<=_currentPage)
-                    _noMore = true;
-                [self mergeLike:innerResp isInsert:false];
-                
-                /*
-                //同步Me的主页数据。
-                FSUser *localUser = (FSUser*)[FSUser localProfile];
-                if ([localUser.uid isEqualToNumber:currentUser.uid]) {
-                    localUser.couponsTotal = innerResp.totalCount;
-                }
-                 */
-            }
-            else
-            {
-                [self reportError:resp.errorDescrip];
-            }
-        }];
-    }
-}
--(void) preparePresent
-{
-    self.navigationItem.title = NSLocalizedString(@"Promotion codes", nil);
+    
+    [self requestData];
+    [self setFilterType];
+    [self initArray];
+    
+    _currentSelIndex = SortByUnUsed;
+    _contentView.backgroundView = nil;
+    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
+    
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
-        FSCommonUserRequest *request = [self createRequest:1];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
+        if (_inLoading)
+        {
+            action();
+            return;
+        }
+        int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+        FSCommonUserRequest *request = [self createRequest:currentPage];
+        request.previousLatestDate = [_refreshTimeList objectAtIndex:_segFilters.selectedSegmentIndex];
+        _inLoading = YES;
+        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            _inLoading = NO;
             action();
             if (resp.isSuccess)
             {
                 FSPagedCoupon *innerResp = resp.responseData;
-                if (innerResp.totalPageCount<=_currentPage)
-                    _noMore = true;
-                [self mergeLike:innerResp isInsert:true];
+                if (innerResp.totalPageCount <= currentPage)
+                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self mergeLike:innerResp isInsert:YES];
+                
+                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedSegmentIndex];
             }
             else
             {
                 [self reportError:resp.errorDescrip];
             }
         }];
-
     }];
-    _contentView.dataSource = self;
-    _contentView.delegate =self;
 }
-- (IBAction)onButtonBack:(id)sender {
+
+- (void)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void) setFilterType
+{
+    [_segFilters removeAllSegments];
+    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_UnUsed", nil) atIndex:0 animated:FALSE];
+    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_Used", nil) atIndex:1 animated:FALSE];
+    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_Disable", nil) atIndex:2 animated:FALSE];
+    [_segFilters addTarget:self action:@selector(filterSearch:) forControlEvents:UIControlEventValueChanged];
+    _segFilters.selectedSegmentIndex = 0;
+}
+
+-(void)initArray
+{
+    _dataSourceList = [@[] mutableCopy];
+    _pageIndexList = [@[] mutableCopy];
+    _noMoreList = [@[] mutableCopy];
+    _refreshTimeList = [@[] mutableCopy];
+    
+    for (int i = 0; i < 3; i++) {
+        [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
+        [_pageIndexList insertObject:@1 atIndex:i];
+        [_noMoreList insertObject:@NO atIndex:i];
+        [_refreshTimeList insertObject:[NSDate date] atIndex:i];
+    }
+}
+
+-(void)filterSearch:(UISegmentedControl *) segmentedControl
+{
+    int index = segmentedControl.selectedSegmentIndex;
+    if(_currentSelIndex == index)
+    {
+        return;
+    }
+    _currentSelIndex = index;
+    NSMutableArray *source = [_dataSourceList objectAtIndex:index];
+    if (source == nil || source.count<=0)
+    {
+        [self requestData];
+    }
+    [_contentView reloadData];
+    [_contentView setContentOffset:CGPointZero];
+}
+
+-(void)setPageIndex:(int)_index selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    NSNumber * nsNum = [NSNumber numberWithInt:_index];
+    [_pageIndexList replaceObjectAtIndex:_selIndexSegment withObject:nsNum];
+}
+
+-(void)setNoMore:(BOOL)_more selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    NSNumber * nsNum = [NSNumber numberWithBool:_more];
+    [_noMoreList replaceObjectAtIndex:_selIndexSegment withObject:nsNum];
+}
+
+-(void)setRefreshTime:(NSDate*)_date selectedSegmentIndex:(NSInteger)_selIndexSegment
+{
+    [_refreshTimeList replaceObjectAtIndex:_selIndexSegment withObject:_date];
+}
+
+-(void) requestData
+{
+    int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+    FSCommonUserRequest *request = [self createRequest:currentPage];
+    [self beginLoading:self.view];
+    [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [self endLoading:self.view];
+        if (resp.isSuccess)
+        {
+            FSPagedCoupon *innerResp = resp.responseData;
+            if (innerResp.totalPageCount <= currentPage)
+                [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+            [self mergeLike:innerResp isInsert:NO];
+            
+            [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+        }
+        else
+        {
+            [self reportError:resp.errorDescrip];
+        }
+    }];
 }
 
 -(void) mergeLike:(FSPagedCoupon *)response isInsert:(BOOL)isinsert
 {
-    if (!_likes)
-    {
-        _likes = [@[] mutableCopy];
-    }
+    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
     if (response && response.items)
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -137,7 +199,6 @@
                 else
                     [_likes addObject:obj];
             }
-            
         }];
         [_contentView reloadData];
     }
@@ -162,30 +223,29 @@
     request.routeResourcePath = RK_REQUEST_COUPON_LIST;
     return request;
 }
--(void) presentData
-{
-    
-    [_contentView reloadData];
+
+- (void)viewDidUnload {
+    [self setSegFilters:nil];
+    [super viewDidUnload];
 }
 
-
-#pragma mark - Table view data source
+#pragma mark - UITableViewDelegate && UITableViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
-    
+    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    return _likes?_likes.count:0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _likes?_likes.count:0;
-    
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSCoupon *coupon = [_likes objectAtIndex:indexPath.row];
+    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
     UITableViewCell *detailCell = nil;
     if (coupon.producttype == FSSourceProduct)
     {
@@ -197,34 +257,19 @@
         [(FSCouponProDetailCell *)detailCell setData:coupon];
     }
     return detailCell;
-    
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    FSCouponProDetailCell *cell = (FSCouponProDetailCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+    return cell.cellHeight;
 }
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row %2==0)
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL1_BGCOLOR;
-        
-    } else
-    {
-        cell.backgroundColor = PRO_LIST_NEAR_CELL2_BGCOLOR;
-    }
-    
-}
-
-
-#pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
     detailView.navContext = _likes;
     detailView.indexInContext = indexPath.row* [self numberOfSectionsInTableView:tableView] + indexPath.section;
     detailView.sourceType = [(FSCoupon *)[_likes objectAtIndex:detailView.indexInContext] producttype];
@@ -232,47 +277,43 @@
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
     [self presentViewController:navControl animated:true completion:nil];
       [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
-
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+#pragma mark - UIScrollViewDelegate
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [super scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
-    if(!_inLoading &&
-       (scrollView.contentOffset.y+scrollView.frame.size.height) > scrollView.contentSize.height
+    [super scrollViewDidScroll:scrollView];
+    BOOL _noMore = [[_noMoreList objectAtIndex:_segFilters.selectedSegmentIndex] boolValue];
+    if(!_inLoading
+       && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
        &&scrollView.contentOffset.y>0
        && !_noMore)
-        
     {
         _inLoading = TRUE;
-        FSCommonUserRequest *request = [self createRequest:_currentPage+1];
+        int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+        FSCommonUserRequest *request = [self createRequest:currentPage+1];
         [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
             if (resp.isSuccess)
             {
                 FSPagedCoupon *innerResp = resp.responseData;
-                if (innerResp.totalPageCount<=_currentPage+1)
-                    _noMore = true;
-                _currentPage ++;
-                [self mergeLike:innerResp isInsert:FALSE];
+                if (innerResp.totalPageCount<=currentPage+1)
+                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self mergeLike:innerResp isInsert:NO];
             }
             else
             {
                 [self reportError:resp.errorDescrip];
             }
         }];
-        
-        
     }
-    
-    
 }
 
+#pragma mark - FSProDetailItemSourceProvider
 
-#pragma FSProDetailItemSourceProvider
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
-
 {
     __block FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
     FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
@@ -306,18 +347,12 @@
             block(resp.responseData);
         }
     }];
-    
 }
+
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
     return favorCurrent.producttype;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

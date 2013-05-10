@@ -20,7 +20,6 @@
 #import "FSCoupon.h"
 #import "FSPagedItem.h"
 #import "FSItemBase.h"
-#import "FSCouponViewController.h"
 #import "FSPointViewController.h"
 #import "FSLikeViewController.h"
 #import "FSCommonUserRequest.h"
@@ -29,16 +28,16 @@
 #import "FSProPostMainViewController.h"
 #import "FSCommonProRequest.h"
 #import "FSLoadMoreRefreshFooter.h"
+#import "FSMoreViewController.h"
+#import "FSGiftListViewController.h"
 
 #import "FSModelManager.h"
 #import "FSLocationManager.h"
 #import "UIImageView+WebCache.h"
-#import "UIViewController+Loading.h"
 #import "TCWBEngine.h"
 #import "FSConfiguration.h"
 #import <PassKit/PassKit.h>
-
-#import "FSImageEditViewController.h"
+#import <MobileCoreServices/UTCoreTypes.h>
 
 #define LOGIN_FROM_3RDPARTY_ACTION @"LOGIN_FROM_3RDPARTY"
 #define LOGIN_GET_USER_PROFILE @"LOGIN_GET_USERPROFILE"
@@ -51,6 +50,7 @@
 #define Favorite_Delete_Alert_Tag 1010
 #define Actionsheet_Publish_Tag 1020
 #define Actionsheet_Delete_Tag 1021
+#define Actionsheet_Takephoto_Tag 1022
 
 @interface MyActionSheet : UIActionSheet
 @property (nonatomic, strong) id object;
@@ -76,11 +76,12 @@
     BOOL            isDeletionModeActive;
     BOOL            _isInLoading;
     BOOL            _isInRefreshing;
-    BOOL            _isInPhotoing;
     int             _favorPageIndex;
     BOOL            _noMoreFavor;
     UIActivityIndicatorView *moreIndicator;
     UIImagePickerController *_camera;
+    
+    int             _takePhotoSource;//1:头像更改；2:更改me的主页背景
 }
 
 @end
@@ -237,7 +238,22 @@
     [self setThumbImg:nil];
     [self setImgLevel:nil];
     [self setSegHeader:nil];
+    [self setBtnHeaderBg:nil];
+    [self setTbScroll:nil];
     [super viewDidUnload];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"nav_bg_2.png"] forBarMetrics: UIBarMetricsDefault];
+    self.navigationController.navigationBar.tintColor = [UIColor clearColor];
+    [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Self Define Method
@@ -315,6 +331,7 @@
         //更新达人标志位置
         CGRect origFrame = _imgLevel.frame;
         origFrame.origin.x = _lblNickie.frame.origin.x+_lblNickie.frame.size.width+4;
+        origFrame.origin.y = (_lblNickie.frame.size.height - origFrame.size.height)/2 + _lblNickie.frame.origin.y;
         _imgLevel.frame = origFrame;
     }
     else if ([keyPath isEqualToString:@"pointsTotal"]) {
@@ -400,9 +417,17 @@
 }
 
 - (void) displayUserProfile{
-    
-    UIBarButtonItem *baritemSet= [self createPlainBarButtonItem:@"set_icon.png" target:self action:@selector(onSetting)];
-    [self.navigationItem setRightBarButtonItem:baritemSet];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn addTarget:self action:@selector(onSetting) forControlEvents:UIControlEventTouchUpInside];
+    [btn setTitle:NSLocalizedString(@"More", nil) forState:UIControlStateNormal];
+    btn.titleLabel.font = ME_FONT(13);
+    btn.showsTouchWhenHighlighted = YES;
+    [btn setBackgroundImage:[UIImage imageNamed:@"btn_right_normal.png"] forState:UIControlStateNormal];
+    [btn sizeToFit];
+    UIBarButtonItem *baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
+    UIBarButtonItem *baritemletter= [self createPlainBarButtonItem:@"message.png" target:self action:@selector(onSetting)];
+    NSArray *_array = [NSArray arrayWithObjects:baritemSet,baritemletter, nil];
+    [self.navigationItem setRightBarButtonItems:_array];
     [_userProfileView removeFromSuperview];
     [self.view addSubview:_userProfileView];
     [self bindUserProfile];
@@ -447,7 +472,6 @@
     isDeletionModeActive=FALSE;
     _isInLoading=FALSE;
     _isInRefreshing=FALSE;
-    _isInPhotoing = FALSE;
     _favorPageIndex=0;
     _noMoreFavor=FALSE;
     [self unregisterKVO];
@@ -457,17 +481,33 @@
 {
     self.navigationItem.title = NSLocalizedString(@"Homepage title", nil);
     _btnSuggest.layer.opacity = _userProfile.userLevelId==FSDARENUser?1:0;
+    UIEdgeInsets _inset = _btnSuggest.contentEdgeInsets;
+    _inset.left = 20;
+    _btnSuggest.contentEdgeInsets = _inset;
+    [_btnSuggest setTitle:@"发布" forState:UIControlStateNormal];
+    
     _lblNickie.text = _userProfile.nickie;
-    _lblNickie.font = ME_FONT(18);
     [_lblNickie sizeToFit];
     CGRect origFrame = _imgLevel.frame;
     origFrame.origin.x = _lblNickie.frame.origin.x+_lblNickie.frame.size.width+4;
+    origFrame.origin.y = (_lblNickie.frame.size.height - origFrame.size.height)/2 + _lblNickie.frame.origin.y;
     _imgLevel.frame = origFrame;
     if (_userProfile.userLevelId!=FSDARENUser)
         [_imgLevel removeFromSuperview];
     _thumbImg.ownerUser = _userProfile;
     _thumbImg.showCamera = true;
     _thumbImg.delegate = self;
+    
+    [_btnHeaderBg addTarget:self action:@selector(handleChangeHeaderBg:) forControlEvents:UIControlEventTouchUpInside];
+    [_btnHeaderBg setBackgroundImage:_btnHeaderBg.currentBackgroundImage forState:UIControlStateHighlighted];
+    origFrame = _btnHeaderBg.frame;
+    [_btnHeaderBg setTitle:@"" forState:UIControlStateNormal];
+    origFrame.origin.y = _segHeader.frame.origin.y - origFrame.size.height;
+    _btnHeaderBg.frame = origFrame;
+    
+    origFrame = _tbScroll.frame;
+    origFrame.size.height = APP_HIGH - NAV_HIGH - TAB_HIGH;
+    _tbScroll.frame = origFrame;
     
     _btnLike.titleLabel.font = ME_FONT(9);
     _btnLike.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -489,8 +529,9 @@
     layout.delegate = self;
     CGRect rect = _likeContainer.frame;
     rect.size.height = APP_HIGH>480?353:265;
-    _likeContainer.frame = rect;
+    //_likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
+    _likeView.scrollEnabled = NO;
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
     
@@ -511,6 +552,15 @@
     
     _likeView.delegate = self;
     _likeView.dataSource = self;
+}
+
+-(void)handleChangeHeaderBg:(UIButton*)sender
+{
+    _takePhotoSource = 2;
+    UIActionSheet *suggestSheet = [[UIActionSheet alloc] initWithTitle:@"修改Me的主页背景" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片",@"从图片库中选择",nil];
+    suggestSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    suggestSheet.tag = Actionsheet_Takephoto_Tag;
+    [suggestSheet showInView:_btnSuggest];
 }
 
 -(void) loadILike
@@ -580,30 +630,6 @@
         _isInLoading = NO;
     }];
 }
--(void)doChangeSetting:(UITapGestureRecognizer *)gesture
-{
-    
-    _camera = [[UIImagePickerController alloc] init];
-    _camera.delegate = self;
-    
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
-    {
-        _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
-        _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        _camera.allowsEditing = false;
-        _isInPhotoing = true;
-        [self decorateOverlayToCamera:_camera];
-        [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
-            [self presentViewController:_camera animated:YES completion:nil];
-        }];
-        
-    } else
-    {
-        [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
-    }
-    
-    
-}
 
 -(void)fillFavorList:(NSArray *)list isInsert:(BOOL)isInsert
 {
@@ -633,8 +659,10 @@
                 }
             }
         }];
-        if (isInsert)
+        if (isInsert){
             [_likeView reloadData];
+            [self resetScrollViewSize];
+        }
         if (_likePros.count<1)
         {
             //加载空视图
@@ -678,8 +706,10 @@
                 //                }
             }
         }];
-        if (isInsert)
+        if (isInsert) {
             [_likeView reloadData];
+            [self resetScrollViewSize];
+        }
         if (_likePros.count<1)
         {
             //加载空视图
@@ -724,10 +754,9 @@
              */
             {
                 
-                FSCouponViewController *couponView = [[FSCouponViewController alloc] initWithNibName:@"FSCouponViewController" bundle:nil];
+                FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
                 couponView.currentUser = _userProfile;
                 [self.navigationController pushViewController:couponView animated:true];
-                
             }
             break;
         }
@@ -748,6 +777,7 @@
 -(void) bindContentView
 {
     [_likeView reloadData];
+    [self resetScrollViewSize];
 }
 
 -(void)onButtonCancel
@@ -757,9 +787,9 @@
 
 -(void)onSetting
 {
-    FSSettingViewController *controller = [[FSSettingViewController alloc] initWithNibName:@"FSSettingViewController" bundle:nil];
-    controller.currentUser = _userProfile;
+    FSMoreViewController *controller = [[FSMoreViewController alloc] initWithNibName:@"FSMoreViewController" bundle:nil];
     controller.delegate = self;
+    controller.currentUser = _userProfile;
     [self.navigationController pushViewController:controller animated:true];
 }
 
@@ -769,9 +799,7 @@
         [self internalUploadThumnail:image CallBack:callback];
     } completeCallbck:^{
         [self endProgress];
-        
     }];
-    
 }
 
 -(void)internalUploadThumnail:(UIImage *)image CallBack:(dispatch_block_t)callback
@@ -779,11 +807,21 @@
     FSThumnailRequest *request = [[FSThumnailRequest alloc] init];
     request.uToken = _userProfile.uToken;
     request.image = image;
+    request.type = 1;
+    if (_takePhotoSource == 2) {
+        request.type = 2;
+    }
     request.routeResourcePath = RK_REQUEST_THUMNAIL_UPLOAD;
     [request upload:^(id result){
         callback();
         _userProfile.thumnail = result;
-        [_thumbImg reloadThumb:_userProfile.thumnailUrl];
+        if (_takePhotoSource == 1) {
+            [_thumbImg reloadThumb:_userProfile.thumnailUrl];
+        }
+        else{
+            [_btnHeaderBg setImage:image forState:UIControlStateNormal];
+            [_btnHeaderBg setImage:image forState:UIControlStateHighlighted];
+        }
         
     } error:^(id error){
         callback();
@@ -793,18 +831,15 @@
 
 #pragma UIImagePicker delegate
 
-- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    
-//    if (picker != _camera) {
-//        [picker dismissViewControllerAnimated:YES completion:nil];
-//    }
-    _camera = picker;
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 	NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
 	
 	if([mediaType isEqualToString:@"public.image"])
 	{
-		UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-        [NSThread detachNewThreadSelector:@selector(showController:) toTarget:self withObject:image];
+		UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+        [NSThread detachNewThreadSelector:@selector(cropImage:) toTarget:self withObject:image];
     }
 	else
 	{
@@ -813,16 +848,14 @@
 	}
 }
 
--(void)showController:(UIImage *)image {
-    FSImageEditViewController *controller = [[FSImageEditViewController alloc] initWithNibName:@"FSImageEditViewController" bundle:nil];
-    controller.image = image;
-    controller.delegate = self;
-    [_camera pushViewController:controller animated:YES];
-}
-
 - (void)cropImage:(UIImage *)image {
-    // Create a graphics image context
-    int whSize = 200;
+    int whSize = 0;
+    if (_takePhotoSource == 1) {
+        whSize = 200;
+    }
+    else{
+        whSize = 320;
+    }
     CGSize newSize = CGSizeMake(whSize, whSize*image.size.height/image.size.width);
     UIGraphicsBeginImageContext(newSize);
     // Tell the old image to draw in this new context, with the desired
@@ -834,10 +867,24 @@
     UIGraphicsEndImageContext();
     [self uploadThumnail:newImage];
 }
+
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated{
+    //暂时没有发现有作用
+    if ([self inUserCamera].sourceType == UIImagePickerControllerSourceTypeCamera &&
+        [navigationController.viewControllers count] <=2) {
+        viewController.wantsFullScreenLayout = NO;
+        navigationController.navigationBar.translucent = NO;
+    }else{
+        viewController.wantsFullScreenLayout = YES;
+        navigationController.navigationBar.translucent = YES;
+    }
+}
+
 -(UIImagePickerController *)inUserCamera
 {
     return _camera;
@@ -945,6 +992,61 @@
             
         }
     }
+    else if(actionSheet.tag == Actionsheet_Takephoto_Tag) {
+        switch (buttonIndex) {
+            case 0:
+            {
+                //照片拍摄
+                _camera = [[UIImagePickerController alloc] init];
+                _camera.delegate = self;
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
+                {
+                    _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
+                    _camera.mediaTypes = [[NSArray alloc] initWithObjects:(NSString*)kUTTypeImage, nil];
+                    _camera.allowsEditing = YES;
+                    if (_takePhotoSource == 1) {
+                        
+                    }
+                    else{
+                        
+                    }
+                    [self presentViewController:_camera animated:YES completion:nil];
+                    
+                } else
+                {
+                    [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
+                }
+                break;
+            }
+            case 1:
+            {
+                //从照片库选取
+                _camera = [[UIImagePickerController alloc] init];
+                _camera.delegate = self;
+                if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
+                {
+                    _camera.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+                    _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+                    _camera.allowsEditing = YES;
+                    if (_takePhotoSource == 1) {
+                        
+                    }
+                    else{
+                        
+                    }
+                    [self presentViewController:_camera animated:YES completion:nil];
+                    
+                }
+                else
+                {
+                    [self reportError:NSLocalizedString(@"Can Not Camera", nil)];
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
 }
 
 #pragma mark - FSQQConnectActivityDelegate
@@ -981,16 +1083,23 @@
     }
 }
 
+-(void) resetScrollViewSize
+{
+    CGRect _rect = _likeView.frame;
+    _rect.size.height = _likeView.collectionViewLayout.collectionViewContentSize.height;
+    _likeView.frame = _rect;
+    
+    int height = _likeView.frame.origin.y + _likeView.frame.size.height;
+    _tbScroll.contentSize = CGSizeMake(320, MAX(height, _tbScroll.frame.size.height));
+}
+
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-
     return _likePros?_likePros.count:0;
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (PSUICollectionView *)collectionView {
-    
     return 1;
 }
 
@@ -1141,6 +1250,7 @@
             } else
             {
                 [_likeView reloadData];
+                [self resetScrollViewSize];
             }
         }
     }
@@ -1162,6 +1272,7 @@
             } else
             {
                 [_likeView reloadData];
+                [self resetScrollViewSize];
             }
         }
     }
@@ -1274,7 +1385,11 @@
 
 -(void)didTapThumView:(id)sender
 {
-    [self doChangeSetting:nil];
+    _takePhotoSource = 1;
+    UIActionSheet *suggestSheet = [[UIActionSheet alloc] initWithTitle:@"修改头像" delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) destructiveButtonTitle:nil otherButtonTitles:@"拍摄照片",@"从图片库中选择",nil];
+    suggestSheet.actionSheetStyle = UIActionSheetStyleBlackOpaque;
+    suggestSheet.tag = Actionsheet_Takephoto_Tag;
+    [suggestSheet showInView:_btnSuggest];
 }
 
 #pragma mark - QQ weibo delegate
@@ -1390,7 +1505,7 @@
 
 #pragma mark - FSSettingViewCompleteDelegate
 
--(void)settingView:(FSSettingViewController *)view didLogOut:(BOOL)flag
+-(void)settingView:(FSMoreViewController *)view didLogOut:(BOOL)flag
 {
     if (flag)
     {
@@ -1398,14 +1513,6 @@
         [self ensureDataContext];
         [self displayUserLogin];
     }
-}
-
--(void)editImageViewControllerSetImage:(FSImageEditViewController*)viewController
-{
-  //  [NSThread detachNewThreadSelector:@selector(cropImage:) toTarget:self withObject:viewController.editView.output];
-    //[self cropImage:viewController.editView.output];
-    [self uploadThumnail:viewController.editView.output];
-    [viewController dismissModalViewControllerAnimated:YES];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "FSExchangeListCell.h"
+#import "FSConfiguration+Fonts.h"
 
 @interface FSExchangeListCell ()
 
@@ -14,25 +15,37 @@
 
 @implementation FSExchangeListCell
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Custom initialization
+        // Initialization code
+        self.clipsToBounds = YES;
     }
     return self;
 }
 
-- (void)viewDidLoad
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
 }
 
-- (void)didReceiveMemoryWarning
+-(void)setData:(id)data
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    _data = data;
+    
+    [_titleView setText:_data.name];
+    
+    [_desc setText:_data.desc];
+    _desc.textColor = RGBCOLOR(102, 102, 102);
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yy年MM月dd日"];
+    NSString *str = [NSString stringWithFormat:@"%@~%@", [df stringFromDate:_data.activeStartDate], [df stringFromDate:_data.activeEndDate]];
+    _activityTime.text = str;
+    _activityTime.textColor = RGBCOLOR(228, 0, 127);
 }
 
 @end

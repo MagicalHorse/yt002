@@ -40,4 +40,6 @@
  */
 +(BOOL)isMobileNum:(NSString *)input;
 
++(BOOL)isIDCardNum:(NSString *)idCard;
+
 @end

@@ -8,7 +8,6 @@
 
 #import "FSImageSlideViewController.h"
 #import "UIImageView+WebCache.h"
-#import "UIViewController+Loading.h"
 
 @interface FSImageSlideViewController ()
 {

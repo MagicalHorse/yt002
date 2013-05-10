@@ -60,7 +60,7 @@
     }
     else{
         RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];
-        return [NSString stringWithFormat:@"%@?", [URL resourcePath]];
+        return [NSString stringWithFormat:@"%@?%@", [URL resourcePath], [URL query]];
     }
     
 //    RKURL *URL = [RKURL URLWithBaseURL:[manager baseURL] resourcePath:self.routeResourcePath queryParameters:queryParams];

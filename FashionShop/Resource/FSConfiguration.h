@@ -12,41 +12,17 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.1.1"
-
-/*
-#if defined ENVIRONMENT_DEV
-//测试库
-    #define REST_API_URL   @"http://10.32.11.65:9550/api"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
-
-#elif defined ENVIRONMENT_ADHOC
-//adhoc
-    #define REST_API_URL   @"http://122.226.53.114:7070/api"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
-
-#elif defined ENVIRONMENT_STORE
-//production
-    #define REST_API_URL   @"http://itoo.yintai.com/api"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
-
-#else
-//测试库
-    #define REST_API_URL   @"http://10.32.11.65:9550/api"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
-
-#endif
- */
+#define REST_API_CLIENT_VERSION @"2.2.0"
 
 //正式库
-#define REST_API_URL   @"http://itoo.yintai.com/api"
-#define REST_API_URL_OUT @"http://api.youhuiin.com"
-#define REST_API_APP_SECRET_KEY @"yintai123456"
+//#define REST_API_URL   @"http://itoo.yintai.com/api"
+//#define REST_API_URL_OUT @"http://api.youhuiin.com"
+//#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库
-//#define REST_API_URL   @"http://apis.youhuiin.com/api"
-//#define REST_API_URL_OUT @"http://stage.youhuiin.com"
-//#define REST_API_APP_SECRET_KEY @"yintai123456"
+#define REST_API_URL   @"http://apis.youhuiin.com/api"
+#define REST_API_URL_OUT @"http://stage.youhuiin.com"
+#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 /*
  预生产环境的地址切换了，原有的地址失效，使用新的地址：
@@ -114,3 +90,17 @@
 #define BFONT(a)            [UIFont boldSystemFontOfSize:a]
 
 #endif
+
+
+typedef enum {
+    SortByUnUsed = 0,//未使用
+    SortByUsed,//已使用
+    SortByDisable//无效
+}FSGiftSortBy;
+
+typedef enum {
+    SortByNone = -1,
+    SortByDistance = 0,
+    SortByDate = 1,
+    SortByPre = 2
+}FSProSortBy;

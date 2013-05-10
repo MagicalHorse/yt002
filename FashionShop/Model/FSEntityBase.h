@@ -35,8 +35,8 @@ typedef  enum
 typedef  enum
 {
     FSProSortByDate = 1,
+    FSProSortByPre = 2,
     FSProSortByDist = 3,
-    FSProSortByPre = 4,
     FSProSortDefault,
 }FSProSortType;
 

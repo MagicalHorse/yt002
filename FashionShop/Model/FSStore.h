@@ -19,4 +19,5 @@
 @property (nonatomic, strong) NSString * address;
 @property(nonatomic,assign) double distance;
 @property (nonatomic,strong) NSMutableArray *resource;
+
 @end
