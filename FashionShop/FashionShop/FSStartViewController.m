@@ -2,6 +2,14 @@
 #import "FSStartViewController.h"
 #import "FSCommonRequest.h"
 #import "UIDevice+Extention.h"
+#import "FSCommon.h"
+
+@interface FSStartViewController()
+{
+    FSCommon *vData;
+}
+
+@end
 
 @implementation FSStartViewController
 
@@ -20,25 +28,81 @@
     //请求网络数据，此处可更改为版本更新检查
     FSCommonRequest *request = [[FSCommonRequest alloc] init];
     [request setRouteResourcePath:RK_REQUEST_CHECK_VERSION];
-    __block FSStartViewController *blockSelf = self;
-    [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+    [request send:[FSCommon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         if (resp.isSuccess)
         {
-            //解析返回的数据
-            /*
-            id json = [jsonData JSONValue];
-            result = [[json objectForKey:@"result"] intValue];
-            message = [json objectForKey:@"prompt"];
-            if (result != 0) {
-                updateUrl = [[json objectForKey:@"url"] retain];
+            vData = resp.responseData;
+            
+            theApp.versionData = vData;
+            vData.code = 0;
+            //http://111.207.166.195/fileupload/img/promotion/20130507/89919e95-ec9b-426e-b620-7ff15bf64c7f_320x0.jpg
+            //http://111.207.166.195/fileupload/img/customerportrait/000/010/4f965d2c-1bd0-4f5a-97ad-b3d94de52d54_100x100.jpg
+            //http://111.207.166.195/fileupload/img/product/20130405/bd2e5e86-62c3-4cc5-af18-fffa11e7613a_320x0.jpg
+            vData.startimage = @"http://111.207.166.195/fileupload/img/product/20130405/bd2e5e86-62c3-4cc5-af18-fffa11e7613a_320x0.jpg";
+            vData.startimage_iphone5 = @"http://111.207.166.195/fileupload/img/promotion/20130507/89919e95-ec9b-426e-b620-7ff15bf64c7f_320x0.jpg";
+            if (vData) {
+                [self dealWithStartImage];
             }
-             */
-        }
-        else
-        {
-        //    [blockSelf reportError:resp.errorDescrip];
+            id value = [[NSUserDefaults standardUserDefaults] objectForKey:@"Not Show Again"];
+            if (value && [value boolValue]) {
+                return ;
+            }
+            UIAlertView *alert = nil;
+            switch (vData.type) {
+                case 0://已是最新版本，不用更新
+                {
+                    //do nothing
+                }
+                    break;
+                case 1://可选更新。有三个选项：取消、确认更新和不再提醒
+                {
+                    alert = [[UIAlertView alloc] initWithTitle:vData.title message:vData.desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新",@"不再提醒", nil];
+                    [alert show];
+                }
+                    break;
+                case 2://强制更新。只有一个更新按钮：强制更新
+                {
+                    alert = [[UIAlertView alloc] initWithTitle:vData.title message:vData.desc delegate:self cancelButtonTitle:@"强制更新" otherButtonTitles:nil, nil];
+                    [alert show];
+                }
+                    break;
+                default:
+                    break;
+            }
+            theApp.versionData = vData;
         }
     }];
+}
+
+-(void)dealWithStartImage
+{
+    if (vData.code == 401) {  //401：已是最新版本；
+        //do nothing
+    }
+    else if(vData.code == 402) {  //402：请使用默认图片。
+        if ([UIDevice isRunningOniPhone5]) {
+            [[NSUserDefaults standardUserDefaults] setObject:@"Default-568h.png" forKey:@"default_img_path"];
+        }
+        else{
+            [[NSUserDefaults standardUserDefaults] setObject:@"Default.png" forKey:@"default_img_path"];
+        }
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
+    else if(vData.code == 0) {    //有新图片
+        FSFileCache *_fileCache = [[FSFileCache alloc] initWithFileName:@"bootImages.dat"];
+        //读取新的图片信息
+        NSError* error=nil;
+        NSString *newPath = [UIDevice isRunningOniPhone5]?vData.startimage_iphone5:vData.startimage;
+        NSData* data=[NSData dataWithContentsOfURL:[NSURL URLWithString:newPath] options:0 error:&error];
+        if(data!=nil && error==nil){
+            UIImage* image=[UIImage imageWithData:data];
+            if(image!=nil){
+                [_fileCache setObject:data forKey:newPath];
+                [[NSUserDefaults standardUserDefaults] setObject:newPath forKey:@"default_img_path"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+    }
 }
 
 -(void)showBootImage:(BOOL)isLandscape{
@@ -71,25 +135,42 @@
         }
     }
     splashImageView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HIGH);
-    [self.view addSubview:splashImageView];	
+    [self.view addSubview:splashImageView];
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    /*
-    if (alertView.tag == 101 && result == 1) {
-        if (buttonIndex == 1) {
-            return;
+    switch (vData.type) {
+        case 0://已是最新版本，不用更新
+        {
+            //do nothing
         }
-        else{
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:updateUrl]];
+            break;
+        case 1://可选更新。有三个选项：取消、确认更新和不再提醒
+        {
+            if (buttonIndex == 0) {
+                //do nothing
+            }
+            else if(buttonIndex == 1)
+            {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:vData.downLoadURL]];
+            }
+            else{
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Not Show Again"];
+            }
         }
+            break;
+        case 2://强制更新。只有一个更新按钮：强制更新
+        {
+            if (buttonIndex == 0) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:vData.downLoadURL]];
+                [self exitApplication];
+            }
+        }
+            break;
+        default:
+            break;
     }
-    else if(alertView.tag == 102 && result == 2) {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:updateUrl]];
-           [self exitApplication];
-    }
-     */
 }
 
 //退出应用程序（OK）

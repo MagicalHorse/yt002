@@ -19,5 +19,7 @@
 @property (nonatomic, strong) NSString * address;
 @property(nonatomic,assign) double distance;
 @property (nonatomic,strong) NSMutableArray *resource;
+@property (nonatomic, strong) NSString * storeLogo;
+@property (nonatomic, strong) NSString * storeIcon;
 
 @end

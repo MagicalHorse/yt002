@@ -11,6 +11,7 @@
 #import "FSFeedbackViewController.h"
 #import "FSCardBindViewController.h"
 #import "WXApi.h"
+#import "FSAboutViewController.h"
 
 @interface FSMoreViewController () {
     NSMutableArray *_titles;
@@ -199,7 +200,8 @@
             break;
         case FSMoreAbout:
         {
-            
+            FSAboutViewController *controller = [[FSAboutViewController alloc] initWithNibName:@"FSAboutViewController" bundle:nil];
+            [self.navigationController pushViewController:controller animated:true];
         }
             break;
         case FSMoreCheckVersion:

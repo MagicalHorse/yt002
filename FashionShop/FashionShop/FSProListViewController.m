@@ -26,6 +26,7 @@
 #import "FSStoreDetailViewController.h"
 #import "EGORefreshTableHeaderView.h"
 #import "UIImageView+WebCache.h"
+#import "FSContentViewController.h"
 
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
@@ -712,6 +713,9 @@
         {
             int storeId = [[[_storeSource objectAtIndex:section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
+            if (rows.count > 2) {
+                return 2;
+            }
             return rows.count;
             break;
         }
@@ -806,14 +810,14 @@
     switch (_currentSearchIndex) {
         case SortByDistance:
         {
-            FSProNearDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL];
+            FSProNearDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:@"FSProNearDetailCell"];
             if (listCell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearDetailCell" owner:self options:nil];
                 if (_array.count > 0) {
                     listCell = (FSProNearDetailCell*)_array[0];
                 }
                 else{
-                    listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PRO_LIST_NEAREST_CELL];
+                    listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProNearDetailCell"];
                 }
             }
             listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
@@ -840,14 +844,14 @@
         case SortByDate:
         case SortByPre:
         {   
-            FSProDateDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:PRO_LIST_NEAREST_CELL];
+            FSProDateDetailCell *listCell = [_contentView dequeueReusableCellWithIdentifier:@"FSProDateDetailCell"];
             if (listCell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearDetailCell" owner:self options:nil];
                 if (_array.count > 1) {
                     listCell = (FSProDateDetailCell*)_array[1];
                 }
                 else{
-                    listCell = [[FSProDateDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:PRO_LIST_NEAREST_CELL];
+                    listCell = [[FSProDateDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProDateDetailCell"];
                 }
             }
             listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
@@ -997,16 +1001,62 @@
 
 - (void)didClickPage:(FSCycleScrollView *)csView atIndex:(NSInteger)index
 {
-    FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    NSMutableArray *rows = NULL;
-    rows = _dataSourceBannerData;
-    detailViewController.navContext = rows;
-    detailViewController.fromBanner = YES;
-    detailViewController.dataProviderInContext = self;
-    detailViewController.indexInContext = index;
-    detailViewController.sourceType = FSSourcePromotion;
-    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    [self presentViewController:navControl animated:YES completion:nil];
+    FSProItemEntity *proItem = [_dataSourceBannerData objectAtIndex:index];
+    switch (proItem.targetType) {
+        case SkipTypeDefault:
+        case SkipTypeProductList:
+        {
+            FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+            FSTopic *topic = [[FSTopic alloc] init];
+            topic.name = proItem.title;
+            topic.topicId = proItem.targetId;
+            dr.topic = topic;
+            dr.pageType = FSPageTypeTopic;
+            [self.navigationController pushViewController:dr animated:TRUE];
+        }
+            break;
+        case SkipTypePromotionDetail:
+        {
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
+            item.id = [proItem.targetId intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourcePromotion;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [self presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case SkipTypeProductDetail:
+        {
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProItemEntity *item = [[FSProItemEntity alloc] init];
+            item.id = [proItem.targetId intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourceProduct;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [self presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case SkipTypeURL:
+        {
+            FSContentViewController *controller = [[FSContentViewController alloc] init];
+            controller.fileName = proItem.targetId;
+            controller.title = proItem.title;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        case SkipTypeNone:
+        {
+            //do nothing
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 @end

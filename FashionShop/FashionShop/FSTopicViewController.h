@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "FSRefreshableViewController.h"
+#import "FSProDetailViewController.h"
 
-@interface FSTopicViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate> {
+@interface FSTopicViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate,FSProDetailItemSourceProvider> {
     
 }
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;

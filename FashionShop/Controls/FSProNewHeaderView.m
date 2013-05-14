@@ -67,8 +67,9 @@
     _data = data;
     bool isToday = [_data isSameDay:[[NSDate alloc] init]];
     BOOL isGoing = [_data compare:[[NSDate alloc] init]]==NSOrderedAscending;
-    NSString *title = isToday?NSLocalizedString(@"Today's new activities", nil):
-    isGoing?NSLocalizedString(@"ing activities", nil):NSLocalizedString(@"coming activities", nil);
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"yyyy年MM月dd日"];
+    NSString *title = isToday?NSLocalizedString(@"Today's new activities", nil):isGoing?[format stringFromDate:_data]:NSLocalizedString(@"coming activities", nil);
     _lblTitle.text = title;
     _lblTitle.adjustsFontSizeToFitWidth = YES;
     _lblTitle.minimumFontSize = 13;

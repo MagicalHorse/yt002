@@ -71,7 +71,7 @@ void uncaughtExceptionHandler(NSException *exception)
     //加载启动图
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     _startController = [[FSStartViewController alloc] init];
-    _startController.view.alpha = 0.4f;
+    _startController.view.alpha = 1.0f;
     [UIView animateWithDuration:0.3 animations:^{
         _startController.view.alpha = 1.0f;
         [self.window addSubview:_startController.view];

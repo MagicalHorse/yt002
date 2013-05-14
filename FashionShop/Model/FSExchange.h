@@ -25,7 +25,7 @@
 @property (nonatomic,strong) NSString *inScopeNotice;
 @property (nonatomic,strong) NSString *exchangeRuleMessage;
 @property (nonatomic,strong) NSString *rule;
-@property (nonatomic) int amount;
+@property (nonatomic) float amount;
 
 @property (nonatomic,strong) NSMutableArray *inscopenotices;
 @property (nonatomic,strong) NSMutableArray *rules;
@@ -43,5 +43,34 @@
 @property (nonatomic,strong) NSDate *validEndDate;
 @property (nonatomic,strong) NSDate *validStartDate;
 @property (nonatomic,strong) NSDate *createDate;
+
+@end
+
+
+@interface FSPromotionItem : FSModelBase
+
+@property (nonatomic,strong) NSDate *activeStartDate;
+@property (nonatomic,strong) NSDate *activeEndDate;
+@property (nonatomic,strong) NSString *description;
+@property (nonatomic,strong) NSMutableArray *inscopenotices;
+@property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *notice;
+@property (nonatomic,strong) NSString *usageNotice;
+
+@end
+
+@interface FSGiftListItem : FSModelBase
+
+@property (nonatomic) int id;
+@property (nonatomic,strong) NSString *giftCode;
+@property (nonatomic,strong) NSDate *createDate;
+@property (nonatomic,strong) NSString *exclude;
+@property (nonatomic) int points;
+@property (nonatomic) float amount;
+@property (nonatomic) int status;
+@property (nonatomic,strong) NSString *storeName;
+@property (nonatomic,strong) NSDate *validEndDate;
+@property (nonatomic,strong) NSDate *validStartDate;
+@property (nonatomic,strong) FSPromotionItem *promotion;
 
 @end

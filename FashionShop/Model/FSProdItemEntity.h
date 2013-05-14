@@ -33,6 +33,7 @@
 @property (nonatomic,assign) BOOL isCouponed;
 @property (nonatomic,assign) BOOL promotionFlag;
 @property (nonatomic,readonly) BOOL hasPromotion;
+@property (nonatomic,strong) NSString *brandDesc;
 
 
 @end

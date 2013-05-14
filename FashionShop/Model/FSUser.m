@@ -38,6 +38,7 @@
 @synthesize appID;
 @synthesize isBindCard;
 @synthesize cardInfo;
+@synthesize logobg;
 
 +(RKObjectMapping *) getRelationDataMap
 {
@@ -48,7 +49,7 @@
 +(RKObjectMapping *) getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",nil];
+    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",@"logobg",@"logobg",nil];
     return relationMap;
 }
 
@@ -116,6 +117,15 @@
     if (!thumnail)
         return nil;
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@_200x200.jpg",thumnail]];
+}
+
+-(NSURL*)logobgURL
+{
+    if (!logobg)
+        return nil;
+    NSString *url = [NSString stringWithFormat:@"%@_320x0.jpg",logobg];
+    NSLog(@"url:%@", url);
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_320x0.jpg",logobg]];
 }
 
 @end

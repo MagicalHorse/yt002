@@ -14,6 +14,7 @@
 #import "FSPagedTopic.h"
 #import "FSTopic.h"
 #import "FSProductListViewController.h"
+#import "FSContentViewController.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
@@ -246,17 +247,59 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
-    FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
-    dr.topic = topic;
-    dr.pageType = FSPageTypeTopic;
-    [self.navigationController pushViewController:dr animated:TRUE];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    //统计
-    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-    [_dic setValue:topic.name forKey:@"专题名称"];
-    [_dic setValue:[NSString stringWithFormat:@"%d", topic.topicId] forKey:@"专题ID"];
-    [[FSAnalysis instance] logEvent:@"查看专题列表" withParameters:_dic];
+    switch (topic.targetType) {
+        case SkipTypeDefault:
+        case SkipTypeProductList:
+        {
+            FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+            dr.topic = topic;
+            dr.pageType = FSPageTypeTopic;
+            [self.navigationController pushViewController:dr animated:TRUE];
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        }
+            break;
+        case SkipTypePromotionDetail:
+        {
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
+            item.id = [topic.targetId intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourcePromotion;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [self presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case SkipTypeProductDetail:
+        {
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProItemEntity *item = [[FSProItemEntity alloc] init];
+            item.id = [topic.targetId intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourceProduct;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [self presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case SkipTypeURL:
+        {
+            FSContentViewController *controller = [[FSContentViewController alloc] init];
+            controller.fileName = topic.targetId;
+            controller.title = topic.name;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        case SkipTypeNone:
+        {
+            //do nothing
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma UITableViewDataSource
@@ -290,6 +333,36 @@
     cell.content.layer.borderWidth = 1;
     cell.content.layer.borderColor = RGBACOLOR(0xee, 0xee, 0xee, 1).CGColor;
     return cell;
+}
+
+#pragma mark - FSProDetailItemSourceProvider
+/*
+-(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
+{
+    if (view.sourceType == FSSourcePromotion) {
+        FSProItemEntity *item =  [view.navContext objectAtIndex:index];
+        if (item)
+            block(item);
+        else
+            errorBlock();
+    }
+    else if (view.sourceType == FSSourceProduct) {
+        FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
+        if (item)
+            block(item);
+        else
+            errorBlock();
+    }
+}
+ */
+-(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return view.sourceType;
+}
+
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return TRUE;
 }
 
 - (void)viewDidUnload {

@@ -41,11 +41,6 @@
 
 @end
 
-typedef enum {
-    Ex_Standard,//兑换标准
-    Ex_Attention,//注意事项
-}ExCommonType;
-
 @interface FSPointExCommonCell : UITableViewCell
 
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
@@ -54,10 +49,9 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet RTLabel *content;
 @property (nonatomic,strong) NSString *title;
 @property (nonatomic,strong) NSString *desc;
-@property (nonatomic) ExCommonType type;
 
 @property (nonatomic) int cellHeight;
-@property (nonatomic, strong) FSExchange* data;
+-(void)setData;
 
 @end
 

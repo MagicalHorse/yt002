@@ -7,6 +7,7 @@
 //
 
 #import "FSPointGiftListCell.h"
+#import "FSCommon.h"
 
 @implementation FSPointGiftListCell
 
@@ -29,38 +30,38 @@
 -(void)setData:(id)data
 {
     _data = data;
-    int yCap = 12;
-    _cellHeight = yCap;
+    _titleView.text = _data.promotion.name;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yy年MM月dd日"];
+    _valideTime.text = [NSString stringWithFormat:@"有效期: %@止", [df stringFromDate:_data.validEndDate]];
+    _amountView.text = [NSString stringWithFormat:@"%.2f元", _data.amount];
+    _giftNumber.text = _data.giftCode;
+}
+
+@end
+
+@implementation FSPointGiftInfoCell
+
+-(void)setData:(id)data
+{
+    _data = data;
     
-    NSString *str = @"<font face='HelveticaNeue-CondensedBold' size=16>VIP回馈“礼”积点领 VIP回馈“礼”积点领 VIP回馈“礼”积点领 VIP回馈“礼”积点领 VIP回馈“礼”积点领 VIP回馈“礼”积点领 VIP回馈“礼”积点领</font>";
-    [_titleView setText:str];
-    CGRect _rect = _titleView.frame;
-    _rect.origin.y = _cellHeight;
-    _rect.size.height = _titleView.optimumSize.height;
-    _titleView.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yy年MM月dd日 HH:MM:SS"];
     
-    str = @"<font face='HelveticaNeue-CondensedBold' size=13 color='#e4e400'>有效期:  2013-05-30止</font>";
-    [_valideTime setText:str];
-    _rect = _valideTime.frame;
-    _rect.origin.y = _cellHeight;
-    _rect.size.height = _valideTime.optimumSize.height;
-    _valideTime.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
-    
-    str = @"<font face='HelveticaNeue-CondensedBold' size=16 color='#e4e400'>礼券面额:  </font><font face=AmericanTypewriter size=16 color='#CC0000'>50元</font>";
-    [_amountView setText:str];
-    _rect = _amountView.frame;
-    _rect.origin.y = _cellHeight;
-    _rect.size.height = _amountView.optimumSize.height;
-    _amountView.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
-    
-    _rect = _giftNumber.frame;
-    _rect.origin.y = _valideTime.frame.origin.y;
-    _giftNumber.frame = _rect;
-    [_giftNumber setText:@"<font face='HelveticaNeue-CondensedBold' size=20 color='#00ee00'>14787890087</font>"];
-    [_giftNumber setTextAlignment:RTTextAlignmentRight];
+    NSLog(@"%@", _data.createDate);
+    _createTime.text = [df stringFromDate:_data.createDate];
+    [df setDateFormat:@"yy年MM月dd日"];
+    _validate.text = [NSString stringWithFormat:@"%@止", [df stringFromDate:_data.validEndDate]];
+    if (_data.promotion.inscopenotices.count > 0) {
+        FSCommon *item = _data.promotion.inscopenotices[0];
+        _useStore.text = item.storename;
+    }
+    _pointCount.text = [NSString stringWithFormat:@"%d", _data.points];
+    _cashCount.text = [NSString stringWithFormat:@"%.2f元", _data.amount];
+    _giftCode.text = _data.giftCode;
+    _attention.text = @"特别提醒：请在使用礼券购买商品时，请同时出示会员卡进行使用。";
+    _attention.numberOfLines = 2;
 }
 
 @end

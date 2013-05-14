@@ -17,6 +17,8 @@
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic) BOOL isFavorited;
 @property (nonatomic) int topicId;
+@property (nonatomic,strong) NSString* targetId;
+@property (nonatomic) int targetType;
 @property (nonatomic,strong) NSMutableArray *resources;
 
 @end

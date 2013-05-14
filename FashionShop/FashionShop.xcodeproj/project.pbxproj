@@ -20,6 +20,19 @@
 		02160E4E1703E57D00D77FE0 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E4D1703E57C00D77FE0 /* CoreAudio.framework */; };
 		02160E501703E58500D77FE0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E4F1703E58500D77FE0 /* AVFoundation.framework */; };
 		02160E521703E98A00D77FE0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02160E511703E98900D77FE0 /* AudioToolbox.framework */; };
+		0216DF26173EA7BD00C6CA9B /* FSAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF24173EA7BD00C6CA9B /* FSAboutViewController.m */; };
+		0216DF27173EA7BD00C6CA9B /* FSAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF25173EA7BD00C6CA9B /* FSAboutViewController.xib */; };
+		0216DF381740B16700C6CA9B /* FSContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF361740B16700C6CA9B /* FSContentViewController.m */; };
+		0216DF391740B16700C6CA9B /* FSContentViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF371740B16700C6CA9B /* FSContentViewController.xib */; };
+		0216DF3B1740D39C00C6CA9B /* brand_story_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF3A1740D39C00C6CA9B /* brand_story_bg@2x.png */; };
+		0216DF3F1741DA5F00C6CA9B /* FSStoreDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF3E1741DA5F00C6CA9B /* FSStoreDetailCell.m */; };
+		0216DF451741DA7200C6CA9B /* FSStoreDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF441741DA7200C6CA9B /* FSStoreDetailCell.xib */; };
+		0216DF471741E81F00C6CA9B /* arrow_down_1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF461741E81F00C6CA9B /* arrow_down_1@2x.png */; };
+		0216DF4B17422D5800C6CA9B /* FSMyCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF4917422D5800C6CA9B /* FSMyCommentController.m */; };
+		0216DF4C17422D5800C6CA9B /* FSMyCommentController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF4A17422D5800C6CA9B /* FSMyCommentController.xib */; };
+		0216DF4F1742301700C6CA9B /* FSMyCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF4E1742301600C6CA9B /* FSMyCommentCell.m */; };
+		0216DF511742302C00C6CA9B /* FSMyCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0216DF501742302B00C6CA9B /* FSMyCommentCell.xib */; };
+		0216DF5417423F3500C6CA9B /* FSPagedMyComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 0216DF5317423F3500C6CA9B /* FSPagedMyComment.m */; };
 		0217169E16D242390098288A /* EGOPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167116D242390098288A /* EGOPhotoViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0217169F16D242390098288A /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167416D242390098288A /* EGOCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716A016D242390098288A /* EGOImageLoadConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217167716D242390098288A /* EGOImageLoadConnection.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -116,6 +129,7 @@
 		027F6DC9173CDAF1004F7ACE /* btn_right_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 027F6DC7173CDAF1004F7ACE /* btn_right_select@2x.png */; };
 		027F6DCB173CDE83004F7ACE /* nav_bg_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 027F6DCA173CDE83004F7ACE /* nav_bg_2@2x.png */; };
 		027F6DCE173CE64F004F7ACE /* FSCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 027F6DCD173CE64F004F7ACE /* FSCommon.m */; };
+		027F6DD3173D5952004F7ACE /* FSPagedGiftList.m in Sources */ = {isa = PBXBuildFile; fileRef = 027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */; };
 		0284773D172CB33C002763F6 /* FSGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0284773A172CB33C002763F6 /* FSGiftListViewController.m */; };
 		0284773E172CB33C002763F6 /* FSGiftListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0284773C172CB33C002763F6 /* FSGiftListViewController.xib */; };
 		02847746172CC887002763F6 /* FSPointGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02847744172CC887002763F6 /* FSPointGiftListViewController.m */; };
@@ -630,6 +644,25 @@
 		02160E4D1703E57C00D77FE0 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		02160E4F1703E58500D77FE0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		02160E511703E98900D77FE0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		0216DF23173EA7BD00C6CA9B /* FSAboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAboutViewController.h; sourceTree = "<group>"; };
+		0216DF24173EA7BD00C6CA9B /* FSAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAboutViewController.m; sourceTree = "<group>"; };
+		0216DF25173EA7BD00C6CA9B /* FSAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAboutViewController.xib; sourceTree = "<group>"; };
+		0216DF351740B16700C6CA9B /* FSContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSContentViewController.h; sourceTree = "<group>"; };
+		0216DF361740B16700C6CA9B /* FSContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSContentViewController.m; sourceTree = "<group>"; };
+		0216DF371740B16700C6CA9B /* FSContentViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSContentViewController.xib; sourceTree = "<group>"; };
+		0216DF3A1740D39C00C6CA9B /* brand_story_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "brand_story_bg@2x.png"; sourceTree = "<group>"; };
+		0216DF3D1741DA5F00C6CA9B /* FSStoreDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSStoreDetailCell.h; path = Controls/FSStoreDetailCell.h; sourceTree = "<group>"; };
+		0216DF3E1741DA5F00C6CA9B /* FSStoreDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSStoreDetailCell.m; path = Controls/FSStoreDetailCell.m; sourceTree = "<group>"; };
+		0216DF441741DA7200C6CA9B /* FSStoreDetailCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSStoreDetailCell.xib; path = Controls/FSStoreDetailCell.xib; sourceTree = "<group>"; };
+		0216DF461741E81F00C6CA9B /* arrow_down_1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_down_1@2x.png"; sourceTree = "<group>"; };
+		0216DF4817422D5800C6CA9B /* FSMyCommentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSMyCommentController.h; sourceTree = "<group>"; };
+		0216DF4917422D5800C6CA9B /* FSMyCommentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSMyCommentController.m; sourceTree = "<group>"; };
+		0216DF4A17422D5800C6CA9B /* FSMyCommentController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSMyCommentController.xib; sourceTree = "<group>"; };
+		0216DF4D1742301400C6CA9B /* FSMyCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSMyCommentCell.h; path = Controls/FSMyCommentCell.h; sourceTree = "<group>"; };
+		0216DF4E1742301600C6CA9B /* FSMyCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSMyCommentCell.m; path = Controls/FSMyCommentCell.m; sourceTree = "<group>"; };
+		0216DF501742302B00C6CA9B /* FSMyCommentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSMyCommentCell.xib; path = Controls/FSMyCommentCell.xib; sourceTree = "<group>"; };
+		0216DF5217423F3500C6CA9B /* FSPagedMyComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedMyComment.h; path = Model/FSPagedMyComment.h; sourceTree = "<group>"; };
+		0216DF5317423F3500C6CA9B /* FSPagedMyComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedMyComment.m; path = Model/FSPagedMyComment.m; sourceTree = "<group>"; };
 		0217167016D242390098288A /* EGOPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOPhotoViewController.h; sourceTree = "<group>"; };
 		0217167116D242390098288A /* EGOPhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoViewController.m; sourceTree = "<group>"; };
 		0217167316D242390098288A /* EGOCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOCache.h; sourceTree = "<group>"; };
@@ -758,6 +791,8 @@
 		027F6DCA173CDE83004F7ACE /* nav_bg_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_bg_2@2x.png"; sourceTree = "<group>"; };
 		027F6DCC173CE64F004F7ACE /* FSCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCommon.h; path = Model/FSCommon.h; sourceTree = "<group>"; };
 		027F6DCD173CE64F004F7ACE /* FSCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCommon.m; path = Model/FSCommon.m; sourceTree = "<group>"; };
+		027F6DD1173D5951004F7ACE /* FSPagedGiftList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedGiftList.h; path = Model/FSPagedGiftList.h; sourceTree = "<group>"; };
+		027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedGiftList.m; path = Model/FSPagedGiftList.m; sourceTree = "<group>"; };
 		0284773A172CB33C002763F6 /* FSGiftListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSGiftListViewController.m; sourceTree = "<group>"; };
 		0284773B172CB33C002763F6 /* FSGiftListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSGiftListViewController.h; sourceTree = "<group>"; };
 		0284773C172CB33C002763F6 /* FSGiftListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSGiftListViewController.xib; sourceTree = "<group>"; };
@@ -1934,6 +1969,12 @@
 				02F6159016B3DC57001F93ED /* FSTopicListCell.h */,
 				02F6159116B3DC57001F93ED /* FSTopicListCell.m */,
 				02F6159216B3DC57001F93ED /* FSTopicListCell.xib */,
+				0216DF3D1741DA5F00C6CA9B /* FSStoreDetailCell.h */,
+				0216DF3E1741DA5F00C6CA9B /* FSStoreDetailCell.m */,
+				0216DF441741DA7200C6CA9B /* FSStoreDetailCell.xib */,
+				0216DF4D1742301400C6CA9B /* FSMyCommentCell.h */,
+				0216DF4E1742301600C6CA9B /* FSMyCommentCell.m */,
+				0216DF501742302B00C6CA9B /* FSMyCommentCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2237,6 +2278,15 @@
 				0284773B172CB33C002763F6 /* FSGiftListViewController.h */,
 				0284773A172CB33C002763F6 /* FSGiftListViewController.m */,
 				0284773C172CB33C002763F6 /* FSGiftListViewController.xib */,
+				0216DF23173EA7BD00C6CA9B /* FSAboutViewController.h */,
+				0216DF24173EA7BD00C6CA9B /* FSAboutViewController.m */,
+				0216DF25173EA7BD00C6CA9B /* FSAboutViewController.xib */,
+				0216DF351740B16700C6CA9B /* FSContentViewController.h */,
+				0216DF361740B16700C6CA9B /* FSContentViewController.m */,
+				0216DF371740B16700C6CA9B /* FSContentViewController.xib */,
+				0216DF4817422D5800C6CA9B /* FSMyCommentController.h */,
+				0216DF4917422D5800C6CA9B /* FSMyCommentController.m */,
+				0216DF4A17422D5800C6CA9B /* FSMyCommentController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2258,6 +2308,10 @@
 				74254F57169D3C93002E269E /* FSPagedItem.m */,
 				02B813BC173A24E70003BCBA /* FSPagedExchangeList.h */,
 				02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */,
+				027F6DD1173D5951004F7ACE /* FSPagedGiftList.h */,
+				027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */,
+				0216DF5217423F3500C6CA9B /* FSPagedMyComment.h */,
+				0216DF5317423F3500C6CA9B /* FSPagedMyComment.m */,
 			);
 			name = Paged;
 			sourceTree = "<group>";
@@ -2284,6 +2338,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0216DF461741E81F00C6CA9B /* arrow_down_1@2x.png */,
+				0216DF3A1740D39C00C6CA9B /* brand_story_bg@2x.png */,
 				027F6DCA173CDE83004F7ACE /* nav_bg_2@2x.png */,
 				027F6DC6173CDAF0004F7ACE /* btn_right_normal@2x.png */,
 				027F6DC7173CDAF1004F7ACE /* btn_right_select@2x.png */,
@@ -3286,6 +3342,13 @@
 				027F6DC8173CDAF1004F7ACE /* btn_right_normal@2x.png in Resources */,
 				027F6DC9173CDAF1004F7ACE /* btn_right_select@2x.png in Resources */,
 				027F6DCB173CDE83004F7ACE /* nav_bg_2@2x.png in Resources */,
+				0216DF27173EA7BD00C6CA9B /* FSAboutViewController.xib in Resources */,
+				0216DF391740B16700C6CA9B /* FSContentViewController.xib in Resources */,
+				0216DF3B1740D39C00C6CA9B /* brand_story_bg@2x.png in Resources */,
+				0216DF451741DA7200C6CA9B /* FSStoreDetailCell.xib in Resources */,
+				0216DF471741E81F00C6CA9B /* arrow_down_1@2x.png in Resources */,
+				0216DF4C17422D5800C6CA9B /* FSMyCommentController.xib in Resources */,
+				0216DF511742302C00C6CA9B /* FSMyCommentCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3552,6 +3615,13 @@
 				02B813BE173A24E70003BCBA /* FSPagedExchangeList.m in Sources */,
 				02B813C5173A25170003BCBA /* FSExchange.m in Sources */,
 				027F6DCE173CE64F004F7ACE /* FSCommon.m in Sources */,
+				027F6DD3173D5952004F7ACE /* FSPagedGiftList.m in Sources */,
+				0216DF26173EA7BD00C6CA9B /* FSAboutViewController.m in Sources */,
+				0216DF381740B16700C6CA9B /* FSContentViewController.m in Sources */,
+				0216DF3F1741DA5F00C6CA9B /* FSStoreDetailCell.m in Sources */,
+				0216DF4B17422D5800C6CA9B /* FSMyCommentController.m in Sources */,
+				0216DF4F1742301700C6CA9B /* FSMyCommentCell.m in Sources */,
+				0216DF5417423F3500C6CA9B /* FSPagedMyComment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

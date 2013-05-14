@@ -30,6 +30,7 @@
 #import "FSLoadMoreRefreshFooter.h"
 #import "FSMoreViewController.h"
 #import "FSGiftListViewController.h"
+#import "FSMyCommentController.h"
 
 #import "FSModelManager.h"
 #import "FSLocationManager.h"
@@ -425,7 +426,7 @@
     [btn setBackgroundImage:[UIImage imageNamed:@"btn_right_normal.png"] forState:UIControlStateNormal];
     [btn sizeToFit];
     UIBarButtonItem *baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
-    UIBarButtonItem *baritemletter= [self createPlainBarButtonItem:@"message.png" target:self action:@selector(onSetting)];
+    UIBarButtonItem *baritemletter= [self createPlainBarButtonItem:@"message.png" target:self action:@selector(clickToMyComment:)];
     NSArray *_array = [NSArray arrayWithObjects:baritemSet,baritemletter, nil];
     [self.navigationItem setRightBarButtonItems:_array];
     [_userProfileView removeFromSuperview];
@@ -438,7 +439,12 @@
     }
     [self registerKVO];
     [self registerLocalNotification];
-    
+}
+
+-(void)clickToMyComment:(UIButton*)sender
+{
+    FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+    [self.navigationController pushViewController:controller animated:true];
 }
 
 -(void) setSegHeader
@@ -499,24 +505,25 @@
     _thumbImg.delegate = self;
     
     [_btnHeaderBg addTarget:self action:@selector(handleChangeHeaderBg:) forControlEvents:UIControlEventTouchUpInside];
-    [_btnHeaderBg setBackgroundImage:_btnHeaderBg.currentBackgroundImage forState:UIControlStateHighlighted];
+    //[_btnHeaderBg setBackgroundImage:_btnHeaderBg.currentBackgroundImage forState:UIControlStateHighlighted];
     origFrame = _btnHeaderBg.frame;
     [_btnHeaderBg setTitle:@"" forState:UIControlStateNormal];
     origFrame.origin.y = _segHeader.frame.origin.y - origFrame.size.height;
     _btnHeaderBg.frame = origFrame;
+    [_btnHeaderBg setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]] forState:UIControlStateNormal];
     
     origFrame = _tbScroll.frame;
     origFrame.size.height = APP_HIGH - NAV_HIGH - TAB_HIGH;
     _tbScroll.frame = origFrame;
     
-    _btnLike.titleLabel.font = ME_FONT(9);
+    _btnLike.titleLabel.font = ME_FONT(10);
     _btnLike.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnLike setTitle:[NSString stringWithFormat:@"%d",_userProfile.likeTotal] forState:UIControlStateNormal];
     
-    _btnFans.titleLabel.font = ME_FONT(9);
+    _btnFans.titleLabel.font = ME_FONT(10);
     _btnFans.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnFans setTitle:[NSString stringWithFormat:@"%d",_userProfile.fansTotal] forState:UIControlStateNormal];
-    _btnCoupons.titleLabel.font = ME_FONT(12);
+    _btnCoupons.titleLabel.font = ME_FONT(10);
     _btnCoupons.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
     
@@ -819,8 +826,9 @@
             [_thumbImg reloadThumb:_userProfile.thumnailUrl];
         }
         else{
-            [_btnHeaderBg setImage:image forState:UIControlStateNormal];
-            [_btnHeaderBg setImage:image forState:UIControlStateHighlighted];
+            //[_btnHeaderBg setBackgroundImage:image forState:UIControlStateNormal];
+            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]];
+            [_btnHeaderBg setImage:img forState:UIControlStateNormal];
         }
         
     } error:^(id error){

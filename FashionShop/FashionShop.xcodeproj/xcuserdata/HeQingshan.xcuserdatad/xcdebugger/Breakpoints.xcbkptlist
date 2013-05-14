@@ -7,39 +7,13 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "ModelService/FSLocationManager.m"
-         timestampString = "388118038.310394"
+         filePath = "Controls/FSMyCommentCell.m"
+         timestampString = "390219166.412065"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "121"
-         endingLineNumber = "121"
-         landmarkName = "+computeDistanceToCurrentLocation:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "Controls/Common/SpringboardLayout.m"
-         timestampString = "389602537.173674"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "147"
-         endingLineNumber = "147"
-         landmarkName = "-collectionViewContentSize"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "ModelService/FSEntityRequestBase.m"
-         timestampString = "389771222.500342"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "101"
-         endingLineNumber = "101"
-         landmarkName = "-send:withRequest:completeCallBack:"
+         startingLineNumber = "33"
+         endingLineNumber = "33"
+         landmarkName = "-setData:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -17,6 +17,7 @@
 
 @implementation FSCardBindViewController
 @synthesize currentUser;
+@synthesize completeCallBack;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -92,13 +93,22 @@
             request.userToken = currentUser.uToken;
             request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
             [self beginLoading:self.view];
+            __block FSCardBindViewController *blockSelf = self;
             [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
                 if (!resp.isSuccess)
                 {
+                    if (blockSelf->completeCallBack!=nil)
+                    {
+                        blockSelf->completeCallBack(NO);
+                    }
                     [self reportError:resp.message];
                 }
                 else
                 {
+                    if (blockSelf->completeCallBack!=nil)
+                    {
+                        blockSelf->completeCallBack(YES);
+                    }
                     //显示绑定成功界面
                     _cardNumField.text = @"";
                     _cardPwField.text = @"";
@@ -145,13 +155,22 @@
         request.passWord = _cardPwField.text;
         request.routeResourcePath = RK_REQUEST_USER_CARD_BIND;
         [self beginLoading:self.view];
+        __block FSCardBindViewController *blockSelf = self;
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (!resp.isSuccess)
             {
+                if (blockSelf->completeCallBack!=nil)
+                {
+                    blockSelf->completeCallBack(NO);
+                }
                 [self reportError:resp.errorDescrip];
             }
             else
             {
+                if (blockSelf->completeCallBack!=nil)
+                {
+                    blockSelf->completeCallBack(YES);
+                }
                 [self reportError:resp.message];
                 //显示绑定成功界面
                 _cardNumField.text = @"";
@@ -193,6 +212,14 @@
 - (IBAction)unBindCard:(id)sender {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt",nil) message:NSLocalizedString(@"Prompt Of UnBindCard", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     [alert show];
+}
+
+-(void)popViewControllerAnimated:(BOOL)flag completion: (void (^)(void))completion
+{
+    [self.navigationController popViewControllerAnimated:flag];
+    if (completion) {
+        completion();
+    }
 }
 
 #pragma UIAlertViewDelegate

@@ -14,7 +14,7 @@
 #import "FSPagedExchangeList.h"
 #import "FSExchange.h"
 
-#define Point_Exchange_Cell_Indentifier @"PointExchangeListCell"
+#define Point_Exchange_Cell_Indentifier @"FSExchangeListCell"
 
 @interface FSPointExchangeListViewController ()
 {
@@ -55,8 +55,8 @@
     //加载数据
     FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_LIST;
-    request.pageSize = @COMMON_PAGE_SIZE;
-    request.nextPage = [NSNumber numberWithInt:_currentPage];
+    request.pageSize = COMMON_PAGE_SIZE;
+    request.nextPage = _currentPage;
     [self beginLoading:_contentView];
     _inLoading = YES;
     [request send:[FSPagedExchangeList class] withRequest:request completeCallBack:^(FSEntityBase *respData) {

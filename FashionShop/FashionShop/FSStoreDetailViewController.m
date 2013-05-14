@@ -12,13 +12,22 @@
 #import "UIImageView+WebCache.h"
 #import "FSStoreMapViewController.h"
 #import "PositionAnnotation.h"
+#import "FSProListRequest.h"
+#import "FSProItems.h"
+#import "FSStoreDetailCell.h"
+#import "FSProNearDetailCell.h"
 
 #define kMKCoordinateSpan 0.005
 
 @interface FSStoreDetailViewController ()
 {
-    MKMapView *_mapView;
     UIImageView *_picImage;
+    UIImageView *_picArrow;
+    NSMutableArray *_promotions;
+    BOOL _isInLoading;
+    bool _noMoreResult;
+    int _currentPage;
+    BOOL _isExpandOfDesc;
 }
 
 @end
@@ -41,59 +50,97 @@
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     self.title = _store.name;
+    _tbAction.backgroundView = nil;
+    _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
+    _tbAction.hidden = YES;
     
     if (!_picImage) {
         _picImage = [[UIImageView alloc] init];
-        _picImage.frame = CGRectMake(10, 10, 300, 200);
+        _picImage.frame = CGRectMake(0, 0, 320, 200);
         _picImage.clipsToBounds = YES;
     }
     _picImage.contentMode = UIViewContentModeScaleAspectFill;
     _picImage.image = [UIImage imageNamed:@"default_icon320.png"];
     
-    [self viewToImage];
+    _currentPage = 1;
+    [self requestData:NO];
 }
 
-//截图
-- (void)viewToImage
+-(void)requestData:(BOOL)isLoadMore
 {
-    CLLocationCoordinate2D center;
-    center.latitude = [_store.lantit floatValue];
-    center.longitude = [_store.longit floatValue];
-    
-    _mapView= [[MKMapView alloc] initWithFrame:CGRectMake(0, 1000, 300, 200)];
-    [self.view addSubview:_mapView];
-    MKCoordinateSpan span = {kMKCoordinateSpan, kMKCoordinateSpan};
-    MKCoordinateRegion region = MKCoordinateRegionMake(center, span);
-    [_mapView setRegion:region animated:NO];
-    
-    PositionAnnotation *annotation = [[PositionAnnotation alloc] initWithCoordinate:center title:nil subTitle:nil];
-    [_mapView addAnnotation:annotation];
-    
-    [self performSelector:@selector(createImage:) withObject:_mapView afterDelay:3];
+    FSProListRequest *request = [[FSProListRequest alloc] init];
+    request.requestType = 1;
+    request.routeResourcePath = RK_REQUEST_PRO_LIST;
+    request.pageSize = COMMON_PAGE_SIZE;
+    request.filterType = FSProSortByDist;
+    request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+    request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    request.previousLatestDate = [NSDate date];
+    request.nextPage = _currentPage + (isLoadMore?1:0);
+    request.storeid = _store.id;
+    isLoadMore?[self beginLoadMoreLayout:_tbAction]:[self beginLoading:_tbAction];
+    _isInLoading = YES;
+    __block FSStoreDetailViewController *blockSelf = self;
+    [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+        isLoadMore?[self endLoadMore:_tbAction]:[self endLoading:_tbAction];
+        _isInLoading = NO;
+        if (!respData.isSuccess) {
+            [blockSelf reportError:respData.errorDescrip];
+        }
+        else{
+            FSProItems *response = (FSProItems *) respData.responseData;
+            _currentPage += isLoadMore?1:0;
+            if (response.totalPageCount <= _currentPage)
+                _noMoreResult = YES;
+            [blockSelf fillProdInMemory:response.items isInsert:NO];
+            
+            if (_tbAction.hidden) {
+                _tbAction.hidden = NO;
+            }
+        }
+    }];
 }
 
--(void)createImage:(UIView*)view
+-(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
 {
-    if(UIGraphicsBeginImageContextWithOptions != NULL)
-    {
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(296, 196), NO, 0.0);
-    } else {
-        UIGraphicsBeginImageContext(CGSizeMake(296, 196));
+    if (!prods)
+        return;
+    if (!_promotions) {
+        _promotions = [NSMutableArray array];
     }
-    
-    //获取图像
-    [_mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    if (!_picImage) {
-        _picImage = [[UIImageView alloc] init];
-        _picImage.frame = CGRectMake(10, 10, 300, 200);
-    }
-    _picImage.image = image;
-    
-    [_mapView removeFromSuperview];
+    [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        int index = [_promotions indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
+            if ([[(FSProItemEntity *)obj1 valueForKey:@"id"] intValue] ==[[(FSProItemEntity *)obj valueForKey:@"id"] intValue])
+            {
+                return TRUE;
+                *stop1 = TRUE;
+            }
+            return FALSE;
+        }];
+        if (index==NSNotFound)
+        {
+            if (!isinserted)
+            {
+                [_promotions addObject:obj];
+            } else
+            {
+                [_promotions insertObject:obj atIndex:0];
+            }
+        }
+    }];
     [_tbAction reloadData];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (!_noMoreResult &&
+        !_isInLoading &&
+        (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
+        && scrollView.contentSize.height>scrollView.frame.size.height
+        &&scrollView.contentOffset.y>0)
+    {
+        [self requestData:YES];
+    }
 }
 
 - (IBAction)onButtonBack:(id)sender {
@@ -111,123 +158,257 @@
     [super viewDidUnload];
 }
 
+-(void)clickToExpandDescContent:(NSArray*)array
+{
+    _isExpandOfDesc = !_isExpandOfDesc;
+    [_tbAction reloadRowsAtIndexPaths:array withRowAnimation:UITableViewRowAnimationFade];
+    
+    CGAffineTransform  transform;
+    //设置旋转度数
+    if (!_isExpandOfDesc) {
+        transform = CGAffineTransformRotate(_picArrow.transform,-M_PI);
+        [_picArrow setTransform:transform];
+    }
+    transform = CGAffineTransformRotate(_picArrow.transform,M_PI);
+    //动画开始
+    [UIView beginAnimations:@"rotate" context:nil ];
+    //动画时常
+    [UIView setAnimationDuration:0.33];
+    //添加代理
+    [UIView setAnimationDelegate:self];
+    //获取transform的值
+    [_picArrow setTransform:transform];
+    //关闭动画
+    [UIView commitAnimations];
+}
+
+-(void)clickToMoreProduct:(UIButton*)sender
+{
+    FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+    dr.store = _store;
+    dr.keyWords = _store.name;
+    dr.pageType = FSPageTypeStore;
+    dr.titleName = dr.keyWords;
+    [self.navigationController pushViewController:dr animated:YES];
+}
+
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return 30;
+    }
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSStoreDetailCell" owner:self options:nil];
+        if (_array.count > 1) {
+           FSStoreProHeadView *view = (FSStoreProHeadView*)_array[1];
+            [view.moreProductBtn addTarget:self action:@selector(clickToMoreProduct:) forControlEvents:UIControlEventTouchUpInside];
+            return view;
+        }
+    }
+    return nil;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (indexPath.row) {
-        case CellTitle:
-        {
-            int height =[_store.name sizeWithFont:ME_FONT(16) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
-            return height;
+    if (indexPath.section == 0) {
+        switch (indexPath.row) {
+            case 0:
+            {
+                return 200;
+            }
+                break;
+            case 1:
+            {
+                return 60;
+            }
+                break;
+            case 2:
+            {
+                FSStoreDescCell *cell = (FSStoreDescCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+                int height = _isExpandOfDesc?cell.cellHeight_Expand:cell.cellHeight_Contract;
+                return height;
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case CellPicture:
-        {
-            return 220;
-        }
-            break;
-        case CellAddress:
-        {
-            int height =[_store.address sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
-            return height;
-        }
-            break;
-        case CellDesc:
-        {
-            int height =[_store.descrip sizeWithFont:ME_FONT(13) constrainedToSize:CGSizeMake(310, 1000) lineBreakMode:NSLineBreakByCharWrapping].height + 26;
-            return height;
-        }
-            break;
-        default:
-            break;
     }
-    return 44;
+    else{
+        return 80;
+    }
+    return 0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    switch (indexPath.row) {
-        case CellPicture:
-        case CellAddress:
-        {
-            FSStoreMapViewController *controller = [[FSStoreMapViewController alloc] initWithNibName:@"FSStoreMapViewController" bundle:nil];
-            controller.store = _store;
-            [self.navigationController pushViewController:controller animated:YES];
+    if (indexPath.section == 0) {
+        switch (indexPath.row) {
+            case 0:
+            {
+                FSStoreMapViewController *controller = [[FSStoreMapViewController alloc] initWithNibName:@"FSStoreMapViewController" bundle:nil];
+                controller.store = _store;
+                [self.navigationController pushViewController:controller animated:YES];
+            }
+                break;
+            case 1:
+            {
+                [self clickToDial:nil];
+            }
+                break;
+            case 2:
+            {
+                //收起或者展开详细描述内容
+                [self clickToExpandDescContent:[NSArray arrayWithObjects:indexPath, nil]];
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case CellPhone:
-        {
-            [self clickToDial:nil];
-        }
-            break;
-        default:
-            break;
     }
+    else{
+        FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+        detailViewController.navContext = _promotions;
+        detailViewController.dataProviderInContext = self;
+        detailViewController.indexInContext = indexPath.row;
+        detailViewController.sourceType = FSSourcePromotion;
+        UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+        [self presentViewController:navControl animated:YES completion:nil];
+        [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    if (section == 0) {
+        return 3;
+    }
+    return _promotions.count;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    UIFont *font = ME_FONT(14);
-    switch (indexPath.row) {
-        case CellTitle:
-        {
-            cell.textLabel.numberOfLines = 0;
-            cell.textLabel.text = _store.name;
-            cell.textLabel.font = ME_FONT(18);
+    if (indexPath.section == 0) {
+        switch (indexPath.row) {
+            case 0://图片展现
+            {
+                NSString *picCell = @"UITableViewCell_Pic";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:picCell];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:picCell];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                _picImage.image = [UIImage imageNamed:@"图形1bb.png"];
+                [cell addSubview:_picImage];
+                return cell;
+            }
+                break;
+            case 1://店名和电话
+            {
+                NSString *phoneCell = @"UITableViewCell_Phone";
+                UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:phoneCell];
+                if (cell == nil) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:phoneCell];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.textLabel.numberOfLines = 0;
+                cell.textLabel.text = _store.name;
+                cell.textLabel.font = ME_FONT(16);
+                cell.detailTextLabel.text = [NSString stringWithFormat:@"联系电话: %@", _store.phone];
+                cell.detailTextLabel.font = ME_FONT(14);
+                return cell;
+            }
+                break;
+            case 2://地址和描述
+            {
+                NSString *storeDescCell = @"FSStoreDescCell";
+                FSStoreDescCell *cell = [tableView dequeueReusableCellWithIdentifier:storeDescCell];
+                if (cell == nil) {
+                    NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSStoreDetailCell" owner:self options:nil];
+                    if (_array.count > 0) {
+                        cell = (FSStoreDescCell*)_array[0];
+                    }
+                    else{
+                        cell = [[FSStoreDescCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storeDescCell];
+                    }
+                }
+                _picArrow = cell.arrow;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.address.text = _store.address;
+                [cell setDescData:_store.descrip];
+                return cell;
+            }
+                break;
+            default:
+                break;
         }
-            break;
-        case CellPicture:
-        {
-            [cell addSubview:_picImage];
-        }
-            break;
-        case CellAddress:
-        {
-            UIImage *locImg = [UIImage imageNamed:@"location_icon"];
-            cell.imageView.image = locImg;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = _store.address;
-            cell.textLabel.font = font;
-            cell.textLabel.numberOfLines = 0;
-        }
-            break;
-        case CellPhone:
-        {
-            UIImage *phoneImg = [UIImage imageNamed:@"phone_icon"];
-            cell.imageView.image = phoneImg;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.textLabel.text = _store.phone;
-            cell.textLabel.font = font;
-        }
-            break;
-        case CellDesc:
-        {
-            cell.textLabel.text = _store.descrip;
-            cell.textLabel.font = ME_FONT(13);
-            cell.textLabel.numberOfLines = 0;
-        }
-            break;
-        default:
-            break;
     }
-    return cell;
+    else{
+        FSProNearDetailCell *listCell = [tableView dequeueReusableCellWithIdentifier:@"FSProNearDetailCell"];
+        if (listCell == nil) {
+            NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearDetailCell" owner:self options:nil];
+            if (_array.count > 1) {
+                listCell = (FSProNearDetailCell*)_array[0];
+            }
+            else{
+                listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProNearDetailCell"];
+            }
+        }
+        listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
+        listCell.lblTitle.textColor = [UIColor whiteColor];
+        listCell.lblSubTitle.textColor = RGBCOLOR(179, 179, 179);
+        listCell.line.backgroundColor = RGBCOLOR(160, 160, 160);
+        listCell.line2.backgroundColor = RGBCOLOR(143, 143, 143);
+        
+        FSProItemEntity* proData = [_promotions objectAtIndex:indexPath.row];
+        NSDateFormatter *smdf = [[NSDateFormatter alloc]init];
+        [smdf setDateFormat:@"yyyy.MM.dd"];
+        NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
+        [emdf setDateFormat:@"yyyy.MM.dd"];
+        
+        NSString * str = [NSString stringWithFormat:@"<font size=12 color='#CBd2a8'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#CBd2a8'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+        [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
+        
+        return listCell;
+    }
+    
+    return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];;
 }
 
-#pragma mark - MKMapViewDelegate
+#pragma mark - FSProDetailItemSourceProvider
 
-- (void)mapViewDidFinishLoadingMap:(MKMapView *)mapView
+-(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
+    FSProItemEntity *item =  [view.navContext objectAtIndex:index];
+    if (item)
+        block(item);
+    else
+        errorBlock();
     
+}
+-(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return FSSourcePromotion;
+}
+
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return TRUE;
 }
 
 @end

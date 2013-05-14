@@ -124,6 +124,7 @@
 
 -(void) reloadThumb:(NSURL *)image
 {
+    NSLog(@"image:%@",image.absoluteString);
     [_imgView setImageWithURL:image placeholderImage:[UIImage imageNamed:@"default_icon50.png"]];
 }
 

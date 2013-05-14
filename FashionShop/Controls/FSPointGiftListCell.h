@@ -7,15 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RTLabel.h"
+#import "FSExchange.h"
 
 @interface FSPointGiftListCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet RTLabel *titleView;
-@property (strong, nonatomic) IBOutlet RTLabel *valideTime;
-@property (strong, nonatomic) IBOutlet RTLabel *amountView;
-@property (strong, nonatomic) IBOutlet RTLabel *giftNumber;
+@property (strong, nonatomic) IBOutlet UILabel *titleView;
+@property (strong, nonatomic) IBOutlet UILabel *valideTime;
+@property (strong, nonatomic) IBOutlet UILabel *amountView;
+@property (strong, nonatomic) IBOutlet UILabel *giftNumber;
 @property (nonatomic) int cellHeight;
 
-@property (nonatomic, strong) id data;
+@property (nonatomic, strong) FSGiftListItem* data;
+
+@end
+
+@interface FSPointGiftInfoCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UILabel *createTime;
+@property (strong, nonatomic) IBOutlet UILabel *validate;
+@property (strong, nonatomic) IBOutlet UILabel *useStore;
+@property (strong, nonatomic) IBOutlet UILabel *pointCount;
+@property (strong, nonatomic) IBOutlet UILabel *cashCount;
+@property (strong, nonatomic) IBOutlet UILabel *giftCode;
+@property (strong, nonatomic) IBOutlet UILabel *attention;
+
+@property (nonatomic, strong) FSGiftListItem* data;
 
 @end

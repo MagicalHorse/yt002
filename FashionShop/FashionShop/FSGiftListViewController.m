@@ -36,6 +36,9 @@
     
     _titles = @[NSLocalizedString(@"My Promotion List",nil),
                 NSLocalizedString(@"My Point Exchange List",nil)];
+    
+    _tbAction.backgroundView = nil;
+    _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 - (IBAction)onButtonBack:(id)sender {

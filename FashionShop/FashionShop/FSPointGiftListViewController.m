@@ -11,7 +11,7 @@
 #import "FSPointGiftListCell.h"
 #import "FSCommonUserRequest.h"
 #import "FSExchangeRequest.h"
-#import "FSPagedExchangeList.h"
+#import "FSPagedGiftList.h"
 #import "FSExchange.h"
 
 #define Point_Gift_List_Cell_Indentifier @"PointGiftListCell"
@@ -46,6 +46,7 @@
     self.title = NSLocalizedString(@"Point Exchange List", nil);
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
+    _currentSelIndex = 0;
     
     [self requestData];
     [self initArray];
@@ -61,16 +62,16 @@
             action();
             return;
         }
-        int currentPage = [_pageIndexList objectAtIndex:_currentSelIndex];
+        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
         [self setPageIndex:currentPage selectedSegmentIndex:_segFilters.selectedSegmentIndex];
         FSExchangeRequest *request = [self createRequest:currentPage];
         _inLoading = YES;
-        [request send:[FSPagedExchangeList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedGiftList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = NO;
             action();
             if (resp.isSuccess)
             {
-                FSPagedExchangeList *innerResp = resp.responseData;
+                FSPagedGiftList *innerResp = resp.responseData;
                 if (innerResp.totalPageCount <= currentPage)
                     [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
                 [self mergeLike:innerResp isInsert:NO];
@@ -150,15 +151,15 @@
 
 -(void) requestData
 {
-    int currentPage = [_pageIndexList objectAtIndex:_currentSelIndex];
+    int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
     [self setPageIndex:currentPage selectedSegmentIndex:_segFilters.selectedSegmentIndex];
     FSExchangeRequest *request = [self createRequest:currentPage];
     [self beginLoading:self.view];
-    [request send:[FSPagedExchangeList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+    [request send:[FSPagedGiftList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:self.view];
         if (resp.isSuccess)
         {
-            FSPagedExchangeList *innerResp = resp.responseData;
+            FSPagedGiftList *innerResp = resp.responseData;
             if (innerResp.totalPageCount <= currentPage)
                 [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
             [self mergeLike:innerResp isInsert:NO];
@@ -172,14 +173,14 @@
     }];
 }
 
--(void) mergeLike:(FSPagedExchangeList *)response isInsert:(BOOL)isinsert
+-(void) mergeLike:(FSPagedGiftList *)response isInsert:(BOOL)isinsert
 {
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     if (response && response.items)
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likes indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([[(FSExchange *)obj1 valueForKey:@"id"] isEqualToValue:[(FSExchange *)obj valueForKey:@"id" ]])
+                if ([[(FSGiftListItem *)obj1 valueForKey:@"id"] isEqualToValue:[(FSGiftListItem *)obj valueForKey:@"id" ]])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -196,24 +197,23 @@
         }];
         [_contentView reloadData];
     }
-    if (_likes.count<1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView];
-    }
+//    if (_likes.count<1)
+//    {
+//        //加载空视图
+//        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:30];
+//    }
+//    else
+//    {
+//        [self hideNoResultImage:_contentView];
+//    }
 }
 
 -(FSExchangeRequest *)createRequest:(int)index
 {
     FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
-    request.userToken =[FSModelManager sharedModelManager].loginToken;
-    request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
-    request.nextPage = [_pageIndexList objectAtIndex:_currentSelIndex];
-    request.type = @1;
+    request.pageSize = COMMON_PAGE_SIZE;
+    request.nextPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue] + 1;
+    request.type = _currentSelIndex+1;
     request.userToken = [FSUser localProfile].uToken;
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_COUPON_LIST;
     return request;
@@ -250,7 +250,8 @@
             cell = [[FSPointGiftListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Gift_List_Cell_Indentifier];
         }
     }
-    [cell setData:nil];
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
+    [cell setData:_likes[indexPath.section]];
     
     return cell;
 }
@@ -258,14 +259,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSPointGiftDetailViewController *controller = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
+    FSExchange *item = [_dataSourceList[_currentSelIndex] objectAtIndex:indexPath.section];
+    controller.requestID = item.id;
     [self.navigationController pushViewController:controller animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSPointGiftListCell *cell = (FSPointGiftListCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-    return cell.cellHeight;
+    return 88;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -280,13 +282,13 @@
        && !_noMore)
     {
         _inLoading = TRUE;
-        int currentPage = [_pageIndexList objectAtIndex:_currentSelIndex];
+        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
         FSExchangeRequest *request = [self createRequest:currentPage+1];
-        [request send:[FSPagedExchangeList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedGiftList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
             if (resp.isSuccess)
             {
-                FSPagedExchangeList *innerResp = resp.responseData;
+                FSPagedGiftList *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=currentPage+1)
                     [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
                 [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedSegmentIndex];

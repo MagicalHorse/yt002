@@ -11,6 +11,7 @@
 #import "FSModelManager.h"
 #import "CL_VoiceEngine.h"
 #import "FSStartViewController.h"
+#import "FSCommon.h"
 
 @class PKRevealController;
 
@@ -28,6 +29,7 @@
 @property (strong,nonatomic) NSMutableArray *allBrands;
 @property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
+@property (strong,nonatomic) FSCommon *versionData;
 
 @property (strong,nonatomic) UIViewController *root;
 

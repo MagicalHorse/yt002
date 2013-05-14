@@ -9,7 +9,7 @@
 #import "FSEntityRequestBase.h"
 
 #define RK_REQUEST_KEYWORD_LIST @"/hotword/list"
-#define RK_REQUEST_CHECK_VERSION @"/checkversion"
+#define RK_REQUEST_CHECK_VERSION @"/version/latest"
 
 @interface FSCommonRequest : FSEntityRequestBase
 

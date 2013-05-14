@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
 
+typedef void (^FSBindCompleteDelegate) (BOOL isSuccess);
+
 @interface FSCardBindViewController : UIViewController
 @property (strong, nonatomic) IBOutlet UIView *bindView;
 @property (strong, nonatomic) IBOutlet UITextField *cardNumField;
@@ -22,7 +24,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *cardPoint;
 - (IBAction)unBindCard:(id)sender;
 @property (strong, nonatomic) IBOutlet UIImageView *bgImageView;
+@property (strong,nonatomic) FSBindCompleteDelegate completeCallBack;
 
 @property (strong, nonatomic) FSUser *currentUser;
+
+-(void)popViewControllerAnimated:(BOOL)flag completion: (void (^)(void))completion;
 
 @end

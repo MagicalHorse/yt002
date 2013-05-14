@@ -10,6 +10,7 @@
 
 #define RK_REQUEST_COMMENT_LIST @"/comment/list"
 #define RK_REQUEST_COMMENT_SAVE @"/comment/create"
+#define RK_REQUEST_MYCOMMENT_LIST @"/comment/my"
 
 typedef void (^FSCommentCompleteBlock)(id);
 

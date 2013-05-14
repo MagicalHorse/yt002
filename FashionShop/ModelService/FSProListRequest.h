@@ -34,5 +34,6 @@
 @property(nonatomic,strong) NSNumber *promotionId;
 @property(nonatomic,strong) NSString *keyword;//关键字
 @property(nonatomic,assign) FSProdSortType searchType;
+@property(nonatomic,assign) int storeid;
 
 @end

@@ -36,6 +36,9 @@
     
     bool _noMoreResult;
     BOOL _isLoading;
+    BOOL _isShowBrandStory;
+    UIView *_brandShowView;
+    float _contentOffsetY;
 }
 
 @end
@@ -64,6 +67,8 @@
     [self zeroMemoryBlock];
     _prodPageIndex = 0;
     _refreshLatestDate = _firstLoadDate = [NSDate date];
+    _isShowBrandStory = NO;
+    
     FSProListRequest *request = nil;
     if (_pageType == FSPageTypeSearch) {
         request = [self buildListRequest:RK_REQUEST_PROD_SEARCH_LIST nextPage:1 isRefresh:NO];
@@ -81,12 +86,104 @@
                 _noMoreResult = TRUE;
             [_prods removeAllObjects];
             [self fillProdInMemory:result.prodItems isInsert:NO];
+            [self showBrandButton];
         }
         else
         {
             [self reportError:resp.errorDescrip];
         }
     }];
+}
+
+-(void)showBrandButton
+{
+    if (_prods.count > 0 && FSPageTypeBrand == _pageType) {
+        FSProdItemEntity *item = _prods[0];
+        if (item.brandDesc && ![item.brandDesc isEqualToString:@""]) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn addTarget:self action:@selector(showBrandDesc:) forControlEvents:UIControlEventTouchUpInside];
+            [btn setTitle:@"品牌介绍" forState:UIControlStateNormal];
+            btn.titleLabel.font = ME_FONT(13);
+            btn.showsTouchWhenHighlighted = YES;
+            [btn setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
+            [btn sizeToFit];
+            [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:btn]];
+        }
+    }
+}
+
+-(void)showBrandDesc:(UIButton*)sender
+{
+    if (_pageType != FSPageTypeBrand) {
+        return;
+    }
+    if (!_isShowBrandStory) {//还没有展开，此时展开
+        if (_prods.count > 0 && FSPageTypeBrand == _pageType)
+        {
+            FSProdItemEntity *item = _prods[0];
+            NSString *brandDesc = item.brandDesc;
+            int height = [brandDesc sizeWithFont:ME_FONT(12) constrainedToSize:CGSizeMake(295, 10000) lineBreakMode:NSLineBreakByCharWrapping].height;
+            CGRect _rect = CGRectMake(0, 0, 320, height + 25);
+            if (!_brandShowView) {
+                _brandShowView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 0)];
+                _brandShowView.clipsToBounds = YES;
+                UIImageView *imgV = [[UIImageView alloc] initWithFrame:_rect];
+                imgV.image = [UIImage imageNamed:@"brand_story_bg.png"];
+                [_brandShowView addSubview:imgV];
+                UILabel *descLb = [[UILabel alloc] initWithFrame:CGRectInset(_rect, 12.5, 12.5)];
+                descLb.tag = 200;
+                descLb.backgroundColor = [UIColor clearColor];
+                descLb.font = ME_FONT(12);
+                descLb.numberOfLines = 0;
+                descLb.lineBreakMode = NSLineBreakByCharWrapping;
+                [_brandShowView addSubview:descLb];
+                
+                [self.view addSubview:_brandShowView];
+            }
+            _brandShowView.hidden = NO;
+            UILabel *descLb = (UILabel*)[_brandShowView viewWithTag:200];
+            if (descLb) {
+                descLb.text = brandDesc;
+            }
+            _contentOffsetY = _productContent.contentOffset.y;
+            [UIView animateWithDuration:0.33 animations:^{
+                _brandShowView.frame = _rect;
+                
+                CGRect aRect = _productContent.frame;
+                aRect.size.height -= _brandShowView.frame.size.height;
+                aRect.origin.y += _brandShowView.frame.size.height;
+                //_productContent.frame = aRect;
+                //_productContent.contentOffset = CGPointMake(0, _contentOffsetY + _brandShowView.frame.size.height);
+            } completion:^(BOOL finished) {
+                //nothing
+            }];
+        }
+        else
+        {
+            return;
+        }
+    }
+    else{
+        if (!_brandShowView) {
+            return;
+        }
+        [UIView animateWithDuration:0.33 animations:^{
+            int height = _brandShowView.frame.size.height;
+            CGRect _rect = _brandShowView.frame;
+            _rect.size.height = 0;
+            _brandShowView.frame = _rect;
+            
+            _rect = _productContent.frame;
+            _rect.size.height += height;
+            _rect.origin.y -= height;
+            //_productContent.frame = _rect;
+            //_productContent.contentOffset = CGPointMake(0, _contentOffsetY + _brandShowView.frame.size.height);
+        } completion:^(BOOL finished) {
+            _brandShowView.hidden = YES;
+        }];
+    }
+    
+    _isShowBrandStory = !_isShowBrandStory;
 }
 
 -(void) zeroMemoryBlock
@@ -107,6 +204,9 @@
         self.navigationItem.title = _titleName;
     }
     else if(_pageType == FSPageTypeCommon) {
+        self.navigationItem.title = _titleName;
+    }
+    else{
         self.navigationItem.title = _titleName;
     }
     [self replaceBackItem];
@@ -195,6 +295,9 @@
     }
     else if(_pageType == FSPageTypeCommon) {
         request.promotionId = [NSNumber numberWithInt:_commonID];
+    }
+    else if(_pageType == FSPageTypeStore) {
+        request.storeid = _store.id;
     }
     if(_pageType != FSPageTypeSearch)
     {

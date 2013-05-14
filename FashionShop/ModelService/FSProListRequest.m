@@ -20,6 +20,7 @@
 @synthesize promotionId;
 @synthesize keyword;
 @synthesize searchType;
+@synthesize storeid;
 @synthesize routeResourcePath=_routeResourcePath;
 
 -(NSString *) routeResourcePath
@@ -65,6 +66,7 @@
     [map mapKeyPath:@"topicid" toAttribute:@"request.topicId"];
     [map mapKeyPath:@"promotionid" toAttribute:@"request.promotionId"];
     [map mapKeyPath:@"term" toAttribute:@"request.keyword"];
+    [map mapKeyPath:@"storeid" toAttribute:@"request.storeid"];
 }
 
 

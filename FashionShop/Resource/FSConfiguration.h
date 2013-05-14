@@ -12,7 +12,7 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.2.0"
+#define REST_API_CLIENT_VERSION @"2.1.2"
 
 //正式库
 //#define REST_API_URL   @"http://itoo.yintai.com/api"
@@ -104,3 +104,20 @@ typedef enum {
     SortByDate = 1,
     SortByPre = 2
 }FSProSortBy;
+
+typedef enum {
+    SkipTypeDefault = 0,
+    SkipTypeProductList,
+    SkipTypePromotionDetail,
+    SkipTypeProductDetail,
+    SkipTypeNone,
+    SkipTypeURL,
+    /*
+     SkipTypeDefault = 0;默认跳转商品列表，兼容老版本数据
+     a、SkipTypeProductList=1：专题商品列表
+     b、SkipTypePromotionDetail=2：活动详情
+     c、SkipTypeProductDetail=3：商品详情
+     d、SkipTypeNone=4：不跳转，即不能点击，主要做展示使用。
+     e、SkipTypeURL=5：根据给定的URL，连接到特定的Web页面。
+     */
+}FSSkipType;

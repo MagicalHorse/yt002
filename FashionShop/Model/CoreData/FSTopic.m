@@ -17,6 +17,7 @@
 @synthesize isFavorited;
 @synthesize topicId;
 @synthesize resources;
+@synthesize targetId,targetType;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -32,6 +33,8 @@
     [relationMap mapKeyPath:@"description" toAttribute:@"description"];
     [relationMap mapKeyPath:@"name" toAttribute:@"name"];
     [relationMap mapKeyPath:@"updateddate" toAttribute:@"updatedDate"];
+    [relationMap mapKeyPath:@"targetId" toAttribute:@"targetId"];
+    [relationMap mapKeyPath:@"targetType" toAttribute:@"targetType"];
     
     RKObjectMapping *resourceRelation = [FSResource getRelationDataMap];
     [relationMap mapKeyPath:@"resources" toRelationship:@"resources" withMapping:resourceRelation];

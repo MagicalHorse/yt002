@@ -106,9 +106,8 @@
 
 @implementation FSPointExCommonCell
 
--(void)setData:(id)data
+-(void)setData
 {
-    _data = data;
     int yCap = 12;
     _cellHeight = yCap;
     

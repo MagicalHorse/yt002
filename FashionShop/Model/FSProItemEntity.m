@@ -34,11 +34,17 @@
 @synthesize limitCount;
 @synthesize height;
 @synthesize promotionid;
+@synthesize targetId;
+@synthesize targetType;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
     [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",@"isproductbinded",@"isProductBinded",@"ispublication",@"isPublication",@"limitcount",@"limitCount",@"promotionid",@"promotionid",nil];
+    
+    [relationMap mapKeyPath:@"targetId" toAttribute:@"targetId"];
+    [relationMap mapKeyPath:@"targetType" toAttribute:@"targetType"];
+    
     NSString *relationKeyPath = @"store";
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];

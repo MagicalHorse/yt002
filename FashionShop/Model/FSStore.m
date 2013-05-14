@@ -18,11 +18,13 @@
 @synthesize lantit;
 @synthesize distance;
 @synthesize resource;
+@synthesize storeIcon;
+@synthesize storeLogo;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
-    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",nil];
+    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",@"storeicon",@"storeIcon",@"storelogo",@"storeLogo",nil];
     RKObjectMapping *resourceRelationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:resourceRelationMap];
     return relationMapping;

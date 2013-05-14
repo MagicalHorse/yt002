@@ -7,20 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FSStore.h"
-
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "FSStore.h"
+#import "FSRefreshableViewController.h"
+#import "FSProDetailViewController.h"
 
-typedef enum {
-    CellTitle,
-    CellPicture,
-    CellAddress,
-    CellPhone,
-    CellDesc,
-}CellType;
-
-@interface FSStoreDetailViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate>
+@interface FSStoreDetailViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate,FSProDetailItemSourceProvider>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (strong, nonatomic) FSStore *store;
 

@@ -31,6 +31,7 @@
     UIPickerView *_picker;
     BOOL pickerIsShow;  //当前picker是否显示
     int tableYOffset;
+    BOOL _inLoading;
     
     NSMutableArray *stores;
     NSInteger selIndex;
@@ -63,8 +64,10 @@
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_DETAIL;
     request.id = _requestID;
     [self beginLoading:_tbAction];
+    _tbAction.hidden = YES;
     [request send:[FSExchange class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
         [self endLoading:_tbAction];
+        _tbAction.hidden = NO;
         if (respData.isSuccess)
         {
             _data = respData.responseData;
@@ -119,6 +122,9 @@
 
 -(void)clickToExchagePoint:(UIButton*)sender
 {
+    if (_inLoading) {
+        return;
+    }
     NSString *error = nil;
     if (![self checkPoint:&error]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:error delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -143,8 +149,12 @@
     request.storeID = [_data.inscopenotices[selIndex] storeid];
     request.userToken = [FSUser localProfile].uToken;
     [self beginLoading:_tbAction];
+    _inLoading = YES;
+    self.view.userInteractionEnabled = NO;
     [request send:[FSExchangeSuccess class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
         [self endLoading:_tbAction];
+        _inLoading = NO;
+        self.view.userInteractionEnabled = YES;
         if (respData.isSuccess)
         {
             FSExchangeSuccess *sucData = (FSExchangeSuccess*)respData.responseData;
@@ -279,10 +289,9 @@
     return 1;
 }
 
-#define Point_Ex_Detail_Desc_Cell_Indentifier @"PointExDescCell"
-#define Point_Ex_Detail_Do_Cell_Indentifier @"PointExDoCell"
-#define Point_Ex_Detail_Standard_Cell_Indentifier @"PointExStandardCell"
-#define Point_Ex_Detail_Attention_Cell_Indentifier @"PointExAttentionCell"
+#define Point_Ex_Detail_Desc_Cell_Indentifier @"FSPointExDescCell"
+#define Point_Ex_Detail_Do_Cell_Indentifier @"FSPointExDoCell"
+#define Point_Ex_Detail_Common_Cell_Indentifier @"FSPointExCommonCell"
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -340,42 +349,42 @@
             break;
         case 2:
         {
-            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView dequeueReusableCellWithIdentifier:Point_Ex_Detail_Standard_Cell_Indentifier];
+            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView dequeueReusableCellWithIdentifier:Point_Ex_Detail_Common_Cell_Indentifier];
             if (cell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExDescCell" owner:self options:nil];
                 if (_array.count > 0) {
                     cell = (FSPointExCommonCell*)_array[2];
                 }
                 else{
-                    cell = [[FSPointExCommonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Ex_Detail_Standard_Cell_Indentifier];
+                    cell = [[FSPointExCommonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Ex_Detail_Common_Cell_Indentifier];
                 }
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             cell.title = @"兑换标准";
             cell.desc = _data.inScopeNotice;
-            [cell setData:_data];
+            [cell setData];
             
             return cell;
         }
             break;
         case 3:
         {
-            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView dequeueReusableCellWithIdentifier:Point_Ex_Detail_Attention_Cell_Indentifier];
+            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView dequeueReusableCellWithIdentifier:Point_Ex_Detail_Common_Cell_Indentifier];
             if (cell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExDescCell" owner:self options:nil];
                 if (_array.count > 0) {
                     cell = (FSPointExCommonCell*)_array[2];
                 }
                 else{
-                    cell = [[FSPointExCommonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Ex_Detail_Attention_Cell_Indentifier];
+                    cell = [[FSPointExCommonCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Ex_Detail_Common_Cell_Indentifier];
                 }
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             cell.title = @"注意事项";
             cell.desc = _data.notice;
-            [cell setData:_data];
+            [cell setData];
             
             return cell;
         }
@@ -469,7 +478,7 @@
                 if (respData.isSuccess)
                 {
                     FSExchange *data = respData.responseData;
-                    exMoneyLb.text = [NSString stringWithFormat:@"%d元",data.amount];
+                    exMoneyLb.text = [NSString stringWithFormat:@"%.2f元",data.amount];
                     [exMoneyLb sizeToFit];
                 }
                 else

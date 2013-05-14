@@ -17,7 +17,7 @@
 #import "FSCardInfo.h"
 #import "FSPointMemberCardCell.h"
 #import "FSPointExchangeListViewController.h"
-#import "FSMeViewController.h"
+#import "FSCardBindViewController.h"
 
 @interface FSPointViewController ()
 {
@@ -218,11 +218,10 @@
 -(void)pointExchange:(UIButton*)sender
 {
     if (!currentUser.isBindCard) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
-        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
-        __block FSMeViewController *blockMeController = loginController;
-        loginController.completeCallBack=^(BOOL isSuccess){
-            [blockMeController dismissViewControllerAnimated:true completion:^{
+        FSCardBindViewController *controller = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
+        __block FSCardBindViewController *blockBindController = controller;
+        blockBindController.completeCallBack = ^(BOOL isSuccess){
+            [blockBindController popViewControllerAnimated:YES completion:^{
                 if (!isSuccess)
                 {
                     [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
@@ -230,12 +229,11 @@
                 else
                 {
                     FSPointExchangeListViewController *controller = [[FSPointExchangeListViewController alloc] initWithNibName:@"FSPointExchangeListViewController" bundle:nil];
-                    [self.navigationController pushViewController:controller animated:YES];
+                    [blockBindController.navigationController pushViewController:controller animated:YES];
                 }
             }];
         };
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:true completion:nil] ;
+        [self.navigationController pushViewController:blockBindController animated:YES];
     }
     else{
         FSPointExchangeListViewController *controller = [[FSPointExchangeListViewController alloc] initWithNibName:@"FSPointExchangeListViewController" bundle:nil];

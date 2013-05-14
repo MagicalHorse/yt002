@@ -12,7 +12,6 @@
 
 @interface FSComment : FSModelBase
 
-
 @property(nonatomic) int id;
 @property(nonatomic,retain) NSString * comment;
 @property(nonatomic,retain) NSDate * indate;
@@ -20,4 +19,12 @@
 @property(nonatomic,retain) NSMutableArray *resources;
 @property(nonatomic,retain) NSString * replyUserName;
 @property(nonatomic,assign) int replyUserID;
+
+//我的评论新增
+@property(nonatomic,retain) FSUser * replyUser;
+@property(nonatomic,assign) int commentid;
+@property(nonatomic,assign) int sourceid;
+@property(nonatomic,assign) int sourcetype;
+
+
 @end
