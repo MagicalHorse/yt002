@@ -13,9 +13,11 @@
 #import "FSStartViewController.h"
 #import "FSCommon.h"
 
-@class PKRevealController;
 
-@interface FSAppDelegate : UIResponder <UIApplicationDelegate> {
+@class PKRevealController;
+@protocol FSProDetailItemSourceProvider;
+
+@interface FSAppDelegate : UIResponder <UIApplicationDelegate,FSProDetailItemSourceProvider> {
     FSStartViewController *_startController;
     NSDictionary    *_launch;
 }
@@ -41,5 +43,7 @@
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName;
 -(NSString*)readFromFile:(NSString *)aFileName;
+
+- (void)registerDevicePushNotification;
 
 @end

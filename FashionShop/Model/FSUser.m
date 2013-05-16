@@ -53,7 +53,6 @@
     return relationMap;
 }
 
-
 + (void) removeUserProfile
 {
     [[FSLocalPersist sharedPersist] removeObjectInMemory:LOCAL_STORE_USER_KEY];
@@ -119,13 +118,19 @@
     return [NSURL URLWithString:[NSString stringWithFormat:@"%@_200x200.jpg",thumnail]];
 }
 
+-(NSURL*)thumnailUrlOrigin
+{
+    if (!thumnail)
+        return nil;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_original.jpg",thumnail]];
+}
+
 -(NSURL*)logobgURL
 {
     if (!logobg)
         return nil;
-    NSString *url = [NSString stringWithFormat:@"%@_320x0.jpg",logobg];
-    NSLog(@"url:%@", url);
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_320x0.jpg",logobg]];
+    int width = 320;// * RetinaFactor;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_%dx%d.jpg",logobg, width, width]];
 }
 
 @end

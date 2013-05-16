@@ -16,5 +16,6 @@
 @property(nonatomic,strong) NSString * deviceToken;
 @property(nonatomic,strong) NSString * deviceName;
 @property(nonatomic,strong) NSString * userToken;
+@property(nonatomic,strong) NSString * userId;
 
 @end

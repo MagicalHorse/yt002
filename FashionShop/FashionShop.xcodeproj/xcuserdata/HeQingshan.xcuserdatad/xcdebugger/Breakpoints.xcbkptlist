@@ -4,16 +4,16 @@
    version = "1.0">
    <FileBreakpoints>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Controls/FSMyCommentCell.m"
-         timestampString = "390219166.412065"
+         filePath = "Model/FSUser.m"
+         timestampString = "390298483.091913"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "33"
-         endingLineNumber = "33"
-         landmarkName = "-setData:"
+         startingLineNumber = "133"
+         endingLineNumber = "133"
+         landmarkName = "-logobgURL"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

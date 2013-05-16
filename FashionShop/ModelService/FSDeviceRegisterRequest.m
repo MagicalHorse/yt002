@@ -15,6 +15,7 @@
 @synthesize deviceName;
 @synthesize deviceToken;
 @synthesize userToken;
+@synthesize userId;
 
 -(NSString *)routeResourcePath
 {
@@ -27,6 +28,7 @@
     [map mapKeyPath:@"lat" toAttribute:@"request.lantit"];
     [map mapKeyPath:@"token" toAttribute:@"request.userToken"];
     [map mapKeyPath:@"devicetoken" toAttribute:@"request.deviceToken"];
+    [map mapKeyPath:@"userid" toAttribute:@"request.userId"];
     
 }
 

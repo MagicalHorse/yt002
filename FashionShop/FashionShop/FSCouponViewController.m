@@ -54,7 +54,6 @@
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_TABLE_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
     
-    [self requestData];
     [self setFilterType];
     [self initArray];
     
@@ -94,6 +93,12 @@
 
 - (void)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self requestData];
 }
 
 -(void) setFilterType
@@ -159,9 +164,9 @@
 {
     int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
     FSCommonUserRequest *request = [self createRequest:currentPage];
-    [self beginLoading:self.view];
+    [self beginLoading:_contentView];
     [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:self.view];
+        [self endLoading:_contentView];
         if (resp.isSuccess)
         {
             FSPagedCoupon *innerResp = resp.responseData;

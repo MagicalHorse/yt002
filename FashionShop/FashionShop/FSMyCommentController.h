@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "FSRefreshableViewController.h"
 #import "FSThumView.h"
+#import "FSProDetailViewController.h"
 
-@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate>
+@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate,FSProDetailItemSourceProvider>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 
 @end

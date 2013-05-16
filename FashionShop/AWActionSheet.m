@@ -35,9 +35,9 @@
     } else if (cout <=6) {
         rowCount = 2;
     }
-    NSString* titleBlank = @"\n\n\n\n";
+    NSString* titleBlank = @"\n\n\n\n\n";
     for (int i = 1 ; i<rowCount; i++) {
-        titleBlank = [NSString stringWithFormat:@"%@%@",titleBlank,@"\n\n\n\n"];
+        titleBlank = [NSString stringWithFormat:@"%@%@",titleBlank,@"\n\n\n\n\n\n"];
     }
     self = [super initWithTitle:titleBlank
                        delegate:nil
@@ -95,14 +95,14 @@
     }
     
     int rowCount = 3;
-    
+    int height = 100;
     if (count <= 3) {
         [self setTitle:@"\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 70)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, height)];
         rowCount = 1;
     } else if (count <= 6) {
         [self setTitle:@"\n\n\n\n\n\n\n\n\n\n\n\n"];
-        [scrollView setFrame:CGRectMake(0, 10, 320, 140)];
+        [scrollView setFrame:CGRectMake(0, 10, 320, height*2)];
         rowCount = 2;
     }
     [scrollView setContentSize:CGSizeMake(320*(count/itemPerPage+1), scrollView.frame.size.height)];
@@ -180,16 +180,23 @@
 
 -(id)init
 {
-    self = [super initWithFrame:CGRectMake(0, 0, 60, 60)];
+    self = [super initWithFrame:CGRectMake(0, 0, 80, 90)];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
         
-        self.iconView = [[UIImageView alloc] initWithFrame:self.frame];
+        self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 5, 60, 60)];
         [iconView setBackgroundColor:[UIColor clearColor]];
         [[iconView layer] setCornerRadius:8.0f];
         [[iconView layer] setMasksToBounds:YES];
         
         [self addSubview:iconView];
+        
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, 80, 20)];
+        self.titleLabel.font = ME_FONT(12);
+        self.titleLabel.textColor = [UIColor whiteColor];
+        self.titleLabel.backgroundColor = [UIColor clearColor];
+        self.titleLabel.textAlignment = UITextAlignmentCenter;
+        [self addSubview:self.titleLabel];
         
     }
     return self;

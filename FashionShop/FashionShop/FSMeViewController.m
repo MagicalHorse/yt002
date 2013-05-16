@@ -129,6 +129,8 @@
                 {
                     [blockSelf displayUserProfile];
                 }
+                //发送userid和devicetoken给服务器
+                [theApp registerDevicePushNotification];
             }
             
         }];
@@ -505,7 +507,6 @@
     _thumbImg.delegate = self;
     
     [_btnHeaderBg addTarget:self action:@selector(handleChangeHeaderBg:) forControlEvents:UIControlEventTouchUpInside];
-    //[_btnHeaderBg setBackgroundImage:_btnHeaderBg.currentBackgroundImage forState:UIControlStateHighlighted];
     origFrame = _btnHeaderBg.frame;
     [_btnHeaderBg setTitle:@"" forState:UIControlStateNormal];
     origFrame.origin.y = _segHeader.frame.origin.y - origFrame.size.height;
@@ -827,8 +828,8 @@
         }
         else{
             //[_btnHeaderBg setBackgroundImage:image forState:UIControlStateNormal];
-            UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]];
-            [_btnHeaderBg setImage:img forState:UIControlStateNormal];
+            //UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]];
+            [_btnHeaderBg setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]] forState:UIControlStateNormal];
         }
         
     } error:^(id error){

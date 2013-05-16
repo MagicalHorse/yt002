@@ -520,6 +520,8 @@
 
 -(BOOL)checkIDCard:(NSString **)error
 {
+    return YES;//不验证身份证信息
+    
     BOOL flag = [NSString isIDCardNum:idCardField.text];
     if (!flag && error) {
         *error = @"身份证号码输入不正确，请重新输入";

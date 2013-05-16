@@ -166,6 +166,7 @@ BOOL networkIsWorking = NO;
         noResult = [[UILabel alloc] init];
         noResult.text = text;
         noResult.font = ME_FONT(12);
+        noResult.backgroundColor = [UIColor clearColor];
         CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(12)];
         noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,self.view.frame.origin.y+height+10, resultSize.width, resultSize.height);
         noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;

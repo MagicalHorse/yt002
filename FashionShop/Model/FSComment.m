@@ -27,7 +27,7 @@
     [relationMapping mapKeyPath:@"sourcetype" toAttribute:@"sourcetype"];
     RKObjectMapping *relationMap = [FSUser getRelationDataMap];
     [relationMapping mapKeyPath:@"customer" toRelationship:@"inUser" withMapping:relationMap];
-    [relationMapping mapKeyPath:@"replyuser" toRelationship:@"replyUser" withMapping:relationMap];
+    [relationMapping mapKeyPath:@"commentuser" toRelationship:@"replyUser" withMapping:relationMap];
     relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resources" toRelationship:@"resources" withMapping:relationMap];
     

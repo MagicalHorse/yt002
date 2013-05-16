@@ -26,6 +26,7 @@
 @property (nonatomic,strong) NSString *userLevelName;
 @property (nonatomic,strong) NSString *thumnail;
 @property (nonatomic,readonly) NSURL *thumnailUrl;
+@property (nonatomic,readonly) NSURL *thumnailUrlOrigin;
 @property (nonatomic,readonly) NSURL *thumnailUrl200;
 @property (nonatomic,strong) NSString *logobg;
 @property (nonatomic,readonly) NSURL *logobgURL;

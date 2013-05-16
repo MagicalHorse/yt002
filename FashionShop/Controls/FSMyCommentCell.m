@@ -31,6 +31,8 @@
 
 -(void)setData:(FSComment *)data{
     _data = data;
+    //_data.comment = @"测试，这是很长的侧h，不知道是否政群，阿斯顿理发师；放假了拉萨附近暗室逢灯静安寺路附近阿斯达克积分，。阿司法局阿斯科利打飞机拉克丝的肌肤";
+    //_data.replyUserName = @"Jinssersun";
     _imgThumb.ownerUser = _data.replyUser;
     if (data.resources &&
         data.resources.count > 0 &&
@@ -69,39 +71,43 @@
         _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
         _lblComment.numberOfLines = 0;
         CGSize newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
-        _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _lblComment.frame.origin.y, newSize.width, newSize.height);
+        _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, 8, 225, newSize.height);
     }
     _cellHeight = _lblComment.frame.origin.y + _lblComment.frame.size.height + 5;
     
+    //回复时间
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy年MM月dd日 HH:MM:SS"];
+    _lblInDate.text = [df stringFromDate:_data.indate];
+    _lblInDate.hidden = NO;
+    _lblInDate.frame = CGRectMake(_lblInDate.frame.origin.x, _cellHeight + 5, 225, _lblInDate.frame.size.height);
+    _lblInDate.font = ME_FONT(12);
+    _lblInDate.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    _cellHeight += _lblInDate.frame.size.height + 5;
+    
+    //回复人名称
+    _lblReplyDesc.frame = CGRectMake(_lblReplyDesc.frame.origin.x, _cellHeight + 5, 225, _lblReplyDesc.frame.size.height);
+    _lblReplyDesc.hidden = NO;
     if (![data.replyUserName isEqualToString:@""] && data.replyUserName) {
-        _lblReplyDesc.frame = CGRectMake(_lblReplyDesc.frame.origin.x, _lblComment.frame.origin.y + _lblComment.frame.size.height + 5, _lblReplyDesc.frame.size.width, _lblReplyDesc.frame.size.height);
-        _lblReplyDesc.hidden = NO;
         _lblReplyDesc.text = [NSString stringWithFormat:@"回复 %@", data.replyUserName];
-        _lblReplyDesc.font = ME_FONT(10);
-        [_lblReplyDesc sizeThatFits:_lblReplyDesc.frame.size];
-        
-        _cellHeight += _lblReplyDesc.frame.size.height;
     }
     else{
-        _lblReplyDesc.hidden = YES;
+        _lblReplyDesc.text = [NSString stringWithFormat:@"评论您参与的%@", _data.sourcetype==1?@"商品":@"活动"];
     }
+    _lblReplyDesc.font = ME_FONT(12);
+    [_lblReplyDesc sizeThatFits:_lblReplyDesc.frame.size];
+    _cellHeight += _lblReplyDesc.frame.size.height;
     
-    _cellHeight += _lblComment.frame.origin.y;
+    _cellHeight += 8;
     _cellHeight = MAX(PRO_DETAIL_COMMENT_CELL_HEIGHT, _cellHeight);
-    
-    _lblInDate.text = [_data.indate toLocalizedString];
-    _lblInDate.font = ME_FONT(10);
-    _lblInDate.textColor = [UIColor colorWithRed:153 green:153 blue:153];
 }
 
 -(void)updateFrame
 {
     int yOffset = 0;
     int height  = [_lblComment sizeThatFits:_lblComment.frame.size].height;
-    BOOL flag = ![_data.replyUserName isEqualToString:@""] && _data.replyUserName;
-    if (flag) {
-        height += _lblReplyDesc.frame.size.height + 5;
-    }
+    height += _lblInDate.frame.size.height + 5;
+    height += _lblReplyDesc.frame.size.height + 5;
     yOffset = (_cellHeight - height)/2;
     
     CGRect _rect = _lblComment.frame;
@@ -114,11 +120,13 @@
         _audioButton.frame = _rect;
     }
     
-    if (flag) {
-        _rect = _lblReplyDesc.frame;
-        _rect.origin.y = _lblComment.frame.origin.y + _lblComment.frame.size.height + 5;
-        _lblReplyDesc.frame = _rect;
-    }
+    _rect = _lblInDate.frame;
+    _rect.origin.y = _lblComment.frame.size.height + _lblComment.frame.origin.y + 5;
+    _lblInDate.frame = _rect;
+    
+    _rect = _lblReplyDesc.frame;
+    _rect.origin.y = _lblInDate.frame.origin.y + _lblInDate.frame.size.height + 5;
+    _lblReplyDesc.frame = _rect;
 }
 
 @end

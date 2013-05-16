@@ -42,19 +42,13 @@
 
 -(void)setData:(FSComment *)data{
     _data = data;
-//    _lblNickie.text = [NSString stringWithFormat:@"%@",_data.inUser.nickie];
-//    _lblNickie.font = ME_FONT(14);
-//    _lblNickie.textColor = [UIColor colorWithRed:229 green:0 blue:79];
-//    [_lblNickie sizeToFit];
-
     _imgThumb.ownerUser = _data.inUser;
-    
     if (data.resources &&
         data.resources.count > 0 &&
         ((FSResource*)data.resources[0]).type == 2) {
         int xOffset = 110;
         _lblComment.text = [NSString stringWithFormat:@"%@: ", _data.inUser.nickie];
-        _lblComment.font = BFONT(13);
+        _lblComment.font = BFONT(12);
         _lblComment.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
         [_lblComment sizeToFit];
@@ -95,6 +89,7 @@
         _lblReplyDesc.hidden = NO;
         _lblReplyDesc.text = [NSString stringWithFormat:@"回复 %@", data.replyUserName];
         _lblReplyDesc.font = ME_FONT(10);
+        _lblReplyDesc.textColor = [UIColor colorWithHexString:@"#999999"];
         [_lblReplyDesc sizeThatFits:_lblReplyDesc.frame.size];
         
         _cellHeight += _lblReplyDesc.frame.size.height;

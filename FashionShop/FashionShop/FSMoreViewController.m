@@ -15,6 +15,7 @@
 
 @interface FSMoreViewController () {
     NSMutableArray *_titles;
+    NSMutableArray *_icons;
 }
 
 @end
@@ -41,6 +42,24 @@
     _tbAction.backgroundView = nil;
     
     [self initTitlesArray];
+    [self initIconsArray];
+}
+
+-(void)initIconsArray
+{
+    _icons = [@[
+              @[
+                @"order_icon.png",],
+              @[
+                @"eidit_icon.png",
+                @"bindcard_icon.png"],
+              @[
+                @"feedback_icon.png",
+                @"aboutyt_icon.png",
+                @"checkversion_icon.png",
+                @"write_icon.png",
+                @"clean_icon.png"]
+              ] mutableCopy];
 }
 
 - (IBAction)onButtonBack:(id)sender {
@@ -55,11 +74,10 @@
     
     _titles = [@[
                 @[
-                    NSLocalizedString(@"Pre Order Title", nil)],
+                    NSLocalizedString(@"Gift List", nil)],
                 @[
                     NSLocalizedString(@"Edit Personal Info",nil),
-                    ([_currentUser.isBindCard boolValue]?NSLocalizedString(@"Card Info Query", nil):NSLocalizedString(@"Bind Member Card",nil)),
-                    NSLocalizedString(@"Address Manager",nil)],
+                    ([_currentUser.isBindCard boolValue]?NSLocalizedString(@"Card Info Query", nil):NSLocalizedString(@"Bind Member Card",nil))],
                 @[
                     NSLocalizedString(@"FeedBack",nil),
                     NSLocalizedString(@"About Love Intime",nil),
@@ -98,7 +116,7 @@
     [btnAttention setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
     [btnAttention setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btnAttention addTarget:self action:@selector(attentionXhyt:) forControlEvents:UIControlEventTouchUpInside];
-    btnAttention.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    btnAttention.titleLabel.font = [UIFont boldSystemFontOfSize:16];
     yOffset += btnAttention.frame.size.height + yOffset;
     
     UIButton *btnExit = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -107,7 +125,7 @@
     [btnExit setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
     [btnExit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btnExit addTarget:self action:@selector(clickToExit:) forControlEvents:UIControlEventTouchUpInside];
-    btnExit.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    btnExit.titleLabel.font = [UIFont boldSystemFontOfSize:16];
     
     [view addSubview:btnAttention];
     [view addSubview:btnExit];
@@ -144,14 +162,15 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    cell.imageView.image = [UIImage imageNamed:@"promotion_header_icon"];
-    NSArray *array = [_titles objectAtIndex:indexPath.section];
+    NSArray *array = [_icons objectAtIndex:indexPath.section];
+    cell.imageView.image = [UIImage imageNamed:[array objectAtIndex:indexPath.row]];
+    array = [_titles objectAtIndex:indexPath.section];
     cell.textLabel.text = [array objectAtIndex:indexPath.row];
     cell.textLabel.font = ME_FONT(15);
     if (indexPath.section == 2 &&
         indexPath.row + indexPath.section * 10 == FSMoreCheckVersion) {
         cell.detailTextLabel.text = [NSString stringWithFormat:@"当前版本V%@", REST_API_CLIENT_VERSION];
-        cell.detailTextLabel.font = ME_FONT(14);
+        cell.detailTextLabel.font = ME_FONT(12);
     }
     
     return cell;

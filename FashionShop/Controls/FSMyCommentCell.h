@@ -13,14 +13,12 @@
 
 @interface FSMyCommentCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet UILabel *lblReplyDesc;
-
 @property (strong, nonatomic) IBOutlet FSThumView *imgThumb;
 @property (strong, nonatomic) IBOutlet UILabel *lblComment;
 @property (strong, nonatomic) IBOutlet UILabel *lblInDate;
+@property (strong, nonatomic) IBOutlet UILabel *lblReplyDesc;
 
 @property (strong, nonatomic) FSComment *data;
-
 @property (nonatomic,assign) int cellHeight;
 @property (nonatomic,strong) FSAudioButton *audioButton;
 

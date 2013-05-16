@@ -32,14 +32,13 @@
 
 -(void) setCount:(int)count
 {
-    self.backgroundColor = [UIColor colorWithRed:229 green:229 blue:229];
     _count = count;
     _lblTitle.text = NSLocalizedString(@"Comments", nil);
     _lblTitle.font = ME_FONT(14);
-    _lblTitle.textColor = [UIColor blackColor];
+    _lblTitle.textColor = [UIColor colorWithHexString:@"6f5e6c"];
     _lblCount.text = [NSString stringWithFormat:NSLocalizedString(@"%dcomments", nil),count];
     _lblCount.font = ME_FONT(12);
-    _lblCount.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    _lblCount.textColor = [UIColor colorWithHexString:@"6f5e6c"];
 }
 
 @end

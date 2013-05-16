@@ -53,8 +53,9 @@
 {
     //设置按钮属性
     [self setBackgroundColor:[UIColor clearColor]];
-    UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
+    UIImage *image = [[UIImage imageNamed:@"play_normal.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:0];
     [self setBackgroundImage:image forState:UIControlStateNormal];
+    [self setBackgroundImage:[[UIImage imageNamed:@"play_hover.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:0] forState:UIControlStateHighlighted];
     
     //添加时间标签
     timeLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width/2, self.frame.size.height)];
@@ -75,9 +76,9 @@
     [self addSubview:activity];
     
     //添加播放图标
-    playImageView = [[UIImageView alloc] initWithFrame:_rect];
-    playImageView.image = [UIImage imageNamed:@"play_icon.png"];
-    [self addSubview:playImageView];
+//    playImageView = [[UIImageView alloc] initWithFrame:_rect];
+//    playImageView.image = [UIImage imageNamed:@"play_icon.png"];
+//    [self addSubview:playImageView];
     
     //添加播放动画
     animateView = [[UIImageView alloc] initWithFrame:_rect];

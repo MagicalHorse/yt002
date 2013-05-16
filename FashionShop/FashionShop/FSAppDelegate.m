@@ -18,6 +18,10 @@
 #import "FSStoreMapViewController.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "FSAudioHelper.h"
+#import "FSMyCommentController.h"
+#import "FSProDetailViewController.h"
+#import "NSString+SBJSON.h"
+#import "FSContentViewController.h"
 
 #import "PKRevealController.h"
 #import "LeftDemoViewController.h"
@@ -30,6 +34,8 @@
 
 @interface FSAppDelegate(){
     NSString *localToken;
+    NSDictionary   *pushInfoDic;   //保存推送过来的消息对象
+    BOOL        isPushing;//正在push过程中
 }
 
 @end
@@ -77,9 +83,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [self.window addSubview:_startController.view];
         [self.window makeKeyAndVisible];
     } completion:^(BOOL finished) {}];
-    
     _launch = launchOptions;
-    
     //三秒钟后关闭
     [self performSelector:@selector(loadMainView) withObject:nil afterDelay:3];
 
@@ -112,7 +116,9 @@ void uncaughtExceptionHandler(NSException *exception)
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
     UITabBarController *root = [storyBoard instantiateInitialViewController];
     self.window.backgroundColor = [UIColor whiteColor];
-    self.root = root;
+    self.window.rootViewController = root;
+    [[FSAnalysis instance] autoTrackPages:root];
+    [self.window makeKeyAndVisible];
     
     //添加背景色
     NSArray *array = [root.view subviews];
@@ -130,19 +136,22 @@ void uncaughtExceptionHandler(NSException *exception)
         [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
         [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
     }
-    
-    
-    UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:leftViewController];
-    self.revealController = [PKRevealController revealControllerWithFrontViewController:root
-                                                                     leftViewController:nav
-                                                                    rightViewController:nil
-                                                                                options:nil];
+
+//    UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:leftViewController];
+//    self.revealController = [PKRevealController revealControllerWithFrontViewController:root
+//                                                                     leftViewController:nav
+//                                                                    rightViewController:nil
+//                                                                                options:nil];
     //侧边栏设置，暂时保留
 //    self.window.rootViewController = self.revealController;
-    self.window.rootViewController = root;
-    [[FSAnalysis instance] autoTrackPages:root];
-    [self.window makeKeyAndVisible];
+    
+    //地下的这点代码应该是判断如果是完全推出状态下，push进来做的操作，如果是完全退出状态下的话，这样会在home里面进行插入操作。
+    NSDictionary *userInfo = [_launch objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
+    if (userInfo) {
+        pushInfoDic = userInfo;
+        [self pushTo];
+    }
 }
 
 +(FSAppDelegate *)app{
@@ -191,11 +200,17 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 #pragma mark - Push Notification
+
 - (void)registerPushNotification
 {
     [[UIApplication sharedApplication] unregisterForRemoteNotifications];
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
-     (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert)];
+     (UIRemoteNotificationTypeSound |UIRemoteNotificationTypeAlert)];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"My token error: %@", [error description]);
 }
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
@@ -207,18 +222,18 @@ void uncaughtExceptionHandler(NSException *exception)
 		token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
 		token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
 	}
-	NSString *localDevice = [FSUser localDeviceToken];
-	if (localDevice && localDevice.length >0
-        && [localDevice isEqualToString:token])
-	{
-		return;
-	}
+//	NSString *localDevice = [FSUser localDeviceToken];
+//	if (localDevice && localDevice.length >0
+//        && [localDevice isEqualToString:token])
+//	{
+//		return;
+//	}
 	if (token.length == 64)
 	{
         localToken = token;
         if (locationManager.locationAwared)
         {
-            [self registerDevicePushNotification:token];
+            [self registerDevicePushNotification];
         }
         else
         {
@@ -230,37 +245,186 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     if ([keyPath isEqualToString:@"locationAwared"])
     {
-        [self registerDevicePushNotification:localToken];
+        [self registerDevicePushNotification];
         [locationManager removeObserver:self forKeyPath:@"locationAwared"];
     }
 }
 
-- (void)registerDevicePushNotification:(NSString *)token
+- (void)registerDevicePushNotification
 {    
 #if defined ENVIRONMENT_DEVELOPMENT
     return;
 #endif
-    
+    if (!localToken || [localToken isEqualToString:@""]) {
+        localToken = [FSUser localDeviceToken];
+        if (!localToken || [localToken isEqualToString:@""])
+            return;
+    }
+    NSString *uId = [NSString stringWithFormat:@"%@", [FSModelManager sharedModelManager].localLoginUid];
+    if (!uId || [uId isEqualToString:@""]) {
+        return;
+    }
     [modelManager enqueueBackgroundBlock:^(void){
         FSDeviceRegisterRequest *request = [[FSDeviceRegisterRequest alloc] init];
         request.longit =[[NSNumber alloc] initWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [[NSNumber alloc] initWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.deviceToken = token;
+        request.deviceToken = localToken;
         request.userToken = [FSModelManager sharedModelManager].loginToken;
+        request.userId = uId;
+        request.deviceName = [[[UIDevice currentDevice] name] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
             {
-                [FSUser saveDeviceToken:token];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"localToken" message:[NSString stringWithFormat:@"token:%@\nuserID:%@", localToken, uId] delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                [alert show];
+                [FSUser saveDeviceToken:localToken];
+            }
+            else{
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@", resp.errorDescrip] delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+                [alert show];
             }
         }]; 
     }];
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)data
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    //goto the badge page:todo
+    if(!isPushing) {
+        pushInfoDic = userInfo;
+        NSString *message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:message delegate:self cancelButtonTitle:@"前往" otherButtonTitles:@"取消", nil];
+        alert.tag = 333;
+        [alert show];
+        isPushing = YES;
+    }
 }
+
+-(void)pushTo
+{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UITabBarController *root = [storyBoard instantiateInitialViewController];
+    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = root;
+    [self.window makeKeyAndVisible];
+    
+    //添加背景色
+    NSArray *array = [root.view subviews];
+    UITabBar *_tabbar = [array objectAtIndex:1];
+    UIImageView *_vImage = [[UIImageView alloc] init];
+    _vImage.image = [UIImage imageNamed:@"Toolbar_bg.png"];
+    _vImage.frame = CGRectMake(0, 0, 320, TAB_HIGH);
+    [_tabbar insertSubview:_vImage atIndex:1];
+    for (int i = 0; i < _tabbar.items.count; i++) {
+        UITabBarItem *item = _tabbar.items[i];
+        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
+        UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
+        [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        
+        [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
+        [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
+    }
+    
+    /*
+     "from"key对应的value为json字符串
+     {“targettype”,"targetvalue"}
+     targettype:
+     0-首页
+     1-商品详情
+     2-促销详情
+     3-我的评论
+     4-URL
+     
+     返回形式：
+     返回形式：
+     {
+     aps =     {
+        alert = "\U65b0\U8bc4\U8bba...";
+        badge = 1;
+        sound = "sound.caf";
+     };
+     from = "{\"targettype\":3,\"targetvalue\":\"\"}";
+     }
+     */
+    //根据不同的key值跳转到不同的界面
+    NSString * from = (NSString*)[pushInfoDic objectForKey:@"from"];
+    NSDictionary *dic = [from JSONValue];
+    int type = [[dic objectForKey:@"targettype"] intValue];
+    NSString *value = [dic objectForKey:@"targetvalue"];
+    switch (type) {
+        case 0://首页
+        {
+            root.selectedIndex = 0;
+        }
+            break;
+        case 1://商品详情
+        {
+            root.selectedIndex = 1;
+            UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProItemEntity *item = [[FSProItemEntity alloc] init];
+            item.id = [value intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourceProduct;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [nav presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case 2://促销详情
+        {
+            root.selectedIndex = 1;
+            UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+            FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
+            item.id = [value intValue];
+            detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
+            detailView.sourceType = FSSourcePromotion;
+            detailView.indexInContext = 0;
+            detailView.dataProviderInContext = self;
+            UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+            [nav presentViewController:navControl animated:true completion:nil];
+        }
+            break;
+        case 3://我的评论
+        {
+            //导航到我的评论页
+            root.selectedIndex = 3;
+            UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+            [nav pushViewController:controller animated:true];
+        }
+            break;
+        case 4://URL
+        {
+            root.selectedIndex = 1;
+            UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+            FSContentViewController *controller = [[FSContentViewController alloc] init];
+            controller.fileName = value;
+            controller.title = [[pushInfoDic objectForKey:@"aps"] objectForKey:@"alert"];
+            [nav pushViewController:controller animated:YES];
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    if (alertView.tag == 333)
+    {
+        if (buttonIndex == 0) {
+            [self pushTo];
+            isPushing = NO;
+        }
+    }
+}
+
+#pragma mark - Write And Read File
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName
 {
@@ -365,6 +529,37 @@ void uncaughtExceptionHandler(NSException *exception)
                            *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
     free(buf);
     return macString;
+}
+
+#pragma mark - FSProDetailItemSourceProvider
+
+/*
+ -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
+ {
+     if (view.sourceType == FSSourcePromotion) {
+         FSProItemEntity *item =  [view.navContext objectAtIndex:index];
+         if (item)
+             block(item);
+         else
+             errorBlock();
+     }
+     else if (view.sourceType == FSSourceProduct) {
+         FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
+         if (item)
+            block(item);
+         else
+            errorBlock();
+     }
+ }
+*/
+-(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return view.sourceType;
+}
+
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return TRUE;
 }
 
 @end

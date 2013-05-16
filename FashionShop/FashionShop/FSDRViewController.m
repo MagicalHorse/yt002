@@ -789,7 +789,7 @@
 -(void)didTapThumView:(id)sender
 {
     FSAvatarHDViewController *controller = [[FSAvatarHDViewController alloc] init];
-    [controller setImageURL:_thumLogo.ownerUser.thumnailUrl200];
+    [controller setImageURL:_thumLogo.ownerUser.thumnailUrlOrigin];
     controller.avatarImg = [_thumLogo getThumbImage];
     CGRect _rect = _thumLogo.frame;
     _rect.origin.y += NAV_HIGH;

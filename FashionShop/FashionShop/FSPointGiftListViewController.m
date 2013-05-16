@@ -48,7 +48,6 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     _currentSelIndex = 0;
     
-    [self requestData];
     [self initArray];
     [self setFilterType];
     
@@ -88,6 +87,12 @@
 
 - (IBAction)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self requestData];
 }
 
 -(void) setFilterType
@@ -152,11 +157,11 @@
 -(void) requestData
 {
     int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
-    [self setPageIndex:currentPage selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+    [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
     FSExchangeRequest *request = [self createRequest:currentPage];
-    [self beginLoading:self.view];
+    [self beginLoading:_contentView];
     [request send:[FSPagedGiftList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:self.view];
+        [self endLoading:_contentView];
         if (resp.isSuccess)
         {
             FSPagedGiftList *innerResp = resp.responseData;
@@ -212,7 +217,7 @@
 {
     FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
     request.pageSize = COMMON_PAGE_SIZE;
-    request.nextPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue] + 1;
+    request.nextPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
     request.type = _currentSelIndex+1;
     request.userToken = [FSUser localProfile].uToken;
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_COUPON_LIST;

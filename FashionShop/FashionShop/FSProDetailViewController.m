@@ -93,6 +93,7 @@
     
     _minRecordGap = 1.5;
     theApp.audioRecoder.clAudioDelegate = self;
+    self.view.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 -(void) beginPrepareData
@@ -182,6 +183,7 @@
     [(id)view tbComment].scrollEnabled = FALSE;
     [(id)view svContent].scrollEnabled = TRUE;
     view.showViewMask = TRUE;
+    
 	return view;
 }
 
@@ -238,18 +240,6 @@
                 [blockSelf.navigationItem setTitle:navTitle] ;
                 blockViewForRefresh.showViewMask= FALSE;
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
-                
-                //左右箭头
-                //_arrowRight.hidden = [self hasNextPage]?NO:YES;
-//                [self.view bringSubviewToFront:_arrowRight];
-//                CGRect _rect = _arrowRight.frame;
-//                _rect.size.height = 15;
-//                _arrowRight.frame = _rect;
-//                //_arrowLeft.hidden = [self hasPrePage]?NO:YES;
-//                [self.view bringSubviewToFront:_arrowLeft];
-//                _rect = _arrowLeft.frame;
-//                _rect.size.height = 15;
-//                _arrowLeft.frame = _rect;
             } else
             {
                 [self onButtonCancel];
@@ -273,6 +263,8 @@
             [self onButtonCancel];
         }];
     }
+    NSLog(@"contentoffset x :%f", paginatorView.scrollView.contentOffset.x);
+    NSLog(@"blockViewForRefresh frame:%@", NSStringFromCGRect(blockViewForRefresh.frame));
     [self hideCommentInputView:nil];
 }
 
@@ -818,7 +810,7 @@
         else{
             //获取选中用户的ID；
             id currentView =  self.paginatorView.currentPage;
-            FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
+            FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview;
             FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
             commentInput.replyLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Reply %@", nil), item.inUser.nickie];
         }
@@ -902,7 +894,7 @@
     if (!isReplyToAll) {
         //获取选中用户的ID；
         id currentView =  self.paginatorView.currentPage;
-        FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview.superview;
+        FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview;
         FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
         request.replyuserID = item.inUser.uid;
     }
@@ -1078,7 +1070,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if (indexPath.section == 0 && indexPath.row == 0) {
         if (_sourceType == FSSourceProduct) {
             if ([self IsBindPromotionOrProduct:parentView.data]) {
@@ -1087,25 +1079,12 @@
                 if (_item.promotions && _item.promotions.count > 0) {
                     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
                     detailView.navContext = _item.promotions;
-                    NSLog(@"count:%d",_item.promotions.count);
                     detailView.sourceType = FSSourcePromotion;
                     detailView.indexInContext = 0;
                     detailView.dataProviderInContext = self;
                     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
                     [self presentViewController:navControl animated:true completion:nil];
                 }
-            }
-        }
-        else {
-            if ([self IsBindPromotionOrProduct:parentView.data]) {
-                //去商品列表
-                FSProItemEntity *_item = parentView.data;
-                FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
-                dr.titleName = NSLocalizedString(@"Product List", nil);
-                dr.commonID = _item.id;
-                dr.pageType = FSPageTypeCommon;
-                [self.navigationController pushViewController:dr animated:TRUE];
-                [tableView deselectRowAtIndexPath:indexPath animated:YES];
             }
         }
     }
@@ -1116,7 +1095,7 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         if (section == 0) {
             return nil;
@@ -1129,8 +1108,8 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    [self resetScrollViewSize:(FSDetailBaseView*)tableView.superview.superview.superview];
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    [self resetScrollViewSize:(FSDetailBaseView*)tableView.superview.superview];
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         return 2;
     }
@@ -1138,7 +1117,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if (!parentView.data) {
         return 0;
     }
@@ -1160,23 +1139,53 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         if (indexPath.section == 0) {
-            UITableViewCell *_cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
             if (_sourceType == FSSourceProduct) {
-                _cell.textLabel.text = NSLocalizedString(@"Browse Promotion Detail", nil);
+                UITableViewCell *_cell = [tableView dequeueReusableCellWithIdentifier:@"FSSourceProduct_Promotion"];
+                if (_cell == nil) {
+                    _cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"FSSourceProduct_Promotion"];
+                    _cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    _cell.selectionStyle = UITableViewCellSelectionStyleGray;
+                }
+                FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
+                FSProdItemEntity *_item = parentView.data;
+                if (_item.promotions.count > 0) {
+                    FSProItemEntity *_proItem = _item.promotions[0];
+                    _cell.textLabel.text = _proItem.title;
+                    _cell.textLabel.font = ME_FONT(12);
+                    _cell.textLabel.textColor = [UIColor colorWithHexString:@"#181818"];
+                    _cell.detailTextLabel.text = _proItem.descrip;
+                    _cell.detailTextLabel.font = ME_FONT(12);
+                    _cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"#666666"];
+                    _cell.detailTextLabel.numberOfLines = 2;
+                    UILabel *_line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+                    _line.backgroundColor = RGBCOLOR(213, 213, 213);
+                    [_cell addSubview:_line];
+                }
+                
+                return _cell;
             }
             else {
-                _cell.textLabel.text = NSLocalizedString(@"Browse Products List", nil);
+                UITableViewCell *_cell = [tableView dequeueReusableCellWithIdentifier:@"FSSourcePromotion_Product"];
+                if (_cell == nil) {
+                    _cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSSourcePromotion_Product"];
+                    _cell.accessoryType = UITableViewCellAccessoryNone;
+                    _cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    
+                    int xOffset = 50;
+                    UIButton *btnAttention = [UIButton buttonWithType:UIButtonTypeCustom];
+                    btnAttention.frame = CGRectMake(xOffset, 15, APP_WIDTH - xOffset * 2, 40);
+                    [btnAttention setTitle:@"查看参与活动商品列表" forState:UIControlStateNormal];
+                    [btnAttention setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+                    [btnAttention setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                    btnAttention.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+                    [btnAttention addTarget:self action:@selector(clickToProductList:) forControlEvents:UIControlEventTouchUpInside];
+                    [_cell addSubview:btnAttention];
+                }
+                return _cell;
             }
-            _cell.textLabel.font = ME_FONT(14);
-            _cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            _cell.selectionStyle = UITableViewCellSelectionStyleGray;
-            UILabel *_line = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-            _line.backgroundColor = RGBCOLOR(213, 213, 213);
-            [_cell addSubview:_line];
-            return _cell;
         }
     }
     FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
@@ -1199,12 +1208,29 @@
     return detailCell;
 }
 
+-(void)clickToProductList:(UIButton*)sender
+{
+    FSDetailBaseView * currentView = (FSDetailBaseView*)self.paginatorView.currentPage;
+    if ([self IsBindPromotionOrProduct:currentView.data]) {
+        //去商品列表
+        FSProItemEntity *_item = currentView.data;
+        FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
+        dr.titleName = NSLocalizedString(@"Product List", nil);
+        dr.commonID = _item.id;
+        dr.pageType = FSPageTypeCommon;
+        [self.navigationController pushViewController:dr animated:TRUE];
+    }
+}
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         if (indexPath.section == 0) {
-            return 40;
+            if (_sourceType == FSSourceProduct) {
+                return 70;
+            }
+            return 70;
         }
     }
     FSProCommentCell *cell = (FSProCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -1213,7 +1239,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview.superview;
+    FSDetailBaseView *parentView = (FSDetailBaseView *)tableView.superview.superview;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         if (section == 0) {
             return 0;
@@ -1234,7 +1260,6 @@
     }
     id currentView =  self.paginatorView.currentPage;
     [[currentView tbComment] reloadData];
-    //[(UIScrollView *)[currentView tbComment].superview scrollRectToVisible:[currentView tbComment].frame animated:TRUE];
     [self displayCommentInputView:currentView];
 }
 
@@ -1480,7 +1505,7 @@
     [self sendToService];
 }
 
--(void)stopAndDelRecorderEnd:(CL_AudioRecorder *)_record
+-(void)stopAndDelRecorderEnd:(CL_AudioRecorder*)_record
 {
     [self endShowAnimation];
 }

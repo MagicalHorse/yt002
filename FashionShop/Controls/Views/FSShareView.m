@@ -79,7 +79,7 @@ static FSShareView *_instance;
     {
         shareCells = [@[] mutableCopy];
         [self createActionCell:SHARE_WB_ICON withTitle:SHARE_WB_TITLE];
-        [self createActionCell:SHARE_WX_FRIENDS_ICON    withTitle:SHARE_WX_FRIENDS_ICON];
+        [self createActionCell:SHARE_WX_FRIENDS_ICON    withTitle:SHARE_WX_FRIENDS_TITLE];
         [self createActionCell:SHARE_TC_ICON    withTitle:SHARE_TC_TITLE];
         [self createActionCell:SHARE_WX_ICON    withTitle:SHARE_WX_TITLE];
         [self createActionCell:SHARE_QQ_ICON    withTitle:SHARE_QQ_TITLE];
@@ -89,7 +89,7 @@ static FSShareView *_instance;
 {
     AWActionSheetCell *wx = [[AWActionSheetCell alloc] init];
     wx.iconView.image = [UIImage imageNamed:icon];
-    //[[wx titleLabel] setText:title];
+    [[wx titleLabel] setText:title];
     wx.index = shareCells.count;
     [shareCells addObject:wx];
 }

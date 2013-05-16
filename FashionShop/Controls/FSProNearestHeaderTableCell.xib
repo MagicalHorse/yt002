@@ -134,10 +134,9 @@
 					<object class="IBUIButton" id="306147811">
 						<reference key="NSNextResponder" ref="975784294"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{270, 0}, {44, 40}}</string>
+						<string key="NSFrame">{{270, 4}, {44, 40}}</string>
 						<reference key="NSSuperview" ref="975784294"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -203,6 +202,14 @@
 						<reference key="destination" ref="82969062"/>
 					</object>
 					<int key="connectionID">52</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">moreBtn</string>
+						<reference key="source" ref="975784294"/>
+						<reference key="destination" ref="306147811"/>
+					</object>
+					<int key="connectionID">56</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -280,7 +287,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">55</int>
+			<int key="maxID">56</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">

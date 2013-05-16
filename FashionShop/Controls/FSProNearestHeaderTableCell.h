@@ -12,6 +12,7 @@
 @interface FSProNearestHeaderTableCell : UIView
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
 @property (strong, nonatomic) IBOutlet UILabel *lblDistance;
+@property (strong, nonatomic) IBOutlet UIButton *moreBtn;
 
 @property (strong,nonatomic) NSString *data;
 @end

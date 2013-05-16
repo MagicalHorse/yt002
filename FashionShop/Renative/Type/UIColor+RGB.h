@@ -12,5 +12,6 @@
 
 +(UIColor *) colorWithRed:(CGFloat)red green:(CGFloat)g blue:(CGFloat)b;
 +(UIColor *) colorWithRGB:(NSUInteger)rgb;
++(UIColor *) colorWithHexString: (NSString *) stringToConvert;
 
 @end

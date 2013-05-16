@@ -201,7 +201,7 @@
 
 -(void)dealloc
 {
-    [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
+   // [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 }
 
 - (void)viewDidUnload {
@@ -676,6 +676,17 @@
 -(void)clickToStore:(UITapGestureRecognizer*)gesture
 {
     id view = gesture.view;
+    [self toStore:view];
+}
+
+-(void)clickToStoreByButton:(UIButton*)sender
+{
+    id view = sender.superview;
+    [self toStore:view];
+}
+
+-(void)toStore:(UIView*)view
+{
     if ([view isKindOfClass:[FSProNearestHeaderTableCell class]]) {
         FSProNearestHeaderTableCell *cell = (FSProNearestHeaderTableCell*)view;
         if (_storeSource.count >= cell.tag) {
@@ -769,6 +780,7 @@
             
             UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickToStore:)];
             [header addGestureRecognizer:tapGesture];
+            [header.moreBtn addTarget:self action:@selector(clickToStoreByButton:) forControlEvents:UIControlEventTouchUpInside];
             return header;
             break;
         }
@@ -820,11 +832,13 @@
                     listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProNearDetailCell"];
                 }
             }
-            listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
+            listCell.contentView.backgroundColor = [UIColor colorWithHexString:@"909090"];
             listCell.lblTitle.textColor = [UIColor whiteColor];
-            listCell.lblSubTitle.textColor = RGBCOLOR(179, 179, 179);
-            listCell.line.backgroundColor = RGBCOLOR(160, 160, 160);
-            listCell.line2.backgroundColor = RGBCOLOR(143, 143, 143);
+            listCell.lblTitle.font = ME_FONT(14);
+            listCell.lblSubTitle.textColor = [UIColor colorWithHexString:@"#dddddd"];
+            listCell.lblSubTitle.font = ME_FONT(12);
+            listCell.line.backgroundColor = [UIColor lightGrayColor];
+            listCell.line2.backgroundColor = [UIColor lightGrayColor];
             int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
             FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
@@ -834,7 +848,7 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#CBd2a8'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#CBd2a8'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
             
             return listCell;
@@ -854,12 +868,12 @@
                     listCell = [[FSProDateDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProDateDetailCell"];
                 }
             }
-            listCell.contentView.backgroundColor = RGBCOLOR(125, 125, 125);
+            listCell.contentView.backgroundColor = [UIColor colorWithHexString:@"909090"];
             listCell.titleView.textColor = [UIColor whiteColor];
-            listCell.descView.textColor = RGBCOLOR(179, 179, 179);
-            listCell.address.textColor = RGBCOLOR(179, 179, 179);
-            listCell.line.backgroundColor = RGBCOLOR(160, 160, 160);
-            listCell.line2.backgroundColor = RGBCOLOR(143, 143, 143);
+            listCell.descView.textColor = [UIColor colorWithHexString:@"#dddddd"];
+            listCell.address.textColor = [UIColor colorWithHexString:@"#dddddd"];
+            listCell.line.backgroundColor = [UIColor lightGrayColor];
+            listCell.line2.backgroundColor = [UIColor lightGrayColor];
             
             NSMutableArray *rows = nil;
             if (_currentSearchIndex == SortByDate) {
@@ -878,7 +892,7 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#CBd2a8'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#CBd2a8'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#ffffff'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             
             [listCell setTitle:proData.title desc:proData.descrip address:proData.store.name dateString:str];
             

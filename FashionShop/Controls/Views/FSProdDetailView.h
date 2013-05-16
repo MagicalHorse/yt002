@@ -12,38 +12,37 @@
 #import "FSThumView.h"
 #import "FSAudioButton.h"
 
-@interface FSProdDetailView : FSDetailBaseView
+@interface FSProdDetailView : FSDetailBaseView {
+    int _viewHeight;
+}
 
+@property (strong, nonatomic) IBOutlet UIScrollView *svContent;
 
-@property (strong, nonatomic) IBOutlet UILabel *lblFavorCount;
-
+@property (strong, nonatomic) IBOutlet UIView *imgNameView;
+@property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet FSThumView *imgThumb;
-
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
+@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
 @property (strong, nonatomic) IBOutlet UIButton *btnBrand;
 
+@property (strong, nonatomic) IBOutlet UIView *descAddView;
+@property (strong, nonatomic) IBOutlet UIView *countView;
+@property (strong, nonatomic) IBOutlet UIImageView *imgLikeBG;
+@property (strong, nonatomic) IBOutlet UILabel *lblFavorCount;
 @property (strong, nonatomic) IBOutlet UILabel *lblCoupons;
-@property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
+@property (strong, nonatomic) IBOutlet UIButton *btnStore;
+
+@property (strong, nonatomic) IBOutlet UITableView *tbComment;
+
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnFavor;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
-
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem1;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem2;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem3;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem4;
 
-@property (strong, nonatomic) IBOutlet UIButton *btnStore;
-
-@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
-@property (strong, nonatomic) IBOutlet UIImageView *imgLikeBG;
-
-@property (strong, nonatomic) IBOutlet UIScrollView *svContent;
-
-@property (strong, nonatomic) IBOutlet UITableView *tbComment;
-
 @property (strong, nonatomic) NSString *imageURL;
-
 @property (nonatomic,strong) FSAudioButton *audioButton;
 
 @end

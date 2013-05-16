@@ -83,12 +83,10 @@
 {
     if (!_likes)
     {
-        [self beginLoading:_contentView];
         _currentPage = 1;
         _inLoading = YES;
         FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:_currentPage isRefresh:NO];
         [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_contentView];
             if (resp.isSuccess)
             {
                 FSPagedPoint *innerResp = resp.responseData;
@@ -105,29 +103,24 @@
         }];
     }
     if (currentUser.isBindCard) {
-        if(!currentUser.cardInfo){
-            FSCardRequest *request = [[FSCardRequest alloc] init];
-            request.userToken = currentUser.uToken;
-            request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
-            [self beginLoading:self.view];
-            [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-                if (!resp.isSuccess)
-                {
-                    [self reportError:resp.description];
-                }
-                else
-                {
-                    //显示绑定成功界面
-                    currentUser.isBindCard = @YES;
-                    currentUser.cardInfo = resp.responseData;
-                    [_contentView reloadData];
-                }
-                [self endLoading:self.view];
-            }];
-        }
-        else{
-            [_contentView reloadData];
-        }
+        FSCardRequest *request = [[FSCardRequest alloc] init];
+        request.userToken = currentUser.uToken;
+        request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
+        [self beginLoading:_contentView];
+        [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            [self endLoading:_contentView];
+            if (!resp.isSuccess)
+            {
+                [self reportError:resp.description];
+            }
+            else
+            {
+                //显示绑定成功界面
+                currentUser.isBindCard = @YES;
+                currentUser.cardInfo = resp.responseData;
+                [_contentView reloadData];
+            }
+        }];
     }
 }
 

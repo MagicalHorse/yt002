@@ -36,8 +36,6 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     self.view.backgroundColor = APP_BACKGROUND_COLOR;
     [self prepareView];
-//    _cardNumField.text = @"4367455100790570";
-//    _cardPwField.text = @"090027";
 }
 
 -(void)updateTitle
@@ -85,47 +83,42 @@
         _rect.origin.y = 15;
         _resultView.frame = _rect;
         
-        if (currentUser.cardInfo) {
-            [self updateResultView:currentUser.cardInfo];
-        }
-        else{
-            FSCardRequest *request = [[FSCardRequest alloc] init];
-            request.userToken = currentUser.uToken;
-            request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
-            [self beginLoading:self.view];
-            __block FSCardBindViewController *blockSelf = self;
-            [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-                if (!resp.isSuccess)
+        FSCardRequest *request = [[FSCardRequest alloc] init];
+        request.userToken = currentUser.uToken;
+        request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
+        [self beginLoading:_bindView];
+        __block FSCardBindViewController *blockSelf = self;
+        [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            [self endLoading:_bindView];
+            if (!resp.isSuccess)
+            {
+                if (blockSelf->completeCallBack!=nil)
                 {
-                    if (blockSelf->completeCallBack!=nil)
-                    {
-                        blockSelf->completeCallBack(NO);
-                    }
-                    [self reportError:resp.message];
+                    blockSelf->completeCallBack(NO);
                 }
-                else
+                [self reportError:resp.message];
+            }
+            else
+            {
+                if (blockSelf->completeCallBack!=nil)
                 {
-                    if (blockSelf->completeCallBack!=nil)
-                    {
-                        blockSelf->completeCallBack(YES);
-                    }
-                    //显示绑定成功界面
-                    _cardNumField.text = @"";
-                    _cardPwField.text = @"";
-                    currentUser.isBindCard = @YES;
-                    if ([_cardNumField isFirstResponder]) {
-                        [_cardNumField resignFirstResponder];
-                    }
-                    if ([_cardPwField isFirstResponder]) {
-                        [_cardPwField resignFirstResponder];
-                    }
-                    [self updateResultView:resp.responseData];
-                    [self updateTitle];
-                    [self prepareView];
+                    blockSelf->completeCallBack(YES);
                 }
-                [self endLoading:self.view];
-            }];
-        }
+                //显示绑定成功界面
+                _cardNumField.text = @"";
+                _cardPwField.text = @"";
+                currentUser.isBindCard = @YES;
+                if ([_cardNumField isFirstResponder]) {
+                    [_cardNumField resignFirstResponder];
+                }
+                if ([_cardPwField isFirstResponder]) {
+                    [_cardPwField resignFirstResponder];
+                }
+                [self updateResultView:resp.responseData];
+                [self updateTitle];
+                [self prepareView];
+            }
+        }];
     }
 }
 

@@ -33,6 +33,10 @@
 -(void)setdata:(NSString *)source{
     _data = source;
     [_lblTitle setValue:_data forKey:@"text"];
+    _lblTitle.font = ME_FONT(15);
+    _lblTitle.textColor = [UIColor colorWithHexString:@"#6f5e6c"];
+    _lblDistance.font = ME_FONT(12);
+    _lblDistance.textColor = [UIColor colorWithHexString:@"#6f5e6c"];
 }
 
 @end

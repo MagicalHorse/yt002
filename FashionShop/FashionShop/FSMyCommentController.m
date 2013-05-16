@@ -58,7 +58,7 @@
     request.routeResourcePath = RK_REQUEST_MYCOMMENT_LIST;
     request.nextPage = [NSNumber numberWithInt:_currentPage + (isLoadMore?1:0)];
     request.pageSize = @COMMON_PAGE_SIZE;
-    request.userToken = [FSUser localProfile].uToken;
+    request.userToken = [FSModelManager sharedModelManager].loginToken;
     isLoadMore?[self beginLoadMoreLayout:_tbAction]:[self beginLoading:_tbAction];
     _isInLoading = YES;
     [request send:[FSPagedMyComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
@@ -141,7 +141,24 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    FSComment *item = _comments[indexPath.row];
+    FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    if (item.sourcetype == FSSourceProduct) {
+        FSProdItemEntity *fsItem = [[FSProdItemEntity alloc] init];
+        fsItem.id = item.sourceid;
+        detailViewController.navContext = [NSArray arrayWithObjects:fsItem, nil];
+    }
+    if (item.sourcetype == FSSourcePromotion) {
+        FSProItemEntity *fsItem = [[FSProItemEntity alloc] init];
+        fsItem.id = item.sourceid;
+        detailViewController.navContext = [NSArray arrayWithObjects:fsItem, nil];
+    }
+    detailViewController.dataProviderInContext = self;
+    detailViewController.indexInContext = 0;
+    detailViewController.sourceType = item.sourcetype;
+    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    [self presentViewController:navControl animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 }
 
 #pragma mark - UITableViewSource delegate
@@ -154,27 +171,28 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *storeDescCell = @"FSMyCommentCell";
-    FSMyCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:storeDescCell];
-    if (cell == nil) {
+    FSMyCommentCell *cellMy = [tableView dequeueReusableCellWithIdentifier:storeDescCell];
+    if (cellMy == nil) {
         NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSMyCommentCell" owner:self options:nil];
         if (_array.count > 0) {
-            cell = (FSMyCommentCell*)_array[0];
+            cellMy = (FSMyCommentCell*)_array[0];
         }
         else{
-            cell = [[FSMyCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storeDescCell];
+            cellMy = [[FSMyCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storeDescCell];
         }
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cell setData:[_comments objectAtIndex:indexPath.row]];
-    cell.imgThumb.delegate = self;
-    [cell updateFrame];
+    cellMy.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cellMy setData:[_comments objectAtIndex:indexPath.row]];
+    cellMy.imgThumb.delegate = self;
+    [cellMy updateFrame];
     
-    return cell;
+    return cellMy;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSMyCommentCell *cell = (FSMyCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
+    FSMyCommentCell *cell = (FSMyCommentCell*)[_tbAction.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.cellHeight;
 }
 
@@ -193,6 +211,28 @@
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
     dr.userId = [userid intValue];
     [self.navigationController pushViewController:dr animated:TRUE];
+}
+
+#pragma mark - FSProDetailItemSourceProvider
+
+-(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
+{
+    FSProItemEntity *item =  [view.navContext objectAtIndex:index];
+    if (item)
+        block(item);
+    else
+        errorBlock();
+    
+}
+-(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    FSComment *item = _comments[index];
+    return item.sourcetype;
+}
+
+-(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
+{
+    return TRUE;
 }
 
 @end
