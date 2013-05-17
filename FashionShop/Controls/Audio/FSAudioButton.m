@@ -53,12 +53,11 @@
 {
     //设置按钮属性
     [self setBackgroundColor:[UIColor clearColor]];
-    UIImage *image = [[UIImage imageNamed:@"play_normal.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:0];
+    UIImage *image = [UIImage imageNamed:@"play_normal.png"];
     [self setBackgroundImage:image forState:UIControlStateNormal];
-    [self setBackgroundImage:[[UIImage imageNamed:@"play_hover.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:0] forState:UIControlStateHighlighted];
     
     //添加时间标签
-    timeLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width/2, self.frame.size.height)];
+    timeLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width/1.5, self.frame.size.height)];
     timeLb.font = [UIFont boldSystemFontOfSize:10];
     timeLb.backgroundColor = [UIColor clearColor];
     timeLb.textAlignment = UITextAlignmentCenter;

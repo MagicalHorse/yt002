@@ -58,7 +58,7 @@
     [self stopPageTimer];
     if(!pageTimer)
     {
-        pageTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(showNext:) userInfo:nil repeats:YES];
+        pageTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(showNext:) userInfo:nil repeats:YES];
     }
 }
 

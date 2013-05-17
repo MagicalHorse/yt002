@@ -60,14 +60,25 @@
     
     if (!currentUser.isBindCard) {
         UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sheepButton setTitle:@"绑定会员卡" forState:UIControlStateNormal];
         [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        [sheepButton setBackgroundImage:[UIImage imageNamed:@"bind_card_btn.png"] forState:UIControlStateNormal];
+        sheepButton.titleLabel.font = ME_FONT(13);
+        sheepButton.showsTouchWhenHighlighted = YES;
+        [sheepButton setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
         [sheepButton sizeToFit];
         UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
         [self.navigationItem setRightBarButtonItem:item];
     }
     else{
-        [self.navigationItem setRightBarButtonItem:nil];
+        UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [sheepButton setTitle:@"积点兑换" forState:UIControlStateNormal];
+        [sheepButton addTarget:self action:@selector(pointExchange:) forControlEvents:UIControlEventTouchUpInside];
+        sheepButton.titleLabel.font = ME_FONT(13);
+        sheepButton.showsTouchWhenHighlighted = YES;
+        [sheepButton setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
+        [sheepButton sizeToFit];
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:sheepButton];
+        [self.navigationItem setRightBarButtonItem:item];
     }
     [self prepareData];
 }
@@ -85,8 +96,10 @@
     {
         _currentPage = 1;
         _inLoading = YES;
+        _contentView.hidden = YES;
         FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:_currentPage isRefresh:NO];
         [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            _contentView.hidden = NO;
             if (resp.isSuccess)
             {
                 FSPagedPoint *innerResp = resp.responseData;
@@ -102,16 +115,31 @@
             _inLoading = NO;
         }];
     }
+    [self bindRequest];
+}
+
+-(void)bindRequest
+{
+    static int requestCount = 1;
     if (currentUser.isBindCard) {
         FSCardRequest *request = [[FSCardRequest alloc] init];
         request.userToken = currentUser.uToken;
         request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
         [self beginLoading:_contentView];
+        _inLoading = YES;
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:_contentView];
+            _inLoading = NO;
             if (!resp.isSuccess)
             {
-                [self reportError:resp.description];
+                requestCount ++;
+                if (requestCount > 5) {
+                    [self reportError:resp.description];
+                    requestCount = 0;
+                }
+                else{
+                    [self bindRequest];
+                }
             }
             else
             {
@@ -195,7 +223,7 @@
     view.backgroundColor = [UIColor clearColor];
     
     int xOffset = 30;
-    int yOffset = 35;
+    int yOffset = 30;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
@@ -210,6 +238,9 @@
 
 -(void)pointExchange:(UIButton*)sender
 {
+    if (_inLoading) {
+        return;
+    }
     if (!currentUser.isBindCard) {
         FSCardBindViewController *controller = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
         __block FSCardBindViewController *blockBindController = controller;

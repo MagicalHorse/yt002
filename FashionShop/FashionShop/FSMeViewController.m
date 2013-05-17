@@ -106,9 +106,9 @@
     [self ensureDataContext];
     __block FSMeViewController *blockSelf = self;
     [_dataSourceProvider setValue:^(FSUserLoginRequest *request){
-        [blockSelf beginLoading:blockSelf.view];
+        [blockSelf beginLoading:blockSelf->_tbScroll];
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
-            [blockSelf endLoading:blockSelf.view];
+            [blockSelf endLoading:blockSelf->_tbScroll];
             if (!response.isSuccess)
             {
                 if (blockSelf->completeCallBack!=nil)
@@ -139,9 +139,9 @@
     } forKey:LOGIN_FROM_3RDPARTY_ACTION];
     
     [_dataSourceProvider setValue:^(FSUserProfileRequest *request){
-        [blockSelf beginLoading:blockSelf.view];
+        [blockSelf beginLoading:blockSelf->_tbScroll];
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
-            [blockSelf endLoading:blockSelf.view];
+            [blockSelf endLoading:blockSelf->_tbScroll];
             if (!response.isSuccess)
             {
                 [FSUser removeUserProfile];
@@ -589,13 +589,13 @@
 -(void) loadILike:(BOOL)showProgress nextPage:(int)pageIndex withCallback:(dispatch_block_t)callback
 {
     if (showProgress)
-        [self beginLoading:_likeView];
+        [self beginLoading:_tbScroll];
     _favorPageIndex = pageIndex;
     FSEntityRequestBase *request = [self createRequest:pageIndex];
     NSString *blockKey = _segHeader.selectedSegmentIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
         if (showProgress)
-            [self endLoading:_likeView];
+            [self endLoading:_tbScroll];
         if (callback)
             callback();
     });
@@ -629,12 +629,12 @@
 
 -(void)loadMore
 {
-    [self beginLoadMoreLayout:_likeView];
+    [self beginLoadMoreLayout:_tbScroll];
     __block FSMeViewController *blockSelf = self;
     _isInRefreshing = NO;
     _isInLoading = YES;
     [self loadILike:FALSE nextPage:++_favorPageIndex withCallback:^{
-        [blockSelf endLoadMore:blockSelf->_likeView];
+        [blockSelf endLoadMore:blockSelf->_tbScroll];
         _isInLoading = NO;
     }];
 }
@@ -751,21 +751,9 @@
         }
         case 2:
         {
-            //just goto passbook here, we can embed the custom url schema in pass, so user can return back.
-            /*
-             if ([PKPass class])
-             {
-             NSString *passUrl = @"shoebox://card";
-             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:passUrl]];
-             }
-             else
-             */
-            {
-                
-                FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
-                couponView.currentUser = _userProfile;
-                [self.navigationController pushViewController:couponView animated:true];
-            }
+            FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+            couponView.currentUser = _userProfile;
+            [self.navigationController pushViewController:couponView animated:true];
             break;
         }
         case 3:
@@ -984,9 +972,9 @@
                 removeRequest.routeResourcePath = RK_REQUEST_FAVOR_REMOVE;
                 request = removeRequest;
             }
-            [self beginLoading:_likeView];
+            [self beginLoading:_tbScroll];
             [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase * resp){
-                [self endLoading:_likeView];
+                [self endLoading:_tbScroll];
                 if (!resp.isSuccess)
                 {
                     [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
@@ -1405,7 +1393,7 @@
 
 -(void) onQQLoginSuccess
 {
-    [self beginLoading:self.view];
+    [self beginLoading:_tbScroll];
     [_qq getUserInfoWithFormat:@"json" parReserved:nil delegate:self onSuccess:@selector(onQQUserInfoGet:) onFailure:@selector(onQQUserInfoFail:)];
     
 }
@@ -1418,7 +1406,7 @@
 
 
 - (void)onQQUserInfoGet:(id)result{
-    [self endLoading:self.view];
+    [self endLoading:_tbScroll];
     NSDictionary *homeDic = (NSDictionary *)result;
     FSUserLoginRequest *request = [[FSUserLoginRequest alloc] init];
     request.accessToken = _qq.accessToken;

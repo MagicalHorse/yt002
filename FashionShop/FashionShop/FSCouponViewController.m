@@ -29,8 +29,8 @@
 
 @end
 
-#define USER_COUPON_TABLE_CELL @"usercoupontablecell"
-#define USER_COUPON_PRO_TABLE_CELL @"usercouponprotablecell"
+#define USER_COUPON_TABLE_CELL @"FSCouponDetailCell"
+#define USER_COUPON_PRO_TABLE_CELL @"FSCouponProDetailCell"
 
 @implementation FSCouponViewController
 @synthesize currentUser;
@@ -53,11 +53,11 @@
     
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_TABLE_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
-    
-    [self setFilterType];
-    [self initArray];
-    
     _currentSelIndex = SortByUnUsed;
+    
+    [self initArray];
+    [self setFilterType];
+
     _contentView.backgroundView = nil;
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     
@@ -67,9 +67,9 @@
             action();
             return;
         }
-        int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
         FSCommonUserRequest *request = [self createRequest:currentPage];
-        request.previousLatestDate = [_refreshTimeList objectAtIndex:_segFilters.selectedSegmentIndex];
+        request.previousLatestDate = [_refreshTimeList objectAtIndex:_currentSelIndex];
         _inLoading = YES;
         [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = NO;
@@ -78,10 +78,10 @@
             {
                 FSPagedCoupon *innerResp = resp.responseData;
                 if (innerResp.totalPageCount <= currentPage)
-                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                    [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
                 [self mergeLike:innerResp isInsert:YES];
                 
-                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSelIndex];
             }
             else
             {
@@ -162,7 +162,8 @@
 
 -(void) requestData
 {
-    int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+    int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
+    [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
     FSCommonUserRequest *request = [self createRequest:currentPage];
     [self beginLoading:_contentView];
     [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
@@ -171,10 +172,8 @@
         {
             FSPagedCoupon *innerResp = resp.responseData;
             if (innerResp.totalPageCount <= currentPage)
-                [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
             [self mergeLike:innerResp isInsert:NO];
-            
-            [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedSegmentIndex];
         }
         else
         {
@@ -185,7 +184,7 @@
 
 -(void) mergeLike:(FSPagedCoupon *)response isInsert:(BOOL)isinsert
 {
-    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     if (response && response.items)
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -207,24 +206,16 @@
         }];
         [_contentView reloadData];
     }
-    if (_likes.count<1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView];
-    }
 }
 
 -(FSCommonUserRequest *)createRequest:(int)index
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
-    request.userToken =[FSModelManager sharedModelManager].loginToken;
+    request.userToken = [FSUser localProfile].uToken;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
     request.pageIndex =[NSNumber numberWithInt:index];
-    request.sort = @0;
+    request.sort = [NSNumber numberWithInt:_currentSelIndex+1];
+    request.likeType = [NSNumber numberWithInt:_currentSelIndex+1];
     request.routeResourcePath = RK_REQUEST_COUPON_LIST;
     return request;
 }
@@ -238,7 +229,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     return _likes?_likes.count:0;
 }
 
@@ -249,7 +240,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
     UITableViewCell *detailCell = nil;
     if (coupon.producttype == FSSourceProduct)
@@ -267,6 +258,8 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    return 80;
+    
     FSCouponProDetailCell *cell = (FSCouponProDetailCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.cellHeight;
 }
@@ -274,7 +267,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-    NSMutableArray *_likes = _dataSourceList[_segFilters.selectedSegmentIndex];
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     detailView.navContext = _likes;
     detailView.indexInContext = indexPath.row* [self numberOfSectionsInTableView:tableView] + indexPath.section;
     detailView.sourceType = [(FSCoupon *)[_likes objectAtIndex:detailView.indexInContext] producttype];
@@ -289,14 +282,14 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
-    BOOL _noMore = [[_noMoreList objectAtIndex:_segFilters.selectedSegmentIndex] boolValue];
+    BOOL _noMore = [[_noMoreList objectAtIndex:_currentSelIndex] boolValue];
     if(!_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
        &&scrollView.contentOffset.y>0
        && !_noMore)
     {
         _inLoading = TRUE;
-        int currentPage = [[_pageIndexList objectAtIndex:_segFilters.selectedSegmentIndex] intValue];
+        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
         FSCommonUserRequest *request = [self createRequest:currentPage+1];
         [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
@@ -304,8 +297,8 @@
             {
                 FSPagedCoupon *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=currentPage+1)
-                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
-                [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                    [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
+                [self setPageIndex:currentPage+1 selectedSegmentIndex:_currentSelIndex];
                 [self mergeLike:innerResp isInsert:NO];
             }
             else

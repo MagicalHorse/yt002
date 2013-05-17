@@ -63,13 +63,11 @@
         _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _lblComment.frame.origin.y, _width>xOffset?xOffset:_width, _lblComment.frame.size.height);
         
         FSResource *_audioResource = data.resources[0];
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 2, 60, 20)];
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 10, 65, 26)];
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
         _audioButton.audioTime = [NSString stringWithFormat:@"%d''", (_audioResource.width>0?_audioResource.width:1)];
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateNormal];
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateHighlighted];
         [self addSubview:_audioButton];
     }
     else
@@ -122,7 +120,7 @@
     
     if (_audioButton) {
         _rect = _audioButton.frame;
-        _rect.origin.y = _lblComment.frame.origin.y - 2;
+        _rect.origin.y = _lblComment.frame.origin.y - 7;
         _audioButton.frame = _rect;
     }
     

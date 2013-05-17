@@ -75,15 +75,12 @@
     
     //设置播放按钮
     if (_audioResource) {
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(0,0, 50, 50)];
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(0, 0, 65, 26)];
         _audioButton.center = CGPointMake(160, yOffset - 25);
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_100x100.png"] forState:UIControlStateNormal];
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
         _audioButton.audioTime = [NSString stringWithFormat:@"%d''", (_audioResource.width>0?_audioResource.width:1)];
-        [_audioButton setTitleFrame:CGRectMake(0, 10, _audioButton.frame.size.width/7*4, _audioButton.frame.size.height - 20)];
-        [_audioButton setPlayButtonFrame:CGRectMake(_audioButton.frame.size.width/7*4 + 1, (_audioButton.frame.size.height-12)/2, 12, 12)];
         [_btnStore.superview addSubview:_audioButton];
     }
     
@@ -94,15 +91,15 @@
     
     //_lblTitle
     _lblTitle.text = _data.title;
-    _lblTitle.font = ME_FONT(18);
-    _lblTitle.textColor = [UIColor colorWithHexString:@"#6f5e6c"];
+    _lblTitle.font = BFONT(18);
+    _lblTitle.textColor = [UIColor colorWithHexString:@"#181818"];
     
     //_lblDuration
     NSDateFormatter *formater = [[NSDateFormatter alloc] init];
     [formater setDateFormat:@"yyyy/MM/dd"];
     [_lblDuration setValue:[NSString stringWithFormat:@"%@-%@",[formater stringFromDate:_data.startDate],[formater stringFromDate:_data.endDate]] forKey:@"text"];
-    _lblDuration.font = ME_FONT(10);
-    _lblDuration.textColor = [UIColor colorWithHexString:@"#6f5e6c"];
+    _lblDuration.font = ME_FONT(12);
+    _lblDuration.textColor = [UIColor colorWithHexString:@"#181818"];
     
     //_imgNameView
     _rect = _imgNameView.frame;
@@ -114,19 +111,19 @@
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];
     [self bringSubviewToFront:_lblCoupons];
-    _lblFavorCount.font = ME_FONT(12);
+    _lblFavorCount.font = ME_FONT(13);
     _lblFavorCount.textColor = [UIColor colorWithRed:229 green:0 blue:79];
     [self bringSubviewToFront:_lblFavorCount];
     
     //_lblCoupons
     _lblCoupons.text = [NSString stringWithFormat:@"%d",_data.couponTotal];
-    _lblCoupons.font = ME_FONT(12);
+    _lblCoupons.font = ME_FONT(13);
     _lblCoupons.textColor = [UIColor colorWithRed:229 green:0 blue:79];
     
     yOffset += 40;
     //_lblDescrip
     _lblDescrip.text = _data.descrip;
-    _lblDescrip.font = ME_FONT(12);
+    _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithHexString:@"#666666"];
     _lblDescrip.numberOfLines = 0;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
@@ -146,7 +143,7 @@
     {
         [_btnStore setTitle:_data.store.name forState:UIControlStateNormal];
     }
-    _btnStore.titleLabel.font = ME_FONT(12);
+    _btnStore.titleLabel.font = ME_FONT(14);
     [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
     [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];

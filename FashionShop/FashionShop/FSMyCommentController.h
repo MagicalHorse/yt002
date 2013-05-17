@@ -10,8 +10,11 @@
 #import "FSRefreshableViewController.h"
 #import "FSThumView.h"
 #import "FSProDetailViewController.h"
+#import "FSAudioButton.h"
 
-@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate,FSProDetailItemSourceProvider>
+@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate,FSProDetailItemSourceProvider,FSAudioDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
+
+-(void)stopAllAudio;
 
 @end

@@ -157,13 +157,14 @@
                                            [UIFont systemFontOfSize:18],UITextAttributeFont,
                                            [UIColor redColor],UITextAttributeTextColor,
                                            [NSValue valueWithCGSize:CGSizeMake(0, 0)],UITextAttributeTextShadowOffset,nil];
-    [self.searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"list_title_bg.png"]];
+    //[self.searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"list_title_bg.png"]];
     //[self.searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"tab_normal.png"] forState:UIControlStateNormal];
     [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesUnSelected forState:UIControlStateNormal];
     [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesSelected forState:UIControlStateSelected];
     
     self.searchBar.backgroundImage = [UIImage imageNamed:@"top_title_bg.png"];
     self.searchBar.backgroundColor = [UIColor blackColor];
+    self.searchBar.clipsToBounds = YES;
     
     [self.searchBar setSearchFieldBackgroundImage:[UIImage imageNamed:@"search_input.png"] forState:UIControlStateNormal];
 }
@@ -339,6 +340,12 @@
     layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
     layout.sectionInset = UIEdgeInsetsMake(5,5,5,5);
     
+    //add iamgeView
+    imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
+    imageTagBgV.image = [UIImage imageNamed:@"tag_bg.png"];//[[UIImage imageNamed:@"tag_bg.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
+    imageTagBgV.contentMode = UIViewContentModeScaleToFill;
+    [_tagContainer addSubview:imageTagBgV];
+    
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
     int height = (lineCount) * 34;
     CGRect _rect = _tagContainer.bounds;
@@ -347,21 +354,13 @@
     _cvTags.scrollEnabled = NO;
     _tagContainer.clipsToBounds = YES;
     [_tagContainer addSubview:_cvTags];
-    _tagContainer.backgroundColor = [UIColor whiteColor];//RGBCOLOR(242, 242, 242);
     [_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
-    _cvTags.backgroundColor = [UIColor clearColor];
     _tagContainer.contentMode = UIViewContentModeCenter;
     _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
     _cvTags.dataSource = self;
     _cvTags.backgroundColor = APP_TABLE_BG_COLOR;
     [self reCreateContentView];
-    
-    //add iamgeView
-    imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
-    imageTagBgV.image = [[UIImage imageNamed:@"tag_bg.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
-    imageTagBgV.contentMode = UIViewContentModeScaleAspectFill;
-    [_tagContainer insertSubview:imageTagBgV belowSubview:_cvTags];
     
     [self addSwipView];
 }
@@ -376,7 +375,7 @@
     view.backgroundColor = [UIColor clearColor];
     UIImageView *imageV = [[UIImageView alloc] initWithFrame:view.bounds];
     imageV.image = [UIImage imageNamed:@"arrow_down.png"];
-    imageV.tag = Tag_Swip_View_Tag + 10;
+    imageV.tag = Tag_Swip_View_Tag + 30;
     [view addSubview:imageV];
     view.tag = Tag_Swip_View_Tag;
     UISwipeGestureRecognizer *gesture = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeFrom:)];
@@ -424,7 +423,7 @@
     if (isSwipToUp) {
         isAnimating = YES;
         strImage = @"arrow_down.png";
-        [UIView animateWithDuration:0.33 animations:^{
+        [UIView animateWithDuration:20.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y -= height;
             view.frame = _rect;
@@ -437,14 +436,14 @@
             //_cvTags.frame = _tagContainer.bounds;
         } completion:^(BOOL finished) {
             isAnimating = NO;
-            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+10];
+            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+30];
             imageV.image = [UIImage imageNamed:strImage];
         }];
     }
     else{
         isAnimating = YES;
         strImage = @"arrow_up.png";
-        [UIView animateWithDuration:0.33 animations:^{
+        [UIView animateWithDuration:10.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y += height;
             view.frame = _rect;
@@ -457,7 +456,7 @@
             //_cvTags.frame = _tagContainer.bounds;
         } completion:^(BOOL finished) {
             isAnimating = NO;
-            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+10];
+            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+30];
             imageV.image = [UIImage imageNamed:strImage];
         }];
     }
@@ -803,17 +802,18 @@
 
 
 #pragma FSProDetailItemSourceProvider
--(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
-{
-    FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
-    if (item)
-        block(item);
-    else
-        errorBlock();
-    
-}
+//-(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
+//{
+//    FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
+//    if (item)
+//        block(item);
+//    else
+//        errorBlock();
+//    
+//}
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
+    return view.sourceType;
     return FSSourceProduct;
 }
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index

@@ -19,6 +19,8 @@
     BOOL _isInLoading;
     int _currentPage;
     BOOL _noMoreResult;
+    
+    FSAudioButton   *lastButton;
 }
 
 @end
@@ -185,6 +187,9 @@
     cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
     [cellMy setData:[_comments objectAtIndex:indexPath.row]];
     cellMy.imgThumb.delegate = self;
+    if (!cellMy.audioButton.audioDelegate) {
+        cellMy.audioButton.audioDelegate = self;
+    }
     [cellMy updateFrame];
     
     return cellMy;
@@ -233,6 +238,18 @@
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
+}
+
+#pragma mark - FSAudioDelegate
+
+-(void)clickAudioButton:(FSAudioButton*)aButton
+{
+    if (lastButton) {
+        if (lastButton != aButton) {
+            [lastButton stop];
+        }
+    }
+    lastButton = aButton;
 }
 
 @end

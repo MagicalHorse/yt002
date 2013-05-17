@@ -21,6 +21,7 @@
 @synthesize beginDate;
 @synthesize endDate;
 @synthesize isUsed;
+@synthesize status;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -40,6 +41,7 @@
     [relationMapping mapKeyPath:@"validstartdate" toAttribute:@"beginDate"];
     [relationMapping mapKeyPath:@"validenddate" toAttribute:@"endDate"];
     [relationMapping mapKeyPath:@"isused" toAttribute:@"isUsed"];
+    [relationMapping mapKeyPath:@"status" toAttribute:@"status"];
     RKObjectMapping *prodRelationMap = [FSProdItemEntity getRelationDataMap];
     [relationMapping mapKeyPath:@"product" toRelationship:@"product" withMapping:prodRelationMap];
     RKObjectMapping *proRelationMap = [FSProItemEntity getRelationDataMap];

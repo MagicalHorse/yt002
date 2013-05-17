@@ -16,13 +16,11 @@
 
 @interface FSDRViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,FSThumViewDelegate,FSAvatarHDViewDelegate>
 
-
-@property (strong, nonatomic) IBOutlet FSThumView *thumLogo;
 - (IBAction)goLikeView:(id)sender;
 - (IBAction)goFanView:(id)sender;
 
+@property (strong, nonatomic) IBOutlet FSThumView *thumLogo;
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
-
 @property (strong, nonatomic) IBOutlet UIButton *btnLike;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnFans;

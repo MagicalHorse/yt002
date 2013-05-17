@@ -137,13 +137,29 @@
 -(void) presentData:(BOOL)isUpdateCollection
 {
     UIBarButtonItem *baritemSet= nil;
-    if (!_daren.isLiked)
-        baritemSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
+    if (!_daren.isLiked) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn addTarget:self action:@selector(doLike) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitle:@"+关注" forState:UIControlStateNormal];
+        btn.titleLabel.font = ME_FONT(13);
+        btn.showsTouchWhenHighlighted = YES;
+        [btn setBackgroundImage:[UIImage imageNamed:@"btn_normal.png"] forState:UIControlStateNormal];
+        [btn sizeToFit];
+        baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
+    }
     else
     {
-        baritemSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn addTarget:self action:@selector(doLikeRemove) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitle:@"取消关注" forState:UIControlStateNormal];
+        btn.titleLabel.font = ME_FONT(13);
+        btn.showsTouchWhenHighlighted = YES;
+        [btn setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
+        [btn sizeToFit];
+        baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
     }
     [self.navigationItem setRightBarButtonItem:baritemSet];
+    
     if ([FSModelManager sharedModelManager].localLoginUid &&
         [_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
     {
@@ -152,14 +168,13 @@
     _thumLogo.ownerUser = _daren;
     _thumLogo.delegate = self;
     _lblNickie.text = _daren.nickie;
-    _lblNickie.font = ME_FONT(18);
+    _lblNickie.font = ME_FONT(14);
     [_lblNickie sizeToFit];
-    [_lblNickie setTextColor:[UIColor colorWithRed:0 green:0 blue:0]];
     [_btnLike setTitle:[NSString stringWithFormat:@"%d",_daren.likeTotal] forState:UIControlStateNormal];
-    [_btnLike setTitleColor:[UIColor colorWithRed:102 green:102 blue:102] forState:UIControlStateNormal];
+    [_btnLike setTitleColor:[UIColor colorWithHexString:@"#333333"] forState:UIControlStateNormal];
     _btnLike.titleLabel.font = ME_FONT(9);
     [_btnFans setTitle:[NSString stringWithFormat:@"%d",_daren.fansTotal] forState:UIControlStateNormal];
-    [_btnFans setTitleColor:[UIColor colorWithRed:102 green:102 blue:102] forState:UIControlStateNormal];
+    [_btnFans setTitleColor:[UIColor colorWithHexString:@"#333333"] forState:UIControlStateNormal];
     _btnFans.titleLabel.font = ME_FONT(9);
     if (!isUpdateCollection)
         return;
@@ -472,12 +487,29 @@
 }
 -(void) updateLikeButtonStatus:(BOOL)canLike canClick:(BOOL)isClickable
 {
-    UIBarButtonItem *barSet = nil;
-    if (canLike)
-        barSet= [self createPlainBarButtonItem:@"follow_icon.png" target:self action:@selector(doLike)];
+    UIBarButtonItem *baritemSet= nil;
+    if (canLike) {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn addTarget:self action:@selector(doLike) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitle:@"+关注" forState:UIControlStateNormal];
+        btn.titleLabel.font = ME_FONT(13);
+        btn.showsTouchWhenHighlighted = YES;
+        [btn setBackgroundImage:[UIImage imageNamed:@"btn_normal.png"] forState:UIControlStateNormal];
+        [btn sizeToFit];
+        baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
+    }
     else
-        barSet= [self createPlainBarButtonItem:@"cancel_follow_btn.png" target:self action:@selector(doLikeRemove)];
-    [self.navigationItem setRightBarButtonItem:barSet];
+    {
+        UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btn addTarget:self action:@selector(doLikeRemove) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitle:@"取消关注" forState:UIControlStateNormal];
+        btn.titleLabel.font = ME_FONT(13);
+        btn.showsTouchWhenHighlighted = YES;
+        [btn setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
+        [btn sizeToFit];
+        baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
+    }
+    [self.navigationItem setRightBarButtonItem:baritemSet];
     
 }
 -(BOOL)isDR

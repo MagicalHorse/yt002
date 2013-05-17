@@ -86,7 +86,7 @@
 								<string key="NSFrame">{{242, 46}, {63, 15}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="526545356"/>
+								<reference key="NSNextKeyView" ref="312745452"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -108,7 +108,7 @@
 								<string key="NSFrame">{{75, 10}, {145, 15}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="497585100"/>
+								<reference key="NSNextKeyView" ref="526545356"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -129,6 +129,7 @@
 								<string key="NSFrame">{{0, 73}, {320, 1}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -160,7 +161,7 @@
 								<string key="NSFrame">{{275, 10}, {30, 30}}</string>
 								<reference key="NSSuperview" ref="391732143"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="312745452"/>
+								<reference key="NSNextKeyView" ref="497585100"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<int key="IBUIContentMode">4</int>
@@ -238,6 +239,7 @@
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="391732143"/>
+				<string key="IBUIReuseIdentifier">FSProCommentCell</string>
 				<real value="66" key="IBUIRowHeight"/>
 			</object>
 		</array>

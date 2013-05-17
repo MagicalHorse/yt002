@@ -27,6 +27,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = NSLocalizedString(@"About Love Intime", nil);
+    
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
@@ -34,16 +36,17 @@
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
     
     _verView.layer.borderWidth = 0;
-    _verView.layer.cornerRadius = 8;
-    _verView.backgroundColor = [UIColor redColor];
+    _verView.layer.cornerRadius = 10;
+    _verView.backgroundColor = [UIColor whiteColor];
+    [self.view bringSubviewToFront:_verView];
     
     if ([UIDevice isRunningOniPhone5]) {
         CGRect _rect = _verView.frame;
-        _rect.origin.y += 100;
+        _rect.origin.y += 44;
         _verView.frame = _rect;
         
         _rect = _desc.frame;
-        _rect.origin.y += 100;
+        _rect.origin.y += 44;
         _desc.frame = _rect;
     }
 }

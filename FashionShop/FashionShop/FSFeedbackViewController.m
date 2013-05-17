@@ -49,19 +49,16 @@
 
 -(void) bindControl
 {
-    [_txtContent setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
-    _txtContent.layer.borderWidth = 2;
-    _txtContent.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+    _txtContent.layer.borderWidth = 0;
+    _txtContent.layer.borderColor = [UIColor clearColor].CGColor;
     _txtContent.placeholder = NSLocalizedString(@"Feedback content place holder", nil);
-    
-    [_txtPhone setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
-    _txtPhone.layer.borderWidth = 1;
-    _txtPhone.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
-    _txtPhone.placeholder = NSLocalizedString(@"Contact place holder", nil);
     _txtContent.delegate = self;
-    _txtPhone.delegate = self;
     
-    _txtContent.superview.backgroundColor = APP_BACKGROUND_COLOR;
+    _txtPhone.layer.borderWidth = 0;
+    _txtPhone.layer.borderColor = [UIColor clearColor].CGColor;
+    _txtPhone.placeholder = NSLocalizedString(@"Contact place holder", nil);
+    [_txtPhone setBackground:[UIImage imageNamed:@"input_text.png"]];
+    _txtPhone.delegate = self;
 }
 
 -(void) decorateTapDismissKeyBoard

@@ -111,7 +111,7 @@
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:14];
         CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
         _btnPrice.frame = CGRectMake(0, 0, newsize.width, newsize.height);
-        _btnPrice.center = CGPointMake(160, yOffset + 40 - newsize.height/2);
+        _btnPrice.center = CGPointMake(160, yOffset + 35 - newsize.height/2);
     }
     else {
         _btnPrice.hidden = YES;
@@ -124,25 +124,21 @@
     _btnBrand.titleLabel.font = ME_FONT(14);
     _btnBrand.titleLabel.minimumFontSize = 10;
     _btnBrand.titleLabel.adjustsFontSizeToFitWidth = YES;
-    UIImage *image = [[UIImage imageNamed:@"brand_btn.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:0];
+    UIImage *image = [UIImage imageNamed:@"brand_btn.png"];
     [_btnBrand setBackgroundImage:image forState:UIControlStateNormal];
     [_btnBrand setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _rect = _btnBrand.frame;
-    _rect.origin.y = yOffset + 15;
+    _rect.origin.y = yOffset + 10;
     _btnBrand.frame = _rect;
     
     //设置播放按钮
     if (_audioResource) {
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(0, 0, 60, 30)];
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(0, 0, 65, 26)];
         _audioButton.center = CGPointMake(160, yOffset);
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateNormal];
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateHighlighted];
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
         _audioButton.audioTime = [NSString stringWithFormat:@"%d''", (_audioResource.width>0?_audioResource.width:1)];
-        [_audioButton setTitleFrame:CGRectMake(0, 10, _audioButton.frame.size.width/7*4, _audioButton.frame.size.height - 20)];
-        [_audioButton setPlayButtonFrame:CGRectMake(_audioButton.frame.size.width/7*4 + 1, (_audioButton.frame.size.height-12)/2, 12, 12)];
         [_imgNameView addSubview:_audioButton];
     }
     
@@ -158,19 +154,19 @@
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];
     [self bringSubviewToFront:_lblCoupons];
-    _lblFavorCount.font = ME_FONT(12);
+    _lblFavorCount.font = ME_FONT(13);
     _lblFavorCount.textColor = [UIColor colorWithHexString:@"#e5004f"];
     [self bringSubviewToFront:_lblFavorCount];
     
     //_lblCoupons
     _lblCoupons.text = [NSString stringWithFormat:@"%d",_data.couponTotal];
-    _lblCoupons.font = ME_FONT(12);
+    _lblCoupons.font = ME_FONT(13);
     _lblCoupons.textColor = [UIColor colorWithHexString:@"#e5004f"];
     
     yOffset += 40;
     //_lblDescrip
     _lblDescrip.text = _data.descrip;
-    _lblDescrip.font = ME_FONT(12);
+    _lblDescrip.font = ME_FONT(14);
     _lblDescrip.textColor = [UIColor colorWithHexString:@"#666666"];
     _lblDescrip.numberOfLines = 0;
     CGSize fitSize = [_lblDescrip sizeThatFits:_lblDescrip.frame.size];
@@ -190,7 +186,7 @@
     {
         [_btnStore setTitle:_data.store.name forState:UIControlStateNormal];
     }
-    _btnStore.titleLabel.font = ME_FONT(12);
+    _btnStore.titleLabel.font = ME_FONT(14);
     [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
     [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
     CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];

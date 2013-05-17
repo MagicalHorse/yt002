@@ -31,12 +31,11 @@
 
 -(void)setData:(FSComment *)data{
     _data = data;
-    //_data.comment = @"测试，这是很长的侧h，不知道是否政群，阿斯顿理发师；放假了拉萨附近暗室逢灯静安寺路附近阿斯达克积分，。阿司法局阿斯科利打飞机拉克丝的肌肤";
-    //_data.replyUserName = @"Jinssersun";
     _imgThumb.ownerUser = _data.replyUser;
     if (data.resources &&
         data.resources.count > 0 &&
         ((FSResource*)data.resources[0]).type == 2) {
+//    if (1) {
         int xOffset = 110;
         _lblComment.text = [NSString stringWithFormat:@"%@: ", _data.replyUser.nickie];
         _lblComment.font = BFONT(13);
@@ -53,14 +52,14 @@
         int _width = _lblComment.frame.size.width;
         _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _lblComment.frame.origin.y, _width>xOffset?xOffset:_width, _lblComment.frame.size.height);
         
-        FSResource *_audioResource = data.resources[0];
-        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 2, 60, 20)];
+        FSResource *_audioResource = [[FSResource alloc] init];//data.resources[0];
+        _audioResource.relativePath = @"test";
+        _audioResource.width = 51;
+        _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 10, 65, 26)];
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
         _audioButton.audioTime = [NSString stringWithFormat:@"%d''", (_audioResource.width>0?_audioResource.width:1)];
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateNormal];
-        [_audioButton setBackgroundImage:[UIImage imageNamed:@"audio_btn_160x50.png"] forState:UIControlStateHighlighted];
         [self addSubview:_audioButton];
     }
     else
@@ -73,17 +72,17 @@
         CGSize newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
         _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, 8, 225, newSize.height);
     }
-    _cellHeight = _lblComment.frame.origin.y + _lblComment.frame.size.height + 5;
+    _cellHeight = _lblComment.frame.origin.y + _lblComment.frame.size.height + 8;
     
     //回复时间
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy年MM月dd日 HH:MM:SS"];
     _lblInDate.text = [df stringFromDate:_data.indate];
     _lblInDate.hidden = NO;
-    _lblInDate.frame = CGRectMake(_lblInDate.frame.origin.x, _cellHeight + 5, 225, _lblInDate.frame.size.height);
-    _lblInDate.font = ME_FONT(12);
+    _lblInDate.frame = CGRectMake(_lblInDate.frame.origin.x, _cellHeight + 8, 225, _lblInDate.frame.size.height);
+    _lblInDate.font = ME_FONT(13);
     _lblInDate.textColor = [UIColor colorWithRed:153 green:153 blue:153];
-    _cellHeight += _lblInDate.frame.size.height + 5;
+    _cellHeight += _lblInDate.frame.size.height + 8;
     
     //回复人名称
     _lblReplyDesc.frame = CGRectMake(_lblReplyDesc.frame.origin.x, _cellHeight + 5, 225, _lblReplyDesc.frame.size.height);
@@ -94,7 +93,7 @@
     else{
         _lblReplyDesc.text = [NSString stringWithFormat:@"评论您参与的%@", _data.sourcetype==1?@"商品":@"活动"];
     }
-    _lblReplyDesc.font = ME_FONT(12);
+    _lblReplyDesc.font = ME_FONT(13);
     [_lblReplyDesc sizeThatFits:_lblReplyDesc.frame.size];
     _cellHeight += _lblReplyDesc.frame.size.height;
     
@@ -116,7 +115,8 @@
     
     if (_audioButton) {
         _rect = _audioButton.frame;
-        _rect.origin.y = _lblComment.frame.origin.y - 2;
+        _rect.origin.y = _lblComment.frame.origin.y - 7;
+        _rect.origin.x = _lblComment.frame.origin.x + _lblComment.frame.size.width + 3;
         _audioButton.frame = _rect;
     }
     

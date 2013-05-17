@@ -36,6 +36,15 @@
     _valideTime.text = [NSString stringWithFormat:@"有效期: %@止", [df stringFromDate:_data.validEndDate]];
     _amountView.text = [NSString stringWithFormat:@"%.2f元", _data.amount];
     _giftNumber.text = _data.giftCode;
+    if (_data.status == 1) {
+        _giftNumber.textColor = [UIColor colorWithHexString:@"#007f06"];
+    }
+    else if(_data.status == 2) {
+        _giftNumber.textColor = [UIColor colorWithHexString:@"#bbbbbb"];
+    }
+    else{
+        _giftNumber.textColor = [UIColor colorWithHexString:@"#e5004f"];
+    }
 }
 
 @end

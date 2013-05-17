@@ -172,7 +172,7 @@
         UIButton *tagButton = (UIButton *)[(id)view btnTag];
         [tagButton addTarget:self action:@selector(goTag:) forControlEvents:UIControlEventTouchUpInside];
     }
-    [[(id)view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"commentCell"];
+    [[(id)view tbComment] registerNib:[UINib nibWithNibName:@"FSProCommentCell" bundle:nil] forCellReuseIdentifier:@"FSProCommentCell"];
     
     if (![(id)view audioButton].audioDelegate) {
         [(id)view audioButton].audioDelegate = self;
@@ -1188,7 +1188,7 @@
             }
         }
     }
-    FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"commentCell"];
+    FSProCommentCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"FSProCommentCell"];
     detailCell.selectionStyle = UITableViewCellSelectionStyleNone;
     [detailCell setData:[[parentView.data comments] objectAtIndex:indexPath.row]];
     detailCell.btnComment.tag = indexPath.row;

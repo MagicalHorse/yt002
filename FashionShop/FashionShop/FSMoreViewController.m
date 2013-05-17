@@ -10,8 +10,10 @@
 #import "FSNickieViewController.h"
 #import "FSFeedbackViewController.h"
 #import "FSCardBindViewController.h"
-#import "WXApi.h"
 #import "FSAboutViewController.h"
+#import "FSGiftListViewController.h"
+#import "FSCommonRequest.h"
+#import "WXApi.h"
 
 @interface FSMoreViewController () {
     NSMutableArray *_titles;
@@ -43,6 +45,11 @@
     
     [self initTitlesArray];
     [self initIconsArray];
+    
+    //检测更新
+    if (!theApp.versionData) {
+        [self checkVersion:NO];
+    }
 }
 
 -(void)initIconsArray
@@ -89,6 +96,7 @@
 
 - (IBAction)clickToExit:(id)sender {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Exit Current Account", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+    alert.tag = 101;
     [alert show];
 }
 
@@ -133,6 +141,28 @@
     return view;
 }
 
+//进行版本检测
+-(void)checkVersion:(BOOL)needAlert
+{
+    //请求网络数据，此处可更改为版本更新检查
+    FSCommonRequest *request = [[FSCommonRequest alloc] init];
+    [request setRouteResourcePath:RK_REQUEST_CHECK_VERSION];
+    [request send:[FSCommon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        if (resp.isSuccess)
+        {
+            theApp.versionData = resp.responseData;
+            [_tbAction reloadData];
+            if (needAlert) {
+                if (theApp.versionData.type > 0) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:theApp.versionData.title message:theApp.versionData.desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+                    alert.tag = 102;
+                    [alert show];
+                }
+            }
+        }
+    }];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -166,11 +196,15 @@
     cell.imageView.image = [UIImage imageNamed:[array objectAtIndex:indexPath.row]];
     array = [_titles objectAtIndex:indexPath.section];
     cell.textLabel.text = [array objectAtIndex:indexPath.row];
+    cell.textLabel.textColor = [UIColor colorWithHexString:@"181818"];
     cell.textLabel.font = ME_FONT(15);
     if (indexPath.section == 2 &&
         indexPath.row + indexPath.section * 10 == FSMoreCheckVersion) {
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"当前版本V%@", REST_API_CLIENT_VERSION];
-        cell.detailTextLabel.font = ME_FONT(12);
+        if (theApp.versionData && theApp.versionData.type > 0) {
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"发现新版本V%@", theApp.versionData.version];
+            cell.detailTextLabel.font = ME_FONT(12);
+            cell.detailTextLabel.textColor = [UIColor colorWithHexString:@"#e4007f"];
+        }
     }
     
     return cell;
@@ -188,7 +222,9 @@
     switch (indexPath.row + indexPath.section * 10) {
         case FSMoreOrder:
         {
-            
+            FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+            couponView.currentUser = _currentUser;
+            [self.navigationController pushViewController:couponView animated:true];
         }
             break;
         case FSMoreEdit:    //编辑个人资料
@@ -225,7 +261,16 @@
             break;
         case FSMoreCheckVersion:
         {
-            
+            if (!theApp.versionData) {
+                [self checkVersion:YES];
+            }
+            else{
+                if (theApp.versionData.type > 0) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:theApp.versionData.title message:theApp.versionData.desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
+                    alert.tag = 102;
+                    [alert show];
+                }
+            }
         }
             break;
         case FSMoreLike:    //去appstore评论
@@ -255,7 +300,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
+    if (alertView.tag == 101 && buttonIndex == 1) {
         [FSUser removeUserProfile];
         if (_delegate)
         {
@@ -263,6 +308,9 @@
         }
         [self reportError:NSLocalizedString(@"COMM_OPERATE_COMPL", nil)];
         [self.navigationController popViewControllerAnimated:YES];
+    }
+    if (alertView.tag == 102 && buttonIndex == 1) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:theApp.versionData.downLoadURL]];
     }
 }
 

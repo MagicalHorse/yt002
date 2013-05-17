@@ -22,5 +22,6 @@
 @property (nonatomic,strong) NSDate *beginDate;
 @property (nonatomic,strong) NSDate *endDate;
 @property (nonatomic) BOOL isUsed;
+@property (nonatomic) int status;//1：未使用 2：已使用 3：已过期
 -(BOOL)isExpired;
 @end

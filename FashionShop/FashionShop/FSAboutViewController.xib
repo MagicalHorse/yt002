@@ -38,12 +38,12 @@
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="314665896">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">274</int>
+						<int key="NSvFlags">256</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUIImageView" id="386454376">
 								<reference key="NSNextResponder" ref="314665896"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{107, 18}, {57, 57}}</string>
+								<string key="NSFrame">{{107, 20}, {57, 57}}</string>
 								<reference key="NSSuperview" ref="314665896"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="627257232"/>
@@ -58,7 +58,7 @@
 							<object class="IBUILabel" id="627257232">
 								<reference key="NSNextResponder" ref="314665896"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{33, 83}, {205, 39}}</string>
+								<string key="NSFrame">{{33, 85}, {205, 39}}</string>
 								<reference key="NSSuperview" ref="314665896"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="344907782"/>
@@ -71,19 +71,18 @@
 								<string key="IBUIText">Label</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
-									<bytes key="NSRGB">MCAwIDAAA</bytes>
-									<string key="IBUIColorCocoaTouchKeyPath">darkTextColor</string>
+									<bytes key="NSRGB">MC40IDAuNCAwLjQAA</bytes>
 								</object>
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<int key="IBUITextAlignment">1</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">1</int>
-									<double key="pointSize">17</double>
+									<double key="pointSize">15</double>
 								</object>
 								<object class="NSFont" key="IBUIFont">
 									<string key="NSName">Helvetica</string>
-									<double key="NSSize">17</double>
+									<double key="NSSize">15</double>
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -278,6 +277,25 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">FSAboutViewController</string>
 					<string key="superclassName">UIViewController</string>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="desc">UILabel</string>
+						<string key="verView">UIView</string>
+						<string key="versionLb">UILabel</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="desc">
+							<string key="name">desc</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="verView">
+							<string key="name">verView</string>
+							<string key="candidateClassName">UIView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="versionLb">
+							<string key="name">versionLb</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/FSAboutViewController.h</string>

@@ -280,8 +280,15 @@
 												</object>
 												<nil key="IBUIHighlightedColor"/>
 												<int key="IBUIBaselineAdjustment">0</int>
-												<reference key="IBUIFontDescription" ref="936181102"/>
-												<reference key="IBUIFont" ref="81192907"/>
+												<object class="IBUIFontDescription" key="IBUIFontDescription" id="578933138">
+													<int key="type">1</int>
+													<double key="pointSize">13</double>
+												</object>
+												<object class="NSFont" key="IBUIFont" id="479470068">
+													<string key="NSName">Helvetica</string>
+													<double key="NSSize">13</double>
+													<int key="NSfFlags">16</int>
+												</object>
 												<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 											</object>
 											<object class="IBUILabel" id="479719339">
@@ -340,8 +347,8 @@
 												</object>
 												<nil key="IBUIHighlightedColor"/>
 												<int key="IBUIBaselineAdjustment">0</int>
-												<reference key="IBUIFontDescription" ref="936181102"/>
-												<reference key="IBUIFont" ref="81192907"/>
+												<reference key="IBUIFontDescription" ref="578933138"/>
+												<reference key="IBUIFont" ref="479470068"/>
 												<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 											</object>
 											<object class="IBUILabel" id="503708594">
@@ -397,8 +404,15 @@
 										<int key="IBUIBaselineAdjustment">0</int>
 										<int key="IBUINumberOfLines">12</int>
 										<int key="IBUILineBreakMode">0</int>
-										<reference key="IBUIFontDescription" ref="936181102"/>
-										<reference key="IBUIFont" ref="81192907"/>
+										<object class="IBUIFontDescription" key="IBUIFontDescription">
+											<int key="type">1</int>
+											<double key="pointSize">14</double>
+										</object>
+										<object class="NSFont" key="IBUIFont">
+											<string key="NSName">Helvetica</string>
+											<double key="NSSize">14</double>
+											<int key="NSfFlags">16</int>
+										</object>
 										<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 										<double key="preferredMaxLayoutWidth">290</double>
 									</object>
@@ -481,7 +495,6 @@
 						<string key="NSFrame">{{0, 416}, {320, 44}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClearsContextBeforeDrawing">NO</bool>

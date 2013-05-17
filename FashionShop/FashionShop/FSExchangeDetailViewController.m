@@ -26,6 +26,7 @@
     UIButton *storeSelBtn;
     UITextField *pointExField;
     UITextField *idCardField;
+    UITextField *activityField;
     
     UIView *pickerView;
     UIPickerView *_picker;
@@ -35,6 +36,9 @@
     
     NSMutableArray *stores;
     NSInteger selIndex;
+    BOOL kbIsShowing;
+    int kbYOffset;
+    BOOL isNeedResignResponse;
 }
 
 @end
@@ -58,6 +62,7 @@
     
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
+    selIndex = -1;
     
     //加载数据
     FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
@@ -81,28 +86,35 @@
     }];
     
     [self initPickerView];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
--(void)dealWithStoreAttributes
+-(void)viewWillUnload
 {
-    if (!stores) {
-        stores = [NSMutableArray array];
+    [super viewWillUnload];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self hidenPickerView:NO];
+}
+
+- (void)keyboardWillShow:(NSNotification *) notification {
+//    float animationDuration = [[[notification userInfo] valueForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+//    CGFloat height = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+    kbIsShowing = YES;
+    kbYOffset = _tbAction.contentOffset.y;
+    [self hidenPickerView:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *) notification {
+    if (!kbIsShowing) {
+        return;
     }
-    else{
-        [stores removeAllObjects];
-    }
-    NSArray *_a = [_data.inScopeNotice componentsSeparatedByString:@"|"];
-    for (NSString *item in _a) {
-        if (item && ![item isEqualToString:@""]) {
-            NSArray * _b = [item componentsSeparatedByString:@"--"];
-            if (_b.count >= 2) {
-                FSStore *s = [[FSStore alloc] init];
-                s.name = _b[0];
-                s.descrip = _b[1];
-                [stores addObject:s];
-            }
-        }
-    }
+    kbIsShowing = NO;
+    [UIView animateWithDuration:0.33 animations:^{
+        _tbAction.contentOffset = CGPointMake(0, kbYOffset);
+    } completion:nil];
 }
 
 - (IBAction)onButtonBack:(id)sender {
@@ -123,6 +135,12 @@
 -(void)clickToExchagePoint:(UIButton*)sender
 {
     if (_inLoading) {
+        return;
+    }
+    if (selIndex < 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请先选择兑换实体店" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        alert.tag = 104;
+        [alert show];
         return;
     }
     NSString *error = nil;
@@ -226,14 +244,20 @@
     if (pickerView.frame.origin.y <= SCREEN_HIGH && !pickerIsShow)
     {
         pickerIsShow = YES;
-        [_picker selectRow:selIndex inComponent:0 animated:NO];
-        
+        [activityField resignFirstResponder];
+        if (selIndex >= 0) {
+            [_picker selectRow:selIndex inComponent:0 animated:NO];
+        }
         tableYOffset = self.tbAction.contentOffset.y;
         [UIView animateWithDuration:0.3f animations:^{
             CGRect rect = pickerView.frame;
             rect.origin.y -= pickerView.frame.size.height;
             pickerView.frame = rect;
         } completion:nil];
+        if (!kbIsShowing) {
+            id cell = storeSelBtn.superview.superview;
+            [_tbAction scrollToRowAtIndexPath:[_tbAction indexPathForCell:(UITableViewCell*)cell] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
         [_picker reloadAllComponents];
     }
 }
@@ -248,6 +272,9 @@
                 CGRect rect = pickerView.frame;
                 rect.origin.y += pickerView.frame.size.height;
                 pickerView.frame = rect;
+                if (!kbIsShowing) {
+                    _tbAction.contentOffset = CGPointMake(0, tableYOffset);
+                }
             } completion:nil];
         }
         else {
@@ -255,6 +282,9 @@
             CGRect rect = pickerView.frame;
             rect.origin.y += pickerView.frame.size.height;
             pickerView.frame = rect;
+            if (!kbIsShowing) {
+                _tbAction.contentOffset = CGPointMake(0, tableYOffset);
+            }
         }
         
     }
@@ -342,6 +372,14 @@
             if (stores.count == 1) {
                 [storeSelBtn setTitle:[stores[0] storename] forState:UIControlStateNormal];
             }
+            else{
+                if (stores.count > selIndex && selIndex >= 0) {
+                    [storeSelBtn setTitle:[stores[selIndex] storename] forState:UIControlStateNormal];
+                }
+                else{
+                    [storeSelBtn setTitle:@"请选择兑换实体店" forState:UIControlStateNormal];
+                }
+            }
             cell.remainPoint.text = [NSString stringWithFormat:@"%@", [FSUser localProfile].cardInfo.amount];
             
             return cell;
@@ -362,7 +400,10 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             cell.title = @"兑换标准";
-            cell.desc = _data.inScopeNotice;
+            cell.desc = _data.exchangeRuleMessage;
+            cell.changeDaga = _data;
+            cell.hasAddionalView = YES;
+            
             [cell setData];
             
             return cell;
@@ -384,6 +425,7 @@
             }
             cell.title = @"注意事项";
             cell.desc = _data.notice;
+            cell.hasAddionalView = NO;
             [cell setData];
             
             return cell;
@@ -409,7 +451,6 @@
             break;
         case 1:
         {
-         //   FSPointExDescCell *cell = (FSPointExDescCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
             return 322;
         }
             break;
@@ -449,10 +490,29 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    if (textField == idCardField || textField == pointExField) {
-        //NSIndexPath *path = [_tbAction indexPathForCell:(FSPointExDoCell*)idCardField.superview.superview];
-        [_tbAction scrollToRowAtIndexPath:[_tbAction indexPathForSelectedRow] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    if (textField == pointExField) {
+        if (!pickerIsShow) {
+            id cell = textField.superview.superview;
+            [_tbAction scrollToRowAtIndexPath:[_tbAction indexPathForCell:(UITableViewCell*)cell] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+        }
     }
+    if(textField == idCardField) {
+        CGRect _rect = [textField convertRect:textField.frame toView:_tbAction];
+        [_tbAction scrollRectToVisible:_rect animated:YES];
+    }
+    if (activityField == nil) {
+        isNeedResignResponse = NO;
+    }
+    else{
+        isNeedResignResponse = YES;
+    }
+    activityField = textField; 
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    activityField = nil;
+    isNeedResignResponse = NO;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -558,6 +618,21 @@
     }
     else if(alertView.tag == 103) {
         [idCardField becomeFirstResponder];
+    }
+    else if(alertView.tag == 104) {
+        [self showPickerView];
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView == _tbAction) {
+        if (isNeedResignResponse && activityField) {
+            [activityField resignFirstResponder];
+            isNeedResignResponse = NO;
+        }
     }
 }
 

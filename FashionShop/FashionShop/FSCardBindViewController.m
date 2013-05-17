@@ -70,7 +70,7 @@
         _rect.origin.y = 15;
         _bindView.frame = _rect;
         
-        UIImage *image = [UIImage imageNamed:@"audio_btn_normal.png"];
+        UIImage *image = [UIImage imageNamed:@"btn_bg.png"];
         [_btnBindCard setBackgroundImage:image forState:UIControlStateNormal];
     }
     else {
@@ -86,10 +86,10 @@
         FSCardRequest *request = [[FSCardRequest alloc] init];
         request.userToken = currentUser.uToken;
         request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
-        [self beginLoading:_bindView];
+        [self beginLoading:_resultView];
         __block FSCardBindViewController *blockSelf = self;
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_bindView];
+            [self endLoading:_resultView];
             if (!resp.isSuccess)
             {
                 if (blockSelf->completeCallBack!=nil)
@@ -115,8 +115,6 @@
                     [_cardPwField resignFirstResponder];
                 }
                 [self updateResultView:resp.responseData];
-                [self updateTitle];
-                [self prepareView];
             }
         }];
     }

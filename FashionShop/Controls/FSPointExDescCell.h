@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet RTLabel *activityTime;
 @property (strong, nonatomic) IBOutlet RTLabel *useTime;
 @property (strong, nonatomic) IBOutlet RTLabel *joinStore;
+@property (strong, nonatomic) IBOutlet UILabel *joinStoreTitle;
 @property (strong, nonatomic) IBOutlet RTLabel *useScope;
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UIImageView *line2;
@@ -41,7 +42,7 @@
 
 @end
 
-@interface FSPointExCommonCell : UITableViewCell
+@interface FSPointExCommonCell : UITableViewCell<PSUICollectionViewDelegate, PSUICollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UILabel *titleView;
@@ -49,6 +50,9 @@
 @property (strong, nonatomic) IBOutlet RTLabel *content;
 @property (nonatomic,strong) NSString *title;
 @property (nonatomic,strong) NSString *desc;
+@property (strong, nonatomic) IBOutlet PSUICollectionView *additionalView;
+@property (nonatomic) BOOL hasAddionalView;
+@property (nonatomic,strong) FSExchange *changeDaga;
 
 @property (nonatomic) int cellHeight;
 -(void)setData;
