@@ -13,7 +13,6 @@
 #import "FSAboutViewController.h"
 #import "FSGiftListViewController.h"
 #import "FSCommonRequest.h"
-#import "WXApi.h"
 
 @interface FSMoreViewController () {
     NSMutableArray *_titles;
@@ -102,7 +101,7 @@
 
 -(void)attentionXhyt:(UIButton*)sender
 {
-    [WXApi openWXApp];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
 }
 
 - (void)stopLoading

@@ -49,7 +49,7 @@
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 						<object class="NSCustomResource" key="IBUIImage">
 							<string key="NSClassName">NSImage</string>
-							<string key="NSResourceName">list_title_bg@2x.png</string>
+							<string key="NSResourceName">list_title_bg.png</string>
 						</object>
 					</object>
 					<object class="IBUILabel" id="368990678">
@@ -137,6 +137,7 @@
 						<string key="NSFrame">{{270, 4}, {44, 40}}</string>
 						<reference key="NSSuperview" ref="975784294"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -297,6 +298,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="lblDistance">UILabel</string>
 						<string key="lblTitle">UILabel</string>
+						<string key="moreBtn">UIButton</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="lblDistance">
@@ -306,6 +308,10 @@
 						<object class="IBToOneOutletInfo" key="lblTitle">
 							<string key="name">lblTitle</string>
 							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="moreBtn">
+							<string key="name">moreBtn</string>
+							<string key="candidateClassName">UIButton</string>
 						</object>
 					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -320,7 +326,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="list_title_bg@2x.png">{640, 80}</string>
+			<string key="list_title_bg.png">{16, 16}</string>
 			<string key="more_btn_normal@2x.png">{92, 84}</string>
 			<string key="promotion_header_icon">{16, 16}</string>
 		</dictionary>

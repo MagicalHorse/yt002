@@ -169,7 +169,7 @@
     
     [self updateInteraction];
     
-    self.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH);
+    //self.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH);
     self.svContent.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH - TOOLBAR_HEIGHT);
     self.svContent.showsVerticalScrollIndicator = YES;
     NSLog(@"self:%@,Scroll:%@", NSStringFromCGRect(self.frame), NSStringFromCGRect(self.svContent.frame));

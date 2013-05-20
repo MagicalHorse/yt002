@@ -83,6 +83,7 @@
     UIImagePickerController *_camera;
     
     int             _takePhotoSource;//1:头像更改；2:更改me的主页背景
+    BOOL            _toDetail;//是否是去详情页
 }
 
 @end
@@ -243,20 +244,41 @@
     [self setSegHeader:nil];
     [self setBtnHeaderBg:nil];
     [self setTbScroll:nil];
+    [self setBtnHeaderImgV:nil];
     [super viewDidUnload];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"nav_bg_2.png"] forBarMetrics: UIBarMetricsDefault];
-    self.navigationController.navigationBar.tintColor = [UIColor clearColor];
+    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    _toDetail = NO;
     [super viewWillAppear:animated];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+    if (!_toDetail) {
+        [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    }
     [super viewWillDisappear:animated];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    if (_toDetail) {
+        [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    }
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Self Define Method
@@ -419,6 +441,10 @@
     [_qqConnect authorize];
 }
 
+- (IBAction)attentionXHYT:(id)sender {
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
+}
+
 - (void) displayUserProfile{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn addTarget:self action:@selector(onSetting) forControlEvents:UIControlEventTouchUpInside];
@@ -511,7 +537,8 @@
     [_btnHeaderBg setTitle:@"" forState:UIControlStateNormal];
     origFrame.origin.y = _segHeader.frame.origin.y - origFrame.size.height;
     _btnHeaderBg.frame = origFrame;
-    [_btnHeaderBg setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]] forState:UIControlStateNormal];
+    _btnHeaderImgV.frame = origFrame;
+    [_btnHeaderImgV setImageWithURL:_userProfile.logobgURL placeholderImage:[UIImage imageNamed:@"图形1bb.png"]];
     
     origFrame = _tbScroll.frame;
     origFrame.size.height = APP_HIGH - NAV_HIGH - TAB_HIGH;
@@ -536,10 +563,9 @@
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 0, 5);
     layout.delegate = self;
     CGRect rect = _likeContainer.frame;
-    rect.size.height = APP_HIGH>480?353:265;
-    //_likeContainer.frame = rect;
+    rect.size.height = APP_HIGH-TAB_HIGH-_segHeader.frame.origin.y - _segHeader.frame.size.height;
+    _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
-    _likeView.scrollEnabled = NO;
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
     
@@ -773,7 +799,6 @@
 -(void) bindContentView
 {
     [_likeView reloadData];
-    [self resetScrollViewSize];
 }
 
 -(void)onButtonCancel
@@ -791,11 +816,20 @@
 
 -(void)uploadThumnail:(UIImage *)image
 {
-    [self startProgress:NSLocalizedString(@"upload thumnail now", nil) withExeBlock:^(dispatch_block_t callback){
-        [self internalUploadThumnail:image CallBack:callback];
-    } completeCallbck:^{
-        [self endProgress];
-    }];
+    if (_takePhotoSource == 1) {
+        [self startProgress:NSLocalizedString(@"upload thumnail now", nil) withExeBlock:^(dispatch_block_t callback){
+            [self internalUploadThumnail:image CallBack:callback];
+        } completeCallbck:^{
+            [self endProgress];
+        }];
+    }
+    else{
+        [self startProgress:NSLocalizedString(@"upload me background now", nil) withExeBlock:^(dispatch_block_t callback){
+            [self internalUploadThumnail:image CallBack:callback];
+        } completeCallbck:^{
+            [self endProgress];
+        }];
+    }
 }
 
 -(void)internalUploadThumnail:(UIImage *)image CallBack:(dispatch_block_t)callback
@@ -815,9 +849,8 @@
             [_thumbImg reloadThumb:_userProfile.thumnailUrl];
         }
         else{
-            //[_btnHeaderBg setBackgroundImage:image forState:UIControlStateNormal];
-            //UIImage *img = [UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]];
-            [_btnHeaderBg setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:_userProfile.logobgURL]] forState:UIControlStateNormal];
+            //[_btnHeaderImgV setImageWithURL:_userProfile.logobgURL placeholderImage:nil];
+            _btnHeaderImgV.image = image;
         }
         
     } error:^(id error){
@@ -868,18 +901,6 @@
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated{
-    //暂时没有发现有作用
-    if ([self inUserCamera].sourceType == UIImagePickerControllerSourceTypeCamera &&
-        [navigationController.viewControllers count] <=2) {
-        viewController.wantsFullScreenLayout = NO;
-        navigationController.navigationBar.translucent = NO;
-    }else{
-        viewController.wantsFullScreenLayout = YES;
-        navigationController.navigationBar.translucent = YES;
-    }
 }
 
 -(UIImagePickerController *)inUserCamera
@@ -1082,12 +1103,21 @@
 
 -(void) resetScrollViewSize
 {
-    CGRect _rect = _likeView.frame;
-    _rect.size.height = _likeView.collectionViewLayout.collectionViewContentSize.height;
-    _likeView.frame = _rect;
+    return;
     
-    int height = _likeView.frame.origin.y + _likeView.frame.size.height;
-    _tbScroll.contentSize = CGSizeMake(320, MAX(height, _tbScroll.frame.size.height));
+    [UIView animateWithDuration:2.3 animations:nil completion:^(BOOL finished) {
+        CGRect _rect = _likeContainer.frame;
+        _rect.size.height = _likeView.contentSize.height;
+        _likeContainer.frame = _rect;
+        int height = _likeContainer.frame.origin.y + _likeView.contentSize.height;
+        _likeView.frame = _likeContainer.bounds;
+        _tbScroll.contentSize = CGSizeMake(320, MAX(height, _tbScroll.frame.size.height));
+        NSLog(@"_likeView frame:%@", NSStringFromCGRect(_likeView.frame));
+        NSLog(@"_tbScroll frame:%@", NSStringFromCGRect(_tbScroll.frame));
+        NSLog(@"_likeView contentSize:%@", NSStringFromCGSize(_likeView.contentSize));
+        NSLog(@"_tbScroll contentSize:%@", NSStringFromCGSize(_tbScroll.contentSize));
+        [_likeView reloadData];
+    }];
 }
 
 #pragma mark - PSUICollectionView Datasource
@@ -1153,11 +1183,13 @@
         return;
     }
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    int index = indexPath.row* [self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
     detailView.navContext = [_likePros copy];
-    detailView.indexInContext = indexPath.row* [self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
+    detailView.indexInContext = index;
     detailView.sourceType = [[[_likePros objectAtIndex:detailView.indexInContext] valueForKey:@"sourceType"] intValue];
     detailView.dataProviderInContext = self;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
+    _toDetail = YES;
     [self presentViewController:navControl animated:true completion:nil];
 }
 
@@ -1247,7 +1279,6 @@
             } else
             {
                 [_likeView reloadData];
-                [self resetScrollViewSize];
             }
         }
     }
@@ -1269,7 +1300,6 @@
             } else
             {
                 [_likeView reloadData];
-                [self resetScrollViewSize];
             }
         }
     }

@@ -136,6 +136,7 @@
                 descLb.font = ME_FONT(12);
                 descLb.numberOfLines = 0;
                 descLb.lineBreakMode = NSLineBreakByCharWrapping;
+                descLb.textColor = [UIColor colorWithHexString:@"#666666"];
                 [_brandShowView addSubview:descLb];
                 
                 [self.view addSubview:_brandShowView];

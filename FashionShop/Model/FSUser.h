@@ -12,6 +12,7 @@
 #import "CommonResponseHeader.h"
 #import "FSModelBase.h"
 #import "FSCardInfo.h"
+#import "FSResource.h"
 
 @interface FSUser : FSModelBase
 
@@ -28,7 +29,7 @@
 @property (nonatomic,readonly) NSURL *thumnailUrl;
 @property (nonatomic,readonly) NSURL *thumnailUrlOrigin;
 @property (nonatomic,readonly) NSURL *thumnailUrl200;
-@property (nonatomic,strong) NSString *logobg;
+@property (nonatomic,strong) FSResource *logobg;
 @property (nonatomic,readonly) NSURL *logobgURL;
 @property (nonatomic,assign) BOOL isLiked;
 @property (nonatomic,assign) int couponsTotal;

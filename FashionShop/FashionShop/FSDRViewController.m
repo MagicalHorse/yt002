@@ -41,6 +41,7 @@
     NSDate * _firstLoadDate;
     bool _noMoreResult;
     BOOL _isInLoadingMore;
+    BOOL _toDetail;//是否是去详情页
 }
 
 @end
@@ -60,6 +61,43 @@
 {
     [super viewDidLoad];    
     [self prepareData];
+    
+    CGRect origFrame = _imgView.frame;
+    origFrame.origin.y = _segHeader.frame.origin.y - origFrame.size.height;
+    _imgView.frame = origFrame;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"nav_bg_2.png"] forBarMetrics: UIBarMetricsDefault];
+    self.navigationController.navigationBar.backgroundColor = [UIColor clearColor];
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    _toDetail = NO;
+    [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    if (!_toDetail) {
+        [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    }
+    [super viewWillDisappear:animated];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    if (_toDetail) {
+        [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+        self.navigationController.navigationBar.translucent = NO;
+        self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+    }
+    [super viewDidDisappear:animated];
 }
 
 -(void) bindSegHeader
@@ -167,6 +205,7 @@
     }
     _thumLogo.ownerUser = _daren;
     _thumLogo.delegate = self;
+    [_imgView setImageWithURL:_daren.logobgURL placeholderImage:[UIImage imageNamed:@"图形1bb.png"]];
     _lblNickie.text = _daren.nickie;
     _lblNickie.font = ME_FONT(14);
     [_lblNickie sizeToFit];
@@ -681,10 +720,12 @@
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    int index = indexPath.row*[self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
     detailViewController.navContext = _items;
     detailViewController.dataProviderInContext = self;
-    detailViewController.indexInContext = indexPath.row*[self numberOfSectionsInCollectionView:collectionView] + indexPath.section;;
+    detailViewController.indexInContext = index;
     detailViewController.sourceType = FSSourceProduct;
+    _toDetail = YES;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
 }
@@ -796,6 +837,7 @@
     [self setItemsContainer:nil];
     [self setThumLogo:nil];
     [self setSegHeader:nil];
+    [self setImgView:nil];
     [super viewDidUnload];
 }
 - (IBAction)goLikeView:(id)sender {

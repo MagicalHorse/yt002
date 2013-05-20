@@ -16,6 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
 @property (strong, nonatomic) IBOutlet UILabel *lblLike;
 @property (strong, nonatomic) IBOutlet UILabel *lblFans;
+@property (strong, nonatomic) IBOutlet UIImageView *line1;
 
 @property (strong,nonatomic) FSUser *data;
 

@@ -11,7 +11,15 @@
 
 #define PRO_DETAIL_COMMENT_CELL_HEIGHT 74
 
+@interface FSMyCommentCell() {
+    CGRect _originalRect;
+}
+
+@end
+
 @implementation FSMyCommentCell
+@synthesize data = _data;
+@synthesize cellHeight = _cellHeight;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -32,16 +40,23 @@
 -(void)setData:(FSComment *)data{
     _data = data;
     _imgThumb.ownerUser = _data.replyUser;
-    if (data.resources &&
-        data.resources.count > 0 &&
-        ((FSResource*)data.resources[0]).type == 2) {
-//    if (1) {
+    id btn= [self viewWithTag:200];
+    if (btn) {
+        [btn removeFromSuperview];
+    }
+    if (CGRectIsEmpty(_originalRect)) {
+        _originalRect = _lblComment.frame;
+    }
+    _lblComment.frame = _originalRect;
+    if (data.myResource &&
+        data.myResource.type == 2) {
         int xOffset = 110;
         _lblComment.text = [NSString stringWithFormat:@"%@: ", _data.replyUser.nickie];
         _lblComment.font = BFONT(13);
         _lblComment.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
         [_lblComment sizeToFit];
+        //[_lblComment sizeThatFits:_lblComment.frame.size];
         
         if (_lblComment.frame.size.height > 50) {
             CGRect _rect = _lblComment.frame;
@@ -52,10 +67,9 @@
         int _width = _lblComment.frame.size.width;
         _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _lblComment.frame.origin.y, _width>xOffset?xOffset:_width, _lblComment.frame.size.height);
         
-        FSResource *_audioResource = [[FSResource alloc] init];//data.resources[0];
-        _audioResource.relativePath = @"test";
-        _audioResource.width = 51;
+        FSResource *_audioResource = data.myResource;
         _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 10, 65, 26)];
+        _audioButton.tag = 200;
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
@@ -87,8 +101,8 @@
     //回复人名称
     _lblReplyDesc.frame = CGRectMake(_lblReplyDesc.frame.origin.x, _cellHeight + 5, 225, _lblReplyDesc.frame.size.height);
     _lblReplyDesc.hidden = NO;
-    if (![data.replyUserName isEqualToString:@""] && data.replyUserName) {
-        _lblReplyDesc.text = [NSString stringWithFormat:@"回复 %@", data.replyUserName];
+    if (![data.replyUserName_myComment isEqualToString:@""] && data.replyUserName_myComment) {
+        _lblReplyDesc.text = [NSString stringWithFormat:@"回复 %@", data.replyUserName_myComment];
     }
     else{
         _lblReplyDesc.text = [NSString stringWithFormat:@"评论您参与的%@", _data.sourcetype==1?@"商品":@"活动"];
@@ -116,7 +130,7 @@
     if (_audioButton) {
         _rect = _audioButton.frame;
         _rect.origin.y = _lblComment.frame.origin.y - 7;
-        _rect.origin.x = _lblComment.frame.origin.x + _lblComment.frame.size.width + 3;
+        //_rect.origin.x = _lblComment.frame.origin.x + _lblComment.frame.size.width + 3;
         _audioButton.frame = _rect;
     }
     

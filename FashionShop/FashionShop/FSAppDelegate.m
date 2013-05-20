@@ -275,13 +275,7 @@ void uncaughtExceptionHandler(NSException *exception)
         [request send:[FSModelBase class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"localToken" message:[NSString stringWithFormat:@"token:%@\nuserID:%@", localToken, uId] delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                [alert show];
                 [FSUser saveDeviceToken:localToken];
-            }
-            else{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@", resp.errorDescrip] delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-                [alert show];
             }
         }]; 
     }];

@@ -7,13 +7,26 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "Model/FSUser.m"
-         timestampString = "390298483.091913"
+         filePath = "FashionShop/FSProDetailViewController.m"
+         timestampString = "390728582.259223"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "133"
-         endingLineNumber = "133"
-         landmarkName = "-logobgURL"
+         startingLineNumber = "142"
+         endingLineNumber = "142"
+         landmarkName = "-paginatorView:viewForPageAtIndex:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "FashionShop/FSProDetailViewController.m"
+         timestampString = "390728765.800642"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "232"
+         endingLineNumber = "232"
+         landmarkName = "-paginatorView:didScrollToPageAtIndex:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

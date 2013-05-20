@@ -25,6 +25,9 @@
 @property(nonatomic,assign) int commentid;
 @property(nonatomic,assign) int sourceid;
 @property(nonatomic,assign) int sourcetype;
+@property(nonatomic,retain) NSString * replyUserName_myComment;
+@property(nonatomic,assign) int replyUserID_myComment;
+@property(nonatomic,retain) FSResource * myResource;
 
 
 @end

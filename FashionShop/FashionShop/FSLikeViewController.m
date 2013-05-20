@@ -92,6 +92,9 @@
     }];
     _contentView.dataSource = self;
     _contentView.delegate =self;
+    
+    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
+    _contentView.backgroundView = nil;
 }
 
 -(void) mergeLike:(FSPagedLike *)response isInsert:(BOOL)isinsert
@@ -176,11 +179,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     FSLikeDetailCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_LIKE_TABLE_CELL];
     detailCell.data = [_likes objectAtIndex:indexPath.row];
     return detailCell;
-    
 }
 
 
@@ -192,6 +193,8 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    return;
+    
     if (indexPath.row %2==0)
     {
         cell.backgroundColor = PRO_LIST_NEAR_CELL1_BGCOLOR;

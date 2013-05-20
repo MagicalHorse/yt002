@@ -19,7 +19,7 @@
     BOOL _isInLoading;
     int _currentPage;
     BOOL _noMoreResult;
-    
+    FSSourceType *type;
     FSAudioButton   *lastButton;
 }
 
@@ -45,6 +45,8 @@
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
+    
+    [_tbAction registerNib:[UINib nibWithNibName:@"FSMyCommentCell" bundle:nil] forCellReuseIdentifier:@"FSMyCommentCell"];
     
     _currentPage = 1;
     [self requestData:NO];
@@ -148,11 +150,13 @@
     if (item.sourcetype == FSSourceProduct) {
         FSProdItemEntity *fsItem = [[FSProdItemEntity alloc] init];
         fsItem.id = item.sourceid;
+        type = FSSourceProduct;
         detailViewController.navContext = [NSArray arrayWithObjects:fsItem, nil];
     }
     if (item.sourcetype == FSSourcePromotion) {
         FSProItemEntity *fsItem = [[FSProItemEntity alloc] init];
         fsItem.id = item.sourceid;
+        type = FSSourcePromotion;
         detailViewController.navContext = [NSArray arrayWithObjects:fsItem, nil];
     }
     detailViewController.dataProviderInContext = self;
@@ -172,20 +176,11 @@
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *storeDescCell = @"FSMyCommentCell";
-    FSMyCommentCell *cellMy = [tableView dequeueReusableCellWithIdentifier:storeDescCell];
-    if (cellMy == nil) {
-        NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSMyCommentCell" owner:self options:nil];
-        if (_array.count > 0) {
-            cellMy = (FSMyCommentCell*)_array[0];
-        }
-        else{
-            cellMy = [[FSMyCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:storeDescCell];
-        }
-    }
+    FSMyCommentCell *cellMy =  [tableView dequeueReusableCellWithIdentifier:@"FSMyCommentCell"];
     cellMy.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
     [cellMy setData:[_comments objectAtIndex:indexPath.row]];
+    cellMy.clipsToBounds = YES;
     cellMy.imgThumb.delegate = self;
     if (!cellMy.audioButton.audioDelegate) {
         cellMy.audioButton.audioDelegate = self;
@@ -197,7 +192,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSMyCommentCell *cell = (FSMyCommentCell*)[_tbAction.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+    FSMyCommentCell *cell = (FSMyCommentCell*)[self tableView:tableView cellForRowAtIndexPath:indexPath];
     return cell.cellHeight;
 }
 
@@ -231,6 +226,8 @@
 }
 -(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
+    return type;
+    
     FSComment *item = _comments[index];
     return item.sourcetype;
 }

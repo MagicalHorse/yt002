@@ -55,10 +55,10 @@
         _lblCode.textColor = [UIColor colorWithHexString:@"#007f06"];
     }
     else if(_data.status == 2) {
-        _lblCode.textColor = [UIColor colorWithHexString:@"#e5004f"];
+        _lblCode.textColor = [UIColor colorWithHexString:@"#bbbbbb"];
     }
     else{
-        _lblCode.textColor = [UIColor colorWithHexString:@"#bbbbbb"];
+        _lblCode.textColor = [UIColor colorWithHexString:@"#e5004f"];
     }
 }
 

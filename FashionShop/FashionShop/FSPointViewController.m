@@ -51,6 +51,7 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointDetailCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_TABLE_CELL];
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointMemberCardCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_CARD_MEMBER_CELL];
+    _contentView.hidden = YES;
     [self preparePresent];
 }
 
@@ -58,11 +59,11 @@
 {
     [super viewDidAppear:animated];
     
-    if (!currentUser.isBindCard) {
+    if (![currentUser.isBindCard boolValue]) {
         UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [sheepButton setTitle:@"绑定会员卡" forState:UIControlStateNormal];
         [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        sheepButton.titleLabel.font = ME_FONT(13);
+        sheepButton.titleLabel.font = ME_FONT(12);
         sheepButton.showsTouchWhenHighlighted = YES;
         [sheepButton setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
         [sheepButton sizeToFit];
@@ -94,12 +95,18 @@
 {
     if (!_likes)
     {
+        BOOL bindCard = [currentUser.isBindCard boolValue];
         _currentPage = 1;
         _inLoading = YES;
-        _contentView.hidden = YES;
         FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:_currentPage isRefresh:NO];
+        if (!bindCard) {
+            [self beginLoading:self.view];
+        }
         [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _contentView.hidden = NO;
+            if (!bindCard) {
+                [self endLoading:self.view];
+            }
             if (resp.isSuccess)
             {
                 FSPagedPoint *innerResp = resp.responseData;
@@ -121,7 +128,8 @@
 -(void)bindRequest
 {
     static int requestCount = 1;
-    if (currentUser.isBindCard) {
+    if ([currentUser.isBindCard boolValue]) {
+        currentUser.cardInfo = nil;
         FSCardRequest *request = [[FSCardRequest alloc] init];
         request.userToken = currentUser.uToken;
         request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
@@ -134,7 +142,7 @@
             {
                 requestCount ++;
                 if (requestCount > 5) {
-                    [self reportError:resp.description];
+                    [self reportError:resp.errorDescrip];
                     requestCount = 0;
                 }
                 else{
@@ -163,6 +171,9 @@
     }];
     _contentView.dataSource = self;
     _contentView.delegate =self;
+    
+    _contentView.backgroundView = nil;
+    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 -(void)refreshContent:(BOOL)isRefresh withCallback:(dispatch_block_t)callback
@@ -223,7 +234,7 @@
     view.backgroundColor = [UIColor clearColor];
     
     int xOffset = 30;
-    int yOffset = 30;
+    int yOffset = 25;
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(xOffset, yOffset, (320-xOffset*2), 40);
@@ -241,9 +252,10 @@
     if (_inLoading) {
         return;
     }
-    if (!currentUser.isBindCard) {
+    if (![currentUser.isBindCard boolValue]) {
         FSCardBindViewController *controller = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
         __block FSCardBindViewController *blockBindController = controller;
+        blockBindController.currentUser = self.currentUser;
         blockBindController.completeCallBack = ^(BOOL isSuccess){
             [blockBindController popViewControllerAnimated:YES completion:^{
                 if (!isSuccess)
@@ -319,7 +331,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (currentUser.isBindCard) {
+    if ([currentUser.isBindCard boolValue]) {
         return 2;
     }
     else{
@@ -329,7 +341,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (currentUser.isBindCard && section == 0) {
+    if ([currentUser.isBindCard boolValue] && section == 0) {
         return 1;
     }
     else{
@@ -339,7 +351,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (currentUser.isBindCard && indexPath.section == 0) {
+    if ([currentUser.isBindCard boolValue] && indexPath.section == 0) {
         if (!currentUser.cardInfo) {
             return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
         }
@@ -359,12 +371,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (currentUser.isBindCard && indexPath.section == 0) {
+    if ([currentUser.isBindCard boolValue] && indexPath.section == 0) {
         return 110;
     }
     else{
         FSPoint *point = [_likes objectAtIndex:indexPath.row];
-        CGFloat baseHeight = 35;
+        CGFloat baseHeight = 45;
         CGSize newSize = [point.getReason sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(200, 200) lineBreakMode:NSLineBreakByWordWrapping];
         return MAX(newSize.height+20, baseHeight);
     }
@@ -372,7 +384,9 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (currentUser.isBindCard && indexPath.section == 0) {
+    return;
+    
+    if ([currentUser.isBindCard boolValue] && indexPath.section == 0) {
         
     }
     else{
@@ -399,12 +413,12 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, 30)];
-    view.backgroundColor = [UIColor darkGrayColor];
+    UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, 30)];
+    view.image = [UIImage imageNamed:@"list_title_bg.png"];
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, 30)];
     title.backgroundColor = [UIColor clearColor];
     title.font = BFONT(14);
-    title.textColor = [UIColor whiteColor];
+    title.textColor = [UIColor colorWithHexString:@"#6f5e6c"];
     if (section == 0) {
         title.text = NSLocalizedString(@"Member Card Point Desc", nil);
         UILabel *total = [[UILabel alloc] initWithFrame:CGRectMake(APP_WIDTH-10-100, 0, 100, 30)];

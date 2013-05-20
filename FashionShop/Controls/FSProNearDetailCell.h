@@ -16,7 +16,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblSubTitle;
 @property (strong, nonatomic) IBOutlet RTLabel *timeView;
 @property (strong, nonatomic) IBOutlet UIImageView *line;
-@property (strong, nonatomic) IBOutlet UILabel *line2;
+@property (weak, nonatomic) IBOutlet UIImageView *line2;
 @property (nonatomic) int cellHeight;
 
 -(void)setTitle:(NSString *)_title subTitle:(NSString *)_subTitle dateString:(NSString*)_dateString;
@@ -32,7 +32,7 @@
 @property (strong, nonatomic) IBOutlet RTLabel *timeView;
 @property (strong, nonatomic) IBOutlet UIImageView *addressIcon;
 @property (strong, nonatomic) IBOutlet UIImageView *line;
-@property (strong, nonatomic) IBOutlet UILabel *line2;
+@property (strong, nonatomic) IBOutlet UIImageView *line2;
 @property (nonatomic) int cellHeight;
 
 -(void)setTitle:(NSString *)_title desc:(NSString *)_desc address:(NSString*)aAddress dateString:(NSString*)_dateString;

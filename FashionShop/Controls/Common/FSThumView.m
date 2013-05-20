@@ -54,12 +54,11 @@
         _owner.thumnailUrl)
     {
         [self reloadThumb:_owner.thumnailUrl];
-//        [_imgButton setImageWithURL:_owner.thumnailUrl];
         [_imgButton setTitle:@"" forState:UIControlStateNormal];
         
         if (_owner.userLevelId == FSDARENUser)
         {
-            [self indicatorViewUpdate:@"daren_icon.png"];
+            [self indicatorViewUpdate:@"daren_icon_2.png"];
             [self addSubview:_drImage];
         }
     }
@@ -77,8 +76,12 @@
     _imgView=[[UIImageView alloc] initWithImage:backgroundImage];
     _imgView.contentMode=UIViewContentModeScaleAspectFit;
     _imgView.frame = _imgButton.frame;
-    _imgView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    _imgView.layer.borderWidth = 1;
+//    _imgView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+//    _imgView.layer.borderWidth = 1;
+    UIImageView *imgV = [[UIImageView alloc] initWithFrame:_imgButton.bounds];
+    imgV.image = [UIImage imageNamed:@"thumb_side.png"];
+    imgV.contentMode = UIViewContentModeScaleToFill;
+    [_imgView addSubview:imgV];
     [_imgButton addSubview:_imgView];
     [self addSubview:_imgButton];
 }

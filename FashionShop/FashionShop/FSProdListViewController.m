@@ -33,6 +33,7 @@
 #define DEFAULT_TAG_WIDTH 50
 #define Tag_Swip_View_Tag 200
 #define Default_SearchBar_Tag 201
+#define Tag_Item_Height 27
 
 @implementation FSSearchBar
 
@@ -337,19 +338,26 @@
 {
     self.navigationItem.title = NSLocalizedString(@"Products", nil);
     PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
-    layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, 34);
+    layout.itemSize = CGSizeMake(DEFAULT_TAG_WIDTH, Tag_Item_Height);
     layout.sectionInset = UIEdgeInsetsMake(5,5,5,5);
     
     //add iamgeView
     imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
-    imageTagBgV.image = [UIImage imageNamed:@"tag_bg.png"];//[[UIImage imageNamed:@"tag_bg.png"] stretchableImageWithLeftCapWidth:5 topCapHeight:5];
-    imageTagBgV.contentMode = UIViewContentModeScaleToFill;
+    if (__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0) {
+        UIImage *image = [[UIImage imageNamed:@"tag_bg_2.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0) resizingMode:UIImageResizingModeTile];
+        imageTagBgV.image = image;
+    }
+//    else{
+//        imageTagBgV.image = [[UIImage imageNamed:@"tag_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(-5, 10, -5, 10)];
+//    }
+    
+//    imageTagBgV.contentMode = UIViewContentModeScaleToFill;
     [_tagContainer addSubview:imageTagBgV];
     
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
-    int height = (lineCount) * 34;
+    int height = (lineCount) * Tag_Item_Height;
     CGRect _rect = _tagContainer.bounds;
-    _rect.size.height = height;
+    _rect.size.height = height + 500;
      _cvTags = [[PSUICollectionView alloc] initWithFrame:_rect collectionViewLayout:layout];
     _cvTags.scrollEnabled = NO;
     _tagContainer.clipsToBounds = YES;
@@ -418,12 +426,12 @@
     }
     UIView *view = [_tagContainer viewWithTag:Tag_Swip_View_Tag];
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
-    int height = (lineCount - 1) * 44;
+    int height = (lineCount - 1) * (Tag_Item_Height + 10);
     NSString *strImage = nil;
     if (isSwipToUp) {
         isAnimating = YES;
         strImage = @"arrow_down.png";
-        [UIView animateWithDuration:20.33 animations:^{
+        [UIView animateWithDuration:0.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y -= height;
             view.frame = _rect;
@@ -443,7 +451,7 @@
     else{
         isAnimating = YES;
         strImage = @"arrow_up.png";
-        [UIView animateWithDuration:10.33 animations:^{
+        [UIView animateWithDuration:0.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y += height;
             view.frame = _rect;
@@ -773,7 +781,7 @@
         CGSize actualSize = [[(FSTag *)[_tags objectAtIndex:indexPath.row] name] sizeWithFont:ME_FONT(12)];
         CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);
         _actualTagWidth+=width+5;
-        return CGSizeMake(width, MAX(actualSize.height, 30));
+        return CGSizeMake(width, MAX(actualSize.height, Tag_Item_Height));
     }
     return  CGSizeMake(ITEM_CELL_WIDTH, ITEM_CELL_WIDTH);
 }

@@ -15,6 +15,8 @@
     _cellHeight = 80;
     [_lblTitle setText:_title];
     [_lblSubTitle setText:_subTitle];
+    [_lblTitle setTextColor:[UIColor colorWithHexString:@"#181818"]];
+    [_lblSubTitle setTextColor:[UIColor colorWithHexString:@"#666666"]];
     
     [_timeView setTextAlignment:RTTextAlignmentCenter];
     [_timeView setText:_dateString];
@@ -45,6 +47,10 @@
     [_titleView setText:_title];
     [_descView setText:_desc];
     [_address setText:aAddress];
+    
+    [_descView setTextColor:[UIColor colorWithHexString:@"#666666"]];
+    [_titleView setTextColor:[UIColor colorWithHexString:@"#181818"]];
+    [_address setTextColor:[UIColor colorWithHexString:@"#666666"]];
     
     [_timeView setTextAlignment:RTTextAlignmentCenter];
     [_timeView setText:_dateString];

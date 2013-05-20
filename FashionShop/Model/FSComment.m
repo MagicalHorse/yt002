@@ -17,11 +17,14 @@
 @synthesize resources;
 @synthesize replyUserID;
 @synthesize replyUserName;
+@synthesize myResource;
+@synthesize replyUserID_myComment;
+@synthesize replyUserName_myComment;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
-    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"content",@"comment",@"createddate",@"indate",@"replycustomer_id",@"replyUserID",@"replycustomer_nickname",@"replyUserName",nil];
+    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"content",@"comment",@"createddate",@"indate",@"replycustomer_id",@"replyUserID",@"replycustomer_nickname",@"replyUserName",@"replyuserid",@"replyUserID_myComment",@"replyusername",@"replyUserName_myComment",nil];
     [relationMapping mapKeyPath:@"commentid" toAttribute:@"commentid"];
     [relationMapping mapKeyPath:@"sourceid" toAttribute:@"sourceid"];
     [relationMapping mapKeyPath:@"sourcetype" toAttribute:@"sourcetype"];
@@ -30,6 +33,8 @@
     [relationMapping mapKeyPath:@"commentuser" toRelationship:@"replyUser" withMapping:relationMap];
     relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resources" toRelationship:@"resources" withMapping:relationMap];
+    
+    [relationMapping mapKeyPath:@"resource" toRelationship:@"myResource" withMapping:relationMap];
     
     return relationMapping;
 }

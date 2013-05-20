@@ -49,7 +49,9 @@
 +(RKObjectMapping *) getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",@"logobg",@"logobg",nil];
+    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",nil];
+    RKObjectMapping *resourceRelation = [FSResource getRelationDataMap];
+    [relationMap mapKeyPath:@"logobg" toRelationship:@"logobg" withMapping:resourceRelation];
     return relationMap;
 }
 
@@ -129,8 +131,13 @@
 {
     if (!logobg)
         return nil;
-    int width = 320;// * RetinaFactor;
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_%dx%d.jpg",logobg, width, width]];
+    NSURL *url = [logobg absoluteUr:320 height:320];
+    NSLog(@"url:%@", url.absoluteString);
+    return url;
+    
+//    int width = 320 * RetinaFactor;
+//    NSString *str = [NSString stringWithFormat:@"%@_%dx%d.jpg",logobg, width, width];
+//    return [NSURL URLWithString:str];
 }
 
 @end

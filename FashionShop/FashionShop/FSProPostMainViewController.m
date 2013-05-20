@@ -164,10 +164,12 @@
     [self.view setBackgroundColor:[UIColor colorWithRed:229 green:229 blue:229]];
     [_tbAction setBackgroundView:nil];
     [_tbAction setBackgroundColor:[UIColor clearColor]];
-    [_tbAction registerNib:[UINib nibWithNibName:@"FSImageUploadCell" bundle:nil] forCellReuseIdentifier:@"imageuploadcell"];
+    [_tbAction registerNib:[UINib nibWithNibName:@"FSImageUploadCell" bundle:nil] forCellReuseIdentifier:@"FSImageUploadCell"];
     [self setProgress:PostBegin withObject:nil];
     _tbAction.dataSource = self;
     _tbAction.delegate = self;
+    _tbAction.backgroundView = nil;
+    _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
     [_tbAction reloadData];
 }
 
@@ -474,12 +476,13 @@
   
 }
 
-#pragma UITableViewSource delegate
+#pragma mark - UITableViewSource delegate
+
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-
     return _sections.count;
 }
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     int keyIndex = [_keySections indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -496,11 +499,12 @@
             return 1;
     }
 }
+
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    
     return [_sections objectAtIndex:section];
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *detailCell =  [tableView dequeueReusableCellWithIdentifier:@"defaultcell"];
@@ -511,6 +515,8 @@
     detailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     detailCell.imageView.image = nil;
     detailCell.textLabel.text = nil;
+    detailCell.textLabel.textColor = [UIColor colorWithHexString:@"#666666"];
+    detailCell.textLabel.font = ME_FONT(15);
     id detailText = [_rows objectForKey:[_sections objectAtIndex:indexPath.section]];
     int keyIndex = [_keySections indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         BOOL match = [[_sections objectAtIndex:indexPath.section] isEqualToString:obj];
@@ -523,7 +529,7 @@
             if (_proRequest.imgs &&
                 _proRequest.imgs.count>0)
             {
-                detailCell = [tableView dequeueReusableCellWithIdentifier:@"imageuploadcell"];
+                detailCell = [tableView dequeueReusableCellWithIdentifier:@"FSImageUploadCell"];
                 [(FSImageUploadCell *)detailCell setImages:_proRequest.imgs];
                 [(FSImageUploadCell *)detailCell setImageRemoveDelegate:self];
             }
@@ -595,6 +601,7 @@
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     int keyIndex = [_keySections indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
@@ -612,7 +619,8 @@
         return tableView.rowHeight;
     }
 }
-#pragma UIImagePicker delegate
+
+#pragma mark - UIImagePicker delegate
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     
@@ -631,6 +639,7 @@
 		return;
 	}
 }
+
 - (void)cropImage:(UIImage *)image {
     CGSize newSize = image.size;
     newSize = CGSizeMake(640*RetinaFactor, 640*RetinaFactor*image.size.height/image.size.width);
@@ -645,6 +654,7 @@
     
     [self proPostStep:PostStep1Finished didCompleteWithObject:@[newImage]];
 }
+
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];  
@@ -654,7 +664,9 @@
 {
     return  camera;
 }
+
 #pragma mark - TDDatePickerControllerDelegate
+
 - (void)datePickerSetDate:(TDDatePickerController *)viewController
 {
     [self proPostStep:PostStep3Finished didCompleteWithObject:@[viewController.datePicker.date]];

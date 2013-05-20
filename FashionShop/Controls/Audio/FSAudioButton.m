@@ -75,9 +75,9 @@
     [self addSubview:activity];
     
     //添加播放图标
-//    playImageView = [[UIImageView alloc] initWithFrame:_rect];
-//    playImageView.image = [UIImage imageNamed:@"play_icon.png"];
-//    [self addSubview:playImageView];
+    playImageView = [[UIImageView alloc] initWithFrame:_rect];
+    playImageView.image = [UIImage imageNamed:@"play_icon.png"];
+    [self addSubview:playImageView];
     
     //添加播放动画
     animateView = [[UIImageView alloc] initWithFrame:_rect];

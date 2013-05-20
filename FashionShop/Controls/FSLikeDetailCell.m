@@ -47,17 +47,17 @@
     _data= data;
     _thumbImg.ownerUser = _data;
     _lblNickie.text = data.nickie;
-    _lblNickie.font = ME_FONT(18);
-    _lblNickie.textColor = [UIColor blackColor];
+    _lblNickie.font = ME_FONT(16);
+    _lblNickie.textColor = [UIColor colorWithHexString:@"#666666"];
     [_lblNickie sizeToFit];
     _lblFans.text= [NSString stringWithFormat:NSLocalizedString(@"fans:%d", Nil),_data.fansTotal];
-    _lblFans.textColor = [UIColor colorWithRed:153 green:153 blue:153];
-    _lblFans.font = ME_FONT(10);
+    _lblFans.textColor = [UIColor colorWithHexString:@"#666666"];
+    _lblFans.font = ME_FONT(14);
     _lblLike.text= [NSString stringWithFormat:NSLocalizedString(@"like:%d", Nil),_data.likeTotal];
-    _lblLike.font = ME_FONT(10);
-    _lblLike.textColor = [UIColor colorWithRed:153 green:153 blue:153];
-    _lblLike.font = ME_FONT(10);
+    _lblLike.font = ME_FONT(14);
+    _lblLike.textColor = [UIColor colorWithHexString:@"#666666"];
     
+    _line1.frame = CGRectMake(0, self.frame.size.height - 2, APP_WIDTH, 2);
 }
 
 @end

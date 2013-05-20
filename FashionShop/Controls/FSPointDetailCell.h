@@ -12,6 +12,7 @@
 @interface FSPointDetailCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *lblReason;
 
+@property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UILabel *lblInDate;
 
 @property(nonatomic,strong) FSPoint *data;

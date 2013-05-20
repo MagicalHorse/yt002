@@ -23,6 +23,7 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;
 @property (strong, nonatomic) IBOutlet UIButton *btnHeaderBg;
+@property (strong, nonatomic) IBOutlet UIImageView *btnHeaderImgV;
 @property (strong, nonatomic) IBOutlet UIScrollView *tbScroll;
 
 @property (strong, nonatomic) IBOutlet UIImageView *imgLevel;
@@ -44,6 +45,7 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 - (IBAction)doLogin:(id)sender;
 - (IBAction)doLoginQQWeiBo:(id)sender;
 - (IBAction)doLoginQQ:(id)sender;
+- (IBAction)attentionXHYT:(id)sender;
 
 - (IBAction)doSuggest:(id)sender;
 - (IBAction)doShowLikes:(id)sender;

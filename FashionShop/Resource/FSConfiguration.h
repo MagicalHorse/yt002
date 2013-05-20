@@ -66,6 +66,7 @@
 
 #define NAV_HIGH        44
 #define TAB_HIGH        49
+#define IPHONE5_AddHEIGHT 88
 #define APP_HIGH        [[UIScreen mainScreen] applicationFrame].size.height
 #define APP_WIDTH       [[UIScreen mainScreen] applicationFrame].size.width
 #define SCREEN_HIGH     [[UIScreen mainScreen] bounds].size.height
@@ -88,6 +89,8 @@
 
 #define FONT(a)             [UIFont systemFontOfSize:a]
 #define BFONT(a)            [UIFont boldSystemFontOfSize:a]
+
+#define ATTENTION_XHYT_URL @"http://weixin.qq.com/r/FHWNghXEhiv5hwThnyAw"
 
 #endif
 

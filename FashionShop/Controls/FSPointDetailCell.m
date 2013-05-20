@@ -45,13 +45,12 @@
     }
     _data = data;
     _lblReason.text = _data.title;
-   // _lblReason.text = [NSString stringWithFormat:NSLocalizedString(@"%@ got:%dpoints",nil),_data.getReason,_data.amount];
     _lblReason.font = ME_FONT(14);
-    _lblReason.textColor = [UIColor colorWithRed:51 green:51 blue:51];
+    _lblReason.textColor = [UIColor colorWithHexString:@"#666666"];
     CGSize newSize = [_lblReason.text sizeWithFont:ME_FONT(14) constrainedToSize:CGSizeMake(200, 100) lineBreakMode:NSLineBreakByWordWrapping];
     CGRect origFrame = _lblReason.frame;
     origFrame.size.width = newSize.width;
-    origFrame.size.height = newSize.height;
+    origFrame.size.height = MAX(newSize.height, 45);
     _lblReason.frame = origFrame;
     _lblReason.numberOfLines = 0;
     
@@ -59,9 +58,10 @@
     [formater setDateFormat:@"yyyy.MM.dd"];
     _lblInDate.text = [NSString stringWithFormat:@"%@",[formater stringFromDate:_data.inDate]];
     _lblInDate.font = ME_FONT(12);
-    _lblInDate.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    _lblInDate.textColor = [UIColor colorWithHexString:@"#666666"];
     _lblInDate.textAlignment = NSTextAlignmentRight;
     
+    _line1.frame = CGRectMake(0, self.frame.size.height - 2, APP_WIDTH, 2);
 }
 
 @end

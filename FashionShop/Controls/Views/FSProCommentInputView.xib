@@ -210,7 +210,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">input_bg@2x.png</string>
+									<string key="NSResourceName">input_text.png</string>
 								</object>
 							</object>
 							<object class="IBUITextView" id="45662220">
@@ -277,10 +277,7 @@
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MQA</bytes>
-							<object class="NSColorSpace" key="NSCustomColorSpace">
-								<int key="NSID">2</int>
-							</object>
+							<bytes key="NSWhite">MCAwAA</bytes>
 						</object>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 					</object>
@@ -533,10 +530,10 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="audio_btn_normal@2x.png">{342, 60}</string>
-			<string key="audio_change_icon@2x.png">{100, 100}</string>
+			<string key="audio_change_icon@2x.png">{62, 62}</string>
 			<string key="cancel_btn@2x.png">{46, 46}</string>
-			<string key="comment_input_bg@2x.png">{640, 89}</string>
-			<string key="input_bg@2x.png">{484, 62}</string>
+			<string key="comment_input_bg@2x.png">{640, 90}</string>
+			<string key="input_text.png">{16, 16}</string>
 			<string key="publish_btn@2x.png">{120, 58}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
