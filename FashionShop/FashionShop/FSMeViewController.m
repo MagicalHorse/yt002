@@ -266,6 +266,7 @@
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
         self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+        self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     }
     [super viewWillDisappear:animated];
 }
@@ -277,6 +278,7 @@
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
         self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
+        self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     }
     [super viewDidDisappear:animated];
 }
@@ -394,6 +396,7 @@
 
 
 - (IBAction)doLogin:(id)sender {
+    _toDetail = YES;
     _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
     [_weibo logIn];
     
@@ -429,6 +432,7 @@
         _qq.rootViewController = self;
         
     }
+    _toDetail = YES;
     [_qq logInWithDelegate:self onSuccess:@selector(onQQLoginSuccess) onFailure:@selector(onQQLoginFail:)];
 }
 
@@ -454,7 +458,20 @@
     [btn setBackgroundImage:[UIImage imageNamed:@"btn_right_normal.png"] forState:UIControlStateNormal];
     [btn sizeToFit];
     UIBarButtonItem *baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
-    UIBarButtonItem *baritemletter= [self createPlainBarButtonItem:@"message.png" target:self action:@selector(clickToMyComment:)];
+    
+    UIButton *msgBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [msgBtn setImage:[UIImage imageNamed:@"message.png"] forState:UIControlStateNormal];
+    [msgBtn addTarget:self action:@selector(clickToMyComment:) forControlEvents:UIControlEventTouchUpInside];
+    [msgBtn setShowsTouchWhenHighlighted:YES];
+    [msgBtn sizeToFit];
+    BOOL showDot = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Has New Comment"] boolValue];
+    if (showDot) {
+        UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(msgBtn.frame.size.width - 17, 6, 15, 15)];
+        dotView.image = [UIImage imageNamed:@"dot.png"];
+        [msgBtn addSubview:dotView];
+    }
+    UIBarButtonItem *baritemletter = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
+    
     NSArray *_array = [NSArray arrayWithObjects:baritemSet,baritemletter, nil];
     [self.navigationItem setRightBarButtonItems:_array];
     [_userProfileView removeFromSuperview];
@@ -920,12 +937,19 @@
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
     }
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
 }
 
 -(void)unregisterLocalNotification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)receivePushNotification:(id)dicInfo
+{
+    //添加提醒标志
+    [self displayUserProfile];
 }
 
 -(void)registerKVO
@@ -954,6 +978,7 @@
         switch (buttonIndex) {
             case 0:
             {
+                _toDetail = YES;
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
                 [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
@@ -1019,6 +1044,7 @@
                 _camera.delegate = self;
                 if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera])
                 {
+                    _toDetail = YES;
                     _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
                     _camera.mediaTypes = [[NSArray alloc] initWithObjects:(NSString*)kUTTypeImage, nil];
                     _camera.allowsEditing = YES;
@@ -1043,6 +1069,7 @@
                 _camera.delegate = self;
                 if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary])
                 {
+                    _toDetail = YES;
                     _camera.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                     _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                     _camera.allowsEditing = YES;

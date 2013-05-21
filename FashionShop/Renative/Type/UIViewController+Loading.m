@@ -391,8 +391,8 @@ BOOL networkIsWorking = NO;
 
 -(void) doTakePhotoExtend:(UIView *)sender
 {
-    //UIImagePickerController *camera = [self inUserCamera];
-    //[camera takePicture];
+    UIImagePickerController *camera = [self inUserCamera];
+    [camera takePicture];
 }
 -(void) doGoGalary:(UIView *)sender
 {

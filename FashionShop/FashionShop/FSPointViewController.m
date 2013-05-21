@@ -95,34 +95,29 @@
 {
     if (!_likes)
     {
-        BOOL bindCard = [currentUser.isBindCard boolValue];
         _currentPage = 1;
         _inLoading = YES;
         FSCommonUserRequest *request = [self buildListRequest:RK_REQUEST_POINT_LIST nextPage:_currentPage isRefresh:NO];
-        if (!bindCard) {
-            [self beginLoading:self.view];
-        }
+        [self beginLoading:self.view];
         [request send:[FSPagedPoint class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            _contentView.hidden = NO;
-            if (!bindCard) {
-                [self endLoading:self.view];
-            }
             if (resp.isSuccess)
             {
                 FSPagedPoint *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=_currentPage)
                     _noMore = true;
                 [self mergeLike:innerResp isInsert:false];
+                [self bindRequest];
             }
             else
             {
+                [self endLoading:self.view];
                 [self reportError:resp.errorDescrip];
+                _inLoading = NO;
+                _contentView.hidden = NO;
             }
             _contentView.tableFooterView= [self createTableFooterView];
-            _inLoading = NO;
         }];
     }
-    [self bindRequest];
 }
 
 -(void)bindRequest
@@ -133,10 +128,8 @@
         FSCardRequest *request = [[FSCardRequest alloc] init];
         request.userToken = currentUser.uToken;
         request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
-        [self beginLoading:_contentView];
         _inLoading = YES;
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_contentView];
             _inLoading = NO;
             if (!resp.isSuccess)
             {
@@ -144,6 +137,8 @@
                 if (requestCount > 5) {
                     [self reportError:resp.errorDescrip];
                     requestCount = 0;
+                    _contentView.hidden = NO;
+                    [self endLoading:self.view];
                 }
                 else{
                     [self bindRequest];
@@ -151,12 +146,18 @@
             }
             else
             {
+                _contentView.hidden = NO;
+                [self endLoading:self.view];
                 //显示绑定成功界面
                 currentUser.isBindCard = @YES;
                 currentUser.cardInfo = resp.responseData;
                 [_contentView reloadData];
             }
         }];
+    }
+    else{
+        _contentView.hidden = NO;
+        [self endLoading:self.view];
     }
 }
 

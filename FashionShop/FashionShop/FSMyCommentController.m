@@ -80,6 +80,15 @@
             if (_tbAction.hidden) {
                 _tbAction.hidden = NO;
             }
+            
+            if (!isLoadMore) {
+                BOOL showDot = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Has New Comment"] boolValue];
+                if (showDot) {
+                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Has New Comment"];
+                    //发送通知,进行特殊标记
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+                }
+            }
         }
         else
         {

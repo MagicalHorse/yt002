@@ -15,6 +15,6 @@
 
 @interface FSStoreDetailViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate,FSProDetailItemSourceProvider>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
-@property (strong, nonatomic) FSStore *store;
+@property (nonatomic) int storeID;
 
 @end

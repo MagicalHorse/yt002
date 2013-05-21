@@ -692,7 +692,8 @@
         if (_storeSource.count >= cell.tag) {
             FSStore * store = [_storeSource objectAtIndex:cell.tag];
             FSStoreDetailViewController *storeController = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
-            storeController.store = store;
+            storeController.storeID = store.id;
+            storeController.title = store.name;
             [self.navigationController setNavigationBarHidden:NO];
             [self.navigationController pushViewController:storeController animated:YES];
         }
@@ -832,11 +833,11 @@
                     listCell = [[FSProNearDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProNearDetailCell"];
                 }
             }
-            listCell.contentView.backgroundColor = [UIColor clearColor];//[UIColor colorWithHexString:@"909090"];
+            listCell.contentView.backgroundColor = [UIColor colorWithHexString:@"909090"];
             listCell.lblTitle.textColor = [UIColor whiteColor];
             listCell.lblTitle.font = ME_FONT(14);
             listCell.lblSubTitle.textColor = [UIColor colorWithHexString:@"#dddddd"];
-            listCell.lblSubTitle.font = ME_FONT(12);
+            listCell.lblSubTitle.font = ME_FONT(13);
             listCell.line.backgroundColor = [UIColor lightGrayColor];
             listCell.line2.backgroundColor = [UIColor lightGrayColor];
             int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
@@ -848,7 +849,7 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#666666'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
             
             return listCell;
@@ -868,7 +869,7 @@
                     listCell = [[FSProDateDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"FSProDateDetailCell"];
                 }
             }
-            listCell.contentView.backgroundColor = [UIColor clearColor];//[UIColor colorWithHexString:@"909090"];
+            listCell.contentView.backgroundColor = [UIColor colorWithHexString:@"909090"];
             listCell.titleView.textColor = [UIColor whiteColor];
             listCell.descView.textColor = [UIColor colorWithHexString:@"#dddddd"];
             listCell.address.textColor = [UIColor colorWithHexString:@"#dddddd"];
@@ -892,7 +893,7 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#666666'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             
             [listCell setTitle:proData.title desc:proData.descrip address:proData.store.name dateString:str];
             

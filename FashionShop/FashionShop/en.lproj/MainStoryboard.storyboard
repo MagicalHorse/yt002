@@ -134,12 +134,12 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="Zeu-9c-Fhj">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="55"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="G2T-9o-ytL">
-                                <rect key="frame" x="0.0" y="44" width="320" height="411"/>
+                                <rect key="frame" x="0.0" y="55" width="320" height="400"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
@@ -220,6 +220,7 @@
         <class className="FSMeViewController" superclassName="FSRefreshableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FSMeViewController.h"/>
             <relationships>
+                <relationship kind="action" name="attentionXHYT:"/>
                 <relationship kind="action" name="doLogin:"/>
                 <relationship kind="action" name="doLoginQQ:"/>
                 <relationship kind="action" name="doLoginQQWeiBo:"/>
@@ -230,14 +231,17 @@
                 <relationship kind="action" name="doSuggest:"/>
                 <relationship kind="outlet" name="btnCoupons" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="btnFans" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnHeaderBg" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnHeaderImgV" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="btnLike" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="btnPoints" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="btnSuggest" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="imgLevel" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="lblNickie" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="likeContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="likeView" candidateClass="PSUICollectionView"/>
+                <relationship kind="outlet" name="likeView" candidateClass="PSUICollectionView_"/>
                 <relationship kind="outlet" name="segHeader" candidateClass="FSSegmentControl"/>
+                <relationship kind="outlet" name="tbScroll" candidateClass="UIScrollView"/>
                 <relationship kind="outlet" name="thumbImg" candidateClass="FSThumView"/>
             </relationships>
         </class>
@@ -245,7 +249,6 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/FSProListViewController.h"/>
             <relationships>
                 <relationship kind="outlet" name="contentView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="segFilters" candidateClass="FSSegmentControl"/>
             </relationships>
         </class>
@@ -273,6 +276,16 @@
             <relationships>
                 <relationship kind="outlet" name="tbAction" candidateClass="UITableView"/>
             </relationships>
+        </class>
+        <class className="PSTCollectionView" superclassName="UIScrollView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PSTCollectionView.h"/>
+            <relationships>
+                <relationship kind="outlet" name="dataSource"/>
+                <relationship kind="outlet" name="delegate"/>
+            </relationships>
+        </class>
+        <class className="PSUICollectionView_" superclassName="PSTCollectionView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/PSUICollectionView_.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -157,6 +157,10 @@
                     alert.tag = 102;
                     [alert show];
                 }
+                else{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:resp.message delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                    [alert show];
+                }
             }
         }
     }];
@@ -267,6 +271,10 @@
                 if (theApp.versionData.type > 0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:theApp.versionData.title message:theApp.versionData.desc delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"更新", nil];
                     alert.tag = 102;
+                    [alert show];
+                }
+                else{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:theApp.versionData.title message:theApp.versionData.desc delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                     [alert show];
                 }
             }

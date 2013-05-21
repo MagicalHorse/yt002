@@ -33,7 +33,7 @@
 #define DEFAULT_TAG_WIDTH 50
 #define Tag_Swip_View_Tag 200
 #define Default_SearchBar_Tag 201
-#define Tag_Item_Height 27
+#define Tag_Item_Height 30
 
 @implementation FSSearchBar
 
@@ -376,13 +376,13 @@
 -(void)addSwipView
 {
     CGRect _rect = _tagContainer.bounds;
-    _rect.size.height = 10;
-    _rect.origin.y = _tagContainer.frame.size.height - 10;
+    _rect.size.height = 15;
+    _rect.origin.y = _tagContainer.frame.size.height - 15;
     
     UIView *view = [[UIView alloc] initWithFrame:_rect];
     view.backgroundColor = [UIColor clearColor];
     UIImageView *imageV = [[UIImageView alloc] initWithFrame:view.bounds];
-    imageV.image = [UIImage imageNamed:@"arrow_down.png"];
+    imageV.image = [UIImage imageNamed:@"tag_arrow.png"];
     imageV.tag = Tag_Swip_View_Tag + 30;
     [view addSubview:imageV];
     view.tag = Tag_Swip_View_Tag;
@@ -427,10 +427,8 @@
     UIView *view = [_tagContainer viewWithTag:Tag_Swip_View_Tag];
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
     int height = (lineCount - 1) * (Tag_Item_Height + 10);
-    NSString *strImage = nil;
     if (isSwipToUp) {
         isAnimating = YES;
-        strImage = @"arrow_down.png";
         [UIView animateWithDuration:0.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y -= height;
@@ -444,13 +442,10 @@
             //_cvTags.frame = _tagContainer.bounds;
         } completion:^(BOOL finished) {
             isAnimating = NO;
-            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+30];
-            imageV.image = [UIImage imageNamed:strImage];
         }];
     }
     else{
         isAnimating = YES;
-        strImage = @"arrow_up.png";
         [UIView animateWithDuration:0.33 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y += height;
@@ -464,8 +459,6 @@
             //_cvTags.frame = _tagContainer.bounds;
         } completion:^(BOOL finished) {
             isAnimating = NO;
-            UIImageView *imageV = (UIImageView*)[view viewWithTag:Tag_Swip_View_Tag+30];
-            imageV.image = [UIImage imageNamed:strImage];
         }];
     }
     isSwipToUp = !isSwipToUp;

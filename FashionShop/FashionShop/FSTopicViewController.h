@@ -10,7 +10,7 @@
 #import "FSRefreshableViewController.h"
 #import "FSProDetailViewController.h"
 
-@interface FSTopicViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate,FSProDetailItemSourceProvider> {
+@interface FSTopicViewController : FSRefreshableViewController<UITableViewDataSource,UITableViewDelegate,FSProDetailItemSourceProvider,FSImageSlideDataSource> {
     
 }
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;

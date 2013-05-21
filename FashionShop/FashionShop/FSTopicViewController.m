@@ -15,6 +15,9 @@
 #import "FSTopic.h"
 #import "FSProductListViewController.h"
 #import "FSContentViewController.h"
+#import "EGOPhotoViewController.h"
+#import "MyPhoto.h"
+#import "MyPhotoSource.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
@@ -30,6 +33,7 @@
     
     NSDate *_refreshLatestDate;
     NSDate * _firstLoadDate;
+    int selIndex;
 }
 
 @end
@@ -294,7 +298,23 @@
             break;
         case SkipTypeNone:
         {
-            //do nothing
+            //弹出大图进行展现
+            selIndex = indexPath.row;
+            NSMutableArray *photoArray=[NSMutableArray arrayWithCapacity:1];
+            for(FSResource *res in topic.resources)
+            {
+                if (res.type == 2) {
+                    continue;
+                }
+                MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[res absoluteUr:315] name:nil];
+                [photoArray addObject:photo];
+            }
+            MyPhotoSource *source = [[MyPhotoSource alloc] initWithPhotos:photoArray];
+            EGOPhotoViewController *photoController = [[EGOPhotoViewController alloc] initWithPhotoSource:source];
+            int width = 100;
+            photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
+            photoController.source = self;
+            [self presentModalViewController:photoController animated:YES];
         }
             break;
         default:
@@ -369,4 +389,18 @@
     [self setTbAction:nil];
     [super viewDidUnload];
 }
+
+#pragma mark - FSImageSlide datasource
+
+-(int)numberOfImagesInSlides:(EGOPhotoViewController *)view
+{
+    return 1;
+}
+
+-(NSURL *)imageSlide:(EGOPhotoViewController *)view imageNameForIndex:(int)index
+{
+    FSTopic *item = _topicList[selIndex];
+    return [[item.resources objectAtIndex:index] absoluteUrl320];
+}
+
 @end

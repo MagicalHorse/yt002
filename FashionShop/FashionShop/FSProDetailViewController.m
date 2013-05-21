@@ -568,7 +568,8 @@
     FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
     FSStore *store = [view.data store];
     FSStoreDetailViewController *sv = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
-    sv.store =store;
+    sv.storeID = store.id;
+    sv.title = store.name;
     [self.navigationController pushViewController:sv animated:TRUE];
 }
 

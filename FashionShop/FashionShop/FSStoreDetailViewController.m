@@ -16,6 +16,7 @@
 #import "FSProItems.h"
 #import "FSStoreDetailCell.h"
 #import "FSProNearDetailCell.h"
+#import "FSStoreDetailRequest.h"
 
 #define kMKCoordinateSpan 0.005
 
@@ -28,6 +29,7 @@
     bool _noMoreResult;
     int _currentPage;
     BOOL _isExpandOfDesc;
+    FSStore *_store;
 }
 
 @end
@@ -49,7 +51,6 @@
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
-    self.title = _store.name;
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
     _tbAction.hidden = YES;
@@ -63,11 +64,37 @@
     _picImage.image = [UIImage imageNamed:@"default_icon320.png"];
     
     _currentPage = 1;
-    [self requestData:NO];
+    [self requestDetailData];
+}
+
+-(void)requestDetailData
+{
+    //请求店铺详情数据
+    FSStoreDetailRequest *storeRequest = [[FSStoreDetailRequest alloc] init];
+    storeRequest.routeResourcePath = REQUEST_STORE_DETAIL;
+    storeRequest.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+    storeRequest.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    storeRequest.storeid = _storeID;
+    [self beginLoading:_tbAction];
+    _isInLoading = YES;
+    [storeRequest send:[FSStore class] withRequest:storeRequest completeCallBack:^(FSEntityBase *respData) {
+        if (respData.isSuccess)
+        {
+            _store = respData.responseData;
+            [self requestData:NO];
+        }
+        else
+        {
+            _isInLoading = NO;
+            [self endLoading:_tbAction];
+            [self reportError:respData.errorDescrip];
+        }
+    }];
 }
 
 -(void)requestData:(BOOL)isLoadMore
-{
+{   
+    //请求店铺列表数据
     FSProListRequest *request = [[FSProListRequest alloc] init];
     request.requestType = 1;
     request.routeResourcePath = RK_REQUEST_PRO_LIST;
@@ -78,12 +105,19 @@
     request.previousLatestDate = [NSDate date];
     request.nextPage = _currentPage + (isLoadMore?1:0);
     request.storeid = _store.id;
-    isLoadMore?[self beginLoadMoreLayout:_tbAction]:[self beginLoading:_tbAction];
+    if (isLoadMore) {
+        [self beginLoadMoreLayout:_tbAction];
+    }
     _isInLoading = YES;
     __block FSStoreDetailViewController *blockSelf = self;
     [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        isLoadMore?[self endLoadMore:_tbAction]:[self endLoading:_tbAction];
         _isInLoading = NO;
+        if (!isLoadMore) {
+            [self endLoading:_tbAction];
+        }
+        else{
+            [self endLoadMore:_tbAction];
+        }
         if (!respData.isSuccess) {
             [blockSelf reportError:respData.errorDescrip];
         }
@@ -312,7 +346,7 @@
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:picCell];
                 }
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                _picImage.image = [UIImage imageNamed:@"图形1bb.png"];
+                [_picImage setImageWithURL:_store.storeLogoBg placeholderImage:nil];//[UIImage imageNamed:@"图形1bb.png"]
                 [cell addSubview:_picImage];
                 return cell;
             }

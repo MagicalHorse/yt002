@@ -22,7 +22,7 @@
     
     [self.contentView addSubview:_lblTag];
     _lblTag.text = _content;
-    _lblTag.font = ME_FONT(14);
+    _lblTag.font = ME_FONT(12);
     _lblTag.adjustsFontSizeToFitWidth = YES;
     _lblTag.minimumFontSize = 12;
     _lblTag.numberOfLines = 0;

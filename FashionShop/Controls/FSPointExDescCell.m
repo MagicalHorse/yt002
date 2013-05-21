@@ -183,7 +183,7 @@
     array = [NSMutableArray array];
     [array addObject:@"起始积点"];
     [array addObject:@"结束积点"];
-    [array addObject:@"兑换比例"];
+    [array addObject:@"兑换比例(100:1)"];
     for (int i = 0; i < _changeDaga.rules.count; i++) {
         FSCommon *item = _changeDaga.rules[i];
         [array addObject:[NSString stringWithFormat:@"%@", item.rangefrom]];
