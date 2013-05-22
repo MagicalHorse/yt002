@@ -717,7 +717,7 @@
         if (_likePros.count<1)
         {
             //加载空视图
-            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Me_Liked_List", nil)  originOffset:30];
+            [self showNoResultImage:_likeView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_Me_Liked_List", nil)  originOffset:30];
         }
         else
         {
@@ -752,9 +752,6 @@
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
-                //                else{
-                //                    [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
-                //                }
             }
         }];
         if (isInsert) {
@@ -764,7 +761,7 @@
         if (_likePros.count<1)
         {
             //加载空视图
-            [self showNoResultImage:_likeView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Me_Shared_List", nil)  originOffset:30];
+            [self showNoResultImage:_likeView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_Me_Shared_List", nil)  originOffset:30];
         }
         else
         {
@@ -946,10 +943,17 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)receivePushNotification:(id)dicInfo
+-(void)receivePushNotification:(id)info
 {
+    [[NSUserDefaults standardUserDefaults] setObject:info forKey:@"Has New Comment"];
     //添加提醒标志
     [self displayUserProfile];
+    if ([info boolValue]) {
+        self.navigationController.tabBarItem.badgeValue = @"new";
+    }
+    else{
+        self.navigationController.tabBarItem.badgeValue = @"";
+    }
 }
 
 -(void)registerKVO

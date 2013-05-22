@@ -22,6 +22,7 @@
 #import "FSProDetailViewController.h"
 #import "NSString+SBJSON.h"
 #import "FSContentViewController.h"
+#import "FSMeViewController.h"
 
 #import "PKRevealController.h"
 #import "LeftDemoViewController.h"
@@ -292,9 +293,9 @@ void uncaughtExceptionHandler(NSException *exception)
         NSDictionary *dic = [from JSONValue];
         int type = [[dic objectForKey:@"targettype"] intValue];
         if (type == 3) {
+            [[NSUserDefaults standardUserDefaults] setObject:[userInfo objectForKey:@"targetvalue"] forKey:@"targetvalue"];
             //发送通知,进行特殊标记
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"Has New Comment"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:[NSNumber numberWithBool:YES]];
         }
         //显示通知
         NSString *desc = [[pushInfoDic objectForKey:@"aps"] objectForKey:@"alert"];
@@ -410,8 +411,35 @@ void uncaughtExceptionHandler(NSException *exception)
             //导航到我的评论页
             root.selectedIndex = 3;
             UINavigationController *nav = (UINavigationController*)root.selectedViewController;
-            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
-            [nav pushViewController:controller animated:true];
+            //需要先判断是否登录
+            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
+            if (!isLogined)
+            {
+                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
+                __block FSMeViewController *blockMeController = loginController;
+                loginController.completeCallBack=^(BOOL isSuccess){
+                    
+                    [blockMeController dismissViewControllerAnimated:true completion:^{
+                        if (!isSuccess)
+                        {
+                            [nav reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                        }
+                        else
+                        {
+                            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                            [nav pushViewController:controller animated:true];
+                        }
+                    }];
+                };
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+                [nav presentViewController:navController animated:YES completion:nil];
+                
+            }
+            else
+            {
+                FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                [nav pushViewController:controller animated:true];
+            }
         }
             break;
         case 4://URL

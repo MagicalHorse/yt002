@@ -82,6 +82,7 @@
 {
     if (!_toDetail) {
         [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
         self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
@@ -93,6 +94,7 @@
 {
     if (_toDetail) {
         [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
+        self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
         self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
@@ -301,7 +303,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_DR_Shared_List", nil)  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_tag.png" withText:NSLocalizedString(@"TipInfo_DR_Shared_List", nil)  originOffset:30];
     }
     else
     {
@@ -343,7 +345,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:30];
     }
     else
     {
@@ -433,13 +435,6 @@
                 {   
                     [self internalDoLike:isRemove];
                     blockMe.completeCallBack = nil;
-                    /*
-                    [self startProgress:NSLocalizedString(@"Do liking...",nil)withExeBlock:^(dispatch_block_t callback){
-                        [self internalDoLike:isRemove withCallback:callback];
-                    } completeCallbck:^{
-                        [self endProgress];
-                    }];
-                     */
                 }
             }];
         };
@@ -450,14 +445,6 @@
     else
     {
         [self internalDoLike:isRemove];
-        /*
-        [self startProgress:NSLocalizedString(@"Do liking...",nil)withExeBlock:^(dispatch_block_t callback){
-            [self internalDoLike:isRemove withCallback:callback];
-        } completeCallbck:^{
-            [self endProgress];
-        }];
-        */
-        
     }
 
 }
@@ -511,18 +498,21 @@
             if (isRemove)
             {
                 blockSelf->_daren.fansTotal--;
+                if (blockSelf->_daren.fansTotal < 0) {
+                    blockSelf->_daren.fansTotal = 0;
+                }
                 localUser.likeTotal --;
+                if (localUser.likeTotal < 0) {
+                    localUser.likeTotal = 0;
+                }
             } else {
                 blockSelf->_daren.fansTotal++;
                 localUser.likeTotal ++;
             }
             [blockSelf->_btnFans setTitle:[NSString stringWithFormat:@"%d",blockSelf->_daren.fansTotal] forState:UIControlStateNormal];
         }
-        self.navigationItem.rightBarButtonItem.enabled = true;
-        
+        self.navigationItem.rightBarButtonItem.enabled = true; 
     }];
-    
-    
 }
 -(void) updateLikeButtonStatus:(BOOL)canLike canClick:(BOOL)isClickable
 {

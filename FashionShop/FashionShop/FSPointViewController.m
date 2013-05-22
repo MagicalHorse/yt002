@@ -128,7 +128,6 @@
         FSCardRequest *request = [[FSCardRequest alloc] init];
         request.userToken = currentUser.uToken;
         request.routeResourcePath = RK_REQUEST_USER_CARD_DETAIL;
-        _inLoading = YES;
         [request send:[FSCardInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = NO;
             if (!resp.isSuccess)
@@ -156,6 +155,7 @@
         }];
     }
     else{
+        _inLoading = NO;
         _contentView.hidden = NO;
         [self endLoading:self.view];
     }

@@ -21,6 +21,7 @@
     BOOL _noMoreResult;
     FSSourceType *type;
     FSAudioButton   *lastButton;
+    BOOL _hasNewComment;
 }
 
 @end
@@ -75,7 +76,6 @@
             if (result.totalPageCount <= _currentPage)
                 _noMoreResult = TRUE;
             [self fillProdInMemory:result.items isInsert:NO];
-            [_tbAction reloadData];
             
             if (_tbAction.hidden) {
                 _tbAction.hidden = NO;
@@ -84,11 +84,19 @@
             if (!isLoadMore) {
                 BOOL showDot = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Has New Comment"] boolValue];
                 if (showDot) {
-                    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:NO] forKey:@"Has New Comment"];
                     //发送通知,进行特殊标记
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:[NSNumber numberWithBool:NO]];
+                    _hasNewComment = YES;
+                }
+                else{
+                    _hasNewComment = NO;
                 }
             }
+            else{
+                _hasNewComment = NO;
+            }
+            
+            [_tbAction reloadData];
         }
         else
         {
@@ -188,13 +196,19 @@
     FSMyCommentCell *cellMy =  [tableView dequeueReusableCellWithIdentifier:@"FSMyCommentCell"];
     cellMy.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
-    [cellMy setData:[_comments objectAtIndex:indexPath.row]];
+    FSComment *item = [_comments objectAtIndex:indexPath.row];
+    [cellMy setData:item];
     cellMy.clipsToBounds = YES;
     cellMy.imgThumb.delegate = self;
     if (!cellMy.audioButton.audioDelegate) {
         cellMy.audioButton.audioDelegate = self;
     }
     [cellMy updateFrame];
+    
+    NSString *target = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetValue"];
+    if (target && item.commentid == [target intValue] && _hasNewComment) {
+        //增加显示红点标识
+    }
     
     return cellMy;
 }

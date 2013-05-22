@@ -97,7 +97,7 @@
     if (_itemList.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_specialtopic.png" withText:NSLocalizedString(@"TipInfo_Topic_List", nil)  originOffset:30];
+        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:30];
     }
     else
     {

@@ -139,8 +139,11 @@
     {
         [self requestData];
     }
-    [_contentView reloadData];
-    [_contentView setContentOffset:CGPointZero];
+    else{
+        [self showBlankIcon];
+        [_contentView reloadData];
+        [_contentView setContentOffset:CGPointZero];
+    }
 }
 
 -(void)setPageIndex:(int)_index selectedSegmentIndex:(NSInteger)_selIndexSegment
@@ -205,6 +208,18 @@
             }
         }];
         [_contentView reloadData];
+    }
+    [self showBlankIcon];
+}
+
+-(void)showBlankIcon
+{
+    NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
+    if (tmpPros.count < 1) {
+        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:100];
+    }
+    else{
+        [self hideNoResultImage:_contentView];
     }
 }
 

@@ -460,6 +460,7 @@
             [self reloadTableView];
         });
     } else{
+        [self showBlankIcon];
         [self reloadTableView];
         [_contentView setContentOffset:CGPointZero];
     }
@@ -476,8 +477,6 @@
 -(void)fillFetchResultInMemory:(FSProItems *)pros isInsert:(BOOL)inserted
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
-    if (pros.items==nil || pros.items.count<=0)
-        return;
     [self calculateHeight:pros];
     @synchronized(tmpPros)
     {
@@ -508,13 +507,25 @@
                         [self mergeByDate:obj isInserted:inserted];
                         break;
                     case 2:
-                        //[self mergeByPre:obj isInserted:inserted];
+                        [self mergeByPre:obj isInserted:inserted];
                         break;
                     default:
                         break;
                 }
             }
         }];
+    }
+    [self showBlankIcon];
+}
+
+-(void)showBlankIcon
+{
+    NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
+    if (tmpPros.count < 1) {
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil) originOffset:50];
+    }
+    else{
+        [self hideNoResultImage:_contentView];
     }
 }
 
@@ -550,16 +561,6 @@
         
         [indexDates addObject:obj];
     }
-    
-    if (_dateSource.count < 1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView ];
-    }
 }
 
 -(void) mergeByStore:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
@@ -592,16 +593,6 @@
         
         [indexStore addObject:obj];
     }
-    
-    if (_storeSource.count<1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView ];
-    }
 }
 
 -(void) mergeByPre:(FSProItemEntity *)obj isInserted:(BOOL)isInsert
@@ -618,23 +609,13 @@
         }
         return  FALSE;
     }];
-    if (storeIndex ==NSNotFound) {
+    if (storeIndex ==NSNotFound && obj) {
         if (isInsert) {
             [tmpPros insertObject:obj atIndex:0];
         }
         else{
             [tmpPros addObject:obj];
         }
-    }
-    
-    if (tmpPros.count<1)
-    {
-        //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil)   originOffset:30];
-    }
-    else
-    {
-        [self hideNoResultImage:_contentView ];
     }
 }
 

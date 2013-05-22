@@ -129,10 +129,10 @@
     {
         //加载空视图
         if (_likeType == 0) {
-            [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Liked_List", nil)  originOffset:30];
+            [self showNoResultImage:_contentView withImage:@"blank_like.png" withText:NSLocalizedString(@"TipInfo_Liked_List", nil)  originOffset:100];
         }
         else {
-            [self showNoResultImage:_contentView withImage:@"blank_me_fans.png" withText:NSLocalizedString(@"TipInfo_Fans_List", nil)  originOffset:30];
+            [self showNoResultImage:_contentView withImage:@"blank_like.png" withText:NSLocalizedString(@"TipInfo_Fans_List", nil)  originOffset:100];
         }
     }
     else

@@ -46,20 +46,6 @@
     if (_inLoading)
         return;
     _inLoading = TRUE;
-    /*
-    loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT)];
-    [container.superview addSubview:loadMoreView];
-    [loadMoreView.layer removeAllAnimations];
-    loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
-    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
-    animation.duration = .4;
-    animation.cumulative =YES;
-    animation.repeatCount = 2000;
-    [loadMoreView.layer addAnimation:animation forKey:@"animation"];
-    [loadMoreView startAnimating];
-     */
     
     indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     indicatorView.frame = CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,container.superview.frame.size.height-LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT);
@@ -81,13 +67,7 @@
 {
     [indicatorView stopAnimating];
     [indicatorView removeFromSuperview];
-    
-//    [loadMoreView.layer removeAllAnimations];
-//    loadMoreView.image = nil;
-//    loadMoreView = nil;
-//    [loadMoreView removeFromSuperview];
     _inLoading = FALSE;
-    
 }
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action 
 {
@@ -103,7 +83,6 @@
      */
     {
         refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,  -REFRESHINGVIEW_HEIGHT, container.frame.size.width,REFRESHINGVIEW_HEIGHT)];
-        refreshHeaderView.backgroundColor = [UIColor whiteColor];
         [container addSubview:refreshHeaderView];
         refreshHeaderView.delegate = self;
     }

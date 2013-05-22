@@ -88,7 +88,7 @@
         }
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    else if(vData.code == 0) {    //有新图片
+    else if(vData.code == 400) {    //有新图片
         FSFileCache *_fileCache = [[FSFileCache alloc] initWithFileName:@"bootImages.dat"];
         //读取新的图片信息
         NSError* error=nil;

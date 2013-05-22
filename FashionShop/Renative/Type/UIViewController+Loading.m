@@ -10,7 +10,6 @@
 #import "FSConfiguration.h"
 #import "FSOverlayView.h"
 
-
 #define UIVIEWCONTROLLER_CAT_LOADING_ID 10000
 #define UIVIEWCONTROLLER_CAT_REPORT_ID 10001
 #define UIVIEWCONTROLLER_CAT_PROGRESS_ID 10002
@@ -97,7 +96,11 @@ BOOL networkIsWorking = NO;
     if (!container)
         container = self.view;
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+80, 80, 80)];
+    //UIView *superView = container.superview;
+    //UIView *view = [[UIView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-40,container.frame.origin.y+80, 80, 80)];
+    //view.center = CGPointMake(superView.frame.size.width/2, superView.frame.size.height/2 - superView.frame.size.height/6);
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
+    view.center = CGPointMake(container.frame.size.width/2, container.frame.size.height/2 - container.frame.size.height/6);
     view.backgroundColor = [UIColor clearColor];
     view.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
     UIView *inView = [[UIView alloc] initWithFrame:CGRectMake(0,0, 80, 80)];
@@ -110,52 +113,24 @@ BOOL networkIsWorking = NO;
     indicatorView.frame = CGRectMake((view.frame.size.width-indicatorView.frame.size.width)/2, (view.frame.size.height-indicatorView.frame.size.height)/2, indicatorView.frame.size.width, indicatorView.frame.size.height);
     [view addSubview:indicatorView];
     [indicatorView startAnimating];
-    [container.superview addSubview:view];
-    
-    /*
-    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
-    if(!loadMoreView)
-    {
-        loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(container.frame.size.width/2-20,container.frame.origin.y+50, 40, 40)];
-        loadMoreView.tag = UIVIEWCONTROLLER_CAT_LOADING_ID;
-    }
-    [container addSubview:loadMoreView];
-    [loadMoreView.layer removeAllAnimations];
-    loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-    animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
-    animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
-    animation.duration = .4;
-    animation.cumulative =YES;
-    animation.repeatCount = 2000;    
-    [loadMoreView.layer addAnimation:animation forKey:@"animation"];
-    [loadMoreView startAnimating];
-    */
+    [container addSubview:view];
 }
+
 -(void) endLoading:(UIView *)container
 {
     networkIsWorking = NO;
     if (!container)
         container = self.view;
     
-    UIView *view = [container.superview viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
+    UIView *view = [container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
     [view removeFromSuperview];
-    
-    /*
-    UIImageView *loadMoreView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_CAT_LOADING_ID];
-    if (loadMoreView)
-    {
-        [loadMoreView.layer removeAllAnimations];
-        loadMoreView.image = nil;
-        [loadMoreView removeFromSuperview];
-    }
-     */
 }
 
 -(void) showNoResult:(UIView *)container withText:(NSString *)text
 {
     [self showNoResult:container withText:text originOffset:0];
 }
+
 -(void) showNoResult:(UIView *)container withText:(NSString *)text originOffset:(CGFloat)height
 {
     if (!container)
@@ -193,10 +168,11 @@ BOOL networkIsWorking = NO;
 {
     [self showNoResultImage:container withImage:imageName  withText:(NSString *)text originOffset:0];
 }
--(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName  withText:(NSString *)text originOffset:(CGFloat)height
+-(void) showNoResultImage:(UIView *)container withImage:(NSString *)imageName  withText:(NSString *)text originOffset:(CGFloat)_height
 {
     if (!container)
         container = self.view;
+    int height = _height + ([UIDevice isRunningOniPhone5]?44:0);
     UIImageView *blankView =(UIImageView *)[container viewWithTag:UIVIEWCONTROLLER_NO_RESULT_ImageID];
     if(!blankView)
     {
@@ -204,6 +180,10 @@ BOOL networkIsWorking = NO;
         blankView = [[UIImageView alloc] initWithImage:blankImage];
         blankView.frame = CGRectMake(self.view.frame.size.width/2-blankImage.size.width/2,self.view.frame.origin.y+height+10, blankImage.size.width, blankImage.size.height);
         blankView.tag = UIVIEWCONTROLLER_NO_RESULT_ImageID;
+    }
+    else{
+        UIImage *blankImage = [UIImage imageNamed:imageName];
+        blankView.image = blankImage;
     }
     if(text)
     {
@@ -218,6 +198,12 @@ BOOL networkIsWorking = NO;
             noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
             noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
             noResult.backgroundColor = [UIColor clearColor];
+        }
+        else{
+            noResult.text = text;
+            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(14)];
+            noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            noResult.text = text;
         }
         
         [container addSubview:noResult];
