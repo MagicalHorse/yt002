@@ -15,7 +15,7 @@
 #define PRO_DETAIL_COMMENT_CELL_HEIGHT 74
 
 @interface FSProCommentCell() {
-    
+    CGRect _originalRect;
 }
 
 @end
@@ -43,6 +43,14 @@
 -(void)setData:(FSComment *)data{
     _data = data;
     _imgThumb.ownerUser = _data.inUser;
+    id btn= [self viewWithTag:300];
+    if (btn) {
+        [btn removeFromSuperview];
+    }
+    if (CGRectIsEmpty(_originalRect)) {
+        _originalRect = _lblComment.frame;
+    }
+    _lblComment.frame = _originalRect;
     if (data.resources &&
         data.resources.count > 0 &&
         ((FSResource*)data.resources[0]).type == 2) {
@@ -64,6 +72,7 @@
         
         FSResource *_audioResource = data.resources[0];
         _audioButton = [[FSAudioButton alloc] initWithFrame:CGRectMake(_lblComment.frame.origin.x + (_width>xOffset?xOffset:_width), _lblComment.frame.origin.y - 10, 65, 26)];
+        _audioButton.tag = 300;
         NSMutableString *newPath = [NSMutableString stringWithString:_audioResource.relativePath];
         [newPath replaceOccurrencesOfString:@"\\" withString:@"/" options:NSCaseInsensitiveSearch range:NSMakeRange(0,newPath.length)];
         _audioButton.fullPath = [NSString stringWithFormat:@"%@%@.mp3", _audioResource.domain,newPath];
@@ -106,6 +115,9 @@
 
 -(void)updateFrame
 {
+    CGRect _rect = _lblComment.frame;
+    _rect.size.width = 192;
+    _lblComment.frame = _rect;
     int yOffset = 0;
     int height  = [_lblComment sizeThatFits:_lblComment.frame.size].height;
     BOOL flag = ![_data.replyUserName isEqualToString:@""] && _data.replyUserName;
@@ -114,7 +126,7 @@
     }
     yOffset = (_cellHeight - height)/2;
     
-    CGRect _rect = _lblComment.frame;
+    _rect = _lblComment.frame;
     _rect.origin.y = yOffset;
     _lblComment.frame = _rect;
     

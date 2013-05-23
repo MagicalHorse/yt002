@@ -206,16 +206,14 @@
     
     //_tbComment
     _rect = _tbComment.frame;
-    _rect.origin.y = yOffset;
+    _rect.origin.y = _viewHeight;
     _rect.size.height = 0;
     _tbComment.frame = _rect;
     
     [self updateInteraction];
     
-    //self.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH);
     self.svContent.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH - TOOLBAR_HEIGHT);
     self.svContent.showsVerticalScrollIndicator = YES;
-    NSLog(@"self:%@,Scroll:%@", NSStringFromCGRect(self.frame), NSStringFromCGRect(self.svContent.frame));
     
     [self showControls:NO];
     
@@ -337,12 +335,14 @@
     CGRect origiFrame = table.frame;
     origiFrame.origin.y = _viewHeight;
     CGFloat totalHeight = 0;
+    BOOL isBind = [self IsBindPromotionOrProduct:_data];
+    int section = isBind?1:0;
     int commentCount = _data.comments.count;
     while (--commentCount >=0) {
-        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:([self IsBindPromotionOrProduct:_data]?1:0)]];
+        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:section]];
         totalHeight += _height;
     }
-    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (_data.hasPromotion?70:0) + (commentCount>0?0:50);
+    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?10:50);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height + _viewHeight;

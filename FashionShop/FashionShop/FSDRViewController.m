@@ -118,21 +118,19 @@
 -(void)dealSegChanged:(UISegmentedControl *) segmentedControl
 {
     [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
-    [self beginLoading:_itemsView];
+    [self beginLoading:self.view];
     [self refreshContent:YES withCallback:^{
-        [self endLoading:_itemsView];
+        [self endLoading:self.view];
     }];
 }
 
 -(void)prepareData
 {
     [self replaceBackItem];
-    [self prepareEnterView:self.view];
     FSCommonUserRequest *request = [self createDRRequest];
     [self beginLoading:self.view];
     [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase * resp) {
         [self endLoading:self.view];
-        [self didEnterView:self.view];
         if (resp.isSuccess)
         {
             _daren = resp.responseData;
@@ -222,14 +220,14 @@
     [self prepareLayout];
     [self bindSegHeader];
     
-    [self beginLoading:_itemsView];
+    [self beginLoading:self.view];
     
     _prodPageIndex = 1;
     FSEntityRequestBase *request = [self createListRequest:_prodPageIndex isRefresh:FALSE];
     if ([self isDR] && _segHeader.selectedSegmentIndex == 1)
     {
         [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_itemsView];
+            [self endLoading:self.view];
             if (!resp.isSuccess)
                 [self reportError:resp.errorDescrip];
             else
@@ -248,7 +246,7 @@
     }
     else {
         [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:_itemsView];
+            [self endLoading:self.view];
             if (!resp.isSuccess)
                 [self reportError:resp.errorDescrip];
             else
@@ -303,7 +301,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_tag.png" withText:NSLocalizedString(@"TipInfo_DR_Shared_List", nil)  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Shared_List", nil)  originOffset:30];
     }
     else
     {

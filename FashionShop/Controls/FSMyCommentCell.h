@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblComment;
 @property (strong, nonatomic) IBOutlet UILabel *lblInDate;
 @property (strong, nonatomic) IBOutlet UILabel *lblReplyDesc;
+@property (strong, nonatomic) IBOutlet UIImageView *dotView;
 
 @property (strong, nonatomic) FSComment *data;
 @property (nonatomic,assign) int cellHeight;

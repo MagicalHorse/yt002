@@ -86,6 +86,8 @@ void uncaughtExceptionHandler(NSException *exception)
     _launch = launchOptions;
     //三秒钟后关闭
     [self performSelector:@selector(loadMainView) withObject:nil afterDelay:3];
+    
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotice:) name:@"ReceivePushNotification" object:nil];
 
     return YES;
 }
@@ -119,6 +121,10 @@ void uncaughtExceptionHandler(NSException *exception)
     self.window.rootViewController = root;
     [[FSAnalysis instance] autoTrackPages:root];
     [self.window makeKeyAndVisible];
+    
+    UINavigationController *con = root.viewControllers[3];
+    [[NSNotificationCenter defaultCenter] addObserver:con.topViewController selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
     
     //添加背景色
     NSArray *array = [root.view subviews];
@@ -279,29 +285,83 @@ void uncaughtExceptionHandler(NSException *exception)
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    pushInfoDic = userInfo;
+    //根据不同的key值跳转到不同的界面
+    NSString * from = (NSString*)[pushInfoDic objectForKey:@"from"];
+    NSDictionary *dic = [from JSONValue];
+    int type = [[dic objectForKey:@"targettype"] intValue];
     if([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
-        pushInfoDic = userInfo;
-        NSString *message = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:message delegate:self cancelButtonTitle:@"前往" otherButtonTitles:@"取消", nil];
-        alert.tag = 333;
-        [alert show];
+        [self pushTo];
+    }
+    if (type == 3) {
+        id value = [dic objectForKey:@"targetvalue"];
+        [self addNewCommentID:value];
+    }
+}
+
+-(void)addNewCommentID:(NSString *)commentID
+{
+    NSMutableArray *_array = nil;
+    id temp = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
+    if (temp && [temp isKindOfClass:[NSMutableArray class]]) {
+        _array = [NSMutableArray arrayWithArray:temp];
     }
     else{
-        //根据不同的key值跳转到不同的界面
-        NSString * from = (NSString*)[pushInfoDic objectForKey:@"from"];
-        NSDictionary *dic = [from JSONValue];
-        int type = [[dic objectForKey:@"targettype"] intValue];
-        if (type == 3) {
-            [[NSUserDefaults standardUserDefaults] setObject:[userInfo objectForKey:@"targetvalue"] forKey:@"targetvalue"];
-            //发送通知,进行特殊标记
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:[NSNumber numberWithBool:YES]];
+        _array = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+    BOOL flag = NO;
+    for (NSString *item in _array) {
+        if ([item intValue] == [commentID intValue]) {
+            flag = YES;
+            break;
         }
-        //显示通知
-        NSString *desc = [[pushInfoDic objectForKey:@"aps"] objectForKey:@"alert"];
-        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-        UITabBarController *root = [storyBoard instantiateInitialViewController];
-        [root.selectedViewController reportError:desc];
+    }
+    if (!flag) {
+        [_array addObject:commentID];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+}
+
+-(void)removeCommentID:(NSString *)commentID
+{
+    id temp = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
+    NSMutableArray *_array = [NSMutableArray arrayWithArray:temp];
+    if (_array) {
+        for (NSString *item in _array) {
+            if ([item intValue] == [commentID intValue]) {
+                [_array removeObject:item];
+                break;
+            }
+        }
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+}
+
+-(int)newCommentCount
+{
+    NSMutableArray *_array = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
+    if (_array && _array.count > 0) {
+        return _array.count;
+    }
+    return 0;
+}
+
+-(void)receivePushNotice:(NSNotification*)notification
+{
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UITabBarController *root = [storyBoard instantiateInitialViewController];
+    UINavigationController *con = root.viewControllers[3];
+    if ([notification.object boolValue]) {
+        con.tabBarItem.badgeValue = @"new";
+    }
+    else{
+        con.tabBarItem.badgeValue = nil;
     }
 }
 
@@ -326,6 +386,9 @@ void uncaughtExceptionHandler(NSException *exception)
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = root;
     [self.window makeKeyAndVisible];
+    
+    UINavigationController *con = root.viewControllers[3];
+    [[NSNotificationCenter defaultCenter] addObserver:con.topViewController selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
     
     //添加背景色
     NSArray *array = [root.view subviews];
@@ -457,23 +520,11 @@ void uncaughtExceptionHandler(NSException *exception)
     }
 }
 
-#pragma mark UIAlertViewDelegate
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if (alertView.tag == 333)
-    {
-        if (buttonIndex == 0) {
-            [self pushTo];
-        }
-    }
-}
-
 #pragma mark - Write And Read File
 
 -(BOOL)writeFile:(NSString*)aString fileName:(NSString*)aFileName
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    //NSString *path = NSTemporaryDirectory();
     NSString *fileName=[path stringByAppendingPathComponent:aFileName];
     return [aString writeToFile:fileName atomically:YES encoding:NSUTF8StringEncoding error:nil];
 }
@@ -481,7 +532,6 @@ void uncaughtExceptionHandler(NSException *exception)
 -(NSString*)readFromFile:(NSString *)aFileName
 {
     NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    //NSString *path = NSTemporaryDirectory();
     NSString *fileName=[path stringByAppendingPathComponent:aFileName];
     return [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil];
 }

@@ -46,4 +46,8 @@
 
 - (void)registerDevicePushNotification;
 
+-(void)addNewCommentID:(NSString *)commentID;
+-(void)removeCommentID:(NSString *)commentID;
+-(int)newCommentCount;
+
 @end

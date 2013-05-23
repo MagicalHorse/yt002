@@ -21,7 +21,6 @@
     BOOL _noMoreResult;
     FSSourceType *type;
     FSAudioButton   *lastButton;
-    BOOL _hasNewComment;
 }
 
 @end
@@ -79,23 +78,7 @@
             
             if (_tbAction.hidden) {
                 _tbAction.hidden = NO;
-            }
-            
-            if (!isLoadMore) {
-                BOOL showDot = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Has New Comment"] boolValue];
-                if (showDot) {
-                    //发送通知,进行特殊标记
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:[NSNumber numberWithBool:NO]];
-                    _hasNewComment = YES;
-                }
-                else{
-                    _hasNewComment = NO;
-                }
-            }
-            else{
-                _hasNewComment = NO;
-            }
-            
+            }            
             [_tbAction reloadData];
         }
         else
@@ -181,6 +164,8 @@
     detailViewController.sourceType = item.sourcetype;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
+    [theApp removeCommentID:[NSString stringWithFormat:@"%d", item.sourceid]];
+    [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 }
 
@@ -205,10 +190,18 @@
     }
     [cellMy updateFrame];
     
-    NSString *target = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetValue"];
-    if (target && item.commentid == [target intValue] && _hasNewComment) {
+    BOOL flag = YES;
+    NSArray *_array = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
+    if (_array) {
         //增加显示红点标识
+        for (NSString *value in _array) {
+            if ([value intValue] == item.sourceid) {
+                flag = NO;
+                break;
+            }
+        }
     }
+    cellMy.dotView.hidden = flag;
     
     return cellMy;
 }

@@ -33,7 +33,7 @@
 #define DEFAULT_TAG_WIDTH 50
 #define Tag_Swip_View_Tag 200
 #define Default_SearchBar_Tag 201
-#define Tag_Item_Height 30
+#define Tag_Item_Height 27
 
 @implementation FSSearchBar
 
@@ -280,6 +280,12 @@
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self endLoading:_cvContent];
+}
+
 -(void) prepareData
 {
     _tags = [@[] mutableCopy];
@@ -343,15 +349,16 @@
     
     //add iamgeView
     imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
-    if (__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_6_0) {
+   NSString *vString = [[[UIDevice currentDevice] systemVersion] substringToIndex:1];
+    if ([vString intValue] >= 6) {
         UIImage *image = [[UIImage imageNamed:@"tag_bg_2.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0) resizingMode:UIImageResizingModeTile];
         imageTagBgV.image = image;
     }
-//    else{
-//        imageTagBgV.image = [[UIImage imageNamed:@"tag_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(-5, 10, -5, 10)];
-//    }
+    else{
+        imageTagBgV.image = [[UIImage imageNamed:@"tag_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(-5, 10, -5, 10)];
+    }
     
-//    imageTagBgV.contentMode = UIViewContentModeScaleToFill;
+    imageTagBgV.contentMode = UIViewContentModeScaleToFill;
     [_tagContainer addSubview:imageTagBgV];
     
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
@@ -367,7 +374,10 @@
     _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
     _cvTags.dataSource = self;
-    _cvTags.backgroundColor = APP_TABLE_BG_COLOR;
+    if ([vString intValue] >= 6)
+        _cvTags.backgroundColor = [UIColor clearColor];
+    else
+        _cvTags.backgroundColor = APP_TABLE_BG_COLOR;
     [self reCreateContentView];
     
     [self addSwipView];

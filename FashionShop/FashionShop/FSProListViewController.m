@@ -904,6 +904,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_inLoading) {
+        return;
+    }
     FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
     NSMutableArray *rows = NULL;
     if (_currentSearchIndex==SortByDistance)
@@ -911,7 +914,7 @@
         int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
         rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
     }
-    else if(_currentSearchIndex==SortByDistance)
+    else if(_currentSearchIndex==SortByDate)
     {
         NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
         NSDateFormatter *mdf = [[NSDateFormatter alloc]init];

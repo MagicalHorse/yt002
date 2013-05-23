@@ -53,7 +53,7 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 - (IBAction)doShowPoints:(id)sender;
 - (IBAction)doShowCoupons:(id)sender;
 
-
+-(void)showDotIcon:(BOOL)flag;
 -(void) displayUserLogin;
 
 

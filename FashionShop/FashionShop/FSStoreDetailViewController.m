@@ -75,7 +75,7 @@
     storeRequest.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
     storeRequest.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
     storeRequest.storeid = _storeID;
-    [self beginLoading:_tbAction];
+    [self beginLoading:self.view];
     _isInLoading = YES;
     [storeRequest send:[FSStore class] withRequest:storeRequest completeCallBack:^(FSEntityBase *respData) {
         if (respData.isSuccess)
@@ -86,7 +86,7 @@
         else
         {
             _isInLoading = NO;
-            [self endLoading:_tbAction];
+            [self endLoading:self.view];
             [self reportError:respData.errorDescrip];
         }
     }];
@@ -113,7 +113,7 @@
     [request send:[FSProItems class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
         _isInLoading = NO;
         if (!isLoadMore) {
-            [self endLoading:_tbAction];
+            [self endLoading:self.view];
         }
         else{
             [self endLoadMore:_tbAction];

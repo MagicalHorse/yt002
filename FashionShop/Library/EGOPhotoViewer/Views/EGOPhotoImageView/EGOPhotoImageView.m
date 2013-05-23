@@ -185,8 +185,8 @@
 		
 		_loading = YES;
 		[_activityView startAnimating];
-		self.userInteractionEnabled= NO;
 		self.imageView.image = kEGOPhotoLoadingPlaceholder;
+        self.userInteractionEnabled = YES;
 	}
 	
 	[self layoutScrollViewAnimated:NO];
@@ -218,10 +218,10 @@
 	self.imageView.image = kEGOPhotoErrorPlaceholder;
 	self.photo.failed = YES;
 	[self layoutScrollViewAnimated:NO];
-	self.userInteractionEnabled = NO;
+    _loading = NO;
+	self.userInteractionEnabled = YES;
 	[_activityView stopAnimating];
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoDidFinishLoading" object:[NSDictionary dictionaryWithObjectsAndKeys:self.photo, @"photo", [NSNumber numberWithBool:YES], @"failed", nil]];
-	
 }
 
 
@@ -580,6 +580,28 @@
 	[_photo release]; _photo=nil;
     [super dealloc];
 	
+}
+
+#pragma mark -
+#pragma mark Touches
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+	[super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+	[super touchesEnded:touches withEvent:event];
+	UITouch *touch = [touches anyObject];
+	
+	if (touch.tapCount == 1) {
+		[self performSelector:@selector(toggleBars) withObject:nil afterDelay:.2];
+	} else if (touch.tapCount == 2) {
+		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(toggleBars) object:nil];
+	}
+}
+
+- (void)toggleBars{
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"EGOPhotoViewToggleBars" object:nil];
 }
 
 

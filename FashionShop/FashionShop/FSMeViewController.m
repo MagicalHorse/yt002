@@ -256,6 +256,7 @@
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     _toDetail = NO;
+    
     [super viewWillAppear:animated];
 }
 
@@ -449,7 +450,22 @@
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
 }
 
-- (void) displayUserProfile{
+- (void) displayUserProfile {
+    [_userProfileView removeFromSuperview];
+    [self.view addSubview:_userProfileView];
+    [self bindUserProfile];
+    [self setSegHeader];
+    if (_loginView!=nil)
+    {
+        [_loginView removeFromSuperview];
+    }
+    [self registerKVO];
+    [self registerLocalNotification];
+    [self initBarButtons];
+}
+
+-(void)initBarButtons
+{
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn addTarget:self action:@selector(onSetting) forControlEvents:UIControlEventTouchUpInside];
     [btn setTitle:NSLocalizedString(@"More", nil) forState:UIControlStateNormal];
@@ -464,26 +480,20 @@
     [msgBtn addTarget:self action:@selector(clickToMyComment:) forControlEvents:UIControlEventTouchUpInside];
     [msgBtn setShowsTouchWhenHighlighted:YES];
     [msgBtn sizeToFit];
-    BOOL showDot = [[[NSUserDefaults standardUserDefaults] objectForKey:@"Has New Comment"] boolValue];
-    if (showDot) {
-        UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(msgBtn.frame.size.width - 17, 6, 15, 15)];
-        dotView.image = [UIImage imageNamed:@"dot.png"];
-        [msgBtn addSubview:dotView];
-    }
+    UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(msgBtn.frame.size.width - 26, 0, 15, 15)];
+    dotView.image = [UIImage imageNamed:@"dot.png"];
+    dotView.tag = 4001;
+    dotView.hidden = YES;
+    [msgBtn addSubview:dotView];
     UIBarButtonItem *baritemletter = [[UIBarButtonItem alloc] initWithCustomView:msgBtn];
     
     NSArray *_array = [NSArray arrayWithObjects:baritemSet,baritemletter, nil];
     [self.navigationItem setRightBarButtonItems:_array];
-    [_userProfileView removeFromSuperview];
-    [self.view addSubview:_userProfileView];
-    [self bindUserProfile];
-    [self setSegHeader];
-    if (_loginView!=nil)
-    {
-        [_loginView removeFromSuperview];
+    
+    int commentCount = [theApp newCommentCount];
+    if (commentCount > 0) {
+        [self showDotIcon:YES];
     }
-    [self registerKVO];
-    [self registerLocalNotification];
 }
 
 -(void)clickToMyComment:(UIButton*)sender
@@ -934,8 +944,6 @@
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
 }
 
 -(void)unregisterLocalNotification
@@ -943,16 +951,39 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
--(void)receivePushNotification:(id)info
+-(void)receivePushNotification:(NSNotification*)notification
 {
-    [[NSUserDefaults standardUserDefaults] setObject:info forKey:@"Has New Comment"];
-    //添加提醒标志
-    [self displayUserProfile];
-    if ([info boolValue]) {
-        self.navigationController.tabBarItem.badgeValue = @"new";
+    int commentCount = [theApp newCommentCount];
+    if (commentCount > 0) {
+        [self showDotIcon:YES];
+        self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", commentCount];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:commentCount];
     }
     else{
-        self.navigationController.tabBarItem.badgeValue = @"";
+        self.navigationController.tabBarItem.badgeValue = nil;
+        [self showDotIcon:NO];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    }
+}
+
+-(void)showDotIcon:(BOOL)flag
+{
+    NSArray *array = self.navigationItem.rightBarButtonItems;
+    if (array.count > 0) {
+        UIBarButtonItem *item = array[0];
+        UIView *view = [item.customView viewWithTag:4001];
+        if (view) {
+            view.hidden = !flag;
+            [item.customView bringSubviewToFront:view];
+        }
+        else{
+            UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake(view.frame.size.width - 26, 0, 15, 15)];
+            dotView.image = [UIImage imageNamed:@"dot.png"];
+            dotView.tag = 4001;
+            dotView.hidden = !flag;
+            [item.customView addSubview:dotView];
+            [item.customView bringSubviewToFront:dotView];
+        }
     }
 }
 
@@ -1454,7 +1485,7 @@
 
 -(void) onQQLoginSuccess
 {
-    [self beginLoading:_tbScroll];
+    [self beginLoading:self.view];
     [_qq getUserInfoWithFormat:@"json" parReserved:nil delegate:self onSuccess:@selector(onQQUserInfoGet:) onFailure:@selector(onQQUserInfoFail:)];
     
 }
@@ -1462,12 +1493,12 @@
 -(void) onQQLoginFail:(NSError *)error
 {
     if (error)
-    [self reportError:NSLocalizedString(@"login failed", nil)];
+        [self reportError:NSLocalizedString(@"login failed", nil)];
 }
 
 
 - (void)onQQUserInfoGet:(id)result{
-    [self endLoading:_tbScroll];
+    [self endLoading:self.view];
     NSDictionary *homeDic = (NSDictionary *)result;
     FSUserLoginRequest *request = [[FSUserLoginRequest alloc] init];
     request.accessToken = _qq.accessToken;
@@ -1476,7 +1507,6 @@
     request.nickie = [homeDic valueForKeyPath:@"data.nick"];
     request.thumnail = [homeDic valueForKey:@"data.head"];
     ((DataSourceProviderRequestBlock)[_dataSourceProvider objectForKey:LOGIN_FROM_3RDPARTY_ACTION])(request);
-
 }
 
 - (void)onQQUserInfoFail:(NSError *)error{

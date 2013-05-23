@@ -174,6 +174,29 @@ void audioRouteChangeListenerCallback (void                      *inUserData,
                                      (__bridge_retained void *)self);
     [self printCurrentCategory];
     [[AVAudioSession sharedInstance] setActive: YES error:NULL];
+    
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    //添加监听
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(sensorStateChange:)
+                                                 name:@"UIDeviceProximityStateDidChangeNotification"
+                                               object:nil];
+}
+
+//处理监听触发事件
+-(void)sensorStateChange:(NSNotificationCenter *)notification;
+{
+    //如果此时手机靠近面部放在耳朵旁，那么声音将通过听筒输出，并将屏幕变暗（省电啊）
+    if ([[UIDevice currentDevice] proximityState] == YES)
+    {
+        NSLog(@"Device is close to user");
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    }
+    else
+    {
+        NSLog(@"Device is not close to user");
+        [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    }
 }
 
 @end

@@ -113,6 +113,10 @@
     
     _cellHeight += 8;
     _cellHeight = MAX(PRO_DETAIL_COMMENT_CELL_HEIGHT, _cellHeight);
+    
+    CGRect _rect = _dotView.frame;
+    _rect.origin.y = (_cellHeight - 13)/2;
+    _dotView.frame = _rect;
 }
 
 -(void)updateFrame

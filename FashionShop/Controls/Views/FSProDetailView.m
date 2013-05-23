@@ -58,6 +58,7 @@
                 CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgHeight);
                 [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
                 CGRect _rect = _imgView.frame;
+                _rect = _imgView.frame;
                 _rect.size.height = _imgHeight;
                 _imgView.frame = _rect;
                 yOffset = _imgView.frame.origin.y + _imgView.frame.size.height;
@@ -86,6 +87,7 @@
     
     //_titleDurationView
     CGRect _rect = _titleDurationView.frame;
+    _rect.size.height = 59;
     _rect.origin.y = yOffset - _rect.size.height;
     _titleDurationView.frame = _rect;
     
@@ -270,11 +272,13 @@
     origiFrame.origin.y = _viewHeight;
     CGFloat totalHeight = 0;
     int commentCount = _data.comments.count;
+    BOOL isBind = [self IsBindPromotionOrProduct:_data];
+    int section = isBind?1:0;
     while (--commentCount >=0) {
-        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:([self IsBindPromotionOrProduct:_data]?1:0)]];
+        double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:section]];
         totalHeight += _height;
     }
-    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (_data.isProductBinded?70:0) + (commentCount>0?0:50);
+    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?10:50);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height + _viewHeight;
