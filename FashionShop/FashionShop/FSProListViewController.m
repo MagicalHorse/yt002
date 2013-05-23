@@ -27,6 +27,8 @@
 #import "EGORefreshTableHeaderView.h"
 #import "UIImageView+WebCache.h"
 #import "FSContentViewController.h"
+#import "FSPointViewController.h"
+#import "FSMeViewController.h"
 
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
@@ -1051,6 +1053,40 @@
         case SkipTypeNone:
         {
             //do nothing
+        }
+            break;
+        case SkipTypePointEx://积点兑换
+        {
+            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
+            if (!isLogined)
+            {
+                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
+                __block FSMeViewController *blockMeController = loginController;
+                loginController.completeCallBack=^(BOOL isSuccess){
+                    [blockMeController dismissViewControllerAnimated:true completion:^{
+                        if (!isSuccess)
+                        {
+                            [blockMeController reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                        }
+                        else
+                        {
+                            FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
+                            pointView.currentUser = [FSUser localProfile];
+                            [self.navigationController pushViewController:pointView animated:TRUE];
+                        }
+                    }];
+                };
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+                [self presentViewController:navController animated:YES completion:nil];
+                
+            }
+            else
+            {
+                FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
+                pointView.currentUser = [FSUser localProfile];
+                [self.navigationController pushViewController:pointView animated:TRUE];
+            }
         }
             break;
         default:

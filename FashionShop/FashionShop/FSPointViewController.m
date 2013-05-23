@@ -63,7 +63,7 @@
         UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [sheepButton setTitle:@"绑定会员卡" forState:UIControlStateNormal];
         [sheepButton addTarget:self action:@selector(onButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-        sheepButton.titleLabel.font = ME_FONT(12);
+        sheepButton.titleLabel.font = ME_FONT(11);
         sheepButton.showsTouchWhenHighlighted = YES;
         [sheepButton setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
         [sheepButton sizeToFit];

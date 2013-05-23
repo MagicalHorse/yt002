@@ -18,6 +18,8 @@
 #import "EGOPhotoViewController.h"
 #import "MyPhoto.h"
 #import "MyPhotoSource.h"
+#import "FSMeViewController.h"
+#import "FSPointViewController.h"
 
 #define TOPIC_LIST_CELL @"FSTopicListCell"
 
@@ -315,6 +317,40 @@
             photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
             photoController.source = self;
             [self presentModalViewController:photoController animated:YES];
+        }
+            break;
+        case SkipTypePointEx://积点兑换
+        {
+            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
+            if (!isLogined)
+            {
+                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
+                __block FSMeViewController *blockMeController = loginController;
+                loginController.completeCallBack=^(BOOL isSuccess){
+                    [blockMeController dismissViewControllerAnimated:true completion:^{
+                        if (!isSuccess)
+                        {
+                            [blockMeController reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                        }
+                        else
+                        {
+                            FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
+                            pointView.currentUser = [FSUser localProfile];
+                            [self.navigationController pushViewController:pointView animated:TRUE];
+                        }
+                    }];
+                };
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+                [self presentViewController:navController animated:YES completion:nil];
+                
+            }
+            else
+            {
+                FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
+                pointView.currentUser = [FSUser localProfile];
+                [self.navigationController pushViewController:pointView animated:TRUE];
+            }
         }
             break;
         default:

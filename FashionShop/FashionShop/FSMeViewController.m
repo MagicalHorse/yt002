@@ -587,7 +587,7 @@
     SpringboardLayout *layout = [[SpringboardLayout alloc] init];
     layout.itemWidth = ITEM_CELL_WIDTH;
     layout.columnCount = I_LIKE_COLUMNS;
-    layout.sectionInset = UIEdgeInsetsMake(5, 5, 0, 5);
+    layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     layout.delegate = self;
     CGRect rect = _likeContainer.frame;
     rect.size.height = APP_HIGH-TAB_HIGH-_segHeader.frame.origin.y - _segHeader.frame.size.height;

@@ -118,7 +118,6 @@
     NSMutableArray *_brandKeywords;
     NSMutableArray *_stores;
     
-    UIActivityIndicatorView * moreIndicator;
     BOOL _isInLoading;
     BOOL _firstTimeLoadDone;
     int _selectedTagIndex;
@@ -555,7 +554,7 @@
 -(void)beginSwitchTag:(FSCoreTag *)tag
 {
     [self zeroMemoryBlock];
-    [self beginLoading:_cvContent];
+    [self beginLoading:self.view];
     _prodPageIndex = 0;
     _currentTag = tag;
     _refreshLatestDate = _firstLoadDate = [NSDate date];
@@ -563,7 +562,7 @@
     [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
     __block FSProdListViewController *blockSelf = self;
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:_cvContent];
+        [self endLoading:self.view];
         if (resp.isSuccess)
         {
             FSBothItems *result = resp.responseData;
