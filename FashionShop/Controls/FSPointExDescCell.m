@@ -110,6 +110,8 @@
     _pointTipLb.text = [NSString stringWithFormat:@"起兑积点:%d", _data.minPoints];
     _unitPerPoint.text = [NSString stringWithFormat:@"注意：兑换的积点必须是%d的整数倍", _data.unitPerPoints];
     UIEdgeInsets insert = _selStoreBtn.contentEdgeInsets;
+    _selStoreBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
+    _selStoreBtn.titleLabel.minimumFontSize = 10;
     insert.right = 25;
     _selStoreBtn.contentEdgeInsets = insert;
 }

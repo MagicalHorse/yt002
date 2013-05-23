@@ -124,7 +124,8 @@
 {
     if (!thumnail)
         return nil;
-    return [NSURL URLWithString:[NSString stringWithFormat:@"%@_original.jpg",thumnail]];
+    NSString *path = [NSString stringWithFormat:@"%@_original.jpeg",thumnail];
+    return [NSURL URLWithString:path];
 }
 
 -(NSURL*)logobgURL

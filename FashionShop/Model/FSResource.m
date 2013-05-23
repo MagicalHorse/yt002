@@ -35,7 +35,7 @@
 {
     if (relativePath && domain)
     {
-        NSString *relative = [NSString stringWithFormat:@"%@_original.jpg",relativePath];
+        NSString *relative = [NSString stringWithFormat:@"%@_original.jpeg",relativePath];
         
         return [NSURL URLWithString:relative relativeToURL:[NSURL URLWithString:self.domain]];
     }

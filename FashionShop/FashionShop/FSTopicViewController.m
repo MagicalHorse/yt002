@@ -251,7 +251,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
-    switch (topic.targetType) {
+    switch ([topic.targetType intValue]) {
         case SkipTypeDefault:
         case SkipTypeProductList:
         {
