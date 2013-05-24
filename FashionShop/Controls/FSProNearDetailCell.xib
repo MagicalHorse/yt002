@@ -236,7 +236,7 @@
 							<object class="IBUILabel" id="249927185">
 								<reference key="NSNextResponder" ref="751996514"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{37, 52}, {195, 24}}</string>
+								<string key="NSFrame">{{32, 52}, {195, 24}}</string>
 								<reference key="NSSuperview" ref="751996514"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="597802244"/>
@@ -282,7 +282,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">location_icon@2x.png</string>
+									<string key="NSResourceName">location_icon_sel.png</string>
 								</object>
 							</object>
 							<object class="IBUIImageView" id="597802244">
@@ -674,7 +674,7 @@
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<string key="line_l.png">{16, 16}</string>
-			<string key="location_icon@2x.png">{18, 26}</string>
+			<string key="location_icon_sel.png">{16, 16}</string>
 		</dictionary>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>

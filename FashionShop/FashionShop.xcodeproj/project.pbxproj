@@ -91,6 +91,11 @@
 		025C4CA116E2FDBB00A7D1E7 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */; };
 		025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */; };
 		025C4CA516E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */; };
+		025CF37D174F50F500261F1E /* tab_two_bg_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025CF37B174F50F500261F1E /* tab_two_bg_normal@2x.png */; };
+		025CF37E174F50F500261F1E /* tab_two_bg_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025CF37C174F50F500261F1E /* tab_two_bg_selected@2x.png */; };
+		025CF381174F51CC00261F1E /* AKSegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 025CF380174F51CC00261F1E /* AKSegmentedControl.m */; };
+		025CF383174F540C00261F1E /* segmented-separator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025CF382174F540C00261F1E /* segmented-separator@2x.png */; };
+		025CF38D174F5FEB00261F1E /* FSPointGiftListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 025CF38C174F5FEB00261F1E /* FSPointGiftListViewController.xib */; };
 		025D430316E72453007B02EC /* qq_friends_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */; };
 		025D430516E72453007B02EC /* qqconnect_login_btn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */; };
 		025E962E16ED9FE10031B68C /* FSCardRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 025E962D16ED9FE10031B68C /* FSCardRequest.m */; };
@@ -151,7 +156,6 @@
 		0284773D172CB33C002763F6 /* FSGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0284773A172CB33C002763F6 /* FSGiftListViewController.m */; };
 		0284773E172CB33C002763F6 /* FSGiftListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0284773C172CB33C002763F6 /* FSGiftListViewController.xib */; };
 		02847746172CC887002763F6 /* FSPointGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02847744172CC887002763F6 /* FSPointGiftListViewController.m */; };
-		02847747172CC887002763F6 /* FSPointGiftListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02847745172CC887002763F6 /* FSPointGiftListViewController.xib */; };
 		02847750172D0462002763F6 /* FSPointExchangeListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0284774E172D0461002763F6 /* FSPointExchangeListViewController.m */; };
 		02847751172D0462002763F6 /* FSPointExchangeListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0284774F172D0461002763F6 /* FSPointExchangeListViewController.xib */; };
 		02847757172D0FA2002763F6 /* FSExchangeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02847755172D0FA2002763F6 /* FSExchangeDetailViewController.m */; };
@@ -176,8 +180,6 @@
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
 		02992D5B16ED789E007ACF62 /* FSCardBindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02992D5916ED789E007ACF62 /* FSCardBindViewController.m */; };
 		02992D5C16ED789E007ACF62 /* FSCardBindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */; };
-		02A2617E16BA62DB0089546B /* seg_header_like_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2617A16BA62DB0089546B /* seg_header_like_bg@2x.png */; };
-		02A2618016BA62DB0089546B /* seg_header_share_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02A2617C16BA62DB0089546B /* seg_header_share_bg@2x.png */; };
 		02B813BE173A24E70003BCBA /* FSPagedExchangeList.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */; };
 		02B813C5173A25170003BCBA /* FSExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813C4173A25170003BCBA /* FSExchange.m */; };
 		02B813C7173A50330003BCBA /* btn_bg_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */; };
@@ -750,6 +752,12 @@
 		025C4CA016E2FDBB00A7D1E7 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TencentOpenAPI.framework; path = Library/qqweibo/QQConnectSDK/TencentOpenAPI.framework; sourceTree = "<group>"; };
 		025C4CA216E2FDFC00A7D1E7 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		025C4CA416E2FED700A7D1E7 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = TencentOpenApi_IOS_Bundle.bundle; path = Library/qqweibo/QQConnectSDK/TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
+		025CF37B174F50F500261F1E /* tab_two_bg_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_two_bg_normal@2x.png"; sourceTree = "<group>"; };
+		025CF37C174F50F500261F1E /* tab_two_bg_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_two_bg_selected@2x.png"; sourceTree = "<group>"; };
+		025CF37F174F51CC00261F1E /* AKSegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKSegmentedControl.h; sourceTree = "<group>"; };
+		025CF380174F51CC00261F1E /* AKSegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKSegmentedControl.m; sourceTree = "<group>"; };
+		025CF382174F540C00261F1E /* segmented-separator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "segmented-separator@2x.png"; sourceTree = "<group>"; };
+		025CF38C174F5FEB00261F1E /* FSPointGiftListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSPointGiftListViewController.xib; sourceTree = "<group>"; };
 		025D42FF16E72453007B02EC /* qq_friends_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qq_friends_icon@2x.png"; sourceTree = "<group>"; };
 		025D430116E72453007B02EC /* qqconnect_login_btn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qqconnect_login_btn@2x.png"; sourceTree = "<group>"; };
 		025E962C16ED9FE10031B68C /* FSCardRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCardRequest.h; path = ModelService/FSCardRequest.h; sourceTree = "<group>"; };
@@ -823,7 +831,6 @@
 		0284773C172CB33C002763F6 /* FSGiftListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSGiftListViewController.xib; sourceTree = "<group>"; };
 		02847743172CC887002763F6 /* FSPointGiftListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSPointGiftListViewController.h; sourceTree = "<group>"; };
 		02847744172CC887002763F6 /* FSPointGiftListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSPointGiftListViewController.m; sourceTree = "<group>"; };
-		02847745172CC887002763F6 /* FSPointGiftListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSPointGiftListViewController.xib; sourceTree = "<group>"; };
 		0284774D172D0460002763F6 /* FSPointExchangeListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSPointExchangeListViewController.h; sourceTree = "<group>"; };
 		0284774E172D0461002763F6 /* FSPointExchangeListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSPointExchangeListViewController.m; sourceTree = "<group>"; };
 		0284774F172D0461002763F6 /* FSPointExchangeListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSPointExchangeListViewController.xib; sourceTree = "<group>"; };
@@ -860,8 +867,6 @@
 		02992D5816ED789D007ACF62 /* FSCardBindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSCardBindViewController.h; sourceTree = "<group>"; };
 		02992D5916ED789E007ACF62 /* FSCardBindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSCardBindViewController.m; sourceTree = "<group>"; };
 		02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCardBindViewController.xib; sourceTree = "<group>"; };
-		02A2617A16BA62DB0089546B /* seg_header_like_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "seg_header_like_bg@2x.png"; sourceTree = "<group>"; };
-		02A2617C16BA62DB0089546B /* seg_header_share_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "seg_header_share_bg@2x.png"; sourceTree = "<group>"; };
 		02B813BC173A24E70003BCBA /* FSPagedExchangeList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedExchangeList.h; path = Model/CoreData/FSPagedExchangeList.h; sourceTree = "<group>"; };
 		02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedExchangeList.m; path = Model/CoreData/FSPagedExchangeList.m; sourceTree = "<group>"; };
 		02B813C3173A25170003BCBA /* FSExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSExchange.h; path = Model/FSExchange.h; sourceTree = "<group>"; };
@@ -1101,8 +1106,8 @@
 		74B63C1F167709E600526042 /* FSProNewHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSProNewHeaderView.xib; path = Controls/FSProNewHeaderView.xib; sourceTree = "<group>"; };
 		74B63C2116770B0E00526042 /* FSProNewHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSProNewHeaderView.h; path = Controls/FSProNewHeaderView.h; sourceTree = "<group>"; };
 		74B63C2216770B0E00526042 /* FSProNewHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSProNewHeaderView.m; path = Controls/FSProNewHeaderView.m; sourceTree = "<group>"; };
-		74B63C281677299F00526042 /* FSSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSSegmentControl.h; path = Controls/FSSegmentControl.h; sourceTree = "<group>"; };
-		74B63C29167729A000526042 /* FSSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSSegmentControl.m; path = Controls/FSSegmentControl.m; sourceTree = "<group>"; };
+		74B63C281677299F00526042 /* FSSegmentControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSSegmentControl.h; path = ../FSSegmentControl.h; sourceTree = "<group>"; };
+		74B63C29167729A000526042 /* FSSegmentControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSSegmentControl.m; path = ../FSSegmentControl.m; sourceTree = "<group>"; };
 		74B63C49167755F100526042 /* UIColor+RGB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+RGB.h"; sourceTree = "<group>"; };
 		74B63C4A167755F100526042 /* UIColor+RGB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+RGB.m"; sourceTree = "<group>"; };
 		74B6F6CC166B17E6003ACB90 /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
@@ -1763,7 +1768,7 @@
 			children = (
 				02847743172CC887002763F6 /* FSPointGiftListViewController.h */,
 				02847744172CC887002763F6 /* FSPointGiftListViewController.m */,
-				02847745172CC887002763F6 /* FSPointGiftListViewController.xib */,
+				025CF38C174F5FEB00261F1E /* FSPointGiftListViewController.xib */,
 				02847759172D0FCB002763F6 /* FSPointGiftDetailViewController.h */,
 				0284775A172D0FCC002763F6 /* FSPointGiftDetailViewController.m */,
 				0284775B172D0FCC002763F6 /* FSPointGiftDetailViewController.xib */,
@@ -2250,8 +2255,6 @@
 				74B63C1F167709E600526042 /* FSProNewHeaderView.xib */,
 				74B63C2116770B0E00526042 /* FSProNewHeaderView.h */,
 				74B63C2216770B0E00526042 /* FSProNewHeaderView.m */,
-				74B63C281677299F00526042 /* FSSegmentControl.h */,
-				74B63C29167729A000526042 /* FSSegmentControl.m */,
 			);
 			name = Pro;
 			sourceTree = "<group>";
@@ -2361,6 +2364,9 @@
 			isa = PBXGroup;
 			children = (
 				025A543716BBA5DE001919EA /* blankimages */,
+				025CF382174F540C00261F1E /* segmented-separator@2x.png */,
+				025CF37B174F50F500261F1E /* tab_two_bg_normal@2x.png */,
+				025CF37C174F50F500261F1E /* tab_two_bg_selected@2x.png */,
 				02D8952D174BC2BB005148DB /* more@2x.png */,
 				02D8952E174BC2BB005148DB /* tag_arrow@2x.png */,
 				02D8952A174B5E60005148DB /* camera_gala_icon@2x.png */,
@@ -2446,8 +2452,6 @@
 				022A6D2316D4F79600374639 /* arrow_right@2x.png */,
 				0240874C16D0DEB8005DCF0A /* weixin_friends_icon@2x.png */,
 				023EFC7116BE3B2F00E96E30 /* Toolbar_bg@2x.png */,
-				02A2617A16BA62DB0089546B /* seg_header_like_bg@2x.png */,
-				02A2617C16BA62DB0089546B /* seg_header_share_bg@2x.png */,
 				023734C116B8FF9600CECCF3 /* promotion_icon@2x.png */,
 				74DC99F416A56E7900580415 /* promotion_header_icon@2x.png */,
 				74793A1C16A0352E00AEF5B9 /* more_img_icon@2x.png */,
@@ -2529,6 +2533,8 @@
 		74BAC61716520A9D00D7F866 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				025CF37F174F51CC00261F1E /* AKSegmentedControl.h */,
+				025CF380174F51CC00261F1E /* AKSegmentedControl.m */,
 				74C1C85416749124000B51BE /* Pro */,
 				74B71A06167031C7005E17EF /* User */,
 				74B6F6D5166B5A91003ACB90 /* TPKeyboardAvoidingScrollView.h */,
@@ -2549,6 +2555,8 @@
 				7464FB21166734220054ADCD /* FSTCWBActivity.m */,
 				74CD28AA167586D9001DFE4D /* FSKeyboardAvoidingUIView.h */,
 				74CD28AB167586D9001DFE4D /* FSKeyboardAvoidingUIView.m */,
+				74B63C281677299F00526042 /* FSSegmentControl.h */,
+				74B63C29167729A000526042 /* FSSegmentControl.m */,
 			);
 			name = Views;
 			path = Controls/Views;
@@ -2960,8 +2968,8 @@
 				02160E441703DB0100D77FE0 /* Audio */,
 				743EBBCC166CCC9300673882 /* Common */,
 				74B48BA616548DED00777CC8 /* MBProgress */,
-				74556E28165371E300DD4C27 /* Cells */,
 				74BAC61716520A9D00D7F866 /* Views */,
+				74556E28165371E300DD4C27 /* Cells */,
 				74B8AF731649FD640013D24A /* LoadingMoreFooterView */,
 				74B8AF6D1649FD470013D24A /* EGORefreshTableHeaderView */,
 				74C5BE921646411B003CBEE3 /* SDImageView */,
@@ -3241,8 +3249,6 @@
 				74DC99FB16A5756400580415 /* icon@2x.png in Resources */,
 				02F6159416B3DC57001F93ED /* FSTopicListCell.xib in Resources */,
 				023734C216B8FF9600CECCF3 /* promotion_icon@2x.png in Resources */,
-				02A2617E16BA62DB0089546B /* seg_header_like_bg@2x.png in Resources */,
-				02A2618016BA62DB0089546B /* seg_header_share_bg@2x.png in Resources */,
 				025A544516BBA5F2001919EA /* blank_activity@2x.png in Resources */,
 				025A544F16BBA5F2001919EA /* blank_specialtopic@2x.png in Resources */,
 				02D4E7D616BD392200B6385A /* default_icon320@2x.png in Resources */,
@@ -3294,7 +3300,6 @@
 				02660A981722411700156566 /* FSImageEditViewController.xib in Resources */,
 				02DC93CB172C15F700281A5E /* FSMoreViewController.xib in Resources */,
 				0284773E172CB33C002763F6 /* FSGiftListViewController.xib in Resources */,
-				02847747172CC887002763F6 /* FSPointGiftListViewController.xib in Resources */,
 				02847751172D0462002763F6 /* FSPointExchangeListViewController.xib in Resources */,
 				02847758172D0FA2002763F6 /* FSExchangeDetailViewController.xib in Resources */,
 				0284775D172D0FCC002763F6 /* FSPointGiftDetailViewController.xib in Resources */,
@@ -3377,6 +3382,10 @@
 				02D8954C174C95B5005148DB /* blank_order@2x.png in Resources */,
 				02D8954D174C95B5005148DB /* blank_bag@2x.png in Resources */,
 				02D8954E174C95B5005148DB /* blank_message@2x.png in Resources */,
+				025CF37D174F50F500261F1E /* tab_two_bg_normal@2x.png in Resources */,
+				025CF37E174F50F500261F1E /* tab_two_bg_selected@2x.png in Resources */,
+				025CF383174F540C00261F1E /* segmented-separator@2x.png in Resources */,
+				025CF38D174F5FEB00261F1E /* FSPointGiftListViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3652,6 +3661,7 @@
 				0216DF5417423F3500C6CA9B /* FSPagedMyComment.m in Sources */,
 				027EBCB517453295005D15BD /* FSScopeCell.m in Sources */,
 				02D89525174B205A005148DB /* FSStoreDetailRequest.m in Sources */,
+				025CF381174F51CC00261F1E /* AKSegmentedControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -63,7 +63,7 @@
     
     _lblTitle.text = _data.productname;
     _lblTitle.textColor = [UIColor colorWithHexString:@"#181818"];
-    _lblTitle.font = [UIFont systemFontOfSize:14];
+    _lblTitle.font = [UIFont systemFontOfSize:15];
     _lblTitle.numberOfLines = 0;
     _lblTitle.lineBreakMode = NSLineBreakByCharWrapping;
     _lblTitle.adjustsFontSizeToFitWidth = YES;

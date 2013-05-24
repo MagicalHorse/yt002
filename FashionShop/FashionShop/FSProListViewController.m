@@ -306,12 +306,41 @@
 
 -(void) setFilterType
 {
-    [_segFilters removeAllSegments];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"Nearest", nil) atIndex:0 animated:FALSE];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"Newest", nil) atIndex:1 animated:FALSE];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"WillPublish", nil) atIndex:2 animated:FALSE];
-    [_segFilters addTarget:self action:@selector(filterSearch:) forControlEvents:UIControlEventValueChanged];
-    _segFilters.selectedSegmentIndex = SortByDistance;
+    [_segFilters setDelegate:self];
+    UIImage *backgroundImage = [UIImage imageNamed:@"tab_two_bg_normal.png"];
+    [_segFilters setBackgroundImage:backgroundImage];
+    [_segFilters setContentEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [_segFilters setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [_segFilters setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin];
+    [_segFilters setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+    
+    UIImage *buttonPressImage = [UIImage imageNamed:@"tab_two_bg_selected"];
+    UIButton *btn1 = [[UIButton alloc] init];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn1 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn1 setTitle:NSLocalizedString(@"Nearest", nil) forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn1.showsTouchWhenHighlighted = YES;
+    
+    UIButton *btn2 = [[UIButton alloc] init];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn2 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn2 setTitle:NSLocalizedString(@"Newest", nil) forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn2.showsTouchWhenHighlighted = YES;
+    
+    UIButton *btn3 = [[UIButton alloc] init];
+    [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn3 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn3 setTitle:NSLocalizedString(@"WillPublish", nil) forState:UIControlStateNormal];
+    btn3.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn3.showsTouchWhenHighlighted = YES;
+    
+    [_segFilters setButtonsArray:@[btn1, btn2, btn3]];
+    _segFilters.selectedIndex = SortByDistance;
 }
 
 -(void) initContentView{
@@ -418,54 +447,6 @@
 -(void) reloadTableView
 {
     [_contentView reloadData];
-}
-
--(void)filterSearch:(UISegmentedControl *) segmentedControl
-{
-    int index = segmentedControl.selectedSegmentIndex;
-    if(_currentSearchIndex == index || _inLoading)
-    {
-        return;
-    }
-    _currentSearchIndex = index;
-    NSMutableArray *source = [_dataSourceList objectAtIndex:_currentSearchIndex];
-    if (source == nil || source.count<=0)
-    {
-        [self setFirstTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
-        [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
-        
-        DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
-        FSProListRequest *request = [[FSProListRequest alloc] init];
-        request.nextPage = 1;
-        request.routeResourcePath = RK_REQUEST_PRO_LIST;
-        FSProSortType type = FSProSortDefault;
-        if (_currentSearchIndex == SortByDistance) {
-            type = FSProSortByDist;
-        }
-        else if(_currentSearchIndex == SortByDate) {
-            type = FSProSortByDate;
-        }
-        else if(_currentSearchIndex == SortByPre) {
-            type = FSProSortByPre;
-        }
-        request.filterType = type;
-        request.previousLatestDate = [NSDate date];
-        request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-        request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.pageSize = COMMON_PAGE_SIZE;
-        request.requestType = 1;
-        
-        [self beginLoading:_contentView];
-        block(request,^(){
-            [self endLoading:_contentView];
-            [_contentView setContentOffset:CGPointZero];
-            [self reloadTableView];
-        });
-    } else{
-        [self showBlankIcon];
-        [self reloadTableView];
-        [_contentView setContentOffset:CGPointZero];
-    }
 }
 
 -(void)calculateHeight:(FSProItems *)pros
@@ -742,7 +723,16 @@
     switch (_currentSearchIndex) {
         case SortByDistance:
         {
-            FSProNearestHeaderTableCell *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNearestHeaderTableCell" owner:self options:nil] lastObject];
+            FSProNearestHeaderTableCell *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FSProNearestHeaderTableCell"];
+            if (header == nil) {
+                NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearestHeaderTableCell" owner:self options:nil];
+                if (_array.count > 0) {
+                    header = (FSProNearestHeaderTableCell*)_array[0];
+                }
+                else{
+                    header = [[FSProNearestHeaderTableCell alloc] init];
+                }
+            }
             header.tag = section;
             FSStore * store = [_storeSource objectAtIndex:section];
             header.lblTitle.text =[NSString stringWithFormat:NSLocalizedString(@"%@", nil),store.name];
@@ -1091,6 +1081,58 @@
             break;
         default:
             break;
+    }
+}
+
+#pragma mark -
+#pragma mark AKSegmentedControlDelegate
+
+- (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
+{
+    if (segmentedControl == _segFilters){
+        if(_currentSearchIndex == index || _inLoading)
+        {
+            return;
+        }
+        _currentSearchIndex = index;
+        NSMutableArray *source = [_dataSourceList objectAtIndex:_currentSearchIndex];
+        if (source == nil || source.count<=0)
+        {
+            [self setFirstTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
+            [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
+            
+            DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
+            FSProListRequest *request = [[FSProListRequest alloc] init];
+            request.nextPage = 1;
+            request.routeResourcePath = RK_REQUEST_PRO_LIST;
+            FSProSortType type = FSProSortDefault;
+            if (_currentSearchIndex == SortByDistance) {
+                type = FSProSortByDist;
+            }
+            else if(_currentSearchIndex == SortByDate) {
+                type = FSProSortByDate;
+            }
+            else if(_currentSearchIndex == SortByPre) {
+                type = FSProSortByPre;
+            }
+            request.filterType = type;
+            request.previousLatestDate = [NSDate date];
+            request.longit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+            request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+            request.pageSize = COMMON_PAGE_SIZE;
+            request.requestType = 1;
+            
+            [self beginLoading:_contentView];
+            block(request,^(){
+                [self endLoading:_contentView];
+                [_contentView setContentOffset:CGPointZero];
+                [self reloadTableView];
+            });
+        } else{
+            [self showBlankIcon];
+            [self reloadTableView];
+            [_contentView setContentOffset:CGPointZero];
+        }
     }
 }
 

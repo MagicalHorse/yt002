@@ -62,7 +62,7 @@
             return;
         }
         int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
-        [self setPageIndex:currentPage selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+        [self setPageIndex:currentPage selectedSegmentIndex:_segFilters.selectedIndex];
         FSExchangeRequest *request = [self createRequest:currentPage];
         _inLoading = YES;
         [request send:[FSPagedGiftList class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
@@ -72,10 +72,10 @@
             {
                 FSPagedGiftList *innerResp = resp.responseData;
                 if (innerResp.totalPageCount <= currentPage)
-                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedIndex];
                 [self mergeLike:innerResp isInsert:NO];
                 
-                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_segFilters.selectedIndex];
             }
             else
             {
@@ -97,12 +97,44 @@
 
 -(void) setFilterType
 {
-    [_segFilters removeAllSegments];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_UnUsed", nil) atIndex:0 animated:FALSE];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_Used", nil) atIndex:1 animated:FALSE];
-    [_segFilters insertSegmentWithTitle:NSLocalizedString(@"ExchangeList_Disable", nil) atIndex:2 animated:FALSE];
-    [_segFilters addTarget:self action:@selector(filterSearch:) forControlEvents:UIControlEventValueChanged];
-    _segFilters.selectedSegmentIndex = 0;
+    [_segFilters setDelegate:self];
+    UIImage *backgroundImage = [UIImage imageNamed:@"tab_two_bg_normal.png"];
+    [_segFilters setBackgroundImage:backgroundImage];
+    [_segFilters setContentEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [_segFilters setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [_segFilters setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin];
+    [_segFilters setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+    
+    UIImage *buttonPressImage = [UIImage imageNamed:@"tab_two_bg_selected"];
+    UIButton *btn1 = [[UIButton alloc] init];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn1 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn1 setTitle:NSLocalizedString(@"ExchangeList_UnUsed", nil) forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn1.showsTouchWhenHighlighted = YES;
+    //[btn1 setTitleColor:[UIColor colorWithHexString:@"#007f06"] forState:UIControlStateNormal];
+    
+    UIButton *btn2 = [[UIButton alloc] init];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn2 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn2 setTitle:NSLocalizedString(@"ExchangeList_Used", nil) forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn2.showsTouchWhenHighlighted = YES;
+    //[btn2 setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
+    
+    UIButton *btn3 = [[UIButton alloc] init];
+    [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn3 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn3 setTitle:NSLocalizedString(@"ExchangeList_Disable", nil) forState:UIControlStateNormal];
+    btn3.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn3.showsTouchWhenHighlighted = YES;
+    //[btn3 setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
+    
+    [_segFilters setButtonsArray:@[btn1, btn2, btn3]];
+    _segFilters.selectedIndex = 0;
 }
 
 -(void)initArray
@@ -117,26 +149,6 @@
         [_pageIndexList insertObject:@1 atIndex:i];
         [_noMoreList insertObject:@NO atIndex:i];
         [_refreshTimeList insertObject:[NSDate date] atIndex:i];
-    }
-}
-
--(void)filterSearch:(UISegmentedControl *) segmentedControl
-{
-    int index = segmentedControl.selectedSegmentIndex;
-    if(_currentSelIndex == index)
-    {
-        return;
-    }
-    _currentSelIndex = index;
-    NSMutableArray *source = [_dataSourceList objectAtIndex:index];
-    if (source == nil || source.count<=0)
-    {
-        [self requestData];
-    }
-    else{
-        [self showBlankIcon];
-        [_contentView reloadData];
-        [_contentView setContentOffset:CGPointZero];
     }
 }
 
@@ -301,8 +313,8 @@
             {
                 FSPagedGiftList *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=currentPage+1)
-                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedSegmentIndex];
-                [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedSegmentIndex];
+                    [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedIndex];
+                [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedIndex];
                 [self mergeLike:innerResp isInsert:NO];
             }
             else
@@ -310,6 +322,30 @@
                 [self reportError:resp.errorDescrip];
             }
         }];
+    }
+}
+
+#pragma mark -
+#pragma mark AKSegmentedControlDelegate
+
+- (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
+{
+    if (segmentedControl == _segFilters){
+        if(_currentSelIndex == index)
+        {
+            return;
+        }
+        _currentSelIndex = index;
+        NSMutableArray *source = [_dataSourceList objectAtIndex:index];
+        if (source == nil || source.count<=0)
+        {
+            [self requestData];
+        }
+        else{
+            [self showBlankIcon];
+            [_contentView reloadData];
+            [_contentView setContentOffset:CGPointZero];
+        }
     }
 }
 

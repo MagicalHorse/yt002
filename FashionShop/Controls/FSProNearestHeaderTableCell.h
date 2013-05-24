@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface FSProNearestHeaderTableCell : UIView
+@interface FSProNearestHeaderTableCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
 @property (strong, nonatomic) IBOutlet UILabel *lblDistance;
 @property (strong, nonatomic) IBOutlet UIButton *moreBtn;

@@ -504,24 +504,40 @@
 
 -(void) setSegHeader
 {
-    [_segHeader removeAllSegments];
-    [_segHeader insertSegmentWithTitle:NSLocalizedString(@"User_Profile_Like", nil) atIndex:0 animated:FALSE];
-    if (_userProfile.userLevelId==FSDARENUser) {
-        [_segHeader insertSegmentWithTitle:NSLocalizedString(@"i shared", nil) atIndex:1 animated:FALSE];
-        _segHeader.selectedSegmentIndex = 1;
-    }
-    else
-        _segHeader.selectedSegmentIndex = 0;
+    [_segHeader setDelegate:self];
+    UIImage *backgroundImage = [UIImage imageNamed:@"tab_two_bg_normal.png"];
+    [_segHeader setBackgroundImage:backgroundImage];
+    [_segHeader setContentEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [_segHeader setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [_segHeader setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin];
+    [_segHeader setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
     
-    [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
-    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
+    UIImage *buttonPressImage = [UIImage imageNamed:@"tab_two_bg_selected"];
+    UIButton *btn1 = [[UIButton alloc] init];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn1 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn1 setTitle:NSLocalizedString(@"User_Profile_Like", nil) forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn1.showsTouchWhenHighlighted = YES;
+    
+    UIButton *btn2 = [[UIButton alloc] init];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn2 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn2 setTitle:NSLocalizedString(@"i shared", nil) forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn2.showsTouchWhenHighlighted = YES;
+    
+    if (_userProfile.userLevelId==FSDARENUser) {
+        [_segHeader setButtonsArray:@[btn1, btn2]];
+        _segHeader.selectedIndex = 1;
+    }
+    else {
+        [_segHeader setButtonsArray:@[btn2]];
+        _segHeader.selectedIndex = 0;
+    }
     _isInRefreshing = NO;
-    [self loadILike];
-}
-
--(void)dealSegChanged:(UISegmentedControl *) segmentedControl
-{
-    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
     [self loadILike];
 }
 
@@ -582,7 +598,7 @@
     _btnCoupons.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_btnCoupons setTitle:[NSString stringWithFormat:@"%d",_userProfile.couponsTotal] forState:UIControlStateNormal];
     
-    [_segHeader setSelectedSegmentIndex:0];
+    _segHeader.selectedIndex = 0;
     
     SpringboardLayout *layout = [[SpringboardLayout alloc] init];
     layout.itemWidth = ITEM_CELL_WIDTH;
@@ -645,7 +661,7 @@
         [self beginLoading:_tbScroll];
     _favorPageIndex = pageIndex;
     FSEntityRequestBase *request = [self createRequest:pageIndex];
-    NSString *blockKey = _segHeader.selectedSegmentIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
+    NSString *blockKey = _segHeader.selectedIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
         if (showProgress)
             [self endLoading:_tbScroll];
@@ -657,7 +673,7 @@
 
 -(FSEntityRequestBase *)createRequest:(int)page
 {
-    if (_userProfile.userLevelId == FSDARENUser && _segHeader.selectedSegmentIndex == 1)
+    if (_userProfile.userLevelId == FSDARENUser && _segHeader.selectedIndex == 1)
     {
         FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
         request.userToken = _userProfile.uToken;
@@ -873,7 +889,6 @@
             [_thumbImg reloadThumb:_userProfile.thumnailUrl];
         }
         else{
-            //[_btnHeaderImgV setImageWithURL:_userProfile.logobgURL placeholderImage:nil];
             _btnHeaderImgV.image = image;
         }
         
@@ -1202,7 +1217,7 @@
     cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSFavorProCell" forIndexPath:indexPath];
     [[(FSFavorProCell *)cell deleteButton] addTarget:self action:@selector(didRemoveClick:) forControlEvents:UIControlEventTouchUpInside];
     ((FSFavorProCell *)cell).data = item;
-    if (_segHeader.selectedSegmentIndex == 0) {
+    if (_segHeader.selectedIndex == 0) {
         if ([item isKindOfClass:[FSFavor class]]) {
             FSFavor *_fav = (FSFavor*)item;
             if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
@@ -1213,7 +1228,7 @@
             }
         }
     }
-    else if(_segHeader.selectedSegmentIndex == 1){
+    else if(_segHeader.selectedIndex == 1){
         if ([item isKindOfClass:[FSItemBase class]]) {
             FSItemBase *_fav = (FSItemBase*)item;
             if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
@@ -1324,7 +1339,7 @@
 
 - (void)activateDeletionMode:(UILongPressGestureRecognizer *)gr
 {
-    if (_segHeader.selectedSegmentIndex == 0) {
+    if (_segHeader.selectedIndex == 0) {
         return;
     }
     if (gr.state == UIGestureRecognizerStateBegan)
@@ -1600,6 +1615,16 @@
         [self removeAuthData];
         [self ensureDataContext];
         [self displayUserLogin];
+    }
+}
+
+#pragma mark -
+#pragma mark AKSegmentedControlDelegate
+
+- (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
+{
+    if (segmentedControl == _segHeader){
+        [self loadILike];
     }
 }
 

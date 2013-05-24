@@ -45,9 +45,8 @@
 -(NSString*)readFromFile:(NSString *)aFileName;
 
 - (void)registerDevicePushNotification;
-
--(void)addNewCommentID:(NSString *)commentID;
 -(void)removeCommentID:(NSString *)commentID;
+-(void)removeCommentIDs:(NSArray *)ids;
 -(int)newCommentCount;
 
 @end

@@ -86,8 +86,6 @@ void uncaughtExceptionHandler(NSException *exception)
     _launch = launchOptions;
     //三秒钟后关闭
     [self performSelector:@selector(loadMainView) withObject:nil afterDelay:3];
-    
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotice:) name:@"ReceivePushNotification" object:nil];
 
     return YES;
 }
@@ -284,7 +282,6 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     pushInfoDic = userInfo;
     //根据不同的key值跳转到不同的界面
     NSString * from = (NSString*)[pushInfoDic objectForKey:@"from"];
@@ -327,20 +324,39 @@ void uncaughtExceptionHandler(NSException *exception)
 
 -(void)removeCommentID:(NSString *)commentID
 {
+    [self removeCommentIDs:[NSArray arrayWithObject:commentID]];
+}
+
+-(void)removeCommentIDs:(NSArray *)ids
+{
+    if (!ids || ids.count <= 0) {
+        return;
+    }
     id temp = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
     NSMutableArray *_array = [NSMutableArray arrayWithArray:temp];
-    if (_array) {
+    if (!_array || _array.count <= 0) {
+        return;
+    }
+    NSMutableArray *toDelArray = [NSMutableArray array];
+    for (NSString *toDel in ids) {
+        NSString *delString = nil;
         for (NSString *item in _array) {
-            if ([item intValue] == [commentID intValue]) {
-                [_array removeObject:item];
+            if ([item intValue] == [toDel intValue]) {
+                delString = item;
                 break;
             }
         }
+        if (delString) {
+            [toDelArray addObject:delString];
+        }
     }
-    [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+    if (toDelArray.count > 0) {
+        [_array removeObjectsInArray:toDelArray];
+        [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+    }
 }
 
 -(int)newCommentCount

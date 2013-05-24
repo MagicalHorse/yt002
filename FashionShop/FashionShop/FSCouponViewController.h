@@ -10,12 +10,12 @@
 #import "FSUser.h"
 #import "FSRefreshableViewController.h"
 #import "FSProDetailViewController.h"
-#import "FSSegmentControl.h"
+#import "AKSegmentedControl.h"
 
-@interface FSCouponViewController : FSRefreshableViewController<FSProDetailItemSourceProvider>
+@interface FSCouponViewController : FSRefreshableViewController<FSProDetailItemSourceProvider,AKSegmentedControlDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
-@property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segFilters;
 @property (strong,nonatomic) FSUser *currentUser;
 
 @end

@@ -438,7 +438,7 @@
     int height = (lineCount - 1) * (Tag_Item_Height + 10);
     if (isSwipToUp) {
         isAnimating = YES;
-        [UIView animateWithDuration:0.33 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y -= height;
             view.frame = _rect;
@@ -455,7 +455,7 @@
     }
     else{
         isAnimating = YES;
-        [UIView animateWithDuration:0.33 animations:^{
+        [UIView animateWithDuration:0.25 animations:^{
             CGRect _rect = view.frame;
             _rect.origin.y += height;
             view.frame = _rect;
@@ -555,6 +555,7 @@
 {
     [self zeroMemoryBlock];
     [self beginLoading:self.view];
+    _isInLoading = YES;
     _prodPageIndex = 0;
     _currentTag = tag;
     _refreshLatestDate = _firstLoadDate = [NSDate date];
@@ -563,6 +564,7 @@
     __block FSProdListViewController *blockSelf = self;
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:self.view];
+        _isInLoading = NO;
         if (resp.isSuccess)
         {
             FSBothItems *result = resp.responseData;
@@ -671,7 +673,7 @@
     else{
         [self loadImagesForOnscreenRows];
         
-        if (!_noMoreResult && !self.inLoading &&
+        if (!_noMoreResult && !_isInLoading &&
             (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
             && scrollView.contentSize.height>scrollView.frame.size.height
             &&scrollView.contentOffset.y>0)

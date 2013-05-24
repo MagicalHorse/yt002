@@ -68,10 +68,10 @@
     FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_DETAIL;
     request.id = _requestID;
-    [self beginLoading:_tbAction];
+    [self beginLoading:self.view];
     _tbAction.hidden = YES;
     [request send:[FSExchange class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:_tbAction];
+        [self endLoading:self.view];
         _tbAction.hidden = NO;
         if (respData.isSuccess)
         {
@@ -166,11 +166,11 @@
     request.identityNo = idCardField.text;
     request.storeID = [_data.inscopenotices[selIndex] storeid];
     request.userToken = [FSUser localProfile].uToken;
-    [self beginLoading:_tbAction];
+    [self beginLoading:self.view];
     _inLoading = YES;
     self.view.userInteractionEnabled = NO;
     [request send:[FSExchangeSuccess class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:_tbAction];
+        [self endLoading:self.view];
         _inLoading = NO;
         self.view.userInteractionEnabled = YES;
         if (respData.isSuccess)

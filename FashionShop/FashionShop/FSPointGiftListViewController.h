@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FSSegmentControl.h"
+#import "AKSegmentedControl.h"
 #import "FSRefreshableViewController.h"
 #import "FSUser.h"
 
-@interface FSPointGiftListViewController : FSRefreshableViewController
+@interface FSPointGiftListViewController : FSRefreshableViewController<AKSegmentedControlDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
-@property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segFilters;
 @property (strong,nonatomic) FSUser *currentUser;
 
 @end

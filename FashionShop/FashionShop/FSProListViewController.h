@@ -11,13 +11,13 @@
 #import "FSLocationManager.h"
 #import "FSProDetailViewController.h"
 #import "FSRefreshableViewController.h"
-#import "FSSegmentControl.h"
+#import "AKSegmentedControl.h"
 #import "FSCycleScrollView.h"
 
-@interface FSProListViewController : FSRefreshableViewController <UITableViewDataSource, UITableViewDelegate,FSProDetailItemSourceProvider,FSCycleScrollViewDatasource,FSCycleScrollViewDelegate>
+@interface FSProListViewController : FSRefreshableViewController <UITableViewDataSource, UITableViewDelegate,FSProDetailItemSourceProvider,FSCycleScrollViewDatasource,FSCycleScrollViewDelegate,AKSegmentedControlDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
-@property (strong, nonatomic) IBOutlet FSSegmentControl *segFilters;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segFilters;
 
 
 

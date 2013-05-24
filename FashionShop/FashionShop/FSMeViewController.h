@@ -15,11 +15,12 @@
 #import "SpringboardLayout.h"
 #import "FSRefreshableViewController.h"
 #import "FSSegmentControl.h"
+#import "AKSegmentedControl.h"
 #import "FSQQConnectActivity.h"
 
 typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 
-@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSMoreCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,FSThumViewDelegate,UINavigationControllerDelegate,FSQQConnectActivityDelegate>
+@interface FSMeViewController : FSRefreshableViewController<SinaWeiboDelegate, SinaWeiboRequestDelegate,PSUICollectionViewDataSource,FSMoreCompleteDelegate,SpringboardLayoutDelegate, UIGestureRecognizerDelegate,FSProDetailItemSourceProvider,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,FSThumViewDelegate,UINavigationControllerDelegate,FSQQConnectActivityDelegate,AKSegmentedControlDelegate>
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumbImg;
 @property (strong, nonatomic) IBOutlet UIButton *btnHeaderBg;
@@ -36,7 +37,7 @@ typedef void (^FSLoginCompleteDelegate) (BOOL isSuccess);
 @property (strong, nonatomic) IBOutlet UIButton *btnPoints;
 @property (strong, nonatomic) IBOutlet UIButton *btnCoupons;
 
-@property (strong, nonatomic) IBOutlet FSSegmentControl *segHeader;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segHeader;
 @property (strong, nonatomic) IBOutlet UIView *likeContainer;
 
 @property (strong, nonatomic) IBOutlet PSUICollectionView *likeView;

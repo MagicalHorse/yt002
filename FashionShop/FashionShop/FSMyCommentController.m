@@ -21,6 +21,8 @@
     BOOL _noMoreResult;
     FSSourceType *type;
     FSAudioButton   *lastButton;
+    
+    NSOperationQueue *_asyncQueue;
 }
 
 @end
@@ -78,12 +80,48 @@
             
             if (_tbAction.hidden) {
                 _tbAction.hidden = NO;
-            }            
+            }
             [_tbAction reloadData];
+            if (!isLoadMore) {
+                //更新badge存储内容
+                [self updateBadgeData];
+            }
         }
         else
         {
             NSLog(@"comment list failed");
+        }
+    }];
+}
+
+-(void)updateBadgeData
+{
+    if (!_asyncQueue) {
+        _asyncQueue = [[NSOperationQueue alloc] init];
+        [_asyncQueue setMaxConcurrentOperationCount:1];
+    }
+    [_asyncQueue addOperationWithBlock:^{
+        NSMutableArray *toRemove = [NSMutableArray array];
+        NSMutableArray *_array = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"]];
+        if (!_array) {
+            return ;
+        }
+        for (NSString *item1 in _array) {
+            BOOL flag = NO;
+            for (FSComment *item2 in _comments) {
+                if ([item1 intValue] == item2.sourceid) {
+                    flag = YES;
+                    break;
+                }
+            }
+            if (!flag) {
+                [toRemove addObject:item1];
+            }
+        }
+        if (toRemove.count > 0) {
+//            [_array removeObjectsInArray:toRemove];
+            [theApp removeCommentIDs:toRemove];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
         }
     }];
 }
