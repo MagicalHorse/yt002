@@ -89,7 +89,7 @@
         }
         else
         {
-            NSLog(@"comment list failed");
+            [self reportError:resp.errorDescrip];
         }
     }];
 }

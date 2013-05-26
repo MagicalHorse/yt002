@@ -41,24 +41,6 @@
         UIView *emptyView = (UIView *)[self viewWithTag:UIVIEW_PROBASE_MASK_IDENTIFER];
         if (!emptyView)
         {
-            /*
-            emptyView = [[UIView alloc] initWithFrame:self.frame];
-            emptyView.backgroundColor = [UIColor whiteColor];
-            UIImageView * loadMoreView= [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-20,self.frame.origin.y+50, 40, 40)];
-            [emptyView addSubview:loadMoreView];
-            [loadMoreView.layer removeAllAnimations];
-            loadMoreView.image = [UIImage imageNamed:@"refresh-spinner-dark"];
-            CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-            animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI/180, 0, 0, 1.0)];
-            animation.toValue = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(M_PI, 0, 0, 1.0)];
-            animation.duration = .4;
-            animation.cumulative =YES;
-            animation.repeatCount = 2000;
-            [loadMoreView.layer addAnimation:animation forKey:@"animation"];
-            [loadMoreView startAnimating];
-            
-            emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
-             */
             emptyView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/2-40,self.frame.origin.y+80, 80, 80)];
             emptyView.backgroundColor = [UIColor clearColor];
             emptyView.tag = UIVIEW_PROBASE_MASK_IDENTIFER;
@@ -80,16 +62,6 @@
         UIView *emptyView =(UIView *)[self viewWithTag:UIVIEW_PROBASE_MASK_IDENTIFER];
         if (emptyView)
         {
-//            if (emptyView.subviews.count>0)
-//            {
-//                UIImageView *loadMoreView =(UIImageView *)emptyView.subviews[0];
-//                if (loadMoreView)
-//                {
-//                    [loadMoreView.layer removeAllAnimations];
-//                    loadMoreView.image = nil;
-//                    [loadMoreView removeFromSuperview];
-//                }
-//            }
             [emptyView removeFromSuperview];
         }
 

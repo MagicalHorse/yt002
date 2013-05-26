@@ -92,6 +92,7 @@
     }
     
     _minRecordGap = 1.5;
+    _isAudio = YES;
     theApp.audioRecoder.clAudioDelegate = self;
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
 }
@@ -182,7 +183,7 @@
     [(id)view tbComment].dataSource = self;
     [(id)view tbComment].scrollEnabled = FALSE;
     [(id)view svContent].scrollEnabled = TRUE;
-    view.showViewMask = TRUE;
+    //view.showViewMask = TRUE;
     
 	return view;
 }
@@ -201,6 +202,7 @@
     __block FSProDetailViewController *blockSelf = self;
     _sourceType = blockViewForRefresh.pType;
    
+    [self beginLoading:blockViewForRefresh];
     if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)] &&
         [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex]==TRUE)
     {
@@ -228,6 +230,8 @@
             drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
             respClass = [FSProItemEntity class];
         }
+        //[(id)blockViewForRefresh svContent].scrollEnabled = NO;
+        self.paginatorView.scrollView.scrollEnabled = NO;
         [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
             {
@@ -238,10 +242,13 @@
                 if (blockSelf->_sourceType==FSSourcePromotion)
                     navTitle = NSLocalizedString(@"promotion detail", nil);
                 [blockSelf.navigationItem setTitle:navTitle] ;
-                blockViewForRefresh.showViewMask= FALSE;
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+//                [[(id)blockViewForRefresh tbComment] reloadData];
             } else
             {
+                //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
+                self.paginatorView.scrollView.scrollEnabled = YES;
+                [self endLoading:blockViewForRefresh];
                 [self onButtonCancel];
             }
         }];
@@ -252,12 +259,13 @@
             [blockViewForRefresh setData:input];
             [(FSProdDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
             [blockViewForRefresh updateToolBar:input];
-            blockViewForRefresh.showViewMask= FALSE;
+            [self endLoading:blockViewForRefresh];
             NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
             if (blockSelf->_sourceType==FSSourcePromotion)
                 navTitle = NSLocalizedString(@"promotion detail", nil);
             [blockSelf.navigationItem setTitle:navTitle] ;
             [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+            [self resetScrollViewSize:blockViewForRefresh];
             
         } errorCallback:^{
             [self onButtonCancel];
@@ -283,6 +291,9 @@
     request.refreshTime = [[NSDate alloc] init];
     request.rootKeyPath = @"data.comments";
     [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [self endLoading:blockViewForRefresh];
+        //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
+        self.paginatorView.scrollView.scrollEnabled = YES;
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
@@ -845,7 +856,7 @@
     }
     else
     {
-        [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil)withExeBlock:^(dispatch_block_t callback){
+        [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil) withExeBlock:^(dispatch_block_t callback){
             [self internalDoComent:callback];
         } completeCallbck:^{
             [self endProgress];
@@ -863,11 +874,15 @@
     request.sourceType = [NSNumber numberWithInt:_sourceType];
     request.routeResourcePath = RK_REQUEST_COMMENT_SAVE;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
-    if (_recordFileName && ![_recordFileName isEqualToString:@""]) {
+    BOOL flag = _isAudio && (_recordFileName && ![_recordFileName isEqualToString:@""]);
+    request.isAudio = flag;
+    if (flag) {
+        request.comment = nil;
         request.audioName = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
     }
     else{
         request.comment = commentText;
+        request.audioName = nil;
     }
     //回复特用户
     if (!isReplyToAll) {
@@ -959,7 +974,7 @@
         [self clearComment:nil];
         
     } error:^(id error){
-        [blockSelf updateProgress:error];//NSLocalizedString(@"upload failed!", nil)
+        [blockSelf reportError:error];
         if (callback) {
             callback();
         }
@@ -974,6 +989,11 @@
         _name = [NSString stringWithFormat:@"活动-评论  %@", [view.data valueForKey:@"title"]];
     }
     [[FSAnalysis instance] logEvent:_name withParameters:nil];
+}
+
+-(void)toEndProgress
+{
+    [self endProgress];
 }
 
 -(BOOL)IsBindPromotionOrProduct:(id)_item
@@ -1303,7 +1323,7 @@
 
 #pragma mark record function
 
-- (void)startToRecord
+- (BOOL)startToRecord
 {
     if (!theApp.audioRecoder) {
         [theApp initAudioRecoder];
@@ -1313,19 +1333,17 @@
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         theApp.audioRecoder.recorderingFileName = _recordFileName;
-        [theApp.audioRecoder startRecord];
+        return [theApp.audioRecoder startRecord];
     }
+    return NO;
 }
 
 - (void)endRecord
 {
-    NSLog(@"1:%@",[NSDate date]);
     _isRecording = NO;
     dispatch_queue_t stopQueue;
     stopQueue = dispatch_queue_create("stopQueue", NULL);
     dispatch_async(stopQueue, ^(void){
-        //run in main thread
-        NSLog(@"2:%@",[NSDate date]);
         dispatch_async(dispatch_get_main_queue(), ^{
             [theApp.audioRecoder stopRecord];
         });
@@ -1339,7 +1357,6 @@
     dispatch_queue_t stopQueue;
     stopQueue = dispatch_queue_create("stopQueue", NULL);
     dispatch_async(stopQueue, ^(void){
-        //run in main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [theApp.audioRecoder stopAndDeleteRecord];
         });
@@ -1351,9 +1368,16 @@
 
 - (IBAction)recordTouchDown:(id)sender
 {
+    if (_isRecording) {
+        _recordState = PTRecording;
+        return;
+    }
     _downTime = [NSDate date];
     [sender setTitle:NSLocalizedString(@"Up To End Record", nil) forState:UIControlStateNormal];
-    [self startToRecord];
+    if (![self startToRecord]) {
+        [self endRecord];
+        return;
+    }
     _recordState = PTRecording;
     if (lastButton) {
         [lastButton pause];
@@ -1406,6 +1430,10 @@
             id currentView =  self.paginatorView.currentPage;
             [[currentView tbComment] reloadData];
         }
+    }
+    else{
+        [self endShowAnimation];
+        NSLog(@"问题1");
     }
 }
 

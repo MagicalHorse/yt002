@@ -30,6 +30,7 @@ typedef void (^FSCommentCompleteBlock)(id);
 @property(nonatomic,strong) NSString *comment;
 @property(nonatomic,strong) NSNumber *replyuserID;
 @property(nonatomic,strong) NSString *audioName;
+@property(nonatomic) BOOL isAudio;
 
 - (void)upload:(FSCommentCompleteBlock)blockcomplete error:(FSCommentCompleteBlock)blockerror;
 

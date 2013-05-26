@@ -207,7 +207,7 @@
     //_tbComment
     _rect = _tbComment.frame;
     _rect.origin.y = _viewHeight;
-    _rect.size.height = 0;
+//    _rect.size.height = 0;
     _tbComment.frame = _rect;
     
     [self updateInteraction];

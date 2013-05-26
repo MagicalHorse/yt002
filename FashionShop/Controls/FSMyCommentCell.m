@@ -90,7 +90,7 @@
     
     //回复时间
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yyyy年MM月dd日 HH:MM:SS"];
+    [df setDateFormat:@"yyyy年MM月dd日 HH:mm:ss"];
     _lblInDate.text = [df stringFromDate:_data.indate];
     _lblInDate.hidden = NO;
     _lblInDate.frame = CGRectMake(_lblInDate.frame.origin.x, _cellHeight + 8, 225, _lblInDate.frame.size.height);

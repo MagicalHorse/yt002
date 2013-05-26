@@ -36,7 +36,7 @@
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 			</object>
 			<object class="IBUITableViewCell" id="133165585">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="830837659">
@@ -120,7 +120,6 @@
 								<int key="NSvFlags">258</int>
 								<string key="NSFrame">{{19, 145}, {282, 1}}</string>
 								<reference key="NSSuperview" ref="830837659"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -179,7 +178,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 136}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="830837659"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<int key="IBUITag">1</int>
@@ -384,7 +382,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-									<int key="IBUIKeyboardType">4</int>
+									<int key="IBUIKeyboardType">5</int>
 									<int key="IBUIReturnKeyType">9</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
@@ -592,6 +590,7 @@
 								<string key="NSFrame">{{50, 276}, {221, 35}}</string>
 								<reference key="NSSuperview" ref="351353646"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -642,7 +641,7 @@
 				<real value="322" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="868425425">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="92298220">
@@ -732,7 +731,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{320, 117}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="92298220"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<int key="IBUITag">3</int>
@@ -742,7 +740,7 @@
 				<real value="117" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="1023796166">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="890586880">
@@ -784,7 +782,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 117}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="890586880"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<int key="IBUITag">4</int>
@@ -794,7 +791,7 @@
 				<real value="117" key="IBUIRowHeight"/>
 			</object>
 			<object class="IBUITableViewCell" id="319090714">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">292</int>
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIView" id="597811031">
@@ -1075,7 +1072,6 @@
 					</object>
 				</array>
 				<string key="NSFrameSize">{300, 190}</string>
-				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="597811031"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
 				<int key="IBUITag">5</int>

@@ -517,7 +517,7 @@ void uncaughtExceptionHandler(NSException *exception)
             else
             {
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
-                [nav pushViewController:controller animated:true];
+                [nav pushViewController:controller animated:YES];
             }
         }
             break;

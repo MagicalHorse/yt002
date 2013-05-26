@@ -138,10 +138,11 @@
             [_audioRecorder stop];
             if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopRecorderEnd:)]) {
                 [_clAudioDelegate stopRecorderEnd:self];
-                NSLog(@"I am first!");
             }
         }
-        else NSLog(@"AVAudioRecorder  in  not in recording.");
+        else {
+            NSLog(@"问题2");
+        }
     });
 }
 - (void)stopAndDeleteRecord
@@ -156,6 +157,9 @@
             if (_clAudioDelegate && [_clAudioDelegate respondsToSelector:@selector(stopAndDelRecorderEnd:)]) {
                 [_clAudioDelegate stopAndDelRecorderEnd:self];
             }
+        }
+        else{
+            NSLog(@"问题3");
         }
         if (!_deletedRecording) {
             _deletedRecording = [_audioRecorder deleteRecording];
@@ -172,6 +176,9 @@
         
         if (_audioRecorder.recording) {
             [_audioRecorder stop];
+        }
+        else{
+            NSLog(@"问题4");
         }
         if (!_deletedRecording) {
             _deletedRecording = [_audioRecorder deleteRecording];

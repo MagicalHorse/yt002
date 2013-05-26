@@ -56,7 +56,7 @@
     _data = data;
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yy年MM月dd日 HH:MM:SS"];
+    [df setDateFormat:@"yy年MM月dd日 HH:mm:ss"];
     
     NSLog(@"%@", _data.createDate);
     _createTime.text = [df stringFromDate:_data.createDate];

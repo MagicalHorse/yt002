@@ -66,7 +66,7 @@
 -(void)clickToContinue:(UIButton*)sender
 {
     NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
+    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-3)];
     [self.navigationController setViewControllers:_array animated:YES];
 }
 
@@ -75,9 +75,9 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 //    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
 //    UITabBarController *root = [storyBoard instantiateInitialViewController];
-//    NSLog(@"root is UITabBarController:%d", [root isKindOfClass:[UITabBarController class]]);
-//    NSLog(@"UITabBarController:%@", root);
-//    NSLog(@"viewControllers:%@", root.viewControllers);
+//    root.selectedIndex = 0;
+//    UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+//    [nav popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - UITableViewDataSource

@@ -11,10 +11,10 @@
 #import "FSRefreshableViewController.h"
 #import "FSProDetailViewController.h"
 #import "FSThumView.h"
-#import "FSSegmentControl.h"
+#import "AKSegmentedControl.h"
 #import "FSAvatarHDViewController.h"
 
-@interface FSDRViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,FSThumViewDelegate,FSAvatarHDViewDelegate>
+@interface FSDRViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,FSThumViewDelegate,FSAvatarHDViewDelegate,AKSegmentedControlDelegate>
 
 - (IBAction)goLikeView:(id)sender;
 - (IBAction)goFanView:(id)sender;
@@ -27,7 +27,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnFans;
 @property (strong, nonatomic) IBOutlet PSUICollectionView *itemsView;
 @property (strong, nonatomic) IBOutlet UIView *itemsContainer;
-@property (strong, nonatomic) IBOutlet FSSegmentControl *segHeader;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segHeader;
 
 @property (nonatomic) int userId;
 @end

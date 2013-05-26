@@ -51,7 +51,7 @@
 -(void)prepareView
 {
     //设置背景图片
-    if (APP_HIGH > 480) {
+    if ([UIDevice isRunningOniPhone5]) {
         _bgImageView.image = [[UIImage imageNamed:@"bind_card__5_bg.png"] stretchableImageWithLeftCapWidth:0 topCapHeight:200];
     }
     else{

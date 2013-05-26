@@ -114,16 +114,13 @@
     }
     if (fileName && ![fileName isEqualToString:@""]) {
         NSLog(@"fileName:%@",fileName);
-        NSData *data = [NSData dataWithContentsOfFile:fileName];
-        if (data) {
-            [params setData:data MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
-            NSLog(@"filename Data:%@", [NSString stringWithContentsOfFile:fileName encoding:NSUTF8StringEncoding error:nil]);
-            NSLog(@"filename Data2:%@", data);
-        }
         NSFileManager *fm = [NSFileManager defaultManager];
-        NSDictionary *attr =[fm fileAttributesAtPath:fileName traverseLink: NO] ; //文件属性
-        NSLog(@"file size is：%i bytes ",[[attr objectForKey:NSFileSize] intValue]);
-        NSLog(@"file type is：%@",[attr objectForKey:NSFileType]);
+        if ([fm fileExistsAtPath:fileName]) {
+            NSData *data = [NSData dataWithContentsOfFile:fileName];
+            if (data) {
+                [params setData:data MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
+            }
+        }
     }
     
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];

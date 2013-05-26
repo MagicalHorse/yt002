@@ -104,24 +104,38 @@
 
 -(void) bindSegHeader
 {
-    [_segHeader removeAllSegments];
-    [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta Like", nil) atIndex:0 animated:NO];
+    [_segHeader setDelegate:self];
+    UIImage *backgroundImage = [UIImage imageNamed:@"tab_two_bg_normal.png"];
+    [_segHeader setBackgroundImage:backgroundImage];
+    [_segHeader setContentEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+    [_segHeader setSegmentedControlMode:AKSegmentedControlModeSticky];
+    [_segHeader setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleBottomMargin];
+    [_segHeader setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
+    
+    UIImage *buttonPressImage = [UIImage imageNamed:@"tab_two_bg_selected"];
+    UIButton *btn1 = [[UIButton alloc] init];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn1 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn1 setTitle:NSLocalizedString(@"Ta Like", nil) forState:UIControlStateNormal];
+    btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn1.showsTouchWhenHighlighted = YES;
+    
+    UIButton *btn2 = [[UIButton alloc] init];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn2 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn2 setTitle:NSLocalizedString(@"Ta Share", nil) forState:UIControlStateNormal];
+    btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn2.showsTouchWhenHighlighted = YES;
+    
     if ([self isDR]) {
-        [_segHeader insertSegmentWithTitle:NSLocalizedString(@"Ta Share", nil) atIndex:1 animated:NO];
+        [_segHeader setButtonsArray:@[btn1, btn2]];
     }
-    [_segHeader addTarget:self action:@selector(dealSegChanged:) forControlEvents:UIControlEventValueChanged];
-    _segHeader.selectedSegmentIndex = 0;
-    [_segHeader setSegBGColor:RGBCOLOR(203, 240, 249)];
-    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
-}
-
--(void)dealSegChanged:(UISegmentedControl *) segmentedControl
-{
-    [_segHeader setTitleColor:[UIColor darkGrayColor] selectedColor:[UIColor lightGrayColor]];
-    [self beginLoading:self.view];
-    [self refreshContent:YES withCallback:^{
-        [self endLoading:self.view];
-    }];
+    else {
+        [_segHeader setButtonsArray:@[btn2]];
+    }
+    _segHeader.selectedIndex = 0;
 }
 
 -(void)prepareData
@@ -224,7 +238,7 @@
     
     _prodPageIndex = 1;
     FSEntityRequestBase *request = [self createListRequest:_prodPageIndex isRefresh:FALSE];
-    if ([self isDR] && _segHeader.selectedSegmentIndex == 1)
+    if ([self isDR] && _segHeader.selectedIndex == 1)
     {
         [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:self.view];
@@ -363,7 +377,7 @@
 
 -(FSEntityRequestBase *)createListRequest:(int)page isRefresh:(BOOL)isRefresh
 {
-    if (_daren.userLevelId == FSDARENUser && _segHeader.selectedSegmentIndex == 1)
+    if (_daren.userLevelId == FSDARENUser && _segHeader.selectedIndex == 1)
     {
         FSProListRequest *request = [[FSProListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_PROD_DR_LIST;
@@ -558,7 +572,7 @@
         [_items removeAllObjects];
     }
     FSEntityRequestBase *request = [self createListRequest:nextPage isRefresh:isRefresh];
-    if ([self isDR] && _segHeader.selectedSegmentIndex == 1)
+    if ([self isDR] && _segHeader.selectedIndex == 1)
     {
         [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             callback();
@@ -666,14 +680,14 @@
 }
 
 - (PSUICollectionViewCell *)collectionView:(PSUICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *identifier = ([self isDR] && _segHeader.selectedSegmentIndex == 1)?DR_DETAIL_CELL:DR_FAVOR_DETAIL_CELL;
+    NSString *identifier = ([self isDR] && _segHeader.selectedIndex == 1)?DR_DETAIL_CELL:DR_FAVOR_DETAIL_CELL;
     PSUICollectionViewCell * cell = [cv dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     if (_items.count <= 0) {
         return cell;
     }
     id item = [_items objectAtIndex:indexPath.row];
     [(id)cell setData:item];
-    if (_segHeader.selectedSegmentIndex == 0) {
+    if (_segHeader.selectedIndex == 0) {
         if ([item isKindOfClass:[FSFavor class]]) {
             FSFavor *_fav = (FSFavor*)item;
             if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
@@ -684,7 +698,7 @@
             }
         }
     }
-    else if(_segHeader.selectedSegmentIndex == 1){
+    else if(_segHeader.selectedIndex == 1){
         if ([item isKindOfClass:[FSProdItemEntity class]]) {
             FSProdItemEntity *_fav = (FSProdItemEntity*)item;
             if (_fav.hasPromotion) {
@@ -729,7 +743,7 @@
  heightForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray * resources = nil;
-    if ([self isDR] && _segHeader.selectedSegmentIndex == 1)
+    if ([self isDR] && _segHeader.selectedIndex == 1)
     {
         resources = [[_items objectAtIndex:indexPath.row] resource];
     } else
@@ -756,7 +770,7 @@
 #pragma FSProDetailItemSourceProvider
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index  completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
-    if ([self isDR] && _segHeader.selectedSegmentIndex == 1)
+    if ([self isDR] && _segHeader.selectedIndex == 1)
     {
         FSProdItemEntity *item =  [view.navContext objectAtIndex:index];
         if (item)
@@ -806,7 +820,7 @@
 }
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
-    return [self isDR] && _segHeader.selectedSegmentIndex == 1;
+    return [self isDR] && _segHeader.selectedIndex == 1;
 }
 
 - (BOOL) isDeletionModeActiveForCollectionView:(PSUICollectionView *)collectionView layout:(PSUICollectionViewLayout*)collectionViewLayout
@@ -880,6 +894,19 @@
     } completion:^(BOOL finished) {
         [_imgV removeFromSuperview];
     }];
+}
+
+#pragma mark -
+#pragma mark AKSegmentedControlDelegate
+
+- (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
+{
+    if (segmentedControl == _segHeader){
+        [self beginLoading:self.view];
+        [self refreshContent:YES withCallback:^{
+            [self endLoading:self.view];
+        }];
+    }
 }
 
 @end

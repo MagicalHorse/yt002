@@ -239,9 +239,13 @@ BOOL networkIsWorking = NO;
         statusReport.mode = MBProgressHUDModeText;
     }
     [self.view addSubview:statusReport];
-    statusReport.labelText = message;
+    statusReport.detailsLabelText = message;
     [statusReport show:true];
-    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
+    float timeLong = 2.5;
+    if (message.length > 15) {
+        timeLong += message.length/10;
+    }
+    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:timeLong];
 
 }
 
@@ -252,6 +256,7 @@ BOOL networkIsWorking = NO;
     if(!statusReport)
     {
         statusReport = [[MBProgressHUD alloc] initWithView:self.view];
+        statusReport.center = CGPointMake(self.view.center.x, self.view.center.y - 40);
         statusReport.tag = UIVIEWCONTROLLER_CAT_PROGRESS_ID;
     }
     [self.view addSubview:statusReport];
@@ -285,7 +290,7 @@ BOOL networkIsWorking = NO;
     MBProgressHUD * statusReport =(MBProgressHUD *)[self.view viewWithTag:UIVIEWCONTROLLER_CAT_PROGRESS_ID];
     if (!statusReport)
         return;
-    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [statusReport performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.0];
 }
 
 

@@ -505,7 +505,14 @@
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
     if (tmpPros.count < 1) {
-        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:NSLocalizedString(@"TipInfo_Promotion_List", nil) originOffset:50];
+        NSString *msg = nil;
+        if (_segFilters.selectedIndex == 0 || _segFilters.selectedIndex == 1) {
+            msg = NSLocalizedString(@"TipInfo_Promotion_List", nil);
+        }
+        else{
+            msg = NSLocalizedString(@"TipInfo_Promotion_Pre_List", nil);
+        }
+        [self showNoResultImage:_contentView withImage:@"blank_activity.png" withText:msg originOffset:50];
     }
     else{
         [self hideNoResultImage:_contentView];

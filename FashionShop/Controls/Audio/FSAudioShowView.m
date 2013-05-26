@@ -110,5 +110,14 @@
     _deleteDesc.hidden = NO;
 }
 
+-(void)showAudioViewInUpload
+{
+    audioView.hidden = NO;
+    _view.hidden = NO;
+    trashView.hidden = YES;
+    _cancelDesc.hidden = YES;
+    _deleteDesc.hidden = YES;
+}
+
 @end
 

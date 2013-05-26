@@ -163,6 +163,7 @@
 								<string key="NSFrame">{{177, 30}, {114, 34}}</string>
 								<reference key="NSSuperview" ref="671584199"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<object class="NSColor" key="IBUIBackgroundColor" id="1000257232">
 									<int key="NSColorSpace">3</int>
@@ -244,11 +245,11 @@
 								<int key="IBUIBaselineAdjustment">0</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<int key="type">2</int>
-									<double key="pointSize">14</double>
+									<double key="pointSize">16</double>
 								</object>
 								<object class="NSFont" key="IBUIFont">
 									<string key="NSName">Helvetica-Bold</string>
-									<double key="NSSize">14</double>
+									<double key="NSSize">16</double>
 									<int key="NSfFlags">16</int>
 								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -265,7 +266,7 @@
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">line@2x.png</string>
+									<string key="NSResourceName">line_l@2x.png</string>
 								</object>
 							</object>
 							<object class="IBUILabel" id="902439130">
@@ -536,6 +537,7 @@
 								<string key="NSFrame">{{20, 219}, {280, 33}}</string>
 								<reference key="NSSuperview" ref="304856418"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -948,8 +950,8 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">line@2x.png</string>
-			<string key="NS.object.0">{594, 1}</string>
+			<string key="NS.key.0">line_l@2x.png</string>
+			<string key="NS.object.0">{578, 4}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>

@@ -46,24 +46,37 @@
     request.routeResourcePath = RK_REQUEST_STOREPROMOTION_COUPON_DETAIL;
     request.storeCouponId = _requestID;
     request.userToken = [[FSUser localProfile] uToken];
-    [self beginLoading:_tbAction];
+    [self beginLoading:self.view];
     _tbAction.hidden = YES;
     [request send:[FSGiftListItem class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:_tbAction];
-        _tbAction.hidden = NO;
+        [self endLoading:self.view];
         if (respData.isSuccess)
         {
             _data = respData.responseData;
-            if (_data.status == 1) {
-                _tbAction.tableFooterView = [self createTableFooterView];
+            if (!_data) {
+                [self reportError:@"数据更新中，将返回刷新数据！"];
+                [self performSelector:@selector(backToList) withObject:nil afterDelay:1.0];
             }
-            [_tbAction reloadData];
+            else{
+                if (_data.status == 1) {
+                    _tbAction.tableFooterView = [self createTableFooterView];
+                }
+                _tbAction.hidden = NO;
+                [_tbAction reloadData];
+            }
         }
         else
         {
             [self reportError:respData.errorDescrip];
         }
     }];
+}
+
+-(void)backToList
+{
+    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
+    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
+    [self.navigationController setViewControllers:_array animated:YES];
 }
 
 - (IBAction)onButtonBack:(id)sender {
@@ -211,14 +224,13 @@
         request.routeResourcePath = RK_REQUEST_STOREPROMOTION_CANCEL;
         request.storeCouponId = _requestID;
         request.userToken = [[FSUser localProfile] uToken];
-        [self beginLoading:_tbAction];
+        [self beginLoading:self.view];
         [request send:[FSExchangeSuccess class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-            [self endLoading:_tbAction];
+            [self endLoading:self.view];
             if (respData.isSuccess)
             {
-//                FSExchangeSuccess *__data = respData.responseData;
                 _tbAction.tableFooterView = nil;
-                [self reportError:@"取消兑换成功"];
+                [self reportError:respData.message];
             }
             else
             {

@@ -14,5 +14,6 @@
 
 -(void)showAudioView;
 -(void)showTrashView;
+-(void)showAudioViewInUpload;
 
 @end

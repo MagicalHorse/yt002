@@ -83,7 +83,7 @@
     } else
     {
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"yyyy-MM-dd"];
+        [df setDateFormat:@"yyyy年MM月dd日"];
         dateString = [NSString stringWithFormat:NSLocalizedString(@"coupon will expired:%@", nil),[df stringFromDate:_data.endDate]];
     }
     _lblDuration.text = dateString;

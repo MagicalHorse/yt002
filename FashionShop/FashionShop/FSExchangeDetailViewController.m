@@ -370,6 +370,7 @@
             }
             [cell setData:_data];
             if (stores.count == 1) {
+                selIndex = 0;
                 [storeSelBtn setTitle:[stores[0] storename] forState:UIControlStateNormal];
             }
             else{

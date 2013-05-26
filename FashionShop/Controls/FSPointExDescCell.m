@@ -256,7 +256,7 @@
     _data = data;
     _giftNumber.text = _data.giftCode;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"yy年MM月dd日 HH:MM:SS"];
+    [df setDateFormat:@"yy年MM月dd日 HH:mm:ss"];
     _exTime.text = [NSString stringWithFormat:@"%@", [df stringFromDate:_data.createDate]];
     [df setDateFormat:@"yy年MM月dd日"];
     _stopTime.text = [NSString stringWithFormat:@"%@止", [df stringFromDate:_data.validEndDate]];

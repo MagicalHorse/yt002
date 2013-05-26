@@ -44,15 +44,15 @@
     m_pagesView.showsVerticalScrollIndicator = NO;
 	
 	for (int i = 1; i <= PAGES; i++) {
-		NSString *filename = [NSString stringWithFormat:@"Splash%d.jpg",i];
-		NSLog(@"add image :%@", filename);
+		NSString *filename = nil;
+        if ([UIDevice isRunningOniPhone5]) {
+            filename = [NSString stringWithFormat:@"Splash%d_5.jpg",i];
+        }
+        else{
+            filename = [NSString stringWithFormat:@"Splash%d.jpg",i];
+        }
 		UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:filename]];
-        if (APP_HIGH > 480) {
-            iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, (APP_HIGH-480)/2, SCREEN_WIDTH, 480.0);
-        }
-		else{
-            iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, 0.0, SCREEN_WIDTH, 480.0);
-        }
+        iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, 0, SCREEN_WIDTH, APP_HIGH);
 		[m_pagesView addSubview:iv];
 	}
 	[self.view addSubview:m_pagesView];
@@ -63,8 +63,8 @@
 - (void)initPageControl
 {
     int yOffset = 425;
-    if (APP_HIGH > 480) {
-        yOffset += (1136/2-480)/2;
+    if ([UIDevice isRunningOniPhone5]) {
+        yOffset += IPHONE5_AddHEIGHT/2;
     }
 	m_pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(135.0, yOffset, 50.0, 20.0)];
 	m_pageControl.numberOfPages = PAGES;
@@ -80,11 +80,8 @@
 		m_entryButton = [UIButton buttonWithType:UIButtonTypeCustom];
         m_entryButton.backgroundColor = [UIColor clearColor];
         
-        if (APP_HIGH > 480) {
-            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+65, 400-205, 190, 54);
-        } else {
-            m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+65, 380-205, 190, 54);
-        }
+        int width = 75;
+        m_entryButton.frame = CGRectMake(SCREEN_WIDTH*(PAGES-1)+(SCREEN_WIDTH-width), SCREEN_HIGH-width, width, width);
 		[m_entryButton addTarget:self action:@selector(entry) forControlEvents:UIControlEventTouchUpInside];
 		[m_pagesView addSubview:m_entryButton];
 	}

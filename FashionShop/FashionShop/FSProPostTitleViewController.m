@@ -397,7 +397,7 @@
 
 #pragma mark - record function
 
-- (void)startToRecord
+- (BOOL)startToRecord
 {
     [activityObject resignFirstResponder];
     
@@ -409,8 +409,9 @@
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         theApp.audioRecoder.recorderingFileName = _recordFileName;
-        [theApp.audioRecoder startRecord];
+        return [theApp.audioRecoder startRecord];
     }
+    return NO;
 }
 
 - (void)endRecord
@@ -542,7 +543,10 @@
     }
     _downTime = [NSDate date];
     [_btnRecord setTitle:NSLocalizedString(@"Up To End Record", nil) forState:UIControlStateNormal];
-    [self startToRecord];
+    if (![self startToRecord]) {
+        [self endRecord];
+        return;
+    }
     _recordState = PTRecording;
     
     [self startShowAnimation];
@@ -556,6 +560,11 @@
 - (IBAction)recordTouchUpOutside:(id)sender
 {
     [self endTouch];
+    //删除录音
+//    [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
+//    _recordState = PTStartRecord;
+//    [self endRecordAndDelete];
+//    [self endShowAnimation];
 }
 
 - (IBAction)reRecordTouchUpInside:(id)sender {
@@ -615,6 +624,7 @@
     }
     [_timer fire];
     _audioShowView.hidden = NO;
+    [_audioShowView showAudioViewInUpload];
 }
 
 #define AudioLabel_Height 47

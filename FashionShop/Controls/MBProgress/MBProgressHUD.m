@@ -19,8 +19,8 @@
 
 
 static const CGFloat kPadding = 4.f;
-static const CGFloat kLabelFontSize = 16.f;
-static const CGFloat kDetailsLabelFontSize = 12.f;
+static const CGFloat kLabelFontSize = 15.f;
+static const CGFloat kDetailsLabelFontSize = 14.f;
 
 
 @interface MBProgressHUD ()
@@ -193,6 +193,7 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 
 - (id)initWithView:(UIView *)view {
 	NSAssert(view, @"View must not be nil.");
+    NSLog(@"view.bounds:%@", NSStringFromCGRect(view.bounds));
 	id me = [self initWithFrame:view.bounds];
 	// We need to take care of rotation ourselfs if we're adding the HUD to a window
 	if ([view isKindOfClass:[UIWindow class]]) {
@@ -425,7 +426,9 @@ static const CGFloat kDetailsLabelFontSize = 12.f;
 
 - (void)setupLabels {
 	label = [[UILabel alloc] initWithFrame:self.bounds];
-	label.adjustsFontSizeToFitWidth = NO;
+    NSLog(@"label frame:%@", NSStringFromCGRect(label.frame));
+    label.adjustsFontSizeToFitWidth = YES;
+    label.minimumFontSize = 12;
 	label.textAlignment = MBLabelAlignmentCenter;
 	label.opaque = NO;
 	label.backgroundColor = [UIColor clearColor];

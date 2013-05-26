@@ -534,7 +534,7 @@
         _segHeader.selectedIndex = 1;
     }
     else {
-        [_segHeader setButtonsArray:@[btn2]];
+        [_segHeader setButtonsArray:@[btn1]];
         _segHeader.selectedIndex = 0;
     }
     _isInRefreshing = NO;

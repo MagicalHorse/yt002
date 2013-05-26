@@ -118,6 +118,9 @@
             _contentView.tableFooterView= [self createTableFooterView];
         }];
     }
+    else{
+        [self bindRequest];
+    }
 }
 
 -(void)bindRequest

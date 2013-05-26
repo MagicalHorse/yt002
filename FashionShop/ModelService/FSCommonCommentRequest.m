@@ -62,10 +62,11 @@
     [params setValue:refreshTime forParam:@"refreshts"];
     
     [params setValue:userToken forParam:@"token"];
-    [params setValue:comment forParam:@"content"];
     [params setValue:replyuserID forParam:@"replyuser"];
     
-    if (audioName && ![audioName isEqualToString:@""]) {
+    NSString *errorMsg = nil;
+    BOOL flag = YES;
+    if (_isAudio) {
         NSFileManager *fm = [NSFileManager defaultManager];
         if ([fm fileExistsAtPath:audioName]) {
             NSData *data = [NSData dataWithContentsOfFile:audioName];
@@ -74,15 +75,39 @@
             }
         }
         else{
-            NSLog(@"file not exist!");
+            flag = NO;
+            errorMsg = @"语音文件生成发生错误，请重新录入";
         }
     }
+    else if(comment) {
+        [params setValue:comment forParam:@"content"];
+    }
+    else{
+        flag = NO;
+        errorMsg = @"语音和文字描述都不存在，无法进行评论！";
+    }
     
-    NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
-    completeBlock = blockcomplete;
-    errorBlock = blockerror;
-    isClientRequest = true;
-    [[RKClient sharedClient] post:baseUrl params:params delegate:self];
+    if (flag) {
+        NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
+        completeBlock = blockcomplete;
+        errorBlock = blockerror;
+        isClientRequest = true;
+        [[RKClient sharedClient] post:baseUrl params:params delegate:self];
+    }
+    else{
+        errorBlock = blockerror;
+        double delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            errorBlock(errorMsg);
+        });
+    }
+}
+
+-(void)show:(NSString*)msg
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"wen" message:msg delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    [alert show];
 }
 
 - (void)requestDidStartLoad:(RKRequest *)request
