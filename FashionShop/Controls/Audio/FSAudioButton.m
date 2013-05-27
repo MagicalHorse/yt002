@@ -152,9 +152,11 @@
         [_audioDelegate clickAudioButton:self];
     }
     if (state == Playing) {
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
         [self pause];
     }
     else{
+        [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
         [self play];
     }
 }
@@ -172,6 +174,8 @@
     }
     else if(state == Pause) {
         self.state = Playing;
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
         [theApp.audioPlayer play];
         [animateView startAnimating];
     }
@@ -188,6 +192,8 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:recordAudioFullPath])
     {
         NSLog(@"recordAudioFullPath:%@", recordAudioFullPath);
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
         theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL URLWithString:recordAudioFullPath] error:nil];
         theApp.audioPlayer.delegate = self;
         [theApp.audioPlayer prepareToPlay];
@@ -211,12 +217,14 @@
     [theApp.audioPlayer stop];
     theApp.audioPlayer.currentTime = 0;
     self.state = Stop;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 -(void)pause
 {
     [theApp.audioPlayer pause];
     self.state = Pause;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 -(BOOL)isPlaying
@@ -255,6 +263,8 @@
     //以该路径初始化一个url,然后以url初始化player
     NSError * error;
     NSURL * url = [NSURL fileURLWithPath:filePath];
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
     theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     theApp.audioPlayer.delegate = self;
     if (error) {
@@ -264,6 +274,7 @@
     [theApp.audioPlayer play];
     self.state = Playing;
     [animateView startAnimating];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
 }
 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
@@ -274,6 +285,7 @@
         NSLog(@"%@",[error localizedDescription]);
     }
     self.state = Normal;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 #pragma mark - AVAudioPlayerDelegate
@@ -281,6 +293,7 @@
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
     self.state = Stop;
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 @end

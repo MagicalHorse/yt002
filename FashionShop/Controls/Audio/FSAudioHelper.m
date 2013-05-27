@@ -175,7 +175,7 @@ void audioRouteChangeListenerCallback (void                      *inUserData,
     [self printCurrentCategory];
     [[AVAudioSession sharedInstance] setActive: YES error:NULL];
     
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
     //添加监听
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(sensorStateChange:)

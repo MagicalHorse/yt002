@@ -54,6 +54,7 @@
     MBProgressHUD   *statusReport;
     id              proItem;
     int             currentPageIndex;
+    BOOL            _inLoading;
     
     int             replyIndex;//回复索引
     BOOL            isReplyToAll;//是否是回复给所有人
@@ -87,14 +88,16 @@
 {
     [super viewDidLoad];
     [self beginPrepareData];
-    if (!theApp.audioRecoder) {
-        [theApp initAudioRecoder];
-    }
     
     _minRecordGap = 1.5;
     _isAudio = YES;
-    theApp.audioRecoder.clAudioDelegate = self;
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 -(void) beginPrepareData
@@ -203,6 +206,7 @@
     _sourceType = blockViewForRefresh.pType;
    
     [self beginLoading:blockViewForRefresh];
+    _inLoading = YES;
     if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)] &&
         [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex]==TRUE)
     {
@@ -249,6 +253,7 @@
                 //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
                 self.paginatorView.scrollView.scrollEnabled = YES;
                 [self endLoading:blockViewForRefresh];
+                _inLoading = NO;
                 [self onButtonCancel];
             }
         }];
@@ -260,6 +265,7 @@
             [(FSProdDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
             [blockViewForRefresh updateToolBar:input];
             [self endLoading:blockViewForRefresh];
+            _inLoading = NO;
             NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
             if (blockSelf->_sourceType==FSSourcePromotion)
                 navTitle = NSLocalizedString(@"promotion detail", nil);
@@ -292,6 +298,7 @@
     request.rootKeyPath = @"data.comments";
     [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:blockViewForRefresh];
+        _inLoading = NO;
         //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
         self.paginatorView.scrollView.scrollEnabled = YES;
         if (resp.isSuccess)
@@ -1285,7 +1292,6 @@
     if (lastButton) {
         [lastButton stop];
     }
-    theApp.audioRecoder.clAudioDelegate = nil;
     [self set_thumView:nil];
     [self setArrowLeft:nil];
     [self setArrowRight:nil];
@@ -1325,11 +1331,10 @@
 
 - (BOOL)startToRecord
 {
-    if (!theApp.audioRecoder) {
-        [theApp initAudioRecoder];
-    }
     if (_isRecording == NO)
     {
+        [theApp initAudioRecoder];
+        theApp.audioRecoder.clAudioDelegate = self;
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         theApp.audioRecoder.recorderingFileName = _recordFileName;
@@ -1340,7 +1345,7 @@
 
 - (void)endRecord
 {
-    _isRecording = NO;
+//    [self updateProgress:@"语音文件生成中。。。"];
     dispatch_queue_t stopQueue;
     stopQueue = dispatch_queue_create("stopQueue", NULL);
     dispatch_async(stopQueue, ^(void){
@@ -1353,7 +1358,7 @@
 
 -(void)endRecordAndDelete
 {
-    _isRecording = NO;
+//    [self updateProgress:@"语音文件生删除中。。。"];
     dispatch_queue_t stopQueue;
     stopQueue = dispatch_queue_create("stopQueue", NULL);
     dispatch_async(stopQueue, ^(void){
@@ -1368,6 +1373,9 @@
 
 - (IBAction)recordTouchDown:(id)sender
 {
+    if (_inLoading) {
+        return;
+    }
     if (_isRecording) {
         _recordState = PTRecording;
         return;
@@ -1392,7 +1400,7 @@
 }
 
 - (IBAction)recordTouchUpOutside:(id)sender
-{
+{ 
     //删除录音
     [sender setTitle:NSLocalizedString(@"Down To Start Comment", nil) forState:UIControlStateNormal];
     _recordState = PTStartRecord;
@@ -1508,17 +1516,20 @@
 
 -(void)stopRecorderEnd:(CL_AudioRecorder *)_record
 {
+    _isRecording = NO;
     [self endShowAnimation];
     [self sendToService];
 }
 
 -(void)stopAndDelRecorderEnd:(CL_AudioRecorder*)_record
 {
+    _isRecording = NO;
     [self endShowAnimation];
 }
 
 -(void)errorRecorderDidOccur:(CL_AudioRecorder*)_record
 {
+    _isRecording = NO;
     [self endShowAnimation];
 }
 

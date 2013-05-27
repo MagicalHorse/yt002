@@ -51,9 +51,6 @@
     [super viewDidLoad];
     [self decorateTapDismissKeyBoard];
     [self bindControl];
-    if (!theApp.audioRecoder) {
-        [theApp initAudioRecoder];
-    }
     [self initRecordButton];
     
     _minRecordGap = 4;
@@ -79,12 +76,14 @@
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [_txtTitle becomeFirstResponder];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self stopAllAudio];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 #pragma mark - selfdef method
@@ -401,11 +400,10 @@
 {
     [activityObject resignFirstResponder];
     
-    if (!theApp.audioRecoder) {
-        [theApp initAudioRecoder];
-    }
     if (_isRecording == NO)
     {
+        [theApp initAudioRecoder];
+        theApp.audioRecoder.clAudioDelegate = self;
         _isRecording = YES;
         _recordFileName = [NSString stringWithFormat:@"%f.m4a", [[NSDate date] timeIntervalSince1970]];
         theApp.audioRecoder.recorderingFileName = _recordFileName;
@@ -449,6 +447,8 @@
     }
     NSString *recordAudioFullPath = [kRecorderDirectory stringByAppendingPathComponent:_recordFileName];
     NSURL *url = [NSURL fileURLWithPath:recordAudioFullPath];
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
     theApp.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
     theApp.audioPlayer.delegate = self;
     [theApp.audioPlayer prepareToPlay];
@@ -568,6 +568,7 @@
 }
 
 - (IBAction)reRecordTouchUpInside:(id)sender {
+    [self stopPlay];
     [self hideReRecordButton];
 }
 
@@ -594,9 +595,6 @@
             [_btnRecord setTitle:NSLocalizedString(@"Click To Play", nil) forState:UIControlStateNormal];
             _recordState = PTWaitPlay;
             [self endRecord];
-            
-            //显示重新录入按钮
-            [self showReRecordButton];
         }
     }
 }
@@ -606,6 +604,23 @@
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
     [self stopPlay];
+}
+
+#pragma mark - FSCL_AudioDelegate
+
+-(void)stopRecorderEnd:(CL_AudioRecorder *)_record
+{
+    //显示重新录入按钮
+    [self showReRecordButton];
+}
+
+-(void)stopAndDelRecorderEnd:(CL_AudioRecorder*)_record
+{
+}
+
+-(void)errorRecorderDidOccur:(CL_AudioRecorder*)_record
+{
+    [self endShowAnimation];
 }
 
 #pragma mark - Record Animation

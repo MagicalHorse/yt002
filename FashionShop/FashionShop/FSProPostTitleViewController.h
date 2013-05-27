@@ -21,7 +21,7 @@ typedef enum {
 
 @protocol FSProPostTitleViewControllerDelegate;
 
-@interface FSProPostTitleViewController : TDSemiModalViewController<UITextFieldDelegate,UITextViewDelegate,AVAudioPlayerDelegate>
+@interface FSProPostTitleViewController : TDSemiModalViewController<UITextFieldDelegate,UITextViewDelegate,AVAudioPlayerDelegate,FSCL_AudioDelegate>
 
 @property (strong, nonatomic) IBOutlet UILabel *lblName;
 @property (strong, nonatomic) IBOutlet UITextField *txtTitle;

@@ -730,15 +730,13 @@
     switch (_currentSearchIndex) {
         case SortByDistance:
         {
-            FSProNearestHeaderTableCell *header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"FSProNearestHeaderTableCell"];
-            if (header == nil) {
-                NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearestHeaderTableCell" owner:self options:nil];
-                if (_array.count > 0) {
-                    header = (FSProNearestHeaderTableCell*)_array[0];
-                }
-                else{
-                    header = [[FSProNearestHeaderTableCell alloc] init];
-                }
+            FSProNearestHeaderTableCell *header = nil;
+            NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSProNearestHeaderTableCell" owner:self options:nil];
+            if (_array.count > 0) {
+                header = (FSProNearestHeaderTableCell*)_array[0];
+            }
+            else{
+                header = [[FSProNearestHeaderTableCell alloc] init];
             }
             header.tag = section;
             FSStore * store = [_storeSource objectAtIndex:section];

@@ -54,6 +54,12 @@
     [self requestData:NO];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+}
+
 - (IBAction)onButtonBack:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }

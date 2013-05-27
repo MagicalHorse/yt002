@@ -53,47 +53,43 @@
 {
     return [self startRecordForDuration:0];    
 }
+
 - (BOOL)startRecordForDuration: (NSTimeInterval) duration
 {
     if (!_audioRecorder.recording) {
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        NSLog(@"audioSession category:%@", [audioSession category]);
         if ([[audioSession category] isEqualToString:AVAudioSessionCategoryPlayAndRecord] ||
             [[audioSession category] isEqualToString:AVAudioSessionCategoryRecord]) {
             if ([audioSession inputIsAvailable]) {
-                
                 NSError * error = NULL;
                 if (![[NSFileManager defaultManager] fileExistsAtPath:kRecorderDirectory]) {
-                    [[NSFileManager defaultManager] createDirectoryAtPath:kRecorderDirectory 
-                                              withIntermediateDirectories:YES 
-                                                               attributes:nil 
+                    [[NSFileManager defaultManager] createDirectoryAtPath:kRecorderDirectory
+                                              withIntermediateDirectories:YES
+                                                               attributes:nil
                                                                     error:&error];
                 }
                 if (!error) {
 #if  TARGET_IPHONE_SIMULATOR
                     NSString *fullPath = [kRecorderDirectory stringByAppendingPathComponent:
                                           [NSString stringWithFormat:@"%@.caf",[[self class] stringWithUUID]]];
-//                    NSString *fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-//                                          [NSString stringWithFormat:@"recordAudio.caf"]];
 #else
-//                    NSString *fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-//                                          [NSString stringWithFormat:@"%@.m4a",[[self class] stringWithUUID]]];
                     NSString *fullPath;
                     if (!_recorderingFileName) {
                         fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-                                              [NSString stringWithFormat:@"recordAudio.m4a"]];
+                                    [NSString stringWithFormat:@"recordAudio.m4a"]];
                     }
                     else{
                         fullPath = [kRecorderDirectory stringByAppendingPathComponent:
-                                              _recorderingFileName];
+                                    _recorderingFileName];
                     }
-                    
 #endif
                     
                     NSDictionary *recordingSettings = [self recordingSettings];
                     NSURL *fullPathURL = [NSURL fileURLWithPath:fullPath];
-                    _audioRecorder = [[AVAudioRecorder alloc] initWithURL:fullPathURL 
-                                                                 settings:recordingSettings 
+                    _audioRecorder = [[AVAudioRecorder alloc] initWithURL:fullPathURL
+                                                                 settings:recordingSettings
                                                                     error:&error];
                     _audioRecorder.delegate = self;
                     _audioRecorder.meteringEnabled = YES;
@@ -105,24 +101,31 @@
                             _deletedRecording = NO;
                             [self startReceivedRecordingCallBackTimer];
                             if (duration < 0.001) {
-                                return [_audioRecorder record]; 
+                                BOOL flag = [_audioRecorder record];
+                                if (!flag) {
+                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"问题提示" message:@"[_audioRecorder record]，这个地方出问题了,快告诉何青山！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                    [alert show];
+                                }
+                                return flag;
                             }
                             else {
-                                return [_audioRecorder recordForDuration:duration]; 
+                                return [_audioRecorder recordForDuration:duration];
                             }
                         }
                         else NSLog(@"AVAudioRecorder prepareToRecord failure.");
                     }
                     else NSLog(@"AVAudioRecorder alloc failure.");
                 }
-                else NSLog(@"AVAudioRecorder createDirectoryAtPath failure.");
+                else
+                    NSLog(@"AVAudioRecorder createDirectoryAtPath failure.");
                 
             }
-            else NSLog(@"Audio input hardware not available.");
+            else
+                NSLog(@"Audio input hardware not available.");
         }
-        else NSLog(@"AudioSession  not allowed to record.");
     }
-    else NSLog(@"AVAudioRecorder  already in recording.");
+    else
+        NSLog(@"AVAudioRecorder  already in recording.");
     
     return NO;
 }
@@ -132,7 +135,6 @@
     double delayInSeconds = 0.1; //0629 0.1
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        NSLog(@"4:%@",[NSDate date]);
         if(_recordTimer){[_recordTimer invalidate]; _recordTimer=nil;}
         if (_audioRecorder.recording) {
             [_audioRecorder stop];
