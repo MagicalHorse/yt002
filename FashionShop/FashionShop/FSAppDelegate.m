@@ -560,8 +560,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [self initAudioProperty];
     _audioRecoder = [[CL_AudioRecorder alloc] initWithFinishRecordingBlock:^(CL_AudioRecorder *recorder, BOOL success) {
     } encodeErrorRecordingBlock:^(CL_AudioRecorder *recorder, NSError *error) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"问题11" message:[error localizedDescription] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
         NSLog(@"%@",[error localizedDescription]);
     } receivedRecordingBlock:^(CL_AudioRecorder *recorder, float peakPower, float averagePower, float currentTime) {
     }];
@@ -580,15 +578,11 @@ void uncaughtExceptionHandler(NSException *exception)
             }
             else
             {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"问题11" message:[NSString stringWithFormat:@"Failed to set audio session category: %@", error] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-                [alert show];
                 NSLog(@"Failed to set audio session category: %@", error);
             }
         }
         else
         {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"问题11" message:[NSString stringWithFormat:@"Failed to set audio session category: %@", error] delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-            [alert show];
             NSLog(@"Failed to set audio session category: %@", error);
         }
         UInt32 audioRouteOverride = kAudioSessionOverrideAudioRoute_Speaker;

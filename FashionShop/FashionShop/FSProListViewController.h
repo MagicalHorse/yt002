@@ -19,6 +19,4 @@
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
 @property (strong, nonatomic) IBOutlet AKSegmentedControl *segFilters;
 
-
-
 @end

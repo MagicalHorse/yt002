@@ -33,6 +33,7 @@
     BOOL pickerIsShow;  //当前picker是否显示
     int tableYOffset;
     BOOL _inLoading;
+    BOOL _pointIsLoading;
     
     NSMutableArray *stores;
     NSInteger selIndex;
@@ -507,11 +508,35 @@
     else{
         isNeedResignResponse = YES;
     }
-    activityField = textField; 
+    activityField = textField;
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
+    if (textField == pointExField && !_pointIsLoading) {
+        if ([self checkPoint:nil]) {
+            FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
+            request.routeResourcePath = RK_REQUEST_STOREPROMOTION_AMOUNT;
+            request.storePromotionId = _requestID;
+            request.userToken = [FSUser localProfile].uToken;
+            request.points = [pointExField.text intValue];
+            _pointIsLoading = YES;
+            [request send:[FSExchange class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+                _pointIsLoading = NO;
+                if (respData.isSuccess)
+                {
+                    FSExchange *data = respData.responseData;
+                    exMoneyLb.text = [NSString stringWithFormat:@"%.2f元",data.amount];
+                    [exMoneyLb sizeToFit];
+                }
+                else
+                {
+                    exMoneyLb.text = respData.errorDescrip;
+                    [exMoneyLb sizeToFit];
+                }
+            }];
+        }
+    }
     activityField = nil;
     isNeedResignResponse = NO;
 }
@@ -535,7 +560,9 @@
             request.storePromotionId = _requestID;
             request.userToken = [FSUser localProfile].uToken;
             request.points = [pointExField.text intValue];
+            _pointIsLoading = YES;
             [request send:[FSExchange class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+                _pointIsLoading = NO;
                 if (respData.isSuccess)
                 {
                     FSExchange *data = respData.responseData;

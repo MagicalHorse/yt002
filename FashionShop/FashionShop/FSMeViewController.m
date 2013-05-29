@@ -1051,7 +1051,7 @@
         if (cell)
         {
             FSEntityRequestBase *request = nil;
-            if (_userProfile.userLevelId == FSDARENUser) {
+            if (_userProfile.userLevelId == FSDARENUser && _segHeader.selectedIndex == 1) {
                 FSCommonProRequest * removeRequest = [[FSCommonProRequest alloc] init];
                 removeRequest.uToken = _userProfile.uToken;
                 removeRequest.id = [NSNumber numberWithInt:[(FSItemBase *)[(FSFavorProCell *)cell data] sourceId]];
@@ -1079,7 +1079,20 @@
                 {
                     [_likePros removeObject:[(FSFavorProCell *)cell data]];
                     [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
-                    
+                    if (_likePros.count<1)
+                    {
+                        //加载空视图
+                        if (_segHeader.selectedIndex == 0) {
+                            [self showNoResultImage:_likeView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_Me_Liked_List", nil)  originOffset:30];
+                        }
+                        else{
+                            [self showNoResultImage:_likeView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_Me_Shared_List", nil)  originOffset:30];
+                        }
+                    }
+                    else
+                    {
+                        [self hideNoResultImage:_likeView];
+                    }
                 }
             }];
             
@@ -1339,9 +1352,9 @@
 
 - (void)activateDeletionMode:(UILongPressGestureRecognizer *)gr
 {
-    if (_segHeader.selectedIndex == 0) {
-        return;
-    }
+//    if (_segHeader.selectedIndex == 0) {
+//        return;
+//    }
     if (gr.state == UIGestureRecognizerStateBegan)
     {
         NSIndexPath *indexPath = [_likeView indexPathForItemAtPoint:[gr locationInView:_likeView]];

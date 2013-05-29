@@ -69,8 +69,12 @@
     _pointCount.text = [NSString stringWithFormat:@"%d", _data.points];
     _cashCount.text = [NSString stringWithFormat:@"%.2f元", _data.amount];
     _giftCode.text = _data.giftCode;
-    _attention.text = @"特别提醒：请在使用礼券购买商品时，请同时出示会员卡进行使用。";
-    _attention.numberOfLines = 2;
+    _attention.numberOfLines = 0;
+    _attention.text = [NSString stringWithFormat:@"特别提醒：%@", _data.promotion.usageNotice];
+    int _h = [_data.promotion.usageNotice sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(280, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    CGRect _rect = _attention.frame;
+    _rect.size.height = _h;
+    _attention.frame = _rect;
 }
 
 @end

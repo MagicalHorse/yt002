@@ -133,7 +133,7 @@
         [_segHeader setButtonsArray:@[btn1, btn2]];
     }
     else {
-        [_segHeader setButtonsArray:@[btn2]];
+        [_segHeader setButtonsArray:@[btn1]];
     }
     _segHeader.selectedIndex = 0;
 }

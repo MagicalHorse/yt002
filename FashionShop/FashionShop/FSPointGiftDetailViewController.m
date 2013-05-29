@@ -207,7 +207,15 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0) {
-        return 260;
+        int height = 260;
+        int _h = [_data.promotion.usageNotice sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(280, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+        if (_h > 33) {
+            _h -= 33;
+        }
+        else {
+            _h = 0;
+        }
+        return height + _h;
     }
     else{
         FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];

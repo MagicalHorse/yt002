@@ -3730,7 +3730,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3740,7 +3740,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
@@ -3753,7 +3753,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3785,7 +3785,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
@@ -3803,7 +3803,7 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -3820,7 +3820,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SDKROOT = iphoneos;
 			};
@@ -3834,8 +3834,8 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -3844,8 +3844,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 			};
@@ -3857,7 +3857,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3893,7 +3893,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
@@ -3909,7 +3909,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3941,7 +3941,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;

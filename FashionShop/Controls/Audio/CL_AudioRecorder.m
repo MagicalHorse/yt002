@@ -102,10 +102,6 @@
                             [self startReceivedRecordingCallBackTimer];
                             if (duration < 0.001) {
                                 BOOL flag = [_audioRecorder record];
-                                if (!flag) {
-                                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"问题提示" message:@"[_audioRecorder record]，这个地方出问题了,快告诉何青山！" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                    [alert show];
-                                }
                                 return flag;
                             }
                             else {
