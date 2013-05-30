@@ -170,8 +170,7 @@
         NSMutableString *str = [NSMutableString string];
         for (int i = 0; i < _data.promotion.inscopenotices.count; i++) {
             FSCommon *item = _data.promotion.inscopenotices[i];
-            [str appendFormat:@"使用门店：%@\n使用范围：%@\n", item.storename, item.excludes];
-            break;//暂时只增加一个
+            [str appendFormat:@"使用门店：%@\n使用范围：%@\n\n", item.storename, item.excludes];
         }
         cell.desc = str;
         [cell setData];

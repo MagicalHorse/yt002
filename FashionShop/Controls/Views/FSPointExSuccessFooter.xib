@@ -38,7 +38,7 @@
 					<object class="IBUIButton" id="491703961">
 						<reference key="NSNextResponder" ref="346092194"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{49, 12}, {222, 37}}</string>
+						<string key="NSFrame">{{49, 12}, {222, 40}}</string>
 						<reference key="NSSuperview" ref="346092194"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="918191662"/>
@@ -68,20 +68,20 @@
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">btn_bg.png</string>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription" id="908510326">
+						<object class="IBUIFontDescription" key="IBUIFontDescription">
 							<int key="type">2</int>
-							<double key="pointSize">18</double>
+							<double key="pointSize">17</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="766866824">
+						<object class="NSFont" key="IBUIFont">
 							<string key="NSName">Helvetica-Bold</string>
-							<double key="NSSize">18</double>
+							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
 						</object>
 					</object>
 					<object class="IBUIButton" id="918191662">
 						<reference key="NSNextResponder" ref="346092194"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{49, 63}, {222, 37}}</string>
+						<string key="NSFrame">{{49, 60}, {222, 40}}</string>
 						<reference key="NSSuperview" ref="346092194"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="226344471"/>
@@ -91,7 +91,7 @@
 						<int key="IBUIContentHorizontalAlignment">0</int>
 						<int key="IBUIContentVerticalAlignment">0</int>
 						<int key="IBUIButtonType">1</int>
-						<string key="IBUINormalTitle">返回首页</string>
+						<string key="IBUINormalTitle">代金券详情</string>
 						<reference key="IBUIHighlightedTitleColor" ref="246428528"/>
 						<object class="NSColor" key="IBUINormalTitleColor">
 							<int key="NSColorSpace">3</int>
@@ -100,8 +100,15 @@
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="205271877"/>
 						<reference key="IBUINormalBackgroundImage" ref="375543406"/>
-						<reference key="IBUIFontDescription" ref="908510326"/>
-						<reference key="IBUIFont" ref="766866824"/>
+						<object class="IBUIFontDescription" key="IBUIFontDescription">
+							<int key="type">2</int>
+							<double key="pointSize">16</double>
+						</object>
+						<object class="NSFont" key="IBUIFont">
+							<string key="NSName">Helvetica-Bold</string>
+							<double key="NSSize">16</double>
+							<int key="NSfFlags">16</int>
+						</object>
 					</object>
 					<object class="IBUIView" id="226344471">
 						<reference key="NSNextResponder" ref="346092194"/>

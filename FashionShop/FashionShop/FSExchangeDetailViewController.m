@@ -160,32 +160,10 @@
     [pointExField resignFirstResponder];
     [idCardField resignFirstResponder];
     
-    FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
-    request.routeResourcePath = RK_REQUEST_STOREPROMOTION_EXCHANGE;
-    request.storePromotionId = _requestID;
-    request.points = [pointExField.text intValue];
-    request.identityNo = idCardField.text;
-    request.storeID = [_data.inscopenotices[selIndex] storeid];
-    request.userToken = [FSUser localProfile].uToken;
-    [self beginLoading:self.view];
-    _inLoading = YES;
-    self.view.userInteractionEnabled = NO;
-    [request send:[FSExchangeSuccess class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:self.view];
-        _inLoading = NO;
-        self.view.userInteractionEnabled = YES;
-        if (respData.isSuccess)
-        {
-            FSExchangeSuccess *sucData = (FSExchangeSuccess*)respData.responseData;
-            FSExchangeSuccessViewController *controller = [[FSExchangeSuccessViewController alloc] initWithNibName:@"FSExchangeSuccessViewController" bundle:nil];
-            controller.data = sucData;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-        else
-        {
-            [self reportError:respData.errorDescrip];
-        }
-    }];
+    NSString *msg = [NSString stringWithFormat:@"兑换门店：%@\n兑换积点：%d\n兑换金额：%@", [_data.inscopenotices[selIndex] storename], [pointExField.text intValue], exMoneyLb.text];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"Continue Exchange", nil), nil];
+    alert.tag = 105;
+    [alert show];
 }
 
 -(void)clickToSelStore:(UIButton*)sender
@@ -608,6 +586,12 @@
 
 -(BOOL)checkIDCard:(NSString **)error
 {
+    if (!idCardField.text || [idCardField.text isEqualToString:@""]) {
+        if (error) {
+            *error = @"身份证号码输入不正确，请重新输入";
+        }
+        return NO;
+    }
     return YES;//不验证身份证信息
     
     BOOL flag = [NSString isIDCardNum:idCardField.text];
@@ -649,6 +633,34 @@
     }
     else if(alertView.tag == 104) {
         [self showPickerView];
+    }
+    else if(alertView.tag == 105 && buttonIndex == 1) {
+        FSExchangeRequest *request = [[FSExchangeRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_STOREPROMOTION_EXCHANGE;
+        request.storePromotionId = _requestID;
+        request.points = [pointExField.text intValue];
+        request.identityNo = idCardField.text;
+        request.storeID = [_data.inscopenotices[selIndex] storeid];
+        request.userToken = [FSUser localProfile].uToken;
+        [self beginLoading:self.view];
+        _inLoading = YES;
+        self.view.userInteractionEnabled = NO;
+        [request send:[FSExchangeSuccess class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            [self endLoading:self.view];
+            _inLoading = NO;
+            self.view.userInteractionEnabled = YES;
+            if (respData.isSuccess)
+            {
+                FSExchangeSuccess *sucData = (FSExchangeSuccess*)respData.responseData;
+                FSExchangeSuccessViewController *controller = [[FSExchangeSuccessViewController alloc] initWithNibName:@"FSExchangeSuccessViewController" bundle:nil];
+                controller.data = sucData;
+                [self.navigationController pushViewController:controller animated:YES];
+            }
+            else
+            {
+                [self reportError:respData.errorDescrip];
+            }
+        }];
     }
 }
 

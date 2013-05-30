@@ -506,6 +506,9 @@
 }
 
 - (IBAction)doComment:(id)sender {
+    if (_inLoading) {
+        return;
+    }
     id currentView =  self.paginatorView.currentPage;
     isReplyToAll = YES;
     
@@ -514,6 +517,9 @@
 }
 
 - (IBAction)doGetCoupon:(id)sender {
+    if (_inLoading) {
+        return;
+    }
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
     NSString *_loginToken = [FSModelManager sharedModelManager].loginToken;
     if (!isLogined || !_loginToken)
@@ -547,11 +553,14 @@
             [self internalGetCoupon:callback];
         } completeCallbck:^{
             [self endProgress];
-        }];   
+        }];
     }
 }
 
 - (IBAction)doShare:(id)sender {
+    if (_inLoading) {
+        return;
+    }
     NSMutableArray *shareItems = [@[] mutableCopy];
     id view = self.paginatorView.currentPage;
     NSString *title = [self.itemSource valueForKey:@"title"];
@@ -613,7 +622,9 @@
 }
 
 - (IBAction)doFavor:(id)sender {
-    
+    if (_inLoading) {
+        return;
+    }
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
      __block id view = self.paginatorView.currentPage;
     if (!isLogined)

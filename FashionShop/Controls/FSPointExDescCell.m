@@ -156,7 +156,7 @@
     _rect.origin.y = _cellHeight;
     _rect.size.height = _content.optimumSize.height;
     _content.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    _cellHeight += _rect.size.height;
     
     if (_hasAddionalView) {
         [self initArray];

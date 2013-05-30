@@ -12,7 +12,7 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.2.0"
+#define REST_API_CLIENT_VERSION @"2.2.1"
 
 //正式库
 #define REST_API_URL   @"http://itoo.yintai.com/api"

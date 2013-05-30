@@ -282,7 +282,7 @@
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [self endLoading:_cvContent];
+    [self endLoading:self.view];
 }
 
 -(void) prepareData
@@ -302,8 +302,9 @@
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
         [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [blockSelf endLoading:_cvTags];
-            if (blockSelf->_tags.count>0)
+            if (blockSelf->_tags.count>0) {
                 return;
+            }
             [blockSelf->_tags addObjectsFromArray:[FSTag localTags]];
             [blockSelf endPrepareData];
         }];

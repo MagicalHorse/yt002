@@ -180,9 +180,11 @@
     int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
     [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
     FSCommonUserRequest *request = [self createRequest:currentPage];
-    [self beginLoading:_contentView];
+    [self beginLoading:self.view];
+    _inLoading = YES;
     [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:_contentView];
+        [self endLoading:self.view];
+        _inLoading = NO;
         if (resp.isSuccess)
         {
             FSPagedCoupon *innerResp = resp.responseData;
@@ -386,6 +388,9 @@
 - (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
 {
     if (segmentedControl == _segFilters){
+        if (_inLoading) {
+            return;
+        }
         if(_currentSelIndex == index)
         {
             return;

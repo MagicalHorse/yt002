@@ -9,6 +9,9 @@
 #import "FSExchangeSuccessViewController.h"
 #import "FSPointExDescCell.h"
 #import "FSPointExSuccessFooter.h"
+#import "FSGiftListViewController.h"
+#import "FSPointGiftListViewController.h"
+#import "FSPointGiftDetailViewController.h"
 
 @interface FSExchangeSuccessViewController ()
 
@@ -28,7 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"领兑完成";
+    self.title = @"领兑成功";
     self.navigationItem.hidesBackButton = YES;
     [self loadFooter];
     _tbAction.backgroundView = nil;
@@ -72,12 +75,26 @@
 
 -(void)clickToBackHome:(UIButton*)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+//    [self.navigationController popToRootViewControllerAnimated:YES];
 //    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
 //    UITabBarController *root = [storyBoard instantiateInitialViewController];
 //    root.selectedIndex = 0;
 //    UINavigationController *nav = (UINavigationController*)root.selectedViewController;
 //    [nav popToRootViewControllerAnimated:YES];
+    
+    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
+    _array = [_array subarrayWithRange:NSMakeRange(0, 1)];
+    NSMutableArray *_mutArray = [NSMutableArray arrayWithArray:_array];
+    FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+    couponView.currentUser = [FSUser localProfile];
+    [_mutArray addObject:couponView];
+    FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
+    [_mutArray addObject:controller];
+    FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
+    detail.requestID = _data.storeProId;
+    [_mutArray addObject:detail];
+    
+    [self.navigationController setViewControllers:_mutArray animated:YES];
 }
 
 #pragma mark - UITableViewDataSource

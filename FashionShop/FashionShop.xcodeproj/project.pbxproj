@@ -3753,8 +3753,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3785,8 +3785,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3857,8 +3857,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3893,8 +3893,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "08D66791-F4FF-4B08-B20E-1D753A15FBF4";
+				PROVISIONING_PROFILE = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3909,8 +3909,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -3941,8 +3941,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

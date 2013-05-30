@@ -62,10 +62,11 @@
     _createTime.text = [df stringFromDate:_data.createDate];
     [df setDateFormat:@"yy年MM月dd日"];
     _validate.text = [NSString stringWithFormat:@"%@止", [df stringFromDate:_data.validEndDate]];
-    if (_data.promotion.inscopenotices.count > 0) {
-        FSCommon *item = _data.promotion.inscopenotices[0];
-        _useStore.text = item.storename;
-    }
+//    if (_data.promotion.inscopenotices.count > 0) {
+//        FSCommon *item = _data.promotion.inscopenotices[0];
+//        _useStore.text = item.storename;
+//    }
+    _useStore.text = _data.storeName;
     _pointCount.text = [NSString stringWithFormat:@"%d", _data.points];
     _cashCount.text = [NSString stringWithFormat:@"%.2f元", _data.amount];
     _giftCode.text = _data.giftCode;

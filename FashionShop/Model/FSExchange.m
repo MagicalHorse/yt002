@@ -104,7 +104,7 @@
     [relationMap mapKeyPath:@"points" toAttribute:@"points"];
     [relationMap mapKeyPath:@"amount" toAttribute:@"amount"];
     [relationMap mapKeyPath:@"status" toAttribute:@"status"];
-    [relationMap mapKeyPath:@"storeName" toAttribute:@"storeName"];
+    [relationMap mapKeyPath:@"storename" toAttribute:@"storeName"];
     [relationMap mapKeyPath:@"validenddate" toAttribute:@"validEndDate"];
     [relationMap mapKeyPath:@"validstartdate" toAttribute:@"validStartDate"];
     
