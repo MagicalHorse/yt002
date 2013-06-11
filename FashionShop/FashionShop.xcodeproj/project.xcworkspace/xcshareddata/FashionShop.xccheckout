@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>CC334608-5F9E-4775-AC53-722549C057D3</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FashionShop</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>68D53008-5520-4A7A-A1F3-4D93E21BFCF2</key>
+		<string>https://github.com/victorgong/yt002.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FashionShop/FashionShop.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>68D53008-5520-4A7A-A1F3-4D93E21BFCF2</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/victorgong/yt002.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>68D53008-5520-4A7A-A1F3-4D93E21BFCF2</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>68D53008-5520-4A7A-A1F3-4D93E21BFCF2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>yt002</string>
+		</dict>
+	</array>
+</dict>
+</plist>

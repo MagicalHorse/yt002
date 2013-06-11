@@ -76,6 +76,7 @@
     bool            _isFirstLoad;
     BOOL            isDeletionModeActive;
     BOOL            _isInLoading;
+    BOOL            _IsRequestUserInfo;
     BOOL            _isInRefreshing;
     int             _favorPageIndex;
     BOOL            _noMoreFavor;
@@ -108,8 +109,10 @@
     __block FSMeViewController *blockSelf = self;
     [_dataSourceProvider setValue:^(FSUserLoginRequest *request){
         [blockSelf beginLoading:blockSelf->_tbScroll];
+        blockSelf->_IsRequestUserInfo = YES;
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
             [blockSelf endLoading:blockSelf->_tbScroll];
+            blockSelf->_IsRequestUserInfo = NO;
             if (!response.isSuccess)
             {
                 if (blockSelf->completeCallBack!=nil)
@@ -141,8 +144,10 @@
     
     [_dataSourceProvider setValue:^(FSUserProfileRequest *request){
         [blockSelf beginLoading:blockSelf->_tbScroll];
+        blockSelf->_IsRequestUserInfo = YES;
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *response) {
             [blockSelf endLoading:blockSelf->_tbScroll];
+            blockSelf->_IsRequestUserInfo = NO;
             if (!response.isSuccess)
             {
                 [FSUser removeUserProfile];
@@ -256,6 +261,9 @@
     self.navigationController.navigationBar.translucent = YES;
     self.navigationController.navigationBar.tintColor = [UIColor blackColor];
     _toDetail = NO;
+    if (!_IsRequestUserInfo && _likePros.count <= 0) {
+        [self switchView];
+    }
     
     [super viewWillAppear:animated];
 }

@@ -640,7 +640,9 @@
 {
     [self beginLoadMoreLayout:_cvContent];
     __block FSProdListViewController *blockSelf = self;
+    _isInLoading = YES;
     [self refreshContent:FALSE withCallback:^{
+        _isInLoading = NO;
         [blockSelf endLoadMore:_cvContent];
     }];
     
