@@ -207,7 +207,8 @@
 {
     if (indexPath.row == 0) {
         int height = 260;
-        int _h = [_data.promotion.usageNotice sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(280, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+        NSString *_temp = [NSString stringWithFormat:@"特别提醒：%@", _data.promotion.usageNotice];
+        int _h = [_temp sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(280, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
         if (_h > 33) {
             _h -= 33;
         }
@@ -236,6 +237,8 @@
             [self endLoading:self.view];
             if (respData.isSuccess)
             {
+                FSUser *localUser = (FSUser *)[FSUser localProfile];
+                localUser.couponsTotal --;
                 _tbAction.tableFooterView = nil;
                 [self reportError:respData.message];
             }

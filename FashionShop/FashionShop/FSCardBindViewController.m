@@ -72,6 +72,8 @@
         
         UIImage *image = [UIImage imageNamed:@"btn_bg.png"];
         [_btnBindCard setBackgroundImage:image forState:UIControlStateNormal];
+        
+        [_cardNumField becomeFirstResponder];
     }
     else {
         _bindView.hidden = YES;
@@ -141,7 +143,8 @@
     if ([self checkInput])
     {
         FSCardRequest *request = [[FSCardRequest alloc] init];
-        request.userToken = currentUser.uToken;
+        FSUser *localUser = [FSUser localProfile];
+        request.userToken = localUser.uToken;
         request.cardNo = _cardNumField.text;
         request.passWord = _cardPwField.text;
         request.routeResourcePath = RK_REQUEST_USER_CARD_BIND;

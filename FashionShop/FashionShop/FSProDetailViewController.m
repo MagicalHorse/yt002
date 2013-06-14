@@ -44,6 +44,9 @@
 #import "MyPhoto.h"
 #import "MyPhotoSource.h"
 
+#import "FSGiftListViewController.h"
+#import "FSCouponViewController.h"
+
 #define PRO_DETAIL_COMMENT_INPUT_TAG 200
 #define TOOLBAR_HEIGHT 44
 #define PRO_DETAIL_COMMENT_INPUT_HEIGHT 63
@@ -342,6 +345,8 @@
     return nil;
 }
 
+#define Alert_Tag_Coupon 123
+
 -(void) internalGetCoupon:(dispatch_block_t) cleanup
 {
     FSCouponRequest *request = [[FSCouponRequest alloc] init];
@@ -382,11 +387,13 @@
                 if (pass)
                 {
                     PKAddPassesViewController *passController = [[PKAddPassesViewController alloc] initWithPass:pass];
+//                    passController.delegate = self;
                     [self presentViewController:passController animated:TRUE completion:nil];
                 }
             }
             else{
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Pass Add Tip Info", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Pass Add Tip Info", nil) delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                alert.tag = Alert_Tag_Coupon;
                 [alert show];
             }
             [blockSelf updateProgressThenEnd:NSLocalizedString(@"coupon use instruction",nil) withDuration:2];
@@ -1138,17 +1145,18 @@
     if (!parentView.data) {
         return 0;
     }
-    int yOffset = PRO_DETAIL_COMMENT_HEADER_HEIGHT;
+    int yOffset = PRO_DETAIL_COMMENT_HEADER_HEIGHT + 5;
     if ([self IsBindPromotionOrProduct:parentView.data]) {
         if (section == 0) {
             return 1;
         }
-        yOffset += 40;
+        yOffset += 70;
     }
     NSMutableArray *comments = [parentView.data comments];
     if (!comments ||
-        comments.count<=0)
+        comments.count<=0) {
         [self showNoResult:tableView withText:NSLocalizedString(@"no comments", Nil) originOffset:yOffset];
+    }
     else
         [self hideNoResult:tableView];
     return comments?comments.count:0;
@@ -1542,6 +1550,35 @@
 {
     _isRecording = NO;
     [self endShowAnimation];
+}
+
+#pragma mark - PKAddPassesViewControllerDelegate
+//-(void)addPassesViewControllerDidFinish:(PKAddPassesViewController *)controller
+//{
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Pass Add Tip Info", nil) delegate:nil cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+//    alert.tag = Alert_Tag_Coupon;
+//    [alert show];
+//}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == Alert_Tag_Coupon && buttonIndex == 1) {
+        [self.navigationController popToRootViewControllerAnimated:NO];
+        UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+        UITabBarController *root = [storyBoard instantiateInitialViewController];
+        root.selectedIndex = 3;
+//        UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+//        //跳转优惠码列表页
+//        NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.visibleViewController];
+//        FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+//        couponView.currentUser = [FSUser localProfile];
+//        [_mutArray addObject:couponView];
+//        FSCouponViewController *controller= [[FSCouponViewController alloc] initWithNibName:@"FSCouponViewController" bundle:nil];
+//        [_mutArray addObject:controller];
+//        [nav.navigationController setViewControllers:_mutArray animated:YES];
+    }
 }
 
 @end

@@ -15,6 +15,7 @@
 #import "FSThumView.h"
 #import "FSImageSlideViewController.h"
 #import "FSAudioButton.h"
+#import <PassKit/PassKit.h>
 
 @class FSProDetailViewController;
 
@@ -30,7 +31,7 @@
 
 @end
 
-@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider,FSAudioDelegate,FSCL_AudioDelegate>
+@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider,FSAudioDelegate,FSCL_AudioDelegate,PKAddPassesViewControllerDelegate>
 
 - (IBAction)doBack:(id)sender;
 - (IBAction)doComment:(id)sender;

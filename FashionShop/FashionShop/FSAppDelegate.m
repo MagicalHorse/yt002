@@ -68,6 +68,9 @@ void uncaughtExceptionHandler(NSException *exception)
     [self setupAnalys];
 #endif
     
+    //添加UmengTrack
+    [self initUMTrack];
+    
     FSAudioHelper *help = [[FSAudioHelper alloc] init];
     [help initSession];
     
@@ -384,7 +387,7 @@ void uncaughtExceptionHandler(NSException *exception)
 
 - (void)applicationDidEnterBackground:(UIApplication *)application NS_AVAILABLE_IOS(4_0)
 {
-    
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application NS_AVAILABLE_IOS(4_0)
 {

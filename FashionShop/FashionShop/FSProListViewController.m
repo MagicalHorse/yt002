@@ -96,8 +96,9 @@
             }
             else
             {
-                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
                 FSProItems *response = (FSProItems *) respData.responseData;
+                int currentPage = response.currentPageIndex;
+                [blockSelf setPageIndex:currentPage selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
@@ -125,8 +126,9 @@
             }
             else
             {
-                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
                 FSProItems *response = (FSProItems *) respData.responseData;
+                int currentPage = response.currentPageIndex;
+                [blockSelf setPageIndex:currentPage selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
@@ -155,8 +157,9 @@
             }
             else
             {
-                int currentPage = [[blockSelf->_pageIndexList objectAtIndex:blockSelf->_currentSearchIndex] intValue];
                 FSProItems *response = (FSProItems *) respData.responseData;
+                int currentPage = response.currentPageIndex;
+                [blockSelf setPageIndex:currentPage selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
@@ -399,9 +402,9 @@
     request.pageSize = COMMON_PAGE_SIZE;
     request.requestType = 1;
     request.previousLatestDate = [_firstTimeList objectAtIndex:_currentSearchIndex];
-    [self beginLoading:_contentView];
+    [self beginLoading:self.view];
     block(request,^(){
-        [self endLoading:_contentView];
+        [self endLoading:self.view];
     });
 }
 
@@ -696,9 +699,6 @@
         {
             int storeId = [[[_storeSource objectAtIndex:section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
-            if (rows.count > 2) {
-                return 2;
-            }
             return rows.count;
             break;
         }
@@ -766,6 +766,9 @@
         case SortByDate:
         {
             FSProNewHeaderView_1 *header = [[[NSBundle mainBundle] loadNibNamed:@"FSProNewHeaderView" owner:self options:nil] objectAtIndex:0];
+            if (_dateSource.count <= section) {
+                return nil;
+            }
             NSDate * date = [_dateSource objectAtIndex:section];
             header.data = date;
             return header;
@@ -820,6 +823,10 @@
             listCell.line2.backgroundColor = [UIColor lightGrayColor];
             int storeId = [[[_storeSource objectAtIndex:indexPath.section] valueForKey:@"id"] intValue];
             NSArray *rows =  [_storeIndexSource objectForKey:[NSString stringWithFormat:@"%d",storeId]];
+            
+            if (indexPath.row >= rows.count) {
+                return listCell;
+            }
             FSProItemEntity* proData = [rows objectAtIndex:indexPath.row];
             
             NSDateFormatter *smdf = [[NSDateFormatter alloc]init];
@@ -856,6 +863,9 @@
             
             NSMutableArray *rows = nil;
             if (_currentSearchIndex == SortByDate) {
+                if (indexPath.section >= _dateSource.count) {
+                    return listCell;
+                }
                 NSDate *sectionDate = [_dateSource objectAtIndex:indexPath.section];
                 NSDateFormatter *mdf = [[NSDateFormatter alloc]init];
                 [mdf setDateFormat:@"yyyy-MM-dd"];
@@ -863,6 +873,9 @@
             }
             else{
                 rows = [_dataSourceList objectAtIndex:_currentSearchIndex];
+            }
+            if (indexPath.row >= rows.count) {
+                return listCell;
             }
             FSProItemEntity * proData = [rows objectAtIndex:indexPath.row];
             
@@ -947,7 +960,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
-    bool cannotLoadMore = [_noMoreList objectAtIndex:_currentSearchIndex];
+    bool cannotLoadMore = [[_noMoreList objectAtIndex:_currentSearchIndex] boolValue];
     if(!_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height
        && scrollView.contentOffset.y>0
@@ -1127,9 +1140,9 @@
             request.pageSize = COMMON_PAGE_SIZE;
             request.requestType = 1;
             
-            [self beginLoading:_contentView];
+            [self beginLoading:self.view];
             block(request,^(){
-                [self endLoading:_contentView];
+                [self endLoading:self.view];
                 [_contentView setContentOffset:CGPointZero];
                 [self reloadTableView];
             });
