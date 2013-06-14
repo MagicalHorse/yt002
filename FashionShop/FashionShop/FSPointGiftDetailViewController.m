@@ -236,10 +236,6 @@
             [self endLoading:self.view];
             if (respData.isSuccess)
             {
-                //取消兑换成功，减少总数
-                FSUser *localUser = (FSUser *)[FSUser localProfile];
-                localUser.couponsTotal --;
-                //取消按钮取消
                 _tbAction.tableFooterView = nil;
                 [self reportError:respData.message];
             }

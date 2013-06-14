@@ -74,12 +74,12 @@
     str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal, storeDesc];
     [_joinStore setText:str];
     _rect = _joinStore.frame;
-    _rect.origin.y = _cellHeight + 4;
+    _rect.origin.y = _cellHeight;
     _rect.origin.x = 90;
     _rect.size.width = 210;
     _rect.size.height = _joinStore.optimumSize.height;
     _joinStore.frame = _rect;
-    _cellHeight += _rect.size.height + yCap + 3;
+    _cellHeight += _rect.size.height + yCap;
     
     //礼券使用范围
     str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>礼券使用范围  </font><font face='%@' size=13 color='0090ff'><a href=''>点击查看</a></font>", Font_Name_Normal, Font_Name_Normal];
@@ -156,11 +156,12 @@
     _rect.origin.y = _cellHeight;
     _rect.size.height = _content.optimumSize.height;
     _content.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    _cellHeight += _rect.size.height;
     
     if (_hasAddionalView) {
         [self initArray];
         PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
+        //layout.itemSize = CGSizeMake(95, 20);
         _additionalView.collectionViewLayout = layout;
         _additionalView.hidden = NO;
         _additionalView.frame = CGRectMake(10, _cellHeight, 300, (_changeDaga.rules.count+1)*30);
@@ -168,7 +169,6 @@
         [_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
         _additionalView.showsHorizontalScrollIndicator = NO;
         _additionalView.showsVerticalScrollIndicator = NO;
-        _additionalView.scrollEnabled = NO;
         _additionalView.delegate = self;
         _additionalView.dataSource = self;
         _cellHeight += _additionalView.frame.size.height + 8;

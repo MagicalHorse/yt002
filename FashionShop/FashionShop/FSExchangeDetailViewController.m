@@ -436,13 +436,13 @@
             break;
         case 2:
         {
-            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+            FSPointExDescCell *cell = (FSPointExDescCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
             return cell.cellHeight;
         }
             break;
         case 3:
         {
-            FSPointExCommonCell *cell = (FSPointExCommonCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+            FSPointExDescCell *cell = (FSPointExDescCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
             return cell.cellHeight;
         }
             break;
@@ -651,10 +651,6 @@
             self.view.userInteractionEnabled = YES;
             if (respData.isSuccess)
             {
-                //修改优惠券总数
-                FSUser *localUser = (FSUser *)[FSUser localProfile];
-                localUser.couponsTotal ++;
-                //跳转成功界面
                 FSExchangeSuccess *sucData = (FSExchangeSuccess*)respData.responseData;
                 FSExchangeSuccessViewController *controller = [[FSExchangeSuccessViewController alloc] initWithNibName:@"FSExchangeSuccessViewController" bundle:nil];
                 controller.data = sucData;

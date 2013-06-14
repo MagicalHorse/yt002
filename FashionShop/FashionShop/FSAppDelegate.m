@@ -61,9 +61,6 @@ void uncaughtExceptionHandler(NSException *exception)
     //SETUP REMOTE NOTIFICATION
     [self registerPushNotification];
     
-    //添加UmengTrack
-    [self initUMTrack];
-    
     //setup exception handler
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 #if defined ENVIRONMENT_STORE
