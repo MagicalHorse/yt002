@@ -8,6 +8,7 @@
 
 #import "FSAboutViewController.h"
 #import "UIDevice+Extention.h"
+#import "FSUser.h"
 
 @interface FSAboutViewController ()
 
@@ -49,6 +50,10 @@
         _rect.origin.y += 44;
         _desc.frame = _rect;
     }
+    
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"关于喜欢银泰页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:ABOUT_XHYT withParameters:_dic];
 }
 
 - (IBAction)onButtonBack:(id)sender {

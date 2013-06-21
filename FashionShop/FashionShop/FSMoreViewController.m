@@ -97,11 +97,21 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Exit Current Account", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     alert.tag = 101;
     [alert show];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"更多页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:USER_EXIT withParameters:_dic];
 }
 
 -(void)attentionXhyt:(UIButton*)sender
 {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"更多页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:ATTETION_XHYT withParameters:_dic];
 }
 
 - (void)stopLoading
@@ -162,6 +172,12 @@
                     [alert show];
                 }
             }
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+            [_dic setValue:theApp.versionData.version forKey:@"版本号"];
+            [_dic setValue:@"更多页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_VERSION withParameters:_dic];
         }
     }];
 }
@@ -228,6 +244,11 @@
             FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
             couponView.currentUser = _currentUser;
             [self.navigationController pushViewController:couponView animated:true];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"更多页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_GIFT_LIST withParameters:_dic];
         }
             break;
         case FSMoreEdit:    //编辑个人资料
@@ -277,6 +298,12 @@
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:theApp.versionData.title delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                     [alert show];
                 }
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [_dic setValue:theApp.versionData.version forKey:@"版本号"];
+                [_dic setValue:@"更多页" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:CHECK_VERSION withParameters:_dic];
             }
         }
             break;
@@ -287,6 +314,11 @@
             }
             NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@",_currentUser.appID];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"更多页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:LIKE_XHYT withParameters:_dic];
         }
             break;
         case FSMoreClear:   //清理缓存
@@ -294,6 +326,11 @@
             [self beginLoading:self.view];
             [[FSModelManager sharedModelManager] clearCache];
             [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0f];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"更多页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CLEAR_CACHE withParameters:_dic];
         }
             break;
             

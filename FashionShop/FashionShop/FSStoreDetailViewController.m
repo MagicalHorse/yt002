@@ -185,6 +185,14 @@
 {
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", _store.phone]];
 	[[UIApplication sharedApplication] openURL:url];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+    [_dic setValue:_store.phone forKey:@"电话号码"];
+    [_dic setValue:_store.name forKey:@"实体店名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", _store.id] forKey:@"实体店ID"];
+    [_dic setValue:@"实体店详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:DIAL_STORE_PHONE withParameters:_dic];
 }
 
 - (void)viewDidUnload {
@@ -224,6 +232,11 @@
     dr.pageType = FSPageTypeStore;
     dr.titleName = dr.keyWords;
     [self.navigationController pushViewController:dr animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"实体店详情页" forKey:@"来源"];
+    [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
 }
 
 #pragma mark - UITableViewDelegate
@@ -289,6 +302,13 @@
                 FSStoreMapViewController *controller = [[FSStoreMapViewController alloc] initWithNibName:@"FSStoreMapViewController" bundle:nil];
                 controller.store = _store;
                 [self.navigationController pushViewController:controller animated:YES];
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+                [_dic setValue:_store.name forKey:@"实体店名称"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", _store.id] forKey:@"实体店ID"];
+                [_dic setValue:@"实体店详情页" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:CHECK_STORE_MAP withParameters:_dic];
             }
                 break;
             case 1:
@@ -315,6 +335,18 @@
         UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self presentViewController:navControl animated:YES completion:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+        
+        //统计
+        FSProItemEntity *item = [_promotions objectAtIndex:indexPath.row];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+        [_dic setValue:item.title forKey:@"促销名称"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
+        [_dic setValue:item.store.name forKey:@"实体店名称"];
+        [_dic setValue:@"实体店详情页" forKey:@"来源页面"];
+        [_dic setValue:item.startDate forKey:@"发布时间"];
+        [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+        
+        [[FSAnalysis instance] autoTrackPages:navControl];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

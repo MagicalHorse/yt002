@@ -23,6 +23,7 @@
 @property(nonatomic,assign,readonly) CLLocationCoordinate2D currentCoord;
 @property(nonatomic,strong) id<FSLocationAwaredDelegate> locationDelegate;
 @property(nonatomic,assign) BOOL locationAwared;
+@property(nonatomic,readonly) CLLocationManager *innerLocation;
 
 + (FSLocationManager *)sharedLocationManager;
 + (NSString *) computeDistanceFromCurrentLocation:(CLLocationCoordinate2D)from;

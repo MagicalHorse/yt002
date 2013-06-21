@@ -132,6 +132,12 @@
                 [_txtContent setNeedsDisplay];
                 [_txtPhone resignFirstResponder];
                 _txtPhone.text = @"";
+                
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+                [_dic setValue:request.content forKey:@"反馈内容"];
+                [_dic setValue:request.phone forKey:@"联系方式"];
+                [_dic setValue:@"意见反馈页" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:FEED_BACK withParameters:_dic];
             }
             [self endLoading:self.view];
         }];

@@ -92,6 +92,13 @@
                 //更新badge存储内容
                 [self updateBadgeData];
             }
+        if (isLoadMore) {
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+            [_dic setValue:@"我的评论列表页" forKey:@"来源"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", _currentPage+1] forKey:@"页码"];
+            [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
+        }
         }
         else
         {
@@ -211,6 +218,28 @@
     [theApp removeCommentID:[NSString stringWithFormat:@"%d", item.sourceid]];
     [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+    
+    if (item.sourcetype == FSSourceProduct) {
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:[NSString stringWithFormat:@"%d", item.sourceid] forKey:@"商品ID"];
+        [_dic setValue:@"我的评论列表" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+    }
+    else if(item.sourcetype == FSSourcePromotion) {
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:[NSString stringWithFormat:@"%d", item.sourceid] forKey:@"促销ID"];
+        [_dic setValue:@"我的评论列表" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+    }
+    
+    //统计2
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:@"我的评论列表" forKey:@"来源页面"];
+    [_dic setValue:item.sourcetype == FSSourceProduct?@"商品":@"活动" forKey:@"来源分类"];
+    [[FSAnalysis instance] logEvent:CHECK_COMMENT_LIST withParameters:_dic];
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 #pragma mark - UITableViewSource delegate
@@ -271,6 +300,11 @@
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
     dr.userId = [userid intValue];
     [self.navigationController pushViewController:dr animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"我的评论列表页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_DAREN_DETAIL withParameters:_dic];
 }
 
 #pragma mark - FSProDetailItemSourceProvider

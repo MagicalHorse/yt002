@@ -25,4 +25,9 @@
    withParameters:(NSDictionary *) parameters;
 
 -(void) autoTrackPages:(UIViewController *)rootConroller;
+-(void) autoTrackPage;
+
+-(void) setLocation:(CLLocation*)location;
+-(void) setUserID:(NSString*)userID;
+
 @end

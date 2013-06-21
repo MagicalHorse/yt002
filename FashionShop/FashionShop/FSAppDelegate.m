@@ -160,6 +160,12 @@ void uncaughtExceptionHandler(NSException *exception)
         pushInfoDic = userInfo;
         [self pushTo];
     }
+    
+    //set User id
+    FSUser *user = [FSUser localProfile];
+    if (user && user.uid) {
+        [[FSAnalysis instance] setUserID:[NSString stringWithFormat:@"%@", user.uid]];
+    }
 }
 
 +(FSAppDelegate *)app{
@@ -236,6 +242,8 @@ void uncaughtExceptionHandler(NSException *exception)
         if (locationManager.locationAwared)
         {
             [self registerDevicePushNotification];
+            
+            [[FSAnalysis instance] setLocation:locationManager.innerLocation.location];
         }
         else
         {
@@ -249,6 +257,8 @@ void uncaughtExceptionHandler(NSException *exception)
     {
         [self registerDevicePushNotification];
         [locationManager removeObserver:self forKeyPath:@"locationAwared"];
+        
+        [[FSAnalysis instance] setLocation:locationManager.innerLocation.location];
     }
 }
 

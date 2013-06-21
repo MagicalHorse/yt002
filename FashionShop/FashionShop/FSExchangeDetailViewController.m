@@ -88,7 +88,6 @@
     
     [self initPickerView];
     
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
@@ -659,6 +658,16 @@
                 FSExchangeSuccessViewController *controller = [[FSExchangeSuccessViewController alloc] initWithNibName:@"FSExchangeSuccessViewController" bundle:nil];
                 controller.data = sucData;
                 [self.navigationController pushViewController:controller animated:YES];
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:6];
+                [_dic setValue:@"兑换活动详情页" forKey:@"来源页面"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", _data.id] forKey:@"兑换活动ID"];
+                [_dic setValue:_data.name forKey:@"活动名称"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", sucData.points] forKey:@"兑换积点"];
+                [_dic setValue:[NSString stringWithFormat:@"%.2f", sucData.amount] forKey:@"兑换金额"];
+                [_dic setValue:sucData.giftCode forKey:@"代金券码"];
+                [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS withParameters:_dic];
             }
             else
             {

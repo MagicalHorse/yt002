@@ -135,6 +135,12 @@
                 }
                 //发送userid和devicetoken给服务器
                 [theApp registerDevicePushNotification];
+                
+                //set User id
+                FSUser *user = [FSUser localProfile];
+                if (user && user.uid) {
+                    [[FSAnalysis instance] setUserID:[NSString stringWithFormat:@"%@", user.uid]];
+                }
             }
             
         }];
@@ -167,6 +173,12 @@
                 
                 [blockSelf->_userProfile save];
                 [blockSelf displayUserProfile];
+                
+                //set User id
+                FSUser *user = [FSUser localProfile];
+                if (user && user.uid) {
+                    [[FSAnalysis instance] setUserID:[NSString stringWithFormat:@"%@", user.uid]];
+                }
             }
             
         }];
@@ -409,6 +421,10 @@
     _weibo =[[FSModelManager sharedModelManager] instantiateWeiboClient:self];
     [_weibo logIn];
     
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"新浪微博登录" forKey:@"登录方式"];
+    [[FSAnalysis instance] logEvent:USER_LOGIN withParameters:_dic];
 }
 
 - (IBAction)doSuggest:(id)sender {
@@ -420,18 +436,35 @@
 
 - (IBAction)doShowLikes:(id)sender {
     [self filterAccount:0];
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_LIKE_LIST withParameters:_dic];
 }
 
 - (IBAction)doShowFans:(id)sender {
     [self filterAccount:1];
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_FANS_LIST withParameters:_dic];
 }
 
 - (IBAction)doShowPoints:(id)sender {
     [self filterAccount:3];
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_EXCHANGE_LIST withParameters:_dic];
 }
 
 - (IBAction)doShowCoupons:(id)sender {
     [self filterAccount:2];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_GIFT_LIST withParameters:_dic];
 }
 
 - (IBAction)doLoginQQWeiBo:(id)sender {
@@ -443,6 +476,11 @@
     }
     _toDetail = YES;
     [_qq logInWithDelegate:self onSuccess:@selector(onQQLoginSuccess) onFailure:@selector(onQQLoginFail:)];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"腾讯微博登录" forKey:@"登录方式"];
+    [[FSAnalysis instance] logEvent:USER_LOGIN withParameters:_dic];
 }
 
 - (IBAction)doLoginQQ:(id)sender
@@ -452,10 +490,19 @@
         _qqConnect.qqDelegate = self;
     }
     [_qqConnect authorize];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"QQ登录" forKey:@"登录方式"];
+    [[FSAnalysis instance] logEvent:USER_LOGIN withParameters:_dic];
 }
 
 - (IBAction)attentionXHYT:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
+    
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"登录页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:ATTETION_XHYT withParameters:_dic];
 }
 
 - (void) displayUserProfile {
@@ -508,6 +555,11 @@
 {
     FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
     [self.navigationController pushViewController:controller animated:true];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:USER_LETTER withParameters:_dic];
 }
 
 -(void) setSegHeader
@@ -713,6 +765,13 @@
     [self loadILike:FALSE nextPage:++_favorPageIndex withCallback:^{
         [blockSelf endLoadMore:blockSelf->_tbScroll];
         _isInLoading = NO;
+        
+        //统计
+        NSString *value = _segHeader.selectedIndex==0?@"Me的主页-我喜欢":@"Me的主页-我分享";
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _favorPageIndex] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }];
 }
 
@@ -860,6 +919,11 @@
     controller.delegate = self;
     controller.currentUser = _userProfile;
     [self.navigationController pushViewController:controller animated:true];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:USER_MORE withParameters:_dic];
 }
 
 -(void)uploadThumnail:(UIImage *)image
@@ -867,6 +931,11 @@
     if (_takePhotoSource == 1) {
         [self startProgress:NSLocalizedString(@"upload thumnail now", nil) withExeBlock:^(dispatch_block_t callback){
             [self internalUploadThumnail:image CallBack:callback];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:USER_THUMB_IMAGE_UPLOAD withParameters:_dic];
         } completeCallbck:^{
             [self endProgress];
         }];
@@ -874,6 +943,11 @@
     else{
         [self startProgress:NSLocalizedString(@"upload me background now", nil) withExeBlock:^(dispatch_block_t callback){
             [self internalUploadThumnail:image CallBack:callback];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:USER_BACKGROUND_IMAGE_UPLOAD withParameters:_dic];
         } completeCallbck:^{
             [self endProgress];
         }];
@@ -1046,6 +1120,14 @@
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
                 uploadController.navigationItem.title = NSLocalizedString(@"Publish product", nil);
                 [self presentViewController:navController animated:TRUE completion:nil];
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:USER_PUBLISH withParameters:_dic];
+                
+                [[FSAnalysis instance] autoTrackPages:navController];
+                
                 break;
             }
             default:
@@ -1085,7 +1167,8 @@
                 }
                 else
                 {
-                    [_likePros removeObject:[(FSFavorProCell *)cell data]];
+                    FSProdItemEntity *item = [(FSFavorProCell *)cell data];
+                    [_likePros removeObject:item];
                     [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
                     if (_likePros.count<1)
                     {
@@ -1101,6 +1184,13 @@
                     {
                         [self hideNoResultImage:_likeView];
                     }
+                    
+                    //统计
+                    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+                    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+                    [_dic setValue:@"取消喜欢" forKey:@"操作类型"];
+                    [_dic setValue:item.title forKey:@"标题"];
+                    [[FSAnalysis instance] logEvent:COMMON_LIKE_UNLIKE withParameters:_dic];
                 }
             }];
             
@@ -1289,6 +1379,28 @@
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
     _toDetail = YES;
     [self presentViewController:navControl animated:true completion:nil];
+    
+    //统计
+    if (detailView.sourceType == FSSourceProduct) {
+        FSProdItemEntity *_item = [_likePros objectAtIndex:indexPath.row];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+        [_dic setValue:_item.title forKey:@"商品名称"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
+        [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+    }
+    else if(detailView.sourceType == FSSourcePromotion) {
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+        FSProItemEntity *item = [_likePros objectAtIndex:indexPath.row];
+        [_dic setValue:item.title forKey:@"促销名称"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
+        [_dic setValue:item.store.name forKey:@"实体店名称"];
+        [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+        [_dic setValue:item.startDate forKey:@"发布时间"];
+        [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+    }
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -1646,6 +1758,12 @@
 {
     if (segmentedControl == _segHeader){
         [self loadILike];
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:(segmentedControl.selectedIndex == 0?@"我喜欢":@"我分享") forKey:@"分类名称"];
+        [_dic setValue:@"Me的主页" forKey:@"页面来源"];
+        [[FSAnalysis instance] logEvent:USER_ME_PRODUCT_TAB withParameters:_dic];
     }
 }
 

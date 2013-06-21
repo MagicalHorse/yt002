@@ -13,7 +13,7 @@ static FSLocationManager *_locationManager;
 
 @interface FSLocationManager()
 {
-    CLLocationManager* _innerLocation;
+    
 }
 @end
 

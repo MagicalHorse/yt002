@@ -402,15 +402,11 @@
     }];
     
     //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
     FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
-    NSString *_name;
-    if (_sourceType == FSSourceProduct) {
-        _name = [NSString stringWithFormat:@"商品-优惠券  %@", [view.data valueForKey:@"title"]];
-    }
-    else {
-        _name = [NSString stringWithFormat:@"活动-优惠券  %@", [view.data valueForKey:@"title"]];
-    }
-    [[FSAnalysis instance] logEvent:_name withParameters:nil];
+    [_dic setValue:(_sourceType == FSSourceProduct?@"商品详情页":@"活动详情页") forKey:@"来源页面"];
+    [_dic setValue:[view.data valueForKey:@"title"] forKey:@"标题"];
+    [[FSAnalysis instance] logEvent:COMMON_GET_COUPON withParameters:_dic];
 }
 
 -(void) internalDoFavor:(UIBarButtonItem *)button
@@ -440,7 +436,6 @@
     [request send:[self convertSourceTypeToClass:_sourceType] withRequest:request completeCallBack:^(FSEntityBase *respData){
         if (respData.isSuccess)
         {
-            
             FSDetailBaseView *view = (FSDetailBaseView*)blockSelf.paginatorView.currentPage;
             if ([view.data isKindOfClass:[FSProdItemEntity class]])
             {
@@ -472,25 +467,12 @@
     }];
     
     //统计
-    NSString *_name;
-    if (favored) {
-        if (_sourceType == FSSourceProduct) {
-            _name = [NSString stringWithFormat:@"商品-喜欢  %@", [view.data valueForKey:@"title"]];
-        }
-        else {
-            _name = [NSString stringWithFormat:@"活动-喜欢  %@", [view.data valueForKey:@"title"]];
-        }
-    }
-    else {
-        if (_sourceType == FSSourceProduct) {
-            _name = [NSString stringWithFormat:@"商品-取消喜欢  %@", [view.data valueForKey:@"title"]];
-        }
-        else {
-            _name = [NSString stringWithFormat:@"活动-取消喜欢  %@", [view.data valueForKey:@"title"]];
-        }
-    }
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    [_dic setValue:(_sourceType == FSSourceProduct?@"商品详情":@"活动详情") forKey:@"来源页面"];
+    [_dic setValue:(favored?@"取消喜欢":@"喜欢") forKey:@"操作类型"];
+    [_dic setValue:[view.data valueForKey:@"title"] forKey:@"标题"];
+    [[FSAnalysis instance] logEvent:COMMON_LIKE_UNLIKE withParameters:_dic];
     
-    [[FSAnalysis instance] logEvent:_name withParameters:nil];
 }
 -(void) updateFavorButtonStatus:(UIBarButtonItem *)button canFavored:(BOOL)canfavored
 {
@@ -553,6 +535,8 @@
         };
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
         [self presentViewController:navController animated:true completion:nil] ;
+        
+        [[FSAnalysis instance] autoTrackPages:navController];
     }
     else
     {
@@ -596,6 +580,11 @@
     dr.brand = tbrand;
     dr.pageType = FSPageTypeBrand;
     [self.navigationController pushViewController:dr animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"活动详情页-品牌" forKey:@"来源"];
+    [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
 }
 
 - (IBAction)goStore:(id)sender {
@@ -605,6 +594,13 @@
     sv.storeID = store.id;
     sv.title = store.name;
     [self.navigationController pushViewController:sv animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    [_dic setValue:store.name forKey:@"实体店名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", store.id] forKey:@"实体店ID"];
+    [_dic setValue:(_sourceType == FSSourceProduct?@"商品详情页":@"促销详情页") forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_STORE_DETAIL withParameters:_dic];
 }
 
 - (IBAction)goDR:(NSNumber *)userid {
@@ -612,6 +608,11 @@
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
     dr.userId = [userid intValue];
     [self.navigationController pushViewController:dr animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:_sourceType==FSSourceProduct?@"商品详情页":@"促销详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_DAREN_DETAIL withParameters:_dic];
 }
 
 -(void) goTag:(id)sender
@@ -660,6 +661,7 @@
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
         [self presentViewController:navController animated:false completion:nil];
         
+        [[FSAnalysis instance] autoTrackPages:navController];
     }
     else
     {
@@ -691,6 +693,12 @@
     photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
     photoController.source = self;
     [self presentModalViewController:photoController animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:(_sourceType == FSSourceProduct?@"商品详情页":@"活动详情页") forKey:@"来源页面"];
+    [_dic setValue:[[self itemSource] title] forKey:@"标题"];
+    [[FSAnalysis instance] logEvent:CHECK_BIG_IMAGE withParameters:nil];
 }
 
 -(void)didTapImages:(id) sender
@@ -878,6 +886,7 @@
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
         [self presentViewController:navController animated:YES completion:nil];
         
+        [[FSAnalysis instance] autoTrackPages:navController];
     }
     else
     {
@@ -1006,14 +1015,16 @@
     }];
     
     //统计
-    NSString *_name;
-    if (_sourceType == FSSourceProduct) {
-        _name = [NSString stringWithFormat:@"商品-评论  %@", [view.data valueForKey:@"title"]];
-    }
-    else {
-        _name = [NSString stringWithFormat:@"活动-评论  %@", [view.data valueForKey:@"title"]];
-    }
-    [[FSAnalysis instance] logEvent:_name withParameters:nil];
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:7];
+    [_dic setValue:(_sourceType == FSSourceProduct?@"商品详情页":@"活动详情页") forKey:@"来源页面"];
+    [_dic setValue:[view.data valueForKey:@"title"] forKey:@"标题"];
+    [_dic setValue:commentText forKey:@"评论内容"];
+    [_dic setValue:[NSNumber numberWithBool:flag] forKey:@"是否语音评论"];
+    [_dic setValue:[NSNumber numberWithBool:isReplyToAll] forKey:@"是否回复所有人"];
+    FSUser *user = [FSUser localProfile];
+    [_dic setValue:user.uid forKey:@"用户ID"];
+    [_dic setValue:user.nickie forKey:@"用户昵称"];
+    [[FSAnalysis instance] logEvent:COMMON_COMMENT withParameters:_dic];
 }
 
 -(void)toEndProgress
@@ -1108,6 +1119,18 @@
                     detailView.dataProviderInContext = self;
                     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
                     [self presentViewController:navControl animated:true completion:nil];
+                    
+                    //统计
+                    FSProItemEntity *item = [_item.promotions objectAtIndex:0];
+                    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+                    [_dic setValue:item.title forKey:@"促销名称"];
+                    [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
+                    [_dic setValue:item.store.name forKey:@"实体店名称"];
+                    [_dic setValue:@"商品详情页" forKey:@"来源页面"];
+                    [_dic setValue:item.startDate forKey:@"发布时间"];
+                    [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+                    
+                    [[FSAnalysis instance] autoTrackPages:navControl];
                 }
             }
         }
@@ -1244,6 +1267,11 @@
         dr.commonID = _item.id;
         dr.pageType = FSPageTypeCommon;
         [self.navigationController pushViewController:dr animated:TRUE];
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+        [_dic setValue:@"实体店详情页-参与活动商品列表" forKey:@"来源"];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
     }
 }
 

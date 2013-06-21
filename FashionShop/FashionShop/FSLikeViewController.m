@@ -216,6 +216,10 @@
     [self.navigationController pushViewController:dr animated:TRUE];
     [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:_likeType==0?@"关注列表页":@"粉丝列表页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_DAREN_DETAIL withParameters:_dic];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -237,6 +241,13 @@
                     _noMore = true;
                 _currentPage ++;
                 [self mergeLike:innerResp isInsert:FALSE];
+                
+                //统计
+                NSString *value = _likeType==0?@"关注列表页":@"粉丝列表页";
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [_dic setValue:value forKey:@"来源"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", _currentPage] forKey:@"页码"];
+                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
             }
             else
             {

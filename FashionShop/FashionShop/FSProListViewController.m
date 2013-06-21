@@ -202,6 +202,9 @@
     if (_dataSourceBannerData.count > 0) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
+    
+    //统计
+    [[FSAnalysis instance] logEvent:CHECK_PROLIST_PAGE withParameters:nil];
 }
 
 -(void)dealloc
@@ -643,8 +646,14 @@
     [self beginLoadMoreLayout:_contentView];
     block(request,^(){
         [self endLoadMore:_contentView];
+        
+        //统计
+        NSString *value = _segFilters.selectedIndex==0?@"促销列表页-距离最近":(_segFilters.selectedIndex==1?@"促销列表页-最新发布":@"促销列表页-即将开始");
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", request.nextPage] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     });
-    
 }
 
 -(void)clickToStore:(UITapGestureRecognizer*)gesture
@@ -670,6 +679,13 @@
             storeController.title = store.name;
             [self.navigationController setNavigationBarHidden:NO];
             [self.navigationController pushViewController:storeController animated:YES];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+            [_dic setValue:store.name forKey:@"实体店名称"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", store.id] forKey:@"实体店ID"];
+            [_dic setValue:@"促销列表页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_STORE_DETAIL withParameters:_dic];
         }
     }
 }
@@ -943,18 +959,17 @@
     [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
     
     //统计
-    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSearchIndex];
     FSProItemEntity *_item = [tmpPros objectAtIndex:indexPath.row];
-    if (_currentSearchIndex == (int)PRO_LIST_FILTER_NEAREST) {
-        [_dic setValue:@"最近距离" forKey:@"查看方式"];
-    }
-    else {
-        [_dic setValue:@"最新发布" forKey:@"查看方式"];
-    }
-    [_dic setValue:_item.title forKey:@"活动名称"];
-    [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"活动ID"];
-    [[FSAnalysis instance] logEvent:@"查看活动详情" withParameters:_dic];
+    [_dic setValue:_item.title forKey:@"促销名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"促销ID"];
+    [_dic setValue:_item.store.name forKey:@"实体店名称"];
+    [_dic setValue:@"促销列表" forKey:@"来源页面"];
+    [_dic setValue:_item.startDate forKey:@"发布时间"];
+    [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1022,12 +1037,17 @@
             dr.topic = topic;
             dr.pageType = FSPageTypeTopic;
             [self.navigationController pushViewController:dr animated:TRUE];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"促销列表Banner" forKey:@"来源"];
+            [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
         }
             break;
         case SkipTypePromotionDetail:
         {
             FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
+            FSProItemEntity *item = [[FSProItemEntity alloc] init];
             item.id = [proItem.targetId intValue];
             detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
             detailView.sourceType = FSSourcePromotion;
@@ -1035,12 +1055,23 @@
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [self presentViewController:navControl animated:true completion:nil];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+            [_dic setValue:item.title forKey:@"促销名称"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
+            [_dic setValue:item.store.name forKey:@"实体店名称"];
+            [_dic setValue:@"促销列表-Banner" forKey:@"来源页面"];
+            [_dic setValue:item.startDate forKey:@"发布时间"];
+            [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+            
+            [[FSAnalysis instance] autoTrackPages:navControl];
         }
             break;
         case SkipTypeProductDetail:
         {
             FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-            FSProItemEntity *item = [[FSProItemEntity alloc] init];
+            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
             item.id = [proItem.targetId intValue];
             detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
             detailView.sourceType = FSSourceProduct;
@@ -1048,6 +1079,8 @@
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [self presentViewController:navControl animated:true completion:nil];
+            
+            [[FSAnalysis instance] autoTrackPages:navControl];
         }
             break;
         case SkipTypeURL:
@@ -1088,6 +1121,7 @@
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
                 [self presentViewController:navController animated:YES completion:nil];
                 
+                [[FSAnalysis instance] autoTrackPages:navController];
             }
             else
             {
@@ -1100,6 +1134,13 @@
         default:
             break;
     }
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    [_dic setValue:proItem.title forKey:@"促销名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", proItem.id] forKey:@"促销ID"];
+    [_dic setValue:@"促销列表页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_PROLIST_BANNER withParameters:_dic];
 }
 
 #pragma mark -
@@ -1108,6 +1149,23 @@
 - (void)segmentedViewController:(AKSegmentedControl *)segmentedControl touchedAtIndex:(NSUInteger)index
 {
     if (segmentedControl == _segFilters){
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        NSString *value = nil;
+        if (index == 0) {
+            value = @"最近距离";
+        }
+        else if (index == 1) {
+            value = @"最新发布";
+        }
+        else {
+            value = @"即将开始";
+        }
+        [_dic setValue:value forKey:@"分类名称"];
+        [_dic setValue:@"促销列表页" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PROLIST_TAB withParameters:_dic];
+        
         if(_currentSearchIndex == index || _inLoading)
         {
             return;

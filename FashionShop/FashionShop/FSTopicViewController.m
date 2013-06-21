@@ -67,6 +67,9 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    //统计
+    [[FSAnalysis instance] logEvent:CHECK_TOPIC_PAGE withParameters:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -233,6 +236,12 @@
     [self refreshContent:NO withCallback:^{
         [blockSelf endLoadMore:blockSelf.tbAction];
         _isInLoading = NO;
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"专题列表页" forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _currentPage+1] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }];
 }
 
@@ -256,22 +265,31 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *value = nil;
     FSTopic *topic = [_topicList objectAtIndex:indexPath.row];
     switch ([topic.targetType intValue]) {
         case SkipTypeDefault:
+            value = @"默认";
         case SkipTypeProductList:
         {
+            value = @"商品列表";
             FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
             dr.topic = topic;
             dr.pageType = FSPageTypeTopic;
             [self.navigationController pushViewController:dr animated:TRUE];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"专题列表页" forKey:@"来源"];
+            [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
         }
             break;
         case SkipTypePromotionDetail:
         {
+            value = @"促销详情";
             FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
+            FSProItemEntity *item = [[FSProItemEntity alloc] init];
             item.id = [topic.targetId intValue];
             detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
             detailView.sourceType = FSSourcePromotion;
@@ -279,12 +297,24 @@
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [self presentViewController:navControl animated:true completion:nil];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+            [_dic setValue:item.title forKey:@"促销名称"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
+            [_dic setValue:item.store.name forKey:@"实体店名称"];
+            [_dic setValue:@"专题列表页" forKey:@"来源页面"];
+            [_dic setValue:item.startDate forKey:@"发布时间"];
+            [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
+            
+            [[FSAnalysis instance] autoTrackPages:navControl];
         }
             break;
         case SkipTypeProductDetail:
         {
+            value = @"商品详情";
             FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-            FSProItemEntity *item = [[FSProItemEntity alloc] init];
+            FSProdItemEntity *item = [[FSProdItemEntity alloc] init];
             item.id = [topic.targetId intValue];
             detailView.navContext = [[NSMutableArray alloc] initWithObjects:item, nil];
             detailView.sourceType = FSSourceProduct;
@@ -292,10 +322,20 @@
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [self presentViewController:navControl animated:true completion:nil];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+            [_dic setValue:nil forKey:@"商品名称"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"商品ID"];
+            [_dic setValue:@"专题列表页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+            
+            [[FSAnalysis instance] autoTrackPages:navControl];
         }
             break;
         case SkipTypeURL:
         {
+            value = @"指定网址";
             FSContentViewController *controller = [[FSContentViewController alloc] init];
             controller.fileName = topic.targetId;
             controller.title = topic.name;
@@ -304,6 +344,7 @@
             break;
         case SkipTypeNone:
         {
+            value = @"大图展示";
             //弹出大图进行展现
             selIndex = indexPath.row;
             NSMutableArray *photoArray=[NSMutableArray arrayWithCapacity:1];
@@ -321,10 +362,17 @@
             photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
             photoController.source = self;
             [self presentModalViewController:photoController animated:YES];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+            [_dic setValue:@"专题列表页" forKey:@"来源页面"];
+            [_dic setValue:topic.name forKey:@"标题"];
+            [[FSAnalysis instance] logEvent:CHECK_BIG_IMAGE withParameters:_dic];
         }
             break;
         case SkipTypePointEx://积点兑换
         {
+            value = @"积点兑换";
             bool isLogined = [[FSModelManager sharedModelManager] isLogined];
             if (!isLogined)
             {
@@ -348,6 +396,8 @@
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
                 [self presentViewController:navController animated:YES completion:nil];
                 
+                [[FSAnalysis instance] autoTrackPages:navController];
+                
             }
             else
             {
@@ -360,6 +410,14 @@
         default:
             break;
     }
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:value forKey:@"类型"];
+    [_dic setValue:topic.name forKey:@"标题"];
+    [[FSAnalysis instance] logEvent:CHECK_TOPIC_DETAIL withParameters:_dic];
+    
+    
 }
 
 #pragma UITableViewDataSource

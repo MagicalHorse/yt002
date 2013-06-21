@@ -304,7 +304,7 @@
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
     
-    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath

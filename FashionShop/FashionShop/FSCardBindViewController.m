@@ -116,7 +116,13 @@
                 if ([_cardPwField isFirstResponder]) {
                     [_cardPwField resignFirstResponder];
                 }
-                [self updateResultView:resp.responseData];
+                FSCardInfo *info = (FSCardInfo*)resp.responseData;
+                [self updateResultView:info];
+                
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [_dic setValue:info.cardNo forKey:@"卡号"];
+                [_dic setValue:@"会员卡页面" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:MEMBER_CARDINFO_SHOW withParameters:_dic];
             }
         }];
     }
@@ -173,6 +179,11 @@
                 [self updateResultView:resp.responseData];
                 [self updateTitle];
                 [self prepareView];
+                
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [_dic setValue:request.cardNo forKey:@"卡号"];
+                [_dic setValue:@"会员卡绑定页" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:MEMBER_CARD_BIND withParameters:_dic];
             }
             [self endLoading:self.view];
         }];

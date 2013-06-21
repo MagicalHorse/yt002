@@ -13,6 +13,7 @@
 #import "FSExchangeRequest.h"
 #import "FSPagedExchangeList.h"
 #import "FSExchange.h"
+#import "FSUser.h"
 
 #define Point_Exchange_Cell_Indentifier @"FSExchangeListCell"
 
@@ -150,10 +151,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSExchangeDetailViewController *controller = [[FSExchangeDetailViewController alloc] initWithNibName:@"FSExchangeDetailViewController" bundle:nil];
-    controller.requestID = [_itemList[indexPath.section] id];
-    controller.title = [_itemList[indexPath.section] name];
+    FSExchange *item = _itemList[indexPath.section];
+    controller.requestID = [item id];
+    controller.title = [item name];
     [self.navigationController pushViewController:controller animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    [_dic setValue:@"代金券兑换列表页" forKey:@"来源页面"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"兑换活动ID"];
+    [_dic setValue:item.name forKey:@"活动名称"];
+    [[FSAnalysis instance] logEvent:CHECK_EXCHANGE_LIST_DETAIL withParameters:_dic];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -186,6 +195,12 @@
                 if (result.totalPageCount <= _currentPage+1)
                     _noMoreResult = YES;
                 [self fillProdInMemory:result.items isInsert:NO];
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [_dic setValue:@"积点兑换活动列表" forKey:@"来源"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", _currentPage+1] forKey:@"页码"];
+                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
             }
             else
             {

@@ -87,12 +87,22 @@
             FSCouponViewController *couponView = [[FSCouponViewController alloc] initWithNibName:@"FSCouponViewController" bundle:nil];
             couponView.currentUser = _currentUser;
             [self.navigationController pushViewController:couponView animated:true];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"礼券列表页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_COUPON_LIST withParameters:_dic];
         }
             break;
         case 1:
         {
             FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
             [self.navigationController pushViewController:controller animated:true];
+
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"礼券列表页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_CASH_COUPON_LIST withParameters:_dic];
         }
             break;
             

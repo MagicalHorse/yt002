@@ -374,6 +374,17 @@
                 //让键盘或者PIckerview消失
                 [_activityField resignFirstResponder];
                 [self hidenPickerView:YES];
+                
+                //统计
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:6];
+                [_dic setValue:request.nickie forKey:@"昵称"];
+                [_dic setValue:request.phone forKey:@"联系方式"];
+                [_dic setValue:request.signature forKey:@"签名"];
+                [_dic setValue:request.gender.intValue==1?@"男":@"女" forKey:@"Gender"];
+                [_dic setValue:@"用户资料编辑页" forKey:@"来源页面"];
+                FSUser *user = [FSUser localProfile];
+                [_dic setValue:user.uid forKey:@"用户ID"];
+                [[FSAnalysis instance] logEvent:USER_EDIT_INFO withParameters:_dic];
             }
             [self endLoading:self.view];
         }];

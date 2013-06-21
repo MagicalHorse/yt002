@@ -33,9 +33,9 @@
 
 #import "FSConfiguration+Fonts.h"
 #import "FSConfiguration.h"
+#import "FSEventsConfig.h"
 #import "UIColor+RGB.h"
 #import "UIDevice+Extention.h"
-
 
 #endif
 

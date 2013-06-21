@@ -284,10 +284,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSPointGiftDetailViewController *controller = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
-    FSExchange *item = [_dataSourceList[_currentSelIndex] objectAtIndex:indexPath.section];
+    FSGiftListItem *item = [_dataSourceList[_currentSelIndex] objectAtIndex:indexPath.section];
     controller.requestID = item.id;
     [self.navigationController pushViewController:controller animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    [_dic setValue:@"代金券列表页" forKey:@"来源页面"];
+    [_dic setValue:item.promotion.name forKey:@"活动名称"];
+    [_dic setValue:item.giftCode forKey:@"优惠券码"];
+    [[FSAnalysis instance] logEvent:CHECK_CASH_COUPON_DETAIL withParameters:_dic];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -318,6 +325,13 @@
                     [self setNoMore:YES selectedSegmentIndex:_segFilters.selectedIndex];
                 [self setPageIndex:currentPage+1 selectedSegmentIndex:_segFilters.selectedIndex];
                 [self mergeLike:innerResp isInsert:NO];
+                
+                //统计
+                NSString *value = _segFilters.selectedIndex==0?@"代金券列表-未使用":(_segFilters.selectedIndex==1?@"代金券列表-已使用":@"代金券列表-已无效");
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [_dic setValue:value forKey:@"来源"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
+                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
             }
             else
             {
@@ -351,6 +365,13 @@
             [_contentView reloadData];
             [_contentView setContentOffset:CGPointZero];
         }
+        
+        //统计
+        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"代金券列表页" forKey:@"来源页面"];
+        [_dic setValue:value forKey:@"分类名称"];
+        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
     }
 }
 

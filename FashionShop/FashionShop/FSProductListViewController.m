@@ -367,6 +367,28 @@
     [self refreshContent:NO withCallback:^{
          [blockSelf endLoadMore:_productContent];
         _isLoading = NO;
+        
+        //统计
+        NSString *value = nil;
+        if (_pageType == FSPageTypeBrand) {
+            value = @"商品列表页-品牌";
+        }
+        else if(_pageType == FSPageTypeTopic) {
+            value = @"商品列表页-专题";
+        }
+        else if(_pageType == FSPageTypeStore) {
+            value = @"商品列表页-实体店";
+        }
+        else if(_pageType == FSPageTypeSearch) {
+            value = @"商品列表页-搜索";
+        }
+        else {
+            value = @"商品列表页-其他";
+        }
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _prodPageIndex+1] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }];
 }
 
@@ -439,13 +461,23 @@
 
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-           FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
-        detailViewController.navContext = _prods;
-        detailViewController.dataProviderInContext = self;
-        detailViewController.indexInContext = indexPath.row;
-        detailViewController.sourceType = FSSourceProduct;
-        UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-        [self presentViewController:navControl animated:YES completion:nil];
+    FSProDetailViewController *detailViewController = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    detailViewController.navContext = _prods;
+    detailViewController.dataProviderInContext = self;
+    detailViewController.indexInContext = indexPath.row;
+    detailViewController.sourceType = FSSourceProduct;
+    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    [self presentViewController:navControl animated:YES completion:nil];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+    FSProdItemEntity *item = [_prods objectAtIndex:indexPath.row];
+    [_dic setValue:nil forKey:@"商品名称"];
+    [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"商品ID"];
+    [_dic setValue:@"商品列表页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath

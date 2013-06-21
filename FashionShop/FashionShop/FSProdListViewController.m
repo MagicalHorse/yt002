@@ -137,6 +137,7 @@
     BOOL isAnimating;
     
     UIImageView *imageTagBgV;
+    FSCoreTag *_currentSelTag;
 }
 
 @property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
@@ -277,6 +278,9 @@
             [self prepareData];
         }
     }
+    
+    //统计
+    [[FSAnalysis instance] logEvent:CHECK_DONGDONG_PAGE withParameters:nil];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -644,8 +648,14 @@
     [self refreshContent:FALSE withCallback:^{
         _isInLoading = NO;
         [blockSelf endLoadMore:_cvContent];
+        
+        //统计
+        NSString *value = [NSString stringWithFormat:@"东东列表页-%@", _currentSelTag.name];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _prodPageIndex+1] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }];
-    
 }
 
 - (void)loadImagesForOnscreenRows
@@ -744,12 +754,12 @@
         [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:TRUE];
         FSCoreTag *tag = [_tags objectAtIndex:indexPath.row];
         [self beginSwitchTag:tag];
+        _currentSelTag = tag;
         
         //统计
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
         [_dic setValue:tag.name forKey:@"分类名称"];
-        [_dic setValue:@"东东商品列表" forKey:@"页面来源"];
-        [[FSAnalysis instance] logEvent:@"查看分类" withParameters:_dic];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_TAB withParameters:_dic];
     }
     else if (collectionView == _cvContent)
     {
@@ -761,13 +771,15 @@
         UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
         [self presentViewController:navControl animated:YES completion:nil];
         
-        //统计
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
         FSProdItemEntity *_item = [_prods objectAtIndex:indexPath.row];
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
         [_dic setValue:_item.title forKey:@"商品名称"];
         [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
-        [_dic setValue:@"东东商品列表" forKey:@"页面来源"];
-        [[FSAnalysis instance] logEvent:@"查看详情" withParameters:_dic];
+        [_dic setValue:@"东东列表页" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+        
+        [[FSAnalysis instance] autoTrackPages:navControl];
     }
 }
 
@@ -947,34 +959,52 @@
 //type>=0:搜索热门关键词、热门品牌
 -(void)toSearch:(int)type
 {
+    NSString *value = nil;
     //跳转搜索界面进行搜索
     FSProductListViewController *dr = [[FSProductListViewController alloc] initWithNibName:@"FSProductListViewController" bundle:nil];
     if (type < 0) {
         dr.keyWords = _searchBar.text;
         dr.pageType = FSPageTypeSearch;
+        value = @"用户输入搜索";
     }
     else{
         if (_selectedIndex == 0) {//热门关键字
             dr.keyWords = _prodKeywords[type];
             dr.pageType = FSPageTypeSearch;
+            value = @"关键词搜索";
         }
         else if(_selectedIndex == 1){//品牌搜索
             FSBrand *brand = _brandKeywords[type];
             dr.pageType = FSPageTypeBrand;
             dr.brand = brand;
             dr.keyWords = brand.name;
+            value = @"热门品牌搜索";
         }
         else{
             FSStore *store = _stores[type];
             dr.store = store;
             dr.keyWords = store.name;
             dr.pageType = FSPageTypeStore;
+            value = @"推荐实体店搜索";
         }
     }
     dr.titleName = dr.keyWords;
     dr.isModel = YES;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:dr];
     [self presentModalViewController:navControl animated:YES];
+    
+    //统计1
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:value forKey:@"来源"];
+    [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST withParameters:_dic];
+    
+    //统计2
+    NSMutableDictionary *_dic2 = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic2 setValue:value forKey:@"搜索方式"];
+    [_dic2 setValue:dr.keyWords forKey:@"搜索内容"];
+    [[FSAnalysis instance] logEvent:COMMON_SEARCH withParameters:_dic2];
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 #pragma mark - MySegmentValueChangedDelegate

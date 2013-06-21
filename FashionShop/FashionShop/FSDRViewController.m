@@ -453,6 +453,7 @@
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
         [self presentViewController:navController animated:false completion:nil];
         
+        [[FSAnalysis instance] autoTrackPages:navController];
     }
     else
     {
@@ -627,6 +628,13 @@
     [self refreshContent:FALSE withCallback:^{
         [self endLoadMore:_itemsView];
         _isInLoadingMore = FALSE;
+        
+        //统计
+        NSString *value = _segHeader.selectedIndex==0?@"达人详情页-Ta喜欢":@"达人详情页-Ta分享";
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _prodPageIndex+1] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }];
 }
 
@@ -730,6 +738,18 @@
     _toDetail = YES;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailViewController];
     [self presentViewController:navControl animated:YES completion:nil];
+    
+    if (detailViewController.sourceType == FSSourceProduct) {
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+        FSProdItemEntity *_item = [_items objectAtIndex:indexPath.row];
+        [_dic setValue:_item.title forKey:@"商品名称"];
+        [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
+        [_dic setValue:@"达人详情页" forKey:@"来源页面"];
+        [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
+    }
+    
+    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -849,6 +869,11 @@
     likeView.searchById = true;
     likeView.navigationItem.title = NSLocalizedString(@"Ta likes persons", nil);
     [self.navigationController pushViewController:likeView animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"达人详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_LIKE_LIST withParameters:nil];
 }
 
 - (IBAction)goFanView:(id)sender {
@@ -858,6 +883,11 @@
     likeView.searchById = TRUE;
     likeView.navigationItem.title = NSLocalizedString(@"Ta fans", nil);
     [self.navigationController pushViewController:likeView animated:TRUE];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+    [_dic setValue:@"达人详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:CHECK_FANS_LIST withParameters:_dic];
 }
 
 #pragma mark - FSThumbView Delegate
@@ -872,6 +902,12 @@
     controller.beginRect = _rect;
     controller.delegate = self;
     [self presentViewController:controller animated:NO completion:nil];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:@"达人详情页" forKey:@"来源页面"];
+    [_dic setValue:nil forKey:@"标题"];
+    [[FSAnalysis instance] logEvent:CHECK_BIG_IMAGE withParameters:_dic];
 }
 
 #pragma mark - FSAvatarHDViewDelegate

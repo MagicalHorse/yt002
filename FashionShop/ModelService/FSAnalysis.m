@@ -36,12 +36,32 @@ static FSAnalysis *_instance;
 - (void) logEvent:(NSString *) 	eventName
           withParameters:(NSDictionary *) parameters
 {
-    [Flurry logEvent:eventName withParameters:parameters];
+    if (parameters) {
+        [Flurry logEvent:eventName withParameters:parameters];
+    }
+    else{
+        [Flurry logEvent:eventName];
+    }
 }
 
 -(void) autoTrackPages:(UIViewController *)rootConroller
 {
     [Flurry logAllPageViews:rootConroller];
+}
+
+-(void) autoTrackPage
+{
+    [Flurry logPageView];
+}
+
+-(void) setLocation:(CLLocation*)location
+{
+    [Flurry setLatitude:location.coordinate.latitude longitude:location.coordinate.longitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy];
+}
+
+-(void) setUserID:(NSString*)userID
+{
+    [Flurry setUserID:userID];
 }
 
 +(FSAnalysis *) instance

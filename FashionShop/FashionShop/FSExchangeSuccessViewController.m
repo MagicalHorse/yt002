@@ -71,17 +71,12 @@
     NSArray *_array = (NSArray*)self.navigationController.viewControllers;
     _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-3)];
     [self.navigationController setViewControllers:_array animated:YES];
+    
+    [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_CONTINUE withParameters:nil];
 }
 
 -(void)clickToBackHome:(UIButton*)sender
 {
-//    [self.navigationController popToRootViewControllerAnimated:YES];
-//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//    UITabBarController *root = [storyBoard instantiateInitialViewController];
-//    root.selectedIndex = 0;
-//    UINavigationController *nav = (UINavigationController*)root.selectedViewController;
-//    [nav popToRootViewControllerAnimated:YES];
-    
     NSArray *_array = (NSArray*)self.navigationController.viewControllers;
     _array = [_array subarrayWithRange:NSMakeRange(0, 1)];
     NSMutableArray *_mutArray = [NSMutableArray arrayWithArray:_array];
@@ -95,6 +90,9 @@
     [_mutArray addObject:detail];
     
     [self.navigationController setViewControllers:_mutArray animated:YES];
+    
+    //统计
+    [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_DETAIL withParameters:nil];
 }
 
 #pragma mark - UITableViewDataSource
