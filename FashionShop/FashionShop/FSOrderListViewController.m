@@ -1,24 +1,22 @@
 //
-//  FSLikeViewController.m
+//  FSOrderListViewController.m
 //  FashionShop
 //
-//  Created by gong yi on 11/28/12.
-//  Copyright (c) 2012 Fashion. All rights reserved.
+//  Created by HeQingshan on 13-6-22.
+//  Copyright (c) 2013年 Fashion. All rights reserved.
 //
 
-#import "FSCouponViewController.h"
-#import "FSCouponDetailCell.h"
-#import "FSCouponProDetailCell.h"
+#import "FSOrderListViewController.h"
 #import "FSCommonUserRequest.h"
-#import "FSPagedCoupon.h"
-#import "FSModelManager.h"
-#import "FSCommonProRequest.h"
-#import "FSLocationManager.h"
-#import "FSDRViewController.h"
+#import "FSOrderListCell.h"
+#import "FSPagedOrder.h"
+#import "FSOrder.h"
 
-@interface FSCouponViewController ()
+#define USER_ORDER_LIST_TABLE_CELL @"FSOrderListCell"
+
+@interface FSOrderListViewController ()
 {
-    FSGiftSortBy _currentSelIndex;
+    FSOrderSortBy _currentSelIndex;
     
     NSMutableArray *_dataSourceList;
     NSMutableArray *_noMoreList;
@@ -29,11 +27,7 @@
 
 @end
 
-#define USER_COUPON_TABLE_CELL @"FSCouponDetailCell"
-#define USER_COUPON_PRO_TABLE_CELL @"FSCouponProDetailCell"
-
-@implementation FSCouponViewController
-@synthesize currentUser;
+@implementation FSOrderListViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -47,21 +41,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"My Promotion List",nil);
+    
+    self.title = NSLocalizedString(@"Pre Order List",nil);
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     
-    [_contentView registerNib:[UINib nibWithNibName:@"FSCouponDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_TABLE_CELL];
-    [_contentView registerNib:[UINib nibWithNibName:@"FSCouponProDetailCell" bundle:Nil] forCellReuseIdentifier:USER_COUPON_PRO_TABLE_CELL];
-    _currentSelIndex = SortByUnUsed;
+    [_contentView registerNib:[UINib nibWithNibName:@"FSOrderListCell" bundle:Nil] forCellReuseIdentifier:USER_ORDER_LIST_TABLE_CELL];
+    _currentSelIndex = OrderSortByCarryOn;
     
     [self initArray];
     [self setFilterType];
-
+    
     _contentView.backgroundView = nil;
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
+        /*
         if (_inLoading)
         {
             action();
@@ -88,17 +83,29 @@
                 [self reportError:resp.errorDescrip];
             }
         }];
+         */
     }];
-}
-
-- (void)onButtonBack:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self requestData];
+}
+
+-(void)initArray
+{
+    _dataSourceList = [@[] mutableCopy];
+    _pageIndexList = [@[] mutableCopy];
+    _noMoreList = [@[] mutableCopy];
+    _refreshTimeList = [@[] mutableCopy];
+    
+    for (int i = 0; i < 3; i++) {
+        [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
+        [_pageIndexList insertObject:@1 atIndex:i];
+        [_noMoreList insertObject:@NO atIndex:i];
+        [_refreshTimeList insertObject:[NSDate date] atIndex:i];
+    }
 }
 
 -(void) setFilterType
@@ -116,7 +123,7 @@
     [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
     [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
     [btn1 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [btn1 setTitle:NSLocalizedString(@"ExchangeList_UnUsed", nil) forState:UIControlStateNormal];
+    [btn1 setTitle:NSLocalizedString(@"Order List Carry On", nil) forState:UIControlStateNormal];
     btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn1.showsTouchWhenHighlighted = YES;
     //[btn1 setTitleColor:[UIColor colorWithHexString:@"#007f06"] forState:UIControlStateNormal];
@@ -125,7 +132,7 @@
     [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
     [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
     [btn2 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [btn2 setTitle:NSLocalizedString(@"ExchangeList_Used", nil) forState:UIControlStateNormal];
+    [btn2 setTitle:NSLocalizedString(@"Order List Completion", nil) forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn2.showsTouchWhenHighlighted = YES;
     //[btn2 setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
@@ -134,7 +141,7 @@
     [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
     [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
     [btn3 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
-    [btn3 setTitle:NSLocalizedString(@"ExchangeList_Disable", nil) forState:UIControlStateNormal];
+    [btn3 setTitle:NSLocalizedString(@"Order List Disable", nil) forState:UIControlStateNormal];
     btn3.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn3.showsTouchWhenHighlighted = YES;
     //[btn3 setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
@@ -143,19 +150,32 @@
     _segFilters.selectedIndex = 0;
 }
 
--(void)initArray
+- (void)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+-(void) requestData
 {
-    _dataSourceList = [@[] mutableCopy];
-    _pageIndexList = [@[] mutableCopy];
-    _noMoreList = [@[] mutableCopy];
-    _refreshTimeList = [@[] mutableCopy];
-    
-    for (int i = 0; i < 3; i++) {
-        [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
-        [_pageIndexList insertObject:@1 atIndex:i];
-        [_noMoreList insertObject:@NO atIndex:i];
-        [_refreshTimeList insertObject:[NSDate date] atIndex:i];
-    }
+    int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
+    [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
+    FSCommonUserRequest *request = [self createRequest:currentPage];
+    [self beginLoading:self.view];
+    _inLoading = YES;
+    [request send:[FSPagedOrder class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [self endLoading:self.view];
+        _inLoading = NO;
+        if (resp.isSuccess)
+        {
+            FSPagedOrder *innerResp = resp.responseData;
+            if (innerResp.totalPageCount <= currentPage)
+                [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
+            [self mergeLike:innerResp isInsert:NO];
+        }
+        else
+        {
+            [self reportError:resp.errorDescrip];
+        }
+    }];
 }
 
 -(void)setPageIndex:(int)_index selectedSegmentIndex:(NSInteger)_selIndexSegment
@@ -175,38 +195,14 @@
     [_refreshTimeList replaceObjectAtIndex:_selIndexSegment withObject:_date];
 }
 
--(void) requestData
-{
-    int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
-    [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
-    FSCommonUserRequest *request = [self createRequest:currentPage];
-    [self beginLoading:self.view];
-    _inLoading = YES;
-    [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:self.view];
-        _inLoading = NO;
-        if (resp.isSuccess)
-        {
-            FSPagedCoupon *innerResp = resp.responseData;
-            if (innerResp.totalPageCount <= currentPage)
-                [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
-            [self mergeLike:innerResp isInsert:NO];
-        }
-        else
-        {
-            [self reportError:resp.errorDescrip];
-        }
-    }];
-}
-
--(void) mergeLike:(FSPagedCoupon *)response isInsert:(BOOL)isinsert
+-(void) mergeLike:(FSPagedOrder *)response isInsert:(BOOL)isinsert
 {
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     if (response && response.items)
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likes indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([[(FSCoupon *)obj1 valueForKey:@"id"] isEqualToValue:[(FSCoupon *)obj valueForKey:@"id" ]])
+                if ([[(FSOrder *)obj1 valueForKey:@"id"] isEqualToValue:[(FSOrder *)obj valueForKey:@"id" ]])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -223,7 +219,7 @@
         }];
         [_contentView reloadData];
     }
-    [self showBlankIcon];
+    //[self showBlankIcon];
 }
 
 -(void)showBlankIcon
@@ -249,15 +245,12 @@
     return request;
 }
 
-- (void)viewDidUnload {
-    [self setSegFilters:nil];
-    [super viewDidUnload];
-}
-
 #pragma mark - UITableViewDelegate && UITableViewDatasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    return 4;
+    
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     return _likes?_likes.count:0;
 }
@@ -269,32 +262,23 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
-    FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
-    UITableViewCell *detailCell = nil;
-    if (coupon.producttype == FSSourceProduct)
-    {
-        detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_COUPON_TABLE_CELL];
-        [(FSCouponDetailCell *)detailCell setData:coupon];
-    } else
-    {
-        detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_COUPON_PRO_TABLE_CELL];
-        [(FSCouponProDetailCell *)detailCell setData:coupon];
-    }
+    FSOrderListCell *detailCell = (FSOrderListCell*)[_contentView dequeueReusableCellWithIdentifier:USER_ORDER_LIST_TABLE_CELL];
+    detailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    //NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
+    //FSOrder *order = [_likes objectAtIndex:indexPath.section];
+    //[(FSOrderListCell *)detailCell setData:order];
     return detailCell;
 }
 
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
-    
-    FSCouponProDetailCell *cell = (FSCouponProDetailCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
-    return cell.cellHeight;
+    return 90;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     detailView.navContext = _likes;
@@ -303,7 +287,7 @@
     detailView.dataProviderInContext = self;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
     [self presentViewController:navControl animated:true completion:nil];
-      [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
     
     //统计
     FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
@@ -315,6 +299,9 @@
     [[FSAnalysis instance] logEvent:CHECK_COUPON_DETAIL withParameters:_dic];
     
     [[FSAnalysis instance] autoTrackPages:navControl];
+     */
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -331,22 +318,22 @@
         _inLoading = TRUE;
         int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
         FSCommonUserRequest *request = [self createRequest:currentPage+1];
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedOrder class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
             if (resp.isSuccess)
             {
-                FSPagedCoupon *innerResp = resp.responseData;
+                FSPagedOrder *innerResp = resp.responseData;
                 if (innerResp.totalPageCount<=currentPage+1)
                     [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
                 [self setPageIndex:currentPage+1 selectedSegmentIndex:_currentSelIndex];
                 [self mergeLike:innerResp isInsert:NO];
                 
                 //统计
-                NSString *value = _segFilters.selectedIndex==0?@"优惠券列表-未使用":(_segFilters.selectedIndex==1?@"优惠券列表-已使用":@"优惠券列表-已无效");
-                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-                [_dic setValue:value forKey:@"来源"];
-                [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
-                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
+//                NSString *value = _segFilters.selectedIndex==0?@"优惠券列表-未使用":(_segFilters.selectedIndex==1?@"优惠券列表-已使用":@"优惠券列表-已无效");
+//                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+//                [_dic setValue:value forKey:@"来源"];
+//                [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
+//                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
             }
             else
             {
@@ -354,50 +341,6 @@
             }
         }];
     }
-}
-
-#pragma mark - FSProDetailItemSourceProvider
-
--(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
-{
-    __block FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
-    FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
-    request.uToken = [FSModelManager sharedModelManager].loginToken;
-    request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-    request.id = [NSNumber numberWithInt:favorCurrent.productid];
-    request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-    request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-    Class respClass;
-    if (favorCurrent.producttype == FSSourceProduct)
-    {
-        request.pType = FSSourceProduct;
-        request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-        respClass = [FSProdItemEntity class];
-    }
-    else
-    {
-        request.pType = FSSourcePromotion;
-        request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-        respClass = [FSProItemEntity class];
-        
-    }
-    [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        if (!resp.isSuccess)
-        {
-            [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-            errorBlock();
-        }
-        else
-        {
-            block(resp.responseData);
-        }
-    }];
-}
-
--(FSSourceType)proDetailViewSourceTypeFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
-{
-    FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
-    return favorCurrent.producttype;
 }
 
 #pragma mark - AKSegmentedControlDelegate
@@ -419,17 +362,17 @@
             [self requestData];
         }
         else{
-            [self showBlankIcon];
+            //[self showBlankIcon];
             [_contentView reloadData];
             [_contentView setContentOffset:CGPointZero];
         }
         
         //统计
-        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-        [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
-        [_dic setValue:value forKey:@"分类名称"];
-        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
+//        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");
+//        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+//        [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
+//        [_dic setValue:value forKey:@"分类名称"];
+//        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
     }
 }
 

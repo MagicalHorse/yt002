@@ -192,17 +192,20 @@ BOOL networkIsWorking = NO;
         {
             noResult = [[UILabel alloc] init];
             noResult.text = text;
+            noResult.numberOfLines = 0;
+            noResult.lineBreakMode = NSLineBreakByCharWrapping;
             noResult.textAlignment = UITextAlignmentCenter;
             noResult.font = ME_FONT(14);
-            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(14)];
-            noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            CGSize resultSize = [noResult.text sizeWithFont:noResult.font constrainedToSize:CGSizeMake(300, 1000) lineBreakMode:NSLineBreakByCharWrapping];
+            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
             noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
             noResult.backgroundColor = [UIColor clearColor];
         }
         else{
             noResult.text = text;
-            CGSize resultSize = [noResult.text sizeWithFont:ME_FONT(14)];
-            noResult.frame = CGRectMake(self.view.frame.size.width/2-resultSize.width/2,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            noResult.textAlignment = UITextAlignmentCenter;
+            CGSize resultSize = [noResult.text sizeWithFont:noResult.font constrainedToSize:CGSizeMake(300, 1000) lineBreakMode:NSLineBreakByCharWrapping];
+            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
             noResult.text = text;
         }
         

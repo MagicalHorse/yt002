@@ -15,19 +15,19 @@
 #define REST_API_CLIENT_VERSION @"2.2.2"
 
 //正式库
-#define REST_API_URL   @"http://itoo.yintai.com/api"
-#define REST_API_URL_OUT @"http://api.youhuiin.com"
-#define REST_API_APP_SECRET_KEY @"yintai123456"
+//#define REST_API_URL   @"http://itoo.yintai.com/api"
+//#define REST_API_URL_OUT @"http://api.youhuiin.com"
+//#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库-内网
-//#define REST_API_URL   @"http://10.92.200.109"
+//#define REST_API_URL   @"http://10.92.200.109/api"
 //#define REST_API_URL_OUT @"http://stage.youhuiin.com"
 //#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库
-//#define REST_API_URL   @"http://apis.youhuiin.com/api"
-//#define REST_API_URL_OUT @"http://stage.youhuiin.com"
-//#define REST_API_APP_SECRET_KEY @"yintai123456"
+#define REST_API_URL   @"http://apis.youhuiin.com/api"
+#define REST_API_URL_OUT @"http://stage.youhuiin.com"
+#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 /*
  预生产环境的地址切换了，原有的地址失效，使用新的地址：
@@ -107,6 +107,12 @@ typedef enum {
 }FSGiftSortBy;
 
 typedef enum {
+    OrderSortByCarryOn,
+    OrderSortByCompletion,
+    OrderSortByDisable,
+}FSOrderSortBy;
+
+typedef enum {
     SortByNone = -1,
     SortByDistance = 0,
     SortByDate = 1,
@@ -131,3 +137,9 @@ typedef enum {
      f、SkipTypePointEx=6：积点兑换
      */
 }FSSkipType;
+
+typedef enum {
+    FSAddressDetailStateShow,
+    FSAddressDetailStateEdit,
+    FSAddressDetailStateNew,
+}FSAddressDetailState;

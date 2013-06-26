@@ -36,26 +36,45 @@
 @synthesize promotionid;
 @synthesize targetId;
 @synthesize targetType;
+@synthesize sharecount;
+@synthesize tag;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",@"isproductbinded",@"isProductBinded",@"ispublication",@"isPublication",@"limitcount",@"limitCount",@"promotionid",@"promotionid",nil];
+    //[relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"startdate",@"startDate",@"enddate",@"endDate",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"tagid",@"tagId",@"isproductbinded",@"isProductBinded",@"ispublication",@"isPublication",@"limitcount",@"limitCount",@"promotionid",@"promotionid",nil];
     
-    [relationMap mapKeyPath:@"targetId" toAttribute:@"targetId"];
-    [relationMap mapKeyPath:@"targetType" toAttribute:@"targetType"];
+    [relationMap mapKeyPath:@"id" toAttribute:@"id"];//
+    [relationMap mapKeyPath:@"name" toAttribute:@"title"];//
+    [relationMap mapKeyPath:@"startdate" toAttribute:@"startDate"];//
+    [relationMap mapKeyPath:@"enddate" toAttribute:@"endDate"];//
+    [relationMap mapKeyPath:@"favoritecount" toAttribute:@"favorTotal"];//
+    [relationMap mapKeyPath:@"couponcount" toAttribute:@"couponTotal"];//
+    [relationMap mapKeyPath:@"description" toAttribute:@"descrip"];//
+    [relationMap mapKeyPath:@"isproductbinded" toAttribute:@"isProductBinded"];//
+    [relationMap mapKeyPath:@"sharecount" toAttribute:@"sharecount"];//
+    [relationMap mapKeyPath:@"tag" toAttribute:@"tag"];
     
-    NSString *relationKeyPath = @"store";
+    [relationMap mapKeyPath:@"isfavorited" toAttribute:@"isFavored"];/////////////////
+    [relationMap mapKeyPath:@"tagid" toAttribute:@"tagId"];/////////////////
+    [relationMap mapKeyPath:@"ispublication" toAttribute:@"isPublication"];/////////////////
+    [relationMap mapKeyPath:@"limitcount" toAttribute:@"limitCount"];/////////////////
+    [relationMap mapKeyPath:@"promotionid" toAttribute:@"promotionid"];/////////////////
+    
+    [relationMap mapKeyPath:@"targetId" toAttribute:@"targetId"];/////////////////
+    [relationMap mapKeyPath:@"targetType" toAttribute:@"targetType"];/////////////////
+    
+    NSString *relationKeyPath = @"store";//
     RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
     [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];
     
     RKObjectMapping *userRelationMap = [FSUser getRelationDataMap];
-    [relationMap mapKeyPath:@"promotionuser" toRelationship:@"fromUser" withMapping:userRelationMap];
+    [relationMap mapKeyPath:@"promotionuser" toRelationship:@"fromUser" withMapping:userRelationMap];/////////////////
     RKObjectMapping *resourceRelationMap = [FSResource getRelationDataMap];
-    [relationMap mapKeyPath:@"resources" toRelationship:@"resource" withMapping:resourceRelationMap];
+    [relationMap mapKeyPath:@"resources" toRelationship:@"resource" withMapping:resourceRelationMap];//
     
     RKObjectMapping *commentRelationMap = [FSComment getRelationDataMap];
-    [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];
+    [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];/////////////////
         return relationMap;
 }
 

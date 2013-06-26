@@ -9,6 +9,19 @@
 /* Begin PBXBuildFile section */
 		0206AB6F16FB5D27008ADFBC /* FSCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0211778B16CF54E700559653 /* PositionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211778A16CF54E700559653 /* PositionAnnotation.m */; };
+		021183A51779249500326DE9 /* FSPagedAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183A41779249500326DE9 /* FSPagedAddress.m */; };
+		021183AC177924D300326DE9 /* FSAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183AB177924D300326DE9 /* FSAddress.m */; };
+		021183AF177925AA00326DE9 /* FSAddressCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183AE177925AA00326DE9 /* FSAddressCell.m */; };
+		021183B1177925BA00326DE9 /* FSAddressCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 021183B0177925BA00326DE9 /* FSAddressCell.xib */; };
+		021183B5177943F300326DE9 /* FSAddressDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183B3177943F200326DE9 /* FSAddressDetailViewController.m */; };
+		021183B6177943F300326DE9 /* FSAddressDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 021183B4177943F200326DE9 /* FSAddressDetailViewController.xib */; };
+		021183B917799D6B00326DE9 /* FSAddressRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183B817799D6B00326DE9 /* FSAddressRequest.m */; };
+		021220581775182C00C8D371 /* FSOrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 021220561775182B00C8D371 /* FSOrderListViewController.m */; };
+		021220591775182C00C8D371 /* FSOrderListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 021220571775182B00C8D371 /* FSOrderListViewController.xib */; };
+		0212206017751FD600C8D371 /* FSPagedOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0212205F17751FD600C8D371 /* FSPagedOrder.m */; };
+		021220631775202B00C8D371 /* FSOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 021220621775202A00C8D371 /* FSOrder.m */; };
+		021220661775295400C8D371 /* FSOrderListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 021220651775295400C8D371 /* FSOrderListCell.m */; };
+		021220681775296900C8D371 /* FSOrderListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 021220671775296900C8D371 /* FSOrderListCell.xib */; };
 		02160CA8170090D500D77FE0 /* search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02160CA6170090D500D77FE0 /* search@2x.png */; };
 		02160E251701720200D77FE0 /* FSPointMemberCardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02160E241701720200D77FE0 /* FSPointMemberCardCell.m */; };
 		02160E2B1701721E00D77FE0 /* FSPointMemberCardCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02160E2A1701721E00D77FE0 /* FSPointMemberCardCell.xib */; };
@@ -184,6 +197,8 @@
 		0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0298BA4216C40EC300BB2C29 /* FSGroupBrand.m */; };
 		02992D5B16ED789E007ACF62 /* FSCardBindViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02992D5916ED789E007ACF62 /* FSCardBindViewController.m */; };
 		02992D5C16ED789E007ACF62 /* FSCardBindViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */; };
+		02AD48A91778368F0041802D /* FSAddressManagerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AD48A71778368F0041802D /* FSAddressManagerViewController.m */; };
+		02AD48AA1778368F0041802D /* FSAddressManagerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02AD48A81778368F0041802D /* FSAddressManagerViewController.xib */; };
 		02B813BE173A24E70003BCBA /* FSPagedExchangeList.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */; };
 		02B813C5173A25170003BCBA /* FSExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813C4173A25170003BCBA /* FSExchange.m */; };
 		02B813C7173A50330003BCBA /* btn_bg_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */; };
@@ -640,6 +655,28 @@
 		0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCycleScrollView.m; path = Controls/Common/FSCycleScrollView.m; sourceTree = "<group>"; };
 		0211778916CF54E700559653 /* PositionAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PositionAnnotation.h; path = Controls/PositionAnnotation.h; sourceTree = "<group>"; };
 		0211778A16CF54E700559653 /* PositionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PositionAnnotation.m; path = Controls/PositionAnnotation.m; sourceTree = "<group>"; };
+		021183A31779249500326DE9 /* FSPagedAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedAddress.h; path = Model/FSPagedAddress.h; sourceTree = "<group>"; };
+		021183A41779249500326DE9 /* FSPagedAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedAddress.m; path = Model/FSPagedAddress.m; sourceTree = "<group>"; };
+		021183AA177924D300326DE9 /* FSAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSAddress.h; path = Model/FSAddress.h; sourceTree = "<group>"; };
+		021183AB177924D300326DE9 /* FSAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSAddress.m; path = Model/FSAddress.m; sourceTree = "<group>"; };
+		021183AD177925AA00326DE9 /* FSAddressCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSAddressCell.h; path = Controls/FSAddressCell.h; sourceTree = "<group>"; };
+		021183AE177925AA00326DE9 /* FSAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSAddressCell.m; path = Controls/FSAddressCell.m; sourceTree = "<group>"; };
+		021183B0177925BA00326DE9 /* FSAddressCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSAddressCell.xib; path = Controls/FSAddressCell.xib; sourceTree = "<group>"; };
+		021183B2177943F200326DE9 /* FSAddressDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAddressDetailViewController.h; sourceTree = "<group>"; };
+		021183B3177943F200326DE9 /* FSAddressDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAddressDetailViewController.m; sourceTree = "<group>"; };
+		021183B4177943F200326DE9 /* FSAddressDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAddressDetailViewController.xib; sourceTree = "<group>"; };
+		021183B717799D6B00326DE9 /* FSAddressRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSAddressRequest.h; path = ModelService/FSAddressRequest.h; sourceTree = "<group>"; };
+		021183B817799D6B00326DE9 /* FSAddressRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSAddressRequest.m; path = ModelService/FSAddressRequest.m; sourceTree = "<group>"; };
+		021220551775182B00C8D371 /* FSOrderListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderListViewController.h; sourceTree = "<group>"; };
+		021220561775182B00C8D371 /* FSOrderListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderListViewController.m; sourceTree = "<group>"; };
+		021220571775182B00C8D371 /* FSOrderListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderListViewController.xib; sourceTree = "<group>"; };
+		0212205E17751FD600C8D371 /* FSPagedOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedOrder.h; path = Model/FSPagedOrder.h; sourceTree = "<group>"; };
+		0212205F17751FD600C8D371 /* FSPagedOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedOrder.m; path = Model/FSPagedOrder.m; sourceTree = "<group>"; };
+		021220611775202A00C8D371 /* FSOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSOrder.h; path = Model/FSOrder.h; sourceTree = "<group>"; };
+		021220621775202A00C8D371 /* FSOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSOrder.m; path = Model/FSOrder.m; sourceTree = "<group>"; };
+		021220641775295400C8D371 /* FSOrderListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSOrderListCell.h; path = Controls/FSOrderListCell.h; sourceTree = "<group>"; };
+		021220651775295400C8D371 /* FSOrderListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSOrderListCell.m; path = Controls/FSOrderListCell.m; sourceTree = "<group>"; };
+		021220671775296900C8D371 /* FSOrderListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSOrderListCell.xib; path = Controls/FSOrderListCell.xib; sourceTree = "<group>"; };
 		02160CA6170090D500D77FE0 /* search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search@2x.png"; sourceTree = "<group>"; };
 		02160E231701720200D77FE0 /* FSPointMemberCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPointMemberCardCell.h; path = Controls/FSPointMemberCardCell.h; sourceTree = "<group>"; };
 		02160E241701720200D77FE0 /* FSPointMemberCardCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPointMemberCardCell.m; path = Controls/FSPointMemberCardCell.m; sourceTree = "<group>"; };
@@ -876,6 +913,9 @@
 		02992D5816ED789D007ACF62 /* FSCardBindViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSCardBindViewController.h; sourceTree = "<group>"; };
 		02992D5916ED789E007ACF62 /* FSCardBindViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSCardBindViewController.m; sourceTree = "<group>"; };
 		02992D5A16ED789E007ACF62 /* FSCardBindViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCardBindViewController.xib; sourceTree = "<group>"; };
+		02AD48A61778368F0041802D /* FSAddressManagerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAddressManagerViewController.h; sourceTree = "<group>"; };
+		02AD48A71778368F0041802D /* FSAddressManagerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAddressManagerViewController.m; sourceTree = "<group>"; };
+		02AD48A81778368F0041802D /* FSAddressManagerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSAddressManagerViewController.xib; sourceTree = "<group>"; };
 		02B813BC173A24E70003BCBA /* FSPagedExchangeList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedExchangeList.h; path = Model/CoreData/FSPagedExchangeList.h; sourceTree = "<group>"; };
 		02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedExchangeList.m; path = Model/CoreData/FSPagedExchangeList.m; sourceTree = "<group>"; };
 		02B813C3173A25170003BCBA /* FSExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSExchange.h; path = Model/FSExchange.h; sourceTree = "<group>"; };
@@ -1886,6 +1926,8 @@
 				02F96BDE1739080F00BB19AB /* FSExchangeRequest.m */,
 				02D89523174B205A005148DB /* FSStoreDetailRequest.h */,
 				02D89524174B205A005148DB /* FSStoreDetailRequest.m */,
+				021183B717799D6B00326DE9 /* FSAddressRequest.h */,
+				021183B817799D6B00326DE9 /* FSAddressRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -2011,6 +2053,12 @@
 				0216DF4D1742301400C6CA9B /* FSMyCommentCell.h */,
 				0216DF4E1742301600C6CA9B /* FSMyCommentCell.m */,
 				0216DF501742302B00C6CA9B /* FSMyCommentCell.xib */,
+				021220641775295400C8D371 /* FSOrderListCell.h */,
+				021220651775295400C8D371 /* FSOrderListCell.m */,
+				021220671775296900C8D371 /* FSOrderListCell.xib */,
+				021183AD177925AA00326DE9 /* FSAddressCell.h */,
+				021183AE177925AA00326DE9 /* FSAddressCell.m */,
+				021183B0177925BA00326DE9 /* FSAddressCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2074,6 +2122,10 @@
 				02B813C4173A25170003BCBA /* FSExchange.m */,
 				027F6DCC173CE64F004F7ACE /* FSCommon.h */,
 				027F6DCD173CE64F004F7ACE /* FSCommon.m */,
+				021220611775202A00C8D371 /* FSOrder.h */,
+				021220621775202A00C8D371 /* FSOrder.m */,
+				021183AA177924D300326DE9 /* FSAddress.h */,
+				021183AB177924D300326DE9 /* FSAddress.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2322,6 +2374,15 @@
 				0216DF4817422D5800C6CA9B /* FSMyCommentController.h */,
 				0216DF4917422D5800C6CA9B /* FSMyCommentController.m */,
 				0216DF4A17422D5800C6CA9B /* FSMyCommentController.xib */,
+				021220551775182B00C8D371 /* FSOrderListViewController.h */,
+				021220561775182B00C8D371 /* FSOrderListViewController.m */,
+				021220571775182B00C8D371 /* FSOrderListViewController.xib */,
+				02AD48A61778368F0041802D /* FSAddressManagerViewController.h */,
+				02AD48A71778368F0041802D /* FSAddressManagerViewController.m */,
+				02AD48A81778368F0041802D /* FSAddressManagerViewController.xib */,
+				021183B2177943F200326DE9 /* FSAddressDetailViewController.h */,
+				021183B3177943F200326DE9 /* FSAddressDetailViewController.m */,
+				021183B4177943F200326DE9 /* FSAddressDetailViewController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2347,6 +2408,10 @@
 				027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */,
 				0216DF5217423F3500C6CA9B /* FSPagedMyComment.h */,
 				0216DF5317423F3500C6CA9B /* FSPagedMyComment.m */,
+				0212205E17751FD600C8D371 /* FSPagedOrder.h */,
+				0212205F17751FD600C8D371 /* FSPagedOrder.m */,
+				021183A31779249500326DE9 /* FSPagedAddress.h */,
+				021183A41779249500326DE9 /* FSPagedAddress.m */,
 			);
 			name = Paged;
 			sourceTree = "<group>";
@@ -3404,6 +3469,11 @@
 				027D90F41751DC7400DA1C58 /* Splash2_5@2x.jpg in Resources */,
 				027D90F51751DC7400DA1C58 /* Splash3_5@2x.jpg in Resources */,
 				027D90F61751DC7400DA1C58 /* Splash4_5@2x.jpg in Resources */,
+				021220591775182C00C8D371 /* FSOrderListViewController.xib in Resources */,
+				021220681775296900C8D371 /* FSOrderListCell.xib in Resources */,
+				02AD48AA1778368F0041802D /* FSAddressManagerViewController.xib in Resources */,
+				021183B1177925BA00326DE9 /* FSAddressCell.xib in Resources */,
+				021183B6177943F300326DE9 /* FSAddressDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3680,6 +3750,16 @@
 				027EBCB517453295005D15BD /* FSScopeCell.m in Sources */,
 				02D89525174B205A005148DB /* FSStoreDetailRequest.m in Sources */,
 				025CF381174F51CC00261F1E /* AKSegmentedControl.m in Sources */,
+				021220581775182C00C8D371 /* FSOrderListViewController.m in Sources */,
+				0212206017751FD600C8D371 /* FSPagedOrder.m in Sources */,
+				021220631775202B00C8D371 /* FSOrder.m in Sources */,
+				021220661775295400C8D371 /* FSOrderListCell.m in Sources */,
+				02AD48A91778368F0041802D /* FSAddressManagerViewController.m in Sources */,
+				021183A51779249500326DE9 /* FSPagedAddress.m in Sources */,
+				021183AC177924D300326DE9 /* FSAddress.m in Sources */,
+				021183AF177925AA00326DE9 /* FSAddressCell.m in Sources */,
+				021183B5177943F300326DE9 /* FSAddressDetailViewController.m in Sources */,
+				021183B917799D6B00326DE9 /* FSAddressRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3787,8 +3867,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3895,8 +3975,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -3943,7 +4023,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;

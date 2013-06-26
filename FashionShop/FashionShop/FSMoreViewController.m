@@ -12,6 +12,8 @@
 #import "FSCardBindViewController.h"
 #import "FSAboutViewController.h"
 #import "FSGiftListViewController.h"
+#import "FSOrderListViewController.h"
+#import "FSAddressManagerViewController.h"
 #import "FSCommonRequest.h"
 
 @interface FSMoreViewController () {
@@ -55,10 +57,12 @@
 {
     _icons = [@[
               @[
+                @"order_icon.png",
                 @"order_icon.png",],
               @[
                 @"eidit_icon.png",
-                @"bindcard_icon.png"],
+                @"bindcard_icon.png",
+                @"address_icon.png"],
               @[
                 @"feedback_icon.png",
                 @"aboutyt_icon.png",
@@ -80,10 +84,12 @@
     
     _titles = [@[
                 @[
-                    NSLocalizedString(@"Gift List", nil)],
+                    NSLocalizedString(@"Gift List", nil),
+                    NSLocalizedString(@"Pre Order Title", nil)],
                 @[
                     NSLocalizedString(@"Edit Personal Info",nil),
-                    ([_currentUser.isBindCard boolValue]?NSLocalizedString(@"Card Info Query", nil):NSLocalizedString(@"Bind Member Card",nil))],
+                    ([_currentUser.isBindCard boolValue]?NSLocalizedString(@"Card Info Query", nil):NSLocalizedString(@"Bind Member Card",nil)),
+                    NSLocalizedString(@"Address Manager", nil)],
                 @[
                     NSLocalizedString(@"FeedBack",nil),
                     NSLocalizedString(@"About Love Intime",nil),
@@ -239,7 +245,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.row + indexPath.section * 10) {
-        case FSMoreOrder:
+        case FSMoreGift:
         {
             FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
             couponView.currentUser = _currentUser;
@@ -249,6 +255,13 @@
             NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
             [_dic setValue:@"更多页" forKey:@"来源页面"];
             [[FSAnalysis instance] logEvent:CHECK_GIFT_LIST withParameters:_dic];
+        }
+            break;
+        case FSMoreOrder:
+        {
+            FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
+            orderView.currentUser = _currentUser;
+            [self.navigationController pushViewController:orderView animated:true];
         }
             break;
         case FSMoreEdit:    //编辑个人资料
@@ -267,7 +280,9 @@
             break;
         case FSMoreAddress:
         {
-            
+            FSAddressManagerViewController *addressView = [[FSAddressManagerViewController alloc] initWithNibName:@"FSAddressManagerViewController" bundle:nil];
+            addressView.pageFrom = 1;
+            [self.navigationController pushViewController:addressView animated:true];
         }
             break;
         case FSMoreFeedback:    //意见反馈

@@ -10,7 +10,8 @@
 #import "FSUser.h"
 
 enum FSMorePageStatus {
-    FSMoreOrder = 0,
+    FSMoreGift = 0,
+    FSMoreOrder,
     FSMoreEdit = 10,
     FSMoreBindCard,
     FSMoreAddress,

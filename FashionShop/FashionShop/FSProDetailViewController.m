@@ -220,6 +220,46 @@
         else{
             itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
         }
+        
+        /*
+        FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+        drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+        drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        Class respClass;
+        if (blockViewForRefresh.pType == FSSourceProduct)
+        {
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",itemId];
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",itemId];
+            respClass = [FSProItemEntity class];
+        }
+        [drequest setBaseURL:2];
+        self.paginatorView.scrollView.scrollEnabled = NO;
+        [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
+            if (resp.isSuccess)
+            {
+                [blockViewForRefresh setData:resp.responseData];
+                [(FSProDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
+                [blockViewForRefresh updateToolBar:resp.responseData];
+                NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
+                if (blockSelf->_sourceType==FSSourcePromotion)
+                    navTitle = NSLocalizedString(@"promotion detail", nil);
+                [blockSelf.navigationItem setTitle:navTitle] ;
+                [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+            } else
+            {
+                self.paginatorView.scrollView.scrollEnabled = YES;
+                [self endLoading:blockViewForRefresh];
+                _inLoading = NO;
+                [self onButtonCancel];
+            }
+        }];
+         */
+        
         FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
         drequest.uToken = [FSModelManager sharedModelManager].loginToken;
         drequest.id = itemId;

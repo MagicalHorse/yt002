@@ -159,7 +159,9 @@
     _cellHeight += _rect.size.height + yCap;
     
     if (_hasAddionalView) {
-        [self initArray];
+        if (!array) {
+            [self initArray];
+        }
         PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
         _additionalView.collectionViewLayout = layout;
         _additionalView.hidden = NO;
@@ -172,12 +174,11 @@
         _additionalView.delegate = self;
         _additionalView.dataSource = self;
         _cellHeight += _additionalView.frame.size.height + 8;
-        [_additionalView reloadData];
     }
     else{
         _additionalView.hidden = YES;
-        [_additionalView reloadData];
     }
+    [_additionalView reloadData];
 }
 
 -(void)initArray

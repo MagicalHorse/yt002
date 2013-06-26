@@ -13,7 +13,6 @@
 #import "FSStartViewController.h"
 #import "FSCommon.h"
 
-
 @class PKRevealController;
 @protocol FSProDetailItemSourceProvider;
 
@@ -32,6 +31,7 @@
 @property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong,nonatomic) FSCommon *versionData;
+@property (nonatomic,strong) NSMutableArray *allAddress;
 
 @property (strong,nonatomic) UIViewController *root;
 

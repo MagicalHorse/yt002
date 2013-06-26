@@ -42,5 +42,7 @@
 @property (nonatomic,strong) NSNumber *promotionid;
 @property (nonatomic) int targetType;
 @property (nonatomic,strong) NSString *targetId;
+@property (nonatomic) int sharecount;
+@property (nonatomic, strong) NSString * tag;
 
 @end
