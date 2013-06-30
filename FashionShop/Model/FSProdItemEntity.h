@@ -13,27 +13,46 @@
 
 @interface FSProdItemEntity : FSModelBase
 
-@property (nonatomic, assign) NSInteger  id;
-@property (nonatomic, assign) NSInteger  type;
-@property (nonatomic, strong) FSStore * store;
-@property (nonatomic,strong) NSMutableArray * resource;
+//product detail need attributes
 
-@property (nonatomic, strong) NSString * descrip;
+@property (nonatomic, assign) NSInteger  id;
 @property (nonatomic, strong) NSString * title;
-@property (nonatomic, strong) FSUser * fromUser;
-@property (nonatomic, strong) NSDate * inDate;
 @property (nonatomic,assign) NSInteger couponTotal;
 @property (nonatomic,assign) NSInteger favorTotal;
-@property (nonatomic,strong) NSMutableArray *coupons;
-@property (nonatomic, strong) NSMutableArray *comments;
-@property (nonatomic, strong) NSMutableArray *promotions;
-@property (nonatomic,strong) FSBrand * brand;
 @property (nonatomic,strong) NSNumber *price;
+@property (nonatomic, strong) NSString * descrip;
+@property (nonatomic) BOOL is4sale;
+@property (nonatomic, strong) NSString * contactPhone;
+
+//@property (nonatomic, strong) NSString * recommendUser_id;
+//@property (nonatomic, strong) NSString * recommendedReason;
+//@property (nonatomic) float unitPrice;
+//@property (nonatomic) int shareCount;
+
+@property (nonatomic,strong) FSBrand * brand;
+@property (nonatomic, strong) FSUser * fromUser;
+@property (nonatomic, strong) FSStore * store;
+@property (nonatomic, strong) NSMutableArray *promotions;
+@property (nonatomic,strong) NSMutableArray * resource;
+//@property (nonatomic,strong) FSTag * tag;
+
+//other need attributes
+@property (nonatomic,strong) NSString *brandDesc;
+@property (nonatomic,assign) BOOL promotionFlag;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
-@property (nonatomic,assign) BOOL promotionFlag;
-@property (nonatomic,readonly) BOOL hasPromotion;
-@property (nonatomic,strong) NSString *brandDesc;
 
+//no need mapping attributes
+@property (nonatomic, strong) NSMutableArray *comments;
+@property (nonatomic,readonly) BOOL hasPromotion;
+
+/*
+@property (nonatomic, assign) NSInteger  type;
+@property (nonatomic, strong) NSDate * inDate;
+@property (nonatomic,strong) NSMutableArray *coupons;
+
+
+
+*/
 
 @end

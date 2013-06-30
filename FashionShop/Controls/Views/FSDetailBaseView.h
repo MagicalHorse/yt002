@@ -16,7 +16,7 @@
 @property(nonatomic) BOOL showViewMask;
 @property (strong, nonatomic) IBOutlet UIToolbar *myToolBar;
 
--(void)updateToolBar:(id)data;
+-(void)updateToolBar:(BOOL)flag;
 -(void)resetScrollViewSize;
 -(void) updateInteraction:(id)updatedEntity;
 -(void)setToolBarBackgroundImage;

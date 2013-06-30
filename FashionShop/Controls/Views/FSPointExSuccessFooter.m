@@ -8,8 +8,8 @@
 
 #import "FSPointExSuccessFooter.h"
 
-//礼券兑换成功Cell之footer
-@implementation FSPointExSuccessFooter
+//礼券兑换成功或订单成功Cell之footer
+@implementation FSCommonSuccessFooter
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -19,11 +19,11 @@
     return self;
 }
 
--(void)initView:(FSExchangeSuccess*)data
+-(void)initView:(NSString*)content
 {
     int yCap = 12;
     int _cellHeight = _infomationDesc.frame.origin.y;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>注意事项 : \n</font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal,Font_Name_Normal, data.exclude];
+    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>温馨提示 : \n</font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal,Font_Name_Normal, content];
     [_infomationDesc setText:str];
     CGRect _rect = _infomationDesc.frame;
     _rect.origin.y = _cellHeight;

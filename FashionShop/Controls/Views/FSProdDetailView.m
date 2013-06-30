@@ -151,6 +151,24 @@
     _viewHeight = yOffset;
     
     yOffset = 0;
+    //在线咨询按钮和在线订购
+    int _x = 15;
+    if (!_data.is4sale) {
+        _x = 93;
+        _btnBuy.hidden = YES;
+    }
+    else{
+        _btnBuy.hidden = NO;
+        _rect = _btnBuy.frame;
+        _rect.origin.x = _x + 20 + _btnContact.frame.size.width;
+        _btnBuy.frame = _rect;
+    }
+    _rect = _btnContact.frame;
+    _rect.origin.x = _x;
+    _btnContact.hidden = NO;
+    _btnContact.frame = _rect;
+    yOffset += 50;
+    
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];
     [self bringSubviewToFront:_lblCoupons];
@@ -163,7 +181,11 @@
     _lblCoupons.font = ME_FONT(13);
     _lblCoupons.textColor = [UIColor colorWithHexString:@"#e5004f"];
     
-    yOffset += 40;
+    _rect = _countView.frame;
+    _rect.origin.y = yOffset;
+    _countView.frame = _rect;
+    yOffset += _rect.size.height + 10;
+    
     //_lblDescrip
     _lblDescrip.text = _data.descrip;
     _lblDescrip.font = ME_FONT(14);
@@ -207,7 +229,6 @@
     //_tbComment
     _rect = _tbComment.frame;
     _rect.origin.y = _viewHeight;
-//    _rect.size.height = 0;
     _tbComment.frame = _rect;
     
     [self updateInteraction];
@@ -297,11 +318,10 @@
     [sheepButton sizeToFit];
 }
 
--(void)updateToolBar:(id)data
+-(void)updateToolBar:(BOOL)flag
 {
-    _data = data;
     //更新优惠按钮
-    if (!_data.hasPromotion) {
+    if (!flag) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];
         if (_array.count >= 7) {
             [_array removeObject:_fixibleItem3];
@@ -342,7 +362,7 @@
         double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:section]];
         totalHeight += _height;
     }
-    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?10:50);
+    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?0:50);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height + _viewHeight;

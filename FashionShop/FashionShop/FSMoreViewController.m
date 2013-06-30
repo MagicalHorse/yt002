@@ -260,7 +260,6 @@
         case FSMoreOrder:
         {
             FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
-            orderView.currentUser = _currentUser;
             [self.navigationController pushViewController:orderView animated:true];
         }
             break;

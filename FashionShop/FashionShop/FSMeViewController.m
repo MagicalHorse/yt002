@@ -1374,6 +1374,7 @@
     int index = indexPath.row* [self numberOfSectionsInCollectionView:collectionView] + indexPath.section;
     detailView.navContext = [_likePros copy];
     detailView.indexInContext = index;
+    detailView.sourceFrom = 2;
     detailView.sourceType = [[[_likePros objectAtIndex:detailView.indexInContext] valueForKey:@"sourceType"] intValue];
     detailView.dataProviderInContext = self;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
@@ -1382,21 +1383,13 @@
     
     //统计
     if (detailView.sourceType == FSSourceProduct) {
-        FSProdItemEntity *_item = [_likePros objectAtIndex:indexPath.row];
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
-        [_dic setValue:_item.title forKey:@"商品名称"];
-        [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
         [_dic setValue:@"Me的主页" forKey:@"来源页面"];
         [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
     }
     else if(detailView.sourceType == FSSourcePromotion) {
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
-        FSProItemEntity *item = [_likePros objectAtIndex:indexPath.row];
-        [_dic setValue:item.title forKey:@"促销名称"];
-        [_dic setValue:[NSString stringWithFormat:@"%d", item.id] forKey:@"促销ID"];
-        [_dic setValue:item.store.name forKey:@"实体店名称"];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
         [_dic setValue:@"Me的主页" forKey:@"来源页面"];
-        [_dic setValue:item.startDate forKey:@"发布时间"];
         [[FSAnalysis instance] logEvent:CHECK_PROLIST_DETAIL withParameters:_dic];
     }
     

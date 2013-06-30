@@ -197,7 +197,7 @@ BOOL networkIsWorking = NO;
             noResult.textAlignment = UITextAlignmentCenter;
             noResult.font = ME_FONT(14);
             CGSize resultSize = [noResult.text sizeWithFont:noResult.font constrainedToSize:CGSizeMake(300, 1000) lineBreakMode:NSLineBreakByCharWrapping];
-            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, 300, resultSize.height);
             noResult.tag = UIVIEWCONTROLLER_NO_RESULT_ID;
             noResult.backgroundColor = [UIColor clearColor];
         }
@@ -205,7 +205,7 @@ BOOL networkIsWorking = NO;
             noResult.text = text;
             noResult.textAlignment = UITextAlignmentCenter;
             CGSize resultSize = [noResult.text sizeWithFont:noResult.font constrainedToSize:CGSizeMake(300, 1000) lineBreakMode:NSLineBreakByCharWrapping];
-            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, resultSize.width, resultSize.height);
+            noResult.frame = CGRectMake(10,blankView.frame.origin.y+blankView.frame.size.height+20, 300, resultSize.height);
             noResult.text = text;
         }
         

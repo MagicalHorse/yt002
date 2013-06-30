@@ -741,10 +741,7 @@
     
     if (detailViewController.sourceType == FSSourceProduct) {
         //统计
-        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
-        FSProdItemEntity *_item = [_items objectAtIndex:indexPath.row];
-        [_dic setValue:_item.title forKey:@"商品名称"];
-        [_dic setValue:[NSString stringWithFormat:@"%d", _item.id] forKey:@"商品ID"];
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
         [_dic setValue:@"达人详情页" forKey:@"来源页面"];
         [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
     }

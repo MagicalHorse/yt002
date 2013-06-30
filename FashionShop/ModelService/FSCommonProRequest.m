@@ -42,14 +42,6 @@
 
 @synthesize routeResourcePath;
 
-//-(void)setRouteResourcePath:(NSString *)aRouteResourcePath
-//{
-//    routeResourcePath = aRouteResourcePath;
-//    if ([routeResourcePath isEqualToString:RK_REQUEST_PRO_DETAIL]) {
-//        [self setBaseURL:2];
-//    }
-//}
-
 -(void) setMappingRequestAttribute:(RKObjectMapping *)map
 {
     [map mapKeyPath:@"lng" toAttribute:@"request.longit"];
@@ -64,7 +56,8 @@
     if (pType==FSSourceProduct)
     {
        [map mapKeyPath:@"productid" toAttribute:@"request.id"];
-    } else if(pType ==FSSourcePromotion)
+    }
+    else if(pType ==FSSourcePromotion)
     {
         [map mapKeyPath:@"promotionid" toAttribute:@"request.id"];
     }

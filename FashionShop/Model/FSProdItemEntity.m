@@ -14,65 +14,98 @@
 
 @implementation FSProdItemEntity
 
+//product detail need attributes
 @synthesize id;
-@synthesize store;
 @synthesize title;
-@synthesize type;
+@synthesize couponTotal;
+@synthesize favorTotal;
 @synthesize descrip;
-@synthesize fromUser;
-@synthesize inDate;
-@synthesize couponTotal,favorTotal;
-@synthesize resource;
-@synthesize coupons;
-@synthesize comments;
-@synthesize promotions;
-@synthesize brand;
 @synthesize price;
+@synthesize is4sale;
+@synthesize contactPhone;
+
+//@synthesize recommendUser_id;
+//@synthesize recommendedReason;
+//@synthesize unitPrice;
+//@synthesize shareCount;
+
+@synthesize brand;
+@synthesize fromUser;
+@synthesize resource;
+@synthesize store;
+@synthesize promotions;
+//@synthesize tag;
+
+//other need attributes
+@synthesize brandDesc;
+@synthesize promotionFlag;
 @synthesize isCouponed;
 @synthesize isFavored;
-@synthesize promotionFlag;
+
+/*
+@synthesize type;
+@synthesize inDate;
+
+@synthesize coupons;
+@synthesize comments;
 @synthesize hasPromotion;
-@synthesize brandDesc;
+ */
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"id",@"id",@"name",@"title",@"favoritecount",@"favorTotal",@"couponcount",@"couponTotal",@"description",@"descrip",@"isfavorited",@"isFavored",@"isreceived",@"isCouponed",@"price",@"price",@"promotionFlag",@"promotionFlag",@"branddesc",@"brandDesc",nil];
-    NSString *relationKeyPath = @"store";
-    RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
-    [relationMap mapKeyPath:relationKeyPath toRelationship:@"store" withMapping:storeRelationMap];
+    
+    //product detail need attributes
+    [relationMap mapKeyPath:@"id" toAttribute:@"id"];
+    [relationMap mapKeyPath:@"name" toAttribute:@"title"];
+    [relationMap mapKeyPath:@"favoritecount" toAttribute:@"favorTotal"];
+    [relationMap mapKeyPath:@"couponcount" toAttribute:@"couponTotal"];
+    [relationMap mapKeyPath:@"description" toAttribute:@"descrip"];
+    [relationMap mapKeyPath:@"price" toAttribute:@"price"];
+    [relationMap mapKeyPath:@"is4sale" toAttribute:@"is4sale"];
+    [relationMap mapKeyPath:@"contactphone" toAttribute:@"contactPhone"];
+    
+//    [relationMap mapKeyPath:@"recommenduser_id" toAttribute:@"recommendUser_id"];
+//    [relationMap mapKeyPath:@"recommendedreason" toAttribute:@"recommendedReason"];
+//    [relationMap mapKeyPath:@"unitprice" toAttribute:@"unitPrice"];
+//    [relationMap mapKeyPath:@"sharecount" toAttribute:@"shareCount"];
+    
+    RKObjectMapping *brandRelationMap = [FSBrand getRelationDataMap];
+    [relationMap mapKeyPath:@"brand" toRelationship:@"brand" withMapping:brandRelationMap];
+    
+    RKObjectMapping *userRelationMap = [FSUser getRelationDataMap];
+    [relationMap mapKeyPath:@"recommenduser" toRelationship:@"fromUser" withMapping:userRelationMap];
     
     RKObjectMapping *resourceRelationMap = [FSResource getRelationDataMap];
     [relationMap mapKeyPath:@"resources" toRelationship:@"resource" withMapping:resourceRelationMap];
-    RKObjectMapping *userRelationMap = [FSUser getRelationDataMap];
-    [relationMap mapKeyPath:@"recommenduser" toRelationship:@"fromUser" withMapping:userRelationMap];
+    
+    RKObjectMapping *storeRelationMap = [FSStore getRelationDataMap];
+    [relationMap mapKeyPath:@"store" toRelationship:@"store" withMapping:storeRelationMap];
     
     RKObjectMapping *promotionRelationMap = [FSProItemEntity getRelationDataMap];
     [relationMap mapKeyPath:@"promotions" toRelationship:@"promotions" withMapping:promotionRelationMap];
     
-    RKObjectMapping *commentRelationMap = [FSComment getRelationDataMap];
-    [relationMap mapKeyPath:@"comment" toRelationship:@"comments" withMapping:commentRelationMap];
+//    RKObjectMapping *commentRelationMap = [FSTag getRelationDataMap];
+//    [relationMap mapKeyPath:@"tag" toRelationship:@"tag" withMapping:commentRelationMap];
     
-    RKObjectMapping *brandRelationMap = [FSBrand getRelationDataMap];
-    [relationMap mapKeyPath:@"brand" toRelationship:@"brand" withMapping:brandRelationMap];
+    //other need attributes
+    [relationMap mapKeyPath:@"branddesc" toAttribute:@"brandDesc"];
+    [relationMap mapKeyPath:@"promotionFlag" toAttribute:@"promotionFlag"];
+    [relationMap mapKeyPath:@"isfavored" toAttribute:@"isFavored"];
+    [relationMap mapKeyPath:@"ifcancoupon" toAttribute:@"isCouponed"];
+//    [relationMap mapKeyPath:@"isfavorited" toAttribute:@"isFavored"];
+//    [relationMap mapKeyPath:@"isreceived" toAttribute:@"isCouponed"];
     
     return relationMap;
 }
 
 -(BOOL)hasPromotion
 {
-//    return promotionFlag;
-    
     if (!promotions) {
         return NO;
     }
     if (promotions.count > 0) {
-        for (FSProItemEntity *item in promotions) {
-            if (item.isPublication) {
-                return YES;
-            }
-        }
-        return NO;
+        return YES;
     }
     return NO;
 }

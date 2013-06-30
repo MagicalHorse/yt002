@@ -12,10 +12,12 @@
 
 #define RK_REQUEST_PRO_UPLOAD @"/promotion/create"
 #define RK_REQUEST_PRO_DETAIL @"/promotion/detail"
+#define RK_REQUEST_PRO_REMOVE @"/promotion/destroy"
+#define RK_REQUEST_PRO_AVAILOPERATIONS @"/promotion/availoperations"    //获取当前用户对促销详情的操作权限
 #define RK_REQUEST_PROD_UPLOAD @"/product/create"
 #define RK_REQUEST_PROD_DETAIL @"/product/detail"
 #define RK_REQUEST_PROD_REMOVE @"/product/destroy"
-#define RK_REQUEST_PRO_REMOVE @"/promotion/destroy"
+#define RK_REQUEST_PROD_AVAILOPERATIONS @"/product/availoperations"     //获取当前用户对产品详情的操作权限
 
 @interface FSCommonProRequest : FSEntityRequestBase<RKRequestDelegate>
 

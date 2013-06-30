@@ -15,6 +15,5 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *contentView;
 @property (strong, nonatomic) IBOutlet AKSegmentedControl *segFilters;
-@property (strong,nonatomic) FSUser *currentUser;
 
 @end

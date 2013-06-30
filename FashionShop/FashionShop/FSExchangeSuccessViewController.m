@@ -53,10 +53,12 @@
 {
     NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExSuccessFooter" owner:self options:nil];
     if (_array.count > 0) {
-        FSPointExSuccessFooter *footer = (FSPointExSuccessFooter*)_array[0];
+        FSCommonSuccessFooter *footer = (FSCommonSuccessFooter*)_array[0];
+        [footer.continueBtn setTitle:@"继续兑换" forState:UIControlStateNormal];
         [footer.continueBtn addTarget:self action:@selector(clickToContinue:) forControlEvents:UIControlEventTouchUpInside];
+        [footer.backHomeBtn setTitle:@"代金券详情" forState:UIControlStateNormal];
         [footer.backHomeBtn addTarget:self action:@selector(clickToBackHome:) forControlEvents:UIControlEventTouchUpInside];
-        [footer initView:_data];
+        [footer initView:_data.exclude];
         _tbAction.tableFooterView = footer;
     }
 }

@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "RTLabel.h"
 #import "FSExchange.h"
+#import "FSPurchase.h"
 
-@interface FSPointExSuccessFooter : UIView
+@interface FSCommonSuccessFooter : UIView
 
 @property (strong, nonatomic) IBOutlet UIButton *continueBtn;
 @property (strong, nonatomic) IBOutlet UIButton *backHomeBtn;
 @property (strong, nonatomic) IBOutlet RTLabel *infomationDesc;
 
--(void)initView:(FSExchangeSuccess*)data;
+-(void)initView:(NSString*)content;
 
 @end

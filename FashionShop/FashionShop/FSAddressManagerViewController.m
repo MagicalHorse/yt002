@@ -109,6 +109,20 @@
     }];
 }
 
+-(void)initIndex
+{
+    _selectedIndex = -1;
+    for (int i = 0; i < _likes.count; i++) {
+        FSAddress *item = _likes[i];
+        if (item.id == _selAddressId) {
+            _selectedIndex = i;
+        }
+        else{
+            continue;
+        }
+    }
+}
+
 -(void) prepareRefresh
 {
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
@@ -159,8 +173,8 @@
                 else
                     [_likes addObject:obj];
             }
-            
         }];
+        [self initIndex];//初始化selIndex
         [_contentView reloadData];
     }
     if (_likes.count<1)
@@ -214,9 +228,17 @@
         }
     }
     if (_pageFrom == 2) {
-        listCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if ([indexPath section] == _selectedIndex) {
+            listCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            lastIndexPath = indexPath;
+        }
+        else {
+            listCell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
-    listCell.accessoryType = _pageFrom == 1?UITableViewCellAccessoryDisclosureIndicator:UITableViewCellAccessoryCheckmark;
+    else if (_pageFrom == 1){
+        listCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
     
     if (indexPath.section < _likes.count) {
         FSAddress *address = _likes[indexPath.section];
@@ -246,19 +268,23 @@
     }
     else{
         //处理选中项的情况
-    }
-}
-
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    if (_pageFrom == 1) {
-        return UITableViewCellAccessoryDisclosureIndicator;
-    }
-    if(indexPath.section == _currentSelIndex){
-        return UITableViewCellAccessoryCheckmark;
-    }
-    else{
-        return UITableViewCellAccessoryNone;
+        int newSection = [indexPath section];
+        int oldSection = lastIndexPath==nil?-1:[lastIndexPath section];
+        if(newSection != oldSection)
+        {
+            UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
+            newCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            UITableViewCell *oldCell = [tableView cellForRowAtIndexPath:lastIndexPath];
+            oldCell.accessoryType = UITableViewCellAccessoryNone;
+            lastIndexPath = indexPath;
+            _selectedIndex = newSection;
+        }
+        _selectedAddress = _likes[indexPath.section];
+        if ([_delegate respondsToSelector:@selector(addressManagerViewControllerSetSelected:)]) {
+            [_delegate addressManagerViewControllerSetSelected:self];
+        }
+        
+        [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:0.5];
     }
 }
 

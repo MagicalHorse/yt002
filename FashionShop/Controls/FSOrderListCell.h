@@ -16,6 +16,6 @@
 @property (strong, nonatomic) IBOutlet UILabel *orderNumber;
 @property (strong, nonatomic) IBOutlet UILabel *crateDate;
 
-@property (strong,nonatomic) FSOrder *data;
+@property (strong,nonatomic) FSOrderInfo *data;
 
 @end

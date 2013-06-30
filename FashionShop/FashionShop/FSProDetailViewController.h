@@ -40,6 +40,8 @@
 - (IBAction)showBrand:(id)sender;
 - (IBAction)goStore:(id)sender;
 - (IBAction)doFavor:(id)sender;
+- (IBAction)contact:(id)sender;
+- (IBAction)buy:(id)sender;
 
 -(void)stopAllAudio;
 
@@ -51,6 +53,6 @@
 @property (assign,nonatomic) int indexInContext;
 @property (nonatomic) FSSourceType sourceType;
 @property (strong, nonatomic) NSString *recordFileName;//记录录音文件名称
-@property (assign, nonatomic) BOOL fromBanner;//从banner条点击进入标识。为了区分id使用
+@property (nonatomic) int sourceFrom;//来源区分，1：banner，2：Me的主页
 
 @end

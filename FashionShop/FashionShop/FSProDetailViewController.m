@@ -25,6 +25,8 @@
 #import "CL_VoiceEngine.h"
 #import "FSAudioShowView.h"
 #import "FSImageBrowserView.h"
+#import "FSBuyCenterViewController.h"
+#import "FSMyCommentController.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -199,6 +201,8 @@
     [view resetScrollViewSize];
 }
 
+#pragma mark - SYPaginatorViewDelegate
+
 - (void)paginatorView:(SYPaginatorView *)paginatorView didScrollToPageAtIndex:(NSInteger)pageIndex
 {
     if (currentPageIndex== pageIndex)
@@ -207,21 +211,22 @@
     __block FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)paginatorView.currentPage;
     __block FSProDetailViewController *blockSelf = self;
     _sourceType = blockViewForRefresh.pType;
-   
+    
+    NSNumber * itemId = nil;
+    if (_sourceFrom == 1) {
+        itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"promotionid"];
+    }
+    else if(_sourceFrom == 2) {
+        itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"sourceId"];
+    }
+    else{
+        itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
+    }
     [self beginLoading:blockViewForRefresh];
     _inLoading = YES;
     if ([dataProviderInContext respondsToSelector:@selector(proDetailViewNeedRefreshFromContext:forIndex:)] &&
         [dataProviderInContext proDetailViewNeedRefreshFromContext:self forIndex:pageIndex]==TRUE)
     {
-        NSNumber * itemId = nil;
-        if (_fromBanner) {
-            itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"promotionid"];
-        }
-        else{
-            itemId = [[navContext objectAtIndex:pageIndex] valueForKey:@"id"];
-        }
-        
-        /*
         FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
         drequest.uToken = [FSModelManager sharedModelManager].loginToken;
         drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
@@ -244,7 +249,6 @@
             {
                 [blockViewForRefresh setData:resp.responseData];
                 [(FSProDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
-                [blockViewForRefresh updateToolBar:resp.responseData];
                 NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
                 if (blockSelf->_sourceType==FSSourcePromotion)
                     navTitle = NSLocalizedString(@"promotion detail", nil);
@@ -258,71 +262,55 @@
                 [self onButtonCancel];
             }
         }];
-         */
-        
-        FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
-        drequest.uToken = [FSModelManager sharedModelManager].loginToken;
-        drequest.id = itemId;
-        drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-        drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        drequest.pType= blockViewForRefresh.pType;
-        Class respClass;
-        if (drequest.pType == FSSourceProduct)
-        {
-            drequest.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-            respClass = [FSProdItemEntity class];
-        }
-        else
-        {
-            drequest.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-            respClass = [FSProItemEntity class];
-        }
-        //[(id)blockViewForRefresh svContent].scrollEnabled = NO;
-        self.paginatorView.scrollView.scrollEnabled = NO;
-        [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
-            if (resp.isSuccess)
-            {
-                [blockViewForRefresh setData:resp.responseData];
-                [(FSProDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
-                [blockViewForRefresh updateToolBar:resp.responseData];
-                NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
-                if (blockSelf->_sourceType==FSSourcePromotion)
-                    navTitle = NSLocalizedString(@"promotion detail", nil);
-                [blockSelf.navigationItem setTitle:navTitle] ;
-                [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
-//                [[(id)blockViewForRefresh tbComment] reloadData];
-            } else
-            {
-                //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
-                self.paginatorView.scrollView.scrollEnabled = YES;
-                [self endLoading:blockViewForRefresh];
-                _inLoading = NO;
-                [self onButtonCancel];
-            }
-        }];
-
-    } else
+    }
+    else
     {
         [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
             [blockViewForRefresh setData:input];
             [(FSProdDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
-            [blockViewForRefresh updateToolBar:input];
             [self endLoading:blockViewForRefresh];
             _inLoading = NO;
             NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
             if (blockSelf->_sourceType==FSSourcePromotion)
                 navTitle = NSLocalizedString(@"promotion detail", nil);
-            [blockSelf.navigationItem setTitle:navTitle] ;
+            [blockSelf.navigationItem setTitle:navTitle];
             [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
             [self resetScrollViewSize:blockViewForRefresh];
-            
         } errorCallback:^{
             [self onButtonCancel];
         }];
     }
-    NSLog(@"contentoffset x :%f", paginatorView.scrollView.contentOffset.x);
-    NSLog(@"blockViewForRefresh frame:%@", NSStringFromCGRect(blockViewForRefresh.frame));
     [self hideCommentInputView:nil];
+    
+    //请求操作
+    [self performSelector:@selector(requestOperations:) withObject:itemId afterDelay:1.0f];
+}
+
+-(void)requestOperations:(NSNumber*)itemid
+{
+    FSDetailBaseView * blockViewForRefresh = (FSDetailBaseView*)self.paginatorView.currentPage;
+    FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+    drequest.routeResourcePath = blockViewForRefresh.pType == FSSourceProduct?RK_REQUEST_PROD_AVAILOPERATIONS:RK_REQUEST_PRO_AVAILOPERATIONS;
+    drequest.pType = _sourceType;
+    drequest.id = itemid;
+    drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+    [drequest send:[FSProdItemEntity class] withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
+        if (resp.isSuccess)
+        {
+            FSProdItemEntity *item = resp.responseData;
+            BOOL flag = item.isCouponed;
+            [blockViewForRefresh updateToolBar:flag];
+            //更新喜欢按钮状态
+            item.isFavored = item.isFavored;
+            if ([blockViewForRefresh.data isKindOfClass:[FSProdItemEntity class]])
+            {
+                ((FSProdItemEntity *)blockViewForRefresh.data).isFavored = item.isFavored;
+            } else if ([blockViewForRefresh.data isKindOfClass:[FSProItemEntity class]])
+            {
+                ((FSProItemEntity *)blockViewForRefresh.data).isFavored = item.isFavored;
+            }
+        }
+    }];
 }
 
 -(void)delayLoadComments:(NSNumber *)proId
@@ -549,43 +537,14 @@
     if (_inLoading) {
         return;
     }
-    bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    NSString *_loginToken = [FSModelManager sharedModelManager].loginToken;
-    if (!isLogined || !_loginToken)
-    {
-         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
-        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
-        __block FSMeViewController *blockMeController = loginController;
-        loginController.completeCallBack=^(BOOL isSuccess){
-            
-            [blockMeController dismissViewControllerAnimated:true completion:^{
-                if (!isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {
-                    [self startProgress:NSLocalizedString(@"coupon use instruction", nil) withExeBlock:^(dispatch_block_t callback){
-                        [self internalGetCoupon:callback];
-                    } completeCallbck:^{
-                        [self endProgress];
-                    }];
-                }
-            }];
-        };
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:true completion:nil] ;
-        
-        [[FSAnalysis instance] autoTrackPages:navController];
-    }
-    else
-    {
+    
+    [self localLogin:^{
         [self startProgress:NSLocalizedString(@"coupon use instruction", nil) withExeBlock:^(dispatch_block_t callback){
             [self internalGetCoupon:callback];
         } completeCallbck:^{
             [self endProgress];
         }];
-    }
+    }];
 }
 
 - (IBAction)doShare:(id)sender {
@@ -673,16 +632,56 @@
     if (_inLoading) {
         return;
     }
+    
+    __block id view = self.paginatorView.currentPage;
+    
+    [self localLogin:^{
+        if ([view respondsToSelector:@selector(btnFavor)])
+        {
+            UIBarButtonItem *favorButton = [view btnFavor];
+            [self internalDoFavor:favorButton];
+        }
+    }];
+}
+
+- (IBAction)contact:(id)sender {
+    //跳转私信列表，需要提前登录
+    if (_inLoading) {
+        return;
+    }
+    
+    [self localLogin:^{
+        //to private letter list
+        FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+        [self.navigationController pushViewController:controller animated:true];
+    }];
+}
+
+- (IBAction)buy:(id)sender {
+    //点击购买，需要提前登录
+    if (_inLoading) {
+        return;
+    }
+    
+    [self localLogin:^{
+        //to buy
+        FSBuyCenterViewController *controller = [[FSBuyCenterViewController alloc] initWithNibName:@"FSBuyCenterViewController" bundle:nil];
+        FSDetailBaseView * currentView = (FSDetailBaseView*)self.paginatorView.currentPage;
+        FSProdItemEntity *_item = currentView.data;
+        controller.productID = _item.id;
+        [self.navigationController pushViewController:controller animated:YES];
+    }];
+}
+
+-(void)localLogin:(void (^)(void))block
+{
     bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-     __block id view = self.paginatorView.currentPage;
     if (!isLogined)
     {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
         FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
         __block FSMeViewController *blockMeController = loginController;
-       
         loginController.completeCallBack=^(BOOL isSuccess){
-            
             [blockMeController dismissViewControllerAnimated:true completion:^{
                 if (!isSuccess)
                 {
@@ -690,29 +689,20 @@
                 }
                 else
                 {
-                    if ([view respondsToSelector:@selector(btnFavor)])
-                    {
-                        UIBarButtonItem *favorButton = [view btnFavor];
-                        [self internalDoFavor:favorButton];
-                    }
+                    block();
                 }
             }];
         };
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:false completion:nil];
-        
+        [self presentViewController:navController animated:YES completion:nil];
         [[FSAnalysis instance] autoTrackPages:navController];
     }
     else
     {
-        if ([view respondsToSelector:@selector(btnFavor)])
-        {
-            UIBarButtonItem *favorButton = [view btnFavor];
-            [self internalDoFavor:favorButton];
-        }
+        block();
     }
-    
 }
+
 -(void)didTapProImage:(id) sender
 {
     if ([self numberOfImagesInSlides:nil]<=0)
@@ -900,42 +890,14 @@
             return;
         }
     }
-    bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    if (!isLogined)
-    {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
-        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
-        __block FSMeViewController *blockMeController = loginController;
-        loginController.completeCallBack=^(BOOL isSuccess){
-            
-            [blockMeController dismissViewControllerAnimated:true completion:^{
-                if (!isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {
-                    [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil)withExeBlock:^(dispatch_block_t callback){
-                        [self internalDoComent:callback];
-                    } completeCallbck:^{
-                        [self endProgress];
-                    }];
-                }
-            }];
-        };
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:YES completion:nil];
-        
-        [[FSAnalysis instance] autoTrackPages:navController];
-    }
-    else
-    {
+    
+    [self localLogin:^{
         [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil) withExeBlock:^(dispatch_block_t callback){
             [self internalDoComent:callback];
         } completeCallbck:^{
             [self endProgress];
         }];
-    }
+    }];
 }
 
 -(void) internalDoComent:(dispatch_block_t)callback

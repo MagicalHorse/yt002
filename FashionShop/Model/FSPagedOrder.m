@@ -13,12 +13,12 @@
 
 +(NSString *)pagedKeyPath
 {
-    return @"";
+    return @"items";
 }
 
 +(Class)pagedModel
 {
-    return [FSOrder class];
+    return [FSOrderInfo class];
 }
 
 @end

@@ -278,7 +278,7 @@
         double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:section]];
         totalHeight += _height;
     }
-    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?10:50);
+    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?0:50);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height + _viewHeight;
@@ -309,11 +309,10 @@
     _data = nil;
 }
 
--(void)updateToolBar:(id)data
+-(void)updateToolBar:(BOOL)flag
 {
-    _data = data;
     //更新优惠按钮
-    if (!_data.isPublication) {
+    if (!flag) {
         _btnCoupon.enabled = NO;
     }
     else {

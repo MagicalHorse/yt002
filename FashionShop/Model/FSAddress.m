@@ -62,7 +62,7 @@
     
     static int index = 0;
     
-    if (++index <= 3) {
+    if (++index <= 2) {
         [relationMapping mapKeyPath:@"items" toRelationship:@"items" withMapping:relationMapping];
     }
     else{

@@ -7,10 +7,11 @@
 //
 
 #import "FSOrderListViewController.h"
-#import "FSCommonUserRequest.h"
+#import "FSPurchaseRequest.h"
 #import "FSOrderListCell.h"
 #import "FSPagedOrder.h"
 #import "FSOrder.h"
+#import "FSOrderDetailViewController.h"
 
 #define USER_ORDER_LIST_TABLE_CELL @"FSOrderListCell"
 
@@ -56,34 +57,30 @@
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     
     [self prepareRefreshLayout:_contentView withRefreshAction:^(dispatch_block_t action) {
-        /*
         if (_inLoading)
         {
             action();
             return;
         }
-        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
-        FSCommonUserRequest *request = [self createRequest:currentPage];
-        request.previousLatestDate = [_refreshTimeList objectAtIndex:_currentSelIndex];
+        int currentPage = 1;
+        FSPurchaseRequest *request = [self createRequest:currentPage];
         _inLoading = YES;
-        [request send:[FSPagedCoupon class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSOrderInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = NO;
             action();
             if (resp.isSuccess)
             {
-                FSPagedCoupon *innerResp = resp.responseData;
+                [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
+                FSPagedOrder *innerResp = resp.responseData;
                 if (innerResp.totalPageCount <= currentPage)
                     [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
-                [self mergeLike:innerResp isInsert:YES];
-                
-                [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSelIndex];
+                [self mergeLike:innerResp isInsert:NO];
             }
             else
             {
                 [self reportError:resp.errorDescrip];
             }
         }];
-         */
     }];
 }
 
@@ -158,7 +155,7 @@
 {
     int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
     [self setPageIndex:currentPage selectedSegmentIndex:_currentSelIndex];
-    FSCommonUserRequest *request = [self createRequest:currentPage];
+    FSPurchaseRequest *request = [self createRequest:currentPage];
     [self beginLoading:self.view];
     _inLoading = YES;
     [request send:[FSPagedOrder class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
@@ -202,7 +199,7 @@
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             int index = [_likes indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1) {
-                if ([[(FSOrder *)obj1 valueForKey:@"id"] isEqualToValue:[(FSOrder *)obj valueForKey:@"id" ]])
+                if ([[(FSOrderInfo *)obj1 valueForKey:@"orderno"] isEqualToString:[(FSOrderInfo *)obj valueForKey:@"orderno" ]])
                 {
                     return TRUE;
                     *stop1 = TRUE;
@@ -219,7 +216,7 @@
         }];
         [_contentView reloadData];
     }
-    //[self showBlankIcon];
+    [self showBlankIcon];
 }
 
 -(void)showBlankIcon
@@ -233,15 +230,14 @@
     }
 }
 
--(FSCommonUserRequest *)createRequest:(int)index
+-(FSPurchaseRequest *)createRequest:(int)index
 {
-    FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
-    request.userToken = [FSUser localProfile].uToken;
+    FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
+    request.uToken = [FSModelManager sharedModelManager].loginToken;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
-    request.pageIndex =[NSNumber numberWithInt:index];
-    request.sort = [NSNumber numberWithInt:_currentSelIndex+1];
-    request.likeType = [NSNumber numberWithInt:_currentSelIndex+1];
-    request.routeResourcePath = RK_REQUEST_COUPON_LIST;
+    request.nextPage =[NSNumber numberWithInt:index];
+    request.type = _currentSelIndex+1;
+    request.routeResourcePath = RK_REQUEST_ORDER_LIST;
     return request;
 }
 
@@ -249,14 +245,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 4;
-    
+    if (!_dataSourceList || _dataSourceList.count == 0) {
+        return 0;
+    }
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     return _likes?_likes.count:0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (!_dataSourceList || _dataSourceList.count == 0) {
+        return 0;
+    }
     return 1;
 }
 
@@ -264,12 +264,12 @@
 {
     FSOrderListCell *detailCell = (FSOrderListCell*)[_contentView dequeueReusableCellWithIdentifier:USER_ORDER_LIST_TABLE_CELL];
     detailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    //NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
-    //FSOrder *order = [_likes objectAtIndex:indexPath.section];
-    //[(FSOrderListCell *)detailCell setData:order];
+    detailCell.selectionStyle = UITableViewCellSelectionStyleGray;
+    NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
+    FSOrderInfo *order = [_likes objectAtIndex:indexPath.section];
+    [(FSOrderListCell *)detailCell setData:order];
     return detailCell;
 }
-
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -278,30 +278,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    FSProDetailViewController *detailView = [[FSProDetailViewController alloc] initWithNibName:@"FSProDetailViewController" bundle:nil];
+    FSOrderDetailViewController *detailView = [[FSOrderDetailViewController alloc] initWithNibName:@"FSOrderDetailViewController" bundle:nil];
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
-    detailView.navContext = _likes;
-    detailView.indexInContext = indexPath.row* [self numberOfSectionsInTableView:tableView] + indexPath.section;
-    detailView.sourceType = [(FSCoupon *)[_likes objectAtIndex:detailView.indexInContext] producttype];
-    detailView.dataProviderInContext = self;
-    UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
-    [self presentViewController:navControl animated:true completion:nil];
-    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+    FSOrderInfo *item = _likes[indexPath.section];
+    detailView.orderno = item.orderno;
+    [self.navigationController pushViewController:detailView animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     //统计
-    FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
-    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
-    [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
-    [_dic setValue:[NSString stringWithFormat:@"%d", coupon.promotion.id] forKey:@"活动ID"];
-    [_dic setValue:coupon.promotion.title forKey:@"活动名称"];
-    [_dic setValue:coupon.code forKey:@"优惠券码"];
-    [[FSAnalysis instance] logEvent:CHECK_COUPON_DETAIL withParameters:_dic];
-    
-    [[FSAnalysis instance] autoTrackPages:navControl];
-     */
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:FALSE];
+//    FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
+//    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+//    [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
+//    [_dic setValue:[NSString stringWithFormat:@"%d", coupon.promotion.id] forKey:@"活动ID"];
+//    [_dic setValue:coupon.promotion.title forKey:@"活动名称"];
+//    [_dic setValue:coupon.code forKey:@"优惠券码"];
+//    [[FSAnalysis instance] logEvent:CHECK_COUPON_DETAIL withParameters:_dic];
+//    
+//    [[FSAnalysis instance] autoTrackPages:navControl];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -317,13 +310,13 @@
     {
         _inLoading = TRUE;
         int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
-        FSCommonUserRequest *request = [self createRequest:currentPage+1];
+        FSPurchaseRequest *request = [self createRequest:currentPage+1];
         [request send:[FSPagedOrder class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = FALSE;
             if (resp.isSuccess)
             {
                 FSPagedOrder *innerResp = resp.responseData;
-                if (innerResp.totalPageCount<=currentPage+1)
+                if (innerResp.totalPageCount <= currentPage+1)
                     [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
                 [self setPageIndex:currentPage+1 selectedSegmentIndex:_currentSelIndex];
                 [self mergeLike:innerResp isInsert:NO];
@@ -362,7 +355,7 @@
             [self requestData];
         }
         else{
-            //[self showBlankIcon];
+            [self showBlankIcon];
             [_contentView reloadData];
             [_contentView setContentOffset:CGPointZero];
         }

@@ -30,6 +30,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imgLikeBG;
 @property (strong, nonatomic) IBOutlet UILabel *lblFavorCount;
 @property (strong, nonatomic) IBOutlet UILabel *lblCoupons;
+@property (strong, nonatomic) IBOutlet UIButton *btnContact;
+@property (strong, nonatomic) IBOutlet UIButton *btnBuy;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
 

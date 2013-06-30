@@ -7,7 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02028201177DF37100201DF5 /* FSCommonTextShowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 020281FF177DF37000201DF5 /* FSCommonTextShowViewController.m */; };
+		02028202177DF37100201DF5 /* FSCommonTextShowViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02028200177DF37100201DF5 /* FSCommonTextShowViewController.xib */; };
+		02028209177F284900201DF5 /* FSMyPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02028208177F284900201DF5 /* FSMyPickerView.m */; };
+		0202820C177FBC4600201DF5 /* FSPropertiesSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0202820B177FBC4600201DF5 /* FSPropertiesSelectView.m */; };
+		02028210178010D100201DF5 /* FSOrderSuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0202820E178010D000201DF5 /* FSOrderSuccessViewController.m */; };
+		02028211178010D100201DF5 /* FSOrderSuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0202820F178010D000201DF5 /* FSOrderSuccessViewController.xib */; };
 		0206AB6F16FB5D27008ADFBC /* FSCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		02108E4E177C8C860056D67A /* FSBuyCenterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02108E4C177C8C850056D67A /* FSBuyCenterViewController.m */; };
+		02108E4F177C8C860056D67A /* FSBuyCenterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02108E4D177C8C860056D67A /* FSBuyCenterViewController.xib */; };
 		0211778B16CF54E700559653 /* PositionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211778A16CF54E700559653 /* PositionAnnotation.m */; };
 		021183A51779249500326DE9 /* FSPagedAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183A41779249500326DE9 /* FSPagedAddress.m */; };
 		021183AC177924D300326DE9 /* FSAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 021183AB177924D300326DE9 /* FSAddress.m */; };
@@ -122,6 +130,12 @@
 		026F27D81747C5D200DD69D0 /* thumb_side@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27D71747C5D100DD69D0 /* thumb_side@2x.png */; };
 		026F27DA1747CCB300DD69D0 /* camera_btn_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27D91747CCB300DD69D0 /* camera_btn_normal@2x.png */; };
 		026F27DC1747D11A00DD69D0 /* vip_label_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27DB1747D11A00DD69D0 /* vip_label_bg@2x.png */; };
+		0274F9BC177D21D100485646 /* FSPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274F9BB177D21D100485646 /* FSPurchase.m */; };
+		0274F9C3177D41BF00485646 /* FSPurchaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274F9C2177D41BF00485646 /* FSPurchaseRequest.m */; };
+		0274F9C6177D545600485646 /* FSPurchaseProdCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0274F9C5177D545600485646 /* FSPurchaseProdCell.m */; };
+		0274F9C8177D546600485646 /* FSPurchaseProdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9C7177D546600485646 /* FSPurchaseProdCell.xib */; };
+		0274F9CA177D5EB000485646 /* btn_property_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */; };
+		0274F9CC177D86B000485646 /* buy_amount_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */; };
 		02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */; };
 		02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */; };
 		02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8D171AF21D0050D7C7 /* PKRevealController.m */; };
@@ -202,6 +216,8 @@
 		02B813BE173A24E70003BCBA /* FSPagedExchangeList.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */; };
 		02B813C5173A25170003BCBA /* FSExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813C4173A25170003BCBA /* FSExchange.m */; };
 		02B813C7173A50330003BCBA /* btn_bg_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */; };
+		02D285231780599D0017F744 /* FSOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02D285211780599D0017F744 /* FSOrderDetailViewController.m */; };
+		02D285241780599D0017F744 /* FSOrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02D285221780599D0017F744 /* FSOrderDetailViewController.xib */; };
 		02D4E7D616BD392200B6385A /* default_icon320@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D416BD392200B6385A /* default_icon320@2x.png */; };
 		02D4E7DC16BD68F600B6385A /* default_icon50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D816BD68F500B6385A /* default_icon50@2x.png */; };
 		02D4E7DE16BD68F600B6385A /* default_icon120@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */; };
@@ -651,8 +667,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		020281FE177DF37000201DF5 /* FSCommonTextShowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSCommonTextShowViewController.h; sourceTree = "<group>"; };
+		020281FF177DF37000201DF5 /* FSCommonTextShowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSCommonTextShowViewController.m; sourceTree = "<group>"; };
+		02028200177DF37100201DF5 /* FSCommonTextShowViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSCommonTextShowViewController.xib; sourceTree = "<group>"; };
+		02028207177F284900201DF5 /* FSMyPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSMyPickerView.h; sourceTree = "<group>"; };
+		02028208177F284900201DF5 /* FSMyPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSMyPickerView.m; sourceTree = "<group>"; };
+		0202820A177FBC4600201DF5 /* FSPropertiesSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSPropertiesSelectView.h; sourceTree = "<group>"; };
+		0202820B177FBC4600201DF5 /* FSPropertiesSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSPropertiesSelectView.m; sourceTree = "<group>"; };
+		0202820D178010CF00201DF5 /* FSOrderSuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderSuccessViewController.h; sourceTree = "<group>"; };
+		0202820E178010D000201DF5 /* FSOrderSuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderSuccessViewController.m; sourceTree = "<group>"; };
+		0202820F178010D000201DF5 /* FSOrderSuccessViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderSuccessViewController.xib; sourceTree = "<group>"; };
 		0206AB6D16FB5D27008ADFBC /* FSCycleScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCycleScrollView.h; path = Controls/Common/FSCycleScrollView.h; sourceTree = "<group>"; };
 		0206AB6E16FB5D27008ADFBC /* FSCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCycleScrollView.m; path = Controls/Common/FSCycleScrollView.m; sourceTree = "<group>"; };
+		02108E4B177C8C850056D67A /* FSBuyCenterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSBuyCenterViewController.h; sourceTree = "<group>"; };
+		02108E4C177C8C850056D67A /* FSBuyCenterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSBuyCenterViewController.m; sourceTree = "<group>"; };
+		02108E4D177C8C860056D67A /* FSBuyCenterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSBuyCenterViewController.xib; sourceTree = "<group>"; };
 		0211778916CF54E700559653 /* PositionAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PositionAnnotation.h; path = Controls/PositionAnnotation.h; sourceTree = "<group>"; };
 		0211778A16CF54E700559653 /* PositionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PositionAnnotation.m; path = Controls/PositionAnnotation.m; sourceTree = "<group>"; };
 		021183A31779249500326DE9 /* FSPagedAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedAddress.h; path = Model/FSPagedAddress.h; sourceTree = "<group>"; };
@@ -817,6 +846,15 @@
 		026F27D71747C5D100DD69D0 /* thumb_side@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_side@2x.png"; sourceTree = "<group>"; };
 		026F27D91747CCB300DD69D0 /* camera_btn_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_btn_normal@2x.png"; sourceTree = "<group>"; };
 		026F27DB1747D11A00DD69D0 /* vip_label_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vip_label_bg@2x.png"; sourceTree = "<group>"; };
+		0274F9BA177D21D100485646 /* FSPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPurchase.h; path = Model/FSPurchase.h; sourceTree = "<group>"; };
+		0274F9BB177D21D100485646 /* FSPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPurchase.m; path = Model/FSPurchase.m; sourceTree = "<group>"; };
+		0274F9C1177D41BF00485646 /* FSPurchaseRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPurchaseRequest.h; path = ModelService/FSPurchaseRequest.h; sourceTree = "<group>"; };
+		0274F9C2177D41BF00485646 /* FSPurchaseRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPurchaseRequest.m; path = ModelService/FSPurchaseRequest.m; sourceTree = "<group>"; };
+		0274F9C4177D545600485646 /* FSPurchaseProdCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPurchaseProdCell.h; path = Controls/FSPurchaseProdCell.h; sourceTree = "<group>"; };
+		0274F9C5177D545600485646 /* FSPurchaseProdCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPurchaseProdCell.m; path = Controls/FSPurchaseProdCell.m; sourceTree = "<group>"; };
+		0274F9C7177D546600485646 /* FSPurchaseProdCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSPurchaseProdCell.xib; path = Controls/FSPurchaseProdCell.xib; sourceTree = "<group>"; };
+		0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_property_normal@2x.png"; sourceTree = "<group>"; };
+		0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_amount_bg@2x.png"; sourceTree = "<group>"; };
 		02779B89171AF21D0050D7C7 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
 		02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
 		02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -922,6 +960,9 @@
 		02B813C4173A25170003BCBA /* FSExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSExchange.m; path = Model/FSExchange.m; sourceTree = "<group>"; };
 		02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_bg_sel@2x.png"; sourceTree = "<group>"; };
 		02BFABFB17434FCF00269E8B /* FashionShop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FashionShop.entitlements; sourceTree = "<group>"; };
+		02D285201780599D0017F744 /* FSOrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderDetailViewController.h; sourceTree = "<group>"; };
+		02D285211780599D0017F744 /* FSOrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderDetailViewController.m; sourceTree = "<group>"; };
+		02D285221780599D0017F744 /* FSOrderDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderDetailViewController.xib; sourceTree = "<group>"; };
 		02D4E7D416BD392200B6385A /* default_icon320@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon320@2x.png"; sourceTree = "<group>"; };
 		02D4E7D816BD68F500B6385A /* default_icon50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon50@2x.png"; sourceTree = "<group>"; };
 		02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon120@2x.png"; sourceTree = "<group>"; };
@@ -1928,6 +1969,8 @@
 				02D89524174B205A005148DB /* FSStoreDetailRequest.m */,
 				021183B717799D6B00326DE9 /* FSAddressRequest.h */,
 				021183B817799D6B00326DE9 /* FSAddressRequest.m */,
+				0274F9C1177D41BF00485646 /* FSPurchaseRequest.h */,
+				0274F9C2177D41BF00485646 /* FSPurchaseRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -2059,6 +2102,9 @@
 				021183AD177925AA00326DE9 /* FSAddressCell.h */,
 				021183AE177925AA00326DE9 /* FSAddressCell.m */,
 				021183B0177925BA00326DE9 /* FSAddressCell.xib */,
+				0274F9C4177D545600485646 /* FSPurchaseProdCell.h */,
+				0274F9C5177D545600485646 /* FSPurchaseProdCell.m */,
+				0274F9C7177D546600485646 /* FSPurchaseProdCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2126,6 +2172,8 @@
 				021220621775202A00C8D371 /* FSOrder.m */,
 				021183AA177924D300326DE9 /* FSAddress.h */,
 				021183AB177924D300326DE9 /* FSAddress.m */,
+				0274F9BA177D21D100485646 /* FSPurchase.h */,
+				0274F9BB177D21D100485646 /* FSPurchase.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2383,6 +2431,18 @@
 				021183B2177943F200326DE9 /* FSAddressDetailViewController.h */,
 				021183B3177943F200326DE9 /* FSAddressDetailViewController.m */,
 				021183B4177943F200326DE9 /* FSAddressDetailViewController.xib */,
+				02108E4B177C8C850056D67A /* FSBuyCenterViewController.h */,
+				02108E4C177C8C850056D67A /* FSBuyCenterViewController.m */,
+				02108E4D177C8C860056D67A /* FSBuyCenterViewController.xib */,
+				020281FE177DF37000201DF5 /* FSCommonTextShowViewController.h */,
+				020281FF177DF37000201DF5 /* FSCommonTextShowViewController.m */,
+				02028200177DF37100201DF5 /* FSCommonTextShowViewController.xib */,
+				0202820D178010CF00201DF5 /* FSOrderSuccessViewController.h */,
+				0202820E178010D000201DF5 /* FSOrderSuccessViewController.m */,
+				0202820F178010D000201DF5 /* FSOrderSuccessViewController.xib */,
+				02D285201780599D0017F744 /* FSOrderDetailViewController.h */,
+				02D285211780599D0017F744 /* FSOrderDetailViewController.m */,
+				02D285221780599D0017F744 /* FSOrderDetailViewController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2438,6 +2498,8 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */,
+				0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */,
 				027D90EF1751DC7400DA1C58 /* Splash1_5@2x.jpg */,
 				027D90F01751DC7400DA1C58 /* Splash2_5@2x.jpg */,
 				027D90F11751DC7400DA1C58 /* Splash3_5@2x.jpg */,
@@ -2636,6 +2698,10 @@
 				74CD28AB167586D9001DFE4D /* FSKeyboardAvoidingUIView.m */,
 				74B63C281677299F00526042 /* FSSegmentControl.h */,
 				74B63C29167729A000526042 /* FSSegmentControl.m */,
+				02028207177F284900201DF5 /* FSMyPickerView.h */,
+				02028208177F284900201DF5 /* FSMyPickerView.m */,
+				0202820A177FBC4600201DF5 /* FSPropertiesSelectView.h */,
+				0202820B177FBC4600201DF5 /* FSPropertiesSelectView.m */,
 			);
 			name = Views;
 			path = Controls/Views;
@@ -3474,6 +3540,13 @@
 				02AD48AA1778368F0041802D /* FSAddressManagerViewController.xib in Resources */,
 				021183B1177925BA00326DE9 /* FSAddressCell.xib in Resources */,
 				021183B6177943F300326DE9 /* FSAddressDetailViewController.xib in Resources */,
+				02108E4F177C8C860056D67A /* FSBuyCenterViewController.xib in Resources */,
+				0274F9C8177D546600485646 /* FSPurchaseProdCell.xib in Resources */,
+				0274F9CA177D5EB000485646 /* btn_property_normal@2x.png in Resources */,
+				0274F9CC177D86B000485646 /* buy_amount_bg@2x.png in Resources */,
+				02028202177DF37100201DF5 /* FSCommonTextShowViewController.xib in Resources */,
+				02028211178010D100201DF5 /* FSOrderSuccessViewController.xib in Resources */,
+				02D285241780599D0017F744 /* FSOrderDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3760,6 +3833,15 @@
 				021183AF177925AA00326DE9 /* FSAddressCell.m in Sources */,
 				021183B5177943F300326DE9 /* FSAddressDetailViewController.m in Sources */,
 				021183B917799D6B00326DE9 /* FSAddressRequest.m in Sources */,
+				02108E4E177C8C860056D67A /* FSBuyCenterViewController.m in Sources */,
+				0274F9BC177D21D100485646 /* FSPurchase.m in Sources */,
+				0274F9C3177D41BF00485646 /* FSPurchaseRequest.m in Sources */,
+				0274F9C6177D545600485646 /* FSPurchaseProdCell.m in Sources */,
+				02028201177DF37100201DF5 /* FSCommonTextShowViewController.m in Sources */,
+				02028209177F284900201DF5 /* FSMyPickerView.m in Sources */,
+				0202820C177FBC4600201DF5 /* FSPropertiesSelectView.m in Sources */,
+				02028210178010D100201DF5 /* FSOrderSuccessViewController.m in Sources */,
+				02D285231780599D0017F744 /* FSOrderDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

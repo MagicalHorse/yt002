@@ -70,10 +70,10 @@
         request.userToken = currentUser?currentUser.uToken:[FSModelManager sharedModelManager].loginToken;
         request.id = _addressID;
         request.routeResourcePath = REQUEST_ADDRESS_DETAIL;
-        [self beginLoading:self.view];
+//        [self beginLoading:self.view];
         _inLoading = YES;
         [request send:[FSAddress class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            [self endLoading:self.view];
+//            [self endLoading:self.view];
             _inLoading = NO;
             if (resp.isSuccess)
             {
@@ -533,8 +533,7 @@
     _zipCode.textColor = fieldTextColor;
 }
 
-#pragma mark -
-#pragma mark UIPickerViewDataSource
+#pragma mark - UIPickerViewDataSource
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
