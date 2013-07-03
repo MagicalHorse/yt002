@@ -11,6 +11,7 @@
 #import "FSUser.h"
 #import "TDSemiModal.h"
 #import "TDDatePickerController.h"
+#import "FSMyPickerView.h"
 
 typedef enum{
     PostBegin,
@@ -18,8 +19,10 @@ typedef enum{
     PostStep2Finished,
     PostStep3Finished,
     PostStep4Finished,
+    PostStepStoreFinished,
+    PostStepSaleTag,
     PostStepTagFinished,
-    PostStepStoreFinished
+    PostStepProperties,
 } PostProgressStep;
 
 typedef enum{
@@ -28,8 +31,8 @@ typedef enum{
     DurationField = 1<<2,
     StoreField = 1<<3,
     BrandField = 1<<4,
-    TagField = 1<<5
-    
+    TagField = 1<<5,
+    SaleField = 1<<6,
 } PostFields;
 
 
@@ -39,28 +42,21 @@ typedef enum{
 
 @end
 
-@interface FSProPostMainViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,FSProPostStepCompleteDelegate,UIAlertViewDelegate>
+@interface FSProPostMainViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,FSProPostStepCompleteDelegate,UIAlertViewDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnPhoto;
-
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
-
-
-
-- (IBAction)doTakePhoto:(id)sender;
-- (IBAction)doTakeDescrip:(id)sender;
-- (IBAction)doSelStore:(id)sender;
-
-- (IBAction)doSelBrand:(id)sender;
-
-
 @property (strong, nonatomic) FSUser *currentUser;
 @property (nonatomic) FSSourceType publishSource;
 @property (nonatomic,strong) NSString *fileName;
 
+- (IBAction)doTakePhoto:(id)sender;
+- (IBAction)doTakeDescrip:(id)sender;
+- (IBAction)doSelStore:(id)sender;
+- (IBAction)doSelBrand:(id)sender;
+
 -(void) setAvailableFields:(PostFields)fields;
 -(void) setMustFields:(PostFields)fields;
-
 -(void) setRoute:(NSString *)route;
 
 @end

@@ -20,6 +20,9 @@
 #import "FSCoreStore.h"
 #import "FSImageUploadCell.h"
 #import "NSString+Extention.h"
+#import "FSPurchase.h"
+#import "FSTableMultiSelViewController.h"
+#import "JSONKit.h"
 
 #define EXIT_ALERT_TAG 1011
 #define SAVE_INFO_TAG 1012
@@ -32,6 +35,7 @@
     NSMutableArray *_keySections;
     NSMutableDictionary *_rows;
     NSMutableDictionary *_rowDone;
+    NSMutableArray *_properties;
     BOOL _originalTabbarStatus;
     
     TDDatePickerController* _datePicker;
@@ -44,6 +48,8 @@
     PostFields _mustFields;
     int _totalFields;
     NSString * _route;
+    
+    FSMyPickerView *paywayPickerView;
 }
 
 @end
@@ -76,15 +82,15 @@
     [self bindControl];
 }
 
-
 -(void) initActionsSource
 {
     _keySections = [@[NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil),
-                    NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil),
-                    NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)
+                    NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_SALE_LABEL", nil),
+                    NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)
                     ] mutableCopy];
     _sections = [@[] mutableCopy];
     _totalFields = 0;
@@ -112,17 +118,23 @@
          if (_mustFields & BrandField)
         _totalFields++;
     }
+    if (_availFields & StoreField)
+    {
+        [_sections addObject:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
+        if (_mustFields & StoreField)
+            _totalFields++;
+    }
+    if (_availFields & SaleField)
+    {
+        [_sections addObject:NSLocalizedString(@"PRO_POST_SALE_LABEL", nil)];
+        if (_mustFields & SaleField)
+            _totalFields++;
+    }
     if (_availFields & TagField)
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
         if (_mustFields & TagField)
             _totalFields++;
-    }
-    if (_availFields & StoreField)
-    {
-        [_sections addObject:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
-         if (_mustFields & StoreField)
-        _totalFields++;
     }
     
     _rows = [@{NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil):NSLocalizedString(@"PRO_POST_IMG_NOTEXT", Nil),
@@ -130,8 +142,9 @@
             NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil):
                     [@[NSLocalizedString(@"PRO_POST_DURATION_STARTTEXT", Nil),NSLocalizedString(@"PRO_POST_DURATION_ENDTEXT", Nil)] mutableCopy],
             NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil):NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", Nil),
-            NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
             NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil):NSLocalizedString(@"PRO_POST_STORE_NOTEXT", Nil),
+            NSLocalizedString(@"PRO_POST_SALE_LABEL", nil):NSLocalizedString(@"PRO_POST_SALE_NOTEXT", nil),
+            NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
             } mutableCopy];
     _rowDone = [@{} mutableCopy];
 }
@@ -213,11 +226,26 @@
             return;
         }
     }
+    //初始化property对象
+    NSMutableArray *pArray = [NSMutableArray array];
+    for (FSPurchasePropertiesItem *item in _properties) {
+        NSMutableArray *array = [NSMutableArray array];
+        for (FSPurchasePropertiesItem *sub in item.values) {
+            if (sub.isChecked) {
+                [array addObject:sub.valuename];
+            }
+        }
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+        [dic setValue:array forKey:item.propertyname];
+        [pArray addObject:dic];
+    }
+    _proRequest.property = [pArray JSONString];
     //做预发布
     NSMutableString *_msg = [NSMutableString string];
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Title:%@", nil), _proRequest.title];
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Desc:%@", nil), _proRequest.descrip];
     if (_publishSource == FSSourceProduct) {
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Original_Price:%@", nil), _proRequest.originalPrice];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Price:%@", nil), _proRequest.price];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_BrandName:%@", nil), _proRequest.brandName];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_TagType:%@", nil), _proRequest.tagName];
@@ -227,6 +255,13 @@
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Pro_EndTime:%@", nil), _proRequest.enddate];
     }
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_StoreName:%@", nil), _proRequest.storeName];
+    for (FSPurchasePropertiesItem *item in _properties) {
+        NSMutableString *str = [NSMutableString string];
+        for (FSPurchasePropertiesItem *subItem in item.values) {
+            [str appendFormat:@"%@;", subItem.valuename];
+        }
+        [_msg appendFormat:@"%@:%@\n", item.propertyname, str];
+    }
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Content Preview",nil) message:_msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     alert.tag = SAVE_INFO_TAG;
@@ -265,8 +300,9 @@
             _proRequest.descrip = [(NSArray *)value objectAtIndex:1];
             _proRequest.fileName = [(NSArray *)value objectAtIndex:2];
             NSString *price = [(NSArray *)value objectAtIndex:3];
-            
             _proRequest.price =[NSNumber numberWithInt:[price intValue]];
+            price = [(NSArray *)value objectAtIndex:4];
+            _proRequest.originalPrice =[NSNumber numberWithInt:[price intValue]];
             break;
         }
         case PostStep3Finished:
@@ -292,6 +328,11 @@
             _proRequest.storeName = [(FSStore *)value name];
             break;
         }
+        case PostStepSaleTag:
+        {
+            _proRequest.is4sale = value[0];
+            break;
+        }
         case PostStepTagFinished:
         {
             _proRequest.tagId =[(FSCoreTag *)value valueForKey:@"id"];
@@ -299,8 +340,16 @@
             break;
         }
         default:
+        {
+            //到正式提交的时候再去获取参数
+        }
             break;
     }
+    [self updateSaveButton];
+}
+
+-(void)updateSaveButton
+{
     if ([self uploadPercent]>=1)
     {
         UIBarButtonItem *rightButton = self.navigationItem.rightBarButtonItem;
@@ -322,9 +371,23 @@
     _proRequest.enddate&&(_mustFields &DurationField)?finishedFields++:finishedFields;
     _proRequest.brandId&&(_mustFields &TagField)?finishedFields++:finishedFields;
     _proRequest.storeId&&(_mustFields &StoreField)?finishedFields++:finishedFields;
+    _proRequest.is4sale&&(_mustFields &SaleField)?finishedFields++:finishedFields;
     _proRequest.tagId&&(_mustFields &TagField)?finishedFields++:finishedFields;
+    if (_properties.count > 0) {
+        for (FSPurchasePropertiesItem *item in _properties) {
+            BOOL flag = NO;
+            for (FSPurchasePropertiesItem *sub in item.values) {
+                if (sub.isChecked) {
+                    flag = YES;
+                    break;
+                }
+            }
+            if (flag) {
+                finishedFields ++;
+            }
+        }
+    }
     return _totalFields==0?0:(float)finishedFields/(float)totalFields;
-
 }
 
 
@@ -356,6 +419,7 @@
         return;
     }
 }
+
 -(void)didImageRemoveAll
 {
     [self proPostStep:PostStep1Finished didCompleteWithObject:nil];
@@ -393,9 +457,9 @@
 -(void)doSelTag:(id)sender
 {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
-   [ tableSelect setDataSource:^id{
+    [tableSelect setDataSource:^id{
        return [FSCoreTag findAllSortedBy:@"name" ascending:TRUE];
-   } step:PostStepTagFinished selectedCallbackTarget:self];
+    } step:PostStepTagFinished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_TAG_NOTEXT", nil);
     [self.navigationController pushViewController:tableSelect animated:TRUE];
 }
@@ -419,7 +483,45 @@
     }
 }
 
+-(void)doSelProperties:(int)section
+{
+    FSTableMultiSelViewController *tableSelect = [[FSTableMultiSelViewController alloc] initWithNibName:@"FSTableMultiSelViewController" bundle:Nil];
+    int index = section - 6;
+    if (_publishSource == FSSourcePromotion) {
+        //do nothing
+    }
+    if (index < 0 || index >= _properties.count) {
+        return;
+    }
+    FSPurchasePropertiesItem *item = _properties[index];
+    [tableSelect setDataSource:^id{
+        return item.values;
+    } step:PostStepProperties+index selectedCallbackTarget:self];
+    tableSelect.navigationItem.title = [NSString stringWithFormat:@"选择%@", item.propertyname];
+    [self.navigationController pushViewController:tableSelect animated:TRUE];
+}
+
+-(void)doSelSale:(id)sender
+{
+    if (!paywayPickerView) {
+        paywayPickerView = [[FSMyPickerView alloc] init];
+        paywayPickerView.delegate = self;
+        paywayPickerView.datasource = self;
+    }
+    //初始化选中项
+    int index = 0;
+    if ([_proRequest.is4sale boolValue]) {
+        index = 1;
+    }
+    else{
+        index = 0;
+    }
+    [paywayPickerView.picker selectRow:index inComponent:0 animated:NO];
+    [paywayPickerView showPickerView];
+}
+
 #pragma FSProPostStepCompleteDelegate
+
 -(void)proPostStep:(PostProgressStep)step didCompleteWithObject:(NSArray *)object
 {
     [self setProgress:step withObject:object];
@@ -457,23 +559,109 @@
             [_tbAction reloadData];
             break;
         }
-        case PostStepTagFinished:
-        {
-            [_rows setValue:_proRequest.tagName forKey:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
-            [_tbAction reloadData];
-            break;
-        }
         case PostStepStoreFinished:
         {
             [_rows setValue:_proRequest.storeName forKey:NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil)];
             [_tbAction reloadData];
             break;
         }
-       
+        case PostStepSaleTag:
+        {
+            BOOL flag = [object[0] boolValue];
+            [_rows setValue:flag?@"是":@"否" forKey:NSLocalizedString(@"PRO_POST_SALE_LABEL", nil)];
+            [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationNone];
+            break;
+        }
+        case PostStepTagFinished:
+        {
+            [_rows setValue:_proRequest.tagName forKey:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
+            [_tbAction reloadData];
+            //请求tagid对应的数据
+            [self requestTagProperties:_proRequest.tagId];
+            break;
+        }
         default:
+        {
+            int index = step- PostStepProperties;
+            if (index < 0 || index >= _properties.count) {
+                return;
+            }
+            FSPurchasePropertiesItem *item = _properties[index];
+            NSMutableString *desc = [NSMutableString string];
+            for (int i = 0; i < item.values.count; i++) {
+                FSPurchasePropertiesItem *_item = item.values[i];
+                if (_item.isChecked) {
+                    [desc appendFormat:@"%@;", _item.valuename];
+                }
+            }
+            if ([NSString isNilOrEmpty:desc]) {
+                [_rows setValue:[NSString stringWithFormat:@"请选择%@", item.propertyname] forKey:item.propertyname];
+            }
+            else{
+                [_rows setValue:desc forKey:item.propertyname];
+            }
+            [_tbAction reloadData];
+        }
             break;
     }
-  
+}
+
+-(void)requestTagProperties:(NSNumber*)tagId
+{
+    FSCommonProRequest* request = [[FSCommonProRequest alloc] init];
+    request.uToken = currentUser.uToken;
+    request.tagId = tagId;
+    request.routeResourcePath = RK_REQUEST_TAG_PROPERTIES;
+    request.rootKeyPath = @"data.items";
+    [self beginLoading:self.view];
+    _tbAction.userInteractionEnabled = NO;
+    [request send:[FSPurchasePropertiesItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
+        [self endLoading:self.view];
+        _tbAction.userInteractionEnabled = YES;
+        if (response.isSuccess) {
+            //加入新的选择行
+            [self resetProperties];
+            _properties = response.responseData;
+            for (int i = 0; i < _properties.count; i++) {
+                FSPurchasePropertiesItem *item = _properties[i];
+                NSString* key = item.propertyname;
+                NSString* value = [NSString stringWithFormat:@"请选择%@", item.propertyname];
+                [_sections addObject:key];
+                [_keySections addObject:value];
+                [_rows setValue:value forKey:key];
+                [_tbAction beginUpdates];
+                [_tbAction insertSections:[NSIndexSet indexSetWithIndex:5]
+                         withRowAnimation:UITableViewRowAnimationFade];
+                [_tbAction endUpdates];
+            }
+            _totalFields += _properties.count;
+            
+            [self updateSaveButton];
+        }
+        else{
+            [self reportError:response.errorDescrip];
+        }
+    }];
+}
+
+-(void)resetProperties
+{
+    for (int i = 0; i < _properties.count; i++) {
+        if (_sections.count <= 6) {
+            break;
+        }
+        FSPurchasePropertiesItem *item = _properties[i];
+        NSString* key = item.propertyname;
+        NSString* value = [NSString stringWithFormat:@"请选择%@", item.propertyname];
+        [_rows removeObjectForKey:key];
+        [_sections removeObject:key];
+        [_keySections removeObject:value];
+        [_tbAction beginUpdates];
+        [_tbAction deleteSections:[NSIndexSet indexSetWithIndex:6]
+                 withRowAnimation:UITableViewRowAnimationFade];
+        [_tbAction endUpdates];
+    }
+    _totalFields -= _properties.count;
 }
 
 #pragma mark - UITableViewSource delegate
@@ -491,8 +679,6 @@
         return match;
     }];
     switch (keyIndex) {
-       // case 0:
-       //     return _proRequest.imgs?_proRequest.imgs.count:1;
         case 2:
             return [[_rows objectForKey:[_sections objectAtIndex:section]] count];
         default:
@@ -547,13 +733,16 @@
         {
             detailCell.textLabel.text = detailText;
             break;
-
         }
         case 2:
         {
             detailCell.textLabel.text = [detailText objectAtIndex:indexPath.row];
         }
         default:
+        {
+            //默认处理
+            detailCell.textLabel.text = detailText;
+        }
             break;
     }
     return detailCell;
@@ -588,15 +777,23 @@
         }
         case 40:
         {
-            [self doSelTag:nil];
+            [self doSelStore:nil];
             break;
         }
         case 50:
         {
-            [self doSelStore:nil];
+            [self doSelSale:nil];
+            break;
+        }
+        case 60:
+        {
+            [self doSelTag:nil];
             break;
         }
         default:
+        {
+            [self doSelProperties:indexPath.section];
+        }
             break;
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -710,7 +907,7 @@
     else{
         _fileName = @"";
     }
-    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text]];
+    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text, viewController.txtOriginalPrice.text]];
     [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
@@ -750,6 +947,48 @@
         return false;
     }
     return true;
+}
+
+#pragma mark - FSMyPickerViewDatasource
+
+- (NSInteger)numberOfComponentsInMyPickerView:(FSMyPickerView *)pickerView
+{
+    if (pickerView == paywayPickerView) {
+        return 1;
+    }
+    return 0;
+}
+
+- (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == paywayPickerView) {
+        return 2;
+    }
+    return 0;
+}
+
+#pragma mark - FSMyPickerViewDelegate
+
+- (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
+{
+    if (aMyPickerView == paywayPickerView) {
+        int index = [aMyPickerView.picker selectedRowInComponent:0];
+        BOOL flag = index == 0?NO:YES;
+        [self proPostStep:PostStepSaleTag didCompleteWithObject:@[[NSNumber numberWithBool:flag]]];
+    }
+}
+
+- (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (aMyPickerView == paywayPickerView) {
+        if (row == 1) {
+            return @"是";
+        }
+        else{
+            return @"否";
+        }
+    }
+    return @"";
 }
 
 @end

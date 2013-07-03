@@ -48,5 +48,7 @@
 -(void)removeCommentID:(NSString *)commentID;
 -(void)removeCommentIDs:(NSArray *)ids;
 -(int)newCommentCount;
+-(void)hiddenPickerView;
+-(void)cleanAllPickerView;
 
 @end

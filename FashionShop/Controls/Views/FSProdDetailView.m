@@ -75,7 +75,7 @@
                 }
                 int _imgHeight = imgObj.height*_imgView.frame.size.width/imgObj.width;
                 CGSize cropSize = CGSizeMake(_imgView.frame.size.width, _imgHeight);
-                [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon320.png"]];
+                [_imgView setImageUrl:imgObj.absoluteUrl320 resizeWidth:CGSizeMake(cropSize.width*RetinaFactor, cropSize.height*RetinaFactor) placeholderImage:nil];//[UIImage imageNamed:@"default_icon320.png"]
                 CGRect _rect = _imgView.frame;
                 _rect.size.height = _imgHeight;
                 _imgView.frame = _rect;

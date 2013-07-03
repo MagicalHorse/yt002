@@ -136,6 +136,13 @@
 		0274F9C8177D546600485646 /* FSPurchaseProdCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9C7177D546600485646 /* FSPurchaseProdCell.xib */; };
 		0274F9CA177D5EB000485646 /* btn_property_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */; };
 		0274F9CC177D86B000485646 /* buy_amount_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */; };
+		02755A751781160B00DFFF85 /* order_amount_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02755A741781160B00DFFF85 /* order_amount_bg@2x.png */; };
+		02755A82178179CD00DFFF85 /* FSOrderRMAListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02755A80178179CD00DFFF85 /* FSOrderRMAListViewController.m */; };
+		02755A83178179CD00DFFF85 /* FSOrderRMAListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02755A81178179CD00DFFF85 /* FSOrderRMAListViewController.xib */; };
+		02755A87178179E600DFFF85 /* FSOrderRMARequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02755A85178179E600DFFF85 /* FSOrderRMARequestViewController.m */; };
+		02755A88178179E600DFFF85 /* FSOrderRMARequestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02755A86178179E600DFFF85 /* FSOrderRMARequestViewController.xib */; };
+		02755A8C1781CEC000DFFF85 /* FSInvoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02755A8A1781CEBA00DFFF85 /* FSInvoiceViewController.m */; };
+		02755A8D1781CEC000DFFF85 /* FSInvoiceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02755A8B1781CEBC00DFFF85 /* FSInvoiceViewController.xib */; };
 		02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */; };
 		02779B93171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */; };
 		02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02779B8D171AF21D0050D7C7 /* PKRevealController.m */; };
@@ -203,6 +210,8 @@
 		02847771172D810E002763F6 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02847770172D810D002763F6 /* CoreText.framework */; };
 		028C9E641722CC0200FCBD02 /* MRZoomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 028C9E631722CC0200FCBD02 /* MRZoomScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		028C9E6B1722CC5400FCBD02 /* FSImageBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */; };
+		029182E61783B7F5004D624D /* FSTableMultiSelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029182E41783B7F5004D624D /* FSTableMultiSelViewController.m */; };
+		029182E71783B7F5004D624D /* FSTableMultiSelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 029182E51783B7F5004D624D /* FSTableMultiSelViewController.xib */; };
 		029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 029371B717165819000B4ACE /* audio_trash_icon@2x.png */; };
 		0293986F174633EE009489E0 /* feedback_text_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0293986E174633EE009489E0 /* feedback_text_bg@2x.png */; };
 		02939871174634E7009489E0 /* input_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02939870174634E7009489E0 /* input_text@2x.png */; };
@@ -244,6 +253,8 @@
 		02E185AA17046E29003C918F /* comment_input_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185A917046E29003C918F /* comment_input_bg@2x.png */; };
 		02E185AD17047040003C918F /* audio_btn_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AB17047040003C918F /* audio_btn_normal@2x.png */; };
 		02E185AE17047040003C918F /* audio_btn_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AC17047040003C918F /* audio_btn_sel@2x.png */; };
+		02EA91A217826D7600BE8B2E /* FSOrderRMASuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */; };
+		02EA91A317826D7600BE8B2E /* FSOrderRMASuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */; };
 		02EC2FE4170BF8F500C6B641 /* audio_btn_100x100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE1170BF8F500C6B641 /* audio_btn_100x100@2x.png */; };
 		02EC2FE5170BF8F500C6B641 /* audio_btn_160x50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */; };
 		02EC2FE6170BF8F500C6B641 /* audio_btn_270x70@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE3170BF8F500C6B641 /* audio_btn_270x70@2x.png */; };
@@ -855,6 +866,16 @@
 		0274F9C7177D546600485646 /* FSPurchaseProdCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSPurchaseProdCell.xib; path = Controls/FSPurchaseProdCell.xib; sourceTree = "<group>"; };
 		0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_property_normal@2x.png"; sourceTree = "<group>"; };
 		0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buy_amount_bg@2x.png"; sourceTree = "<group>"; };
+		02755A741781160B00DFFF85 /* order_amount_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order_amount_bg@2x.png"; sourceTree = "<group>"; };
+		02755A7F178179CD00DFFF85 /* FSOrderRMAListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMAListViewController.h; sourceTree = "<group>"; };
+		02755A80178179CD00DFFF85 /* FSOrderRMAListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMAListViewController.m; sourceTree = "<group>"; };
+		02755A81178179CD00DFFF85 /* FSOrderRMAListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderRMAListViewController.xib; sourceTree = "<group>"; };
+		02755A84178179E600DFFF85 /* FSOrderRMARequestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMARequestViewController.h; sourceTree = "<group>"; };
+		02755A85178179E600DFFF85 /* FSOrderRMARequestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMARequestViewController.m; sourceTree = "<group>"; };
+		02755A86178179E600DFFF85 /* FSOrderRMARequestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderRMARequestViewController.xib; sourceTree = "<group>"; };
+		02755A891781CEB800DFFF85 /* FSInvoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSInvoiceViewController.h; sourceTree = "<group>"; };
+		02755A8A1781CEBA00DFFF85 /* FSInvoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSInvoiceViewController.m; sourceTree = "<group>"; };
+		02755A8B1781CEBC00DFFF85 /* FSInvoiceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSInvoiceViewController.xib; sourceTree = "<group>"; };
 		02779B89171AF21D0050D7C7 /* LeftDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftDemoViewController.h; sourceTree = "<group>"; };
 		02779B8A171AF21D0050D7C7 /* LeftDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftDemoViewController.m; sourceTree = "<group>"; };
 		02779B8B171AF21D0050D7C7 /* LeftDemoViewController~iphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "LeftDemoViewController~iphone.xib"; sourceTree = "<group>"; };
@@ -940,6 +961,9 @@
 		028C9E631722CC0200FCBD02 /* MRZoomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRZoomScrollView.m; path = Controls/Common/MRZoomScrollView.m; sourceTree = "<group>"; };
 		028C9E691722CC5400FCBD02 /* FSImageBrowserView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSImageBrowserView.h; sourceTree = "<group>"; };
 		028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSImageBrowserView.m; sourceTree = "<group>"; };
+		029182E31783B7F5004D624D /* FSTableMultiSelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTableMultiSelViewController.h; sourceTree = "<group>"; };
+		029182E41783B7F5004D624D /* FSTableMultiSelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTableMultiSelViewController.m; sourceTree = "<group>"; };
+		029182E51783B7F5004D624D /* FSTableMultiSelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSTableMultiSelViewController.xib; sourceTree = "<group>"; };
 		029371B717165819000B4ACE /* audio_trash_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_trash_icon@2x.png"; sourceTree = "<group>"; };
 		0293986E174633EE009489E0 /* feedback_text_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feedback_text_bg@2x.png"; sourceTree = "<group>"; };
 		02939870174634E7009489E0 /* input_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "input_text@2x.png"; sourceTree = "<group>"; };
@@ -994,6 +1018,9 @@
 		02E185A917046E29003C918F /* comment_input_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comment_input_bg@2x.png"; sourceTree = "<group>"; };
 		02E185AB17047040003C918F /* audio_btn_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_normal@2x.png"; sourceTree = "<group>"; };
 		02E185AC17047040003C918F /* audio_btn_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_sel@2x.png"; sourceTree = "<group>"; };
+		02EA919F17826D7600BE8B2E /* FSOrderRMASuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMASuccessViewController.h; sourceTree = "<group>"; };
+		02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMASuccessViewController.m; sourceTree = "<group>"; };
+		02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderRMASuccessViewController.xib; sourceTree = "<group>"; };
 		02EC2FE1170BF8F500C6B641 /* audio_btn_100x100@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_100x100@2x.png"; sourceTree = "<group>"; };
 		02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_160x50@2x.png"; sourceTree = "<group>"; };
 		02EC2FE3170BF8F500C6B641 /* audio_btn_270x70@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_270x70@2x.png"; sourceTree = "<group>"; };
@@ -2434,6 +2461,9 @@
 				02108E4B177C8C850056D67A /* FSBuyCenterViewController.h */,
 				02108E4C177C8C850056D67A /* FSBuyCenterViewController.m */,
 				02108E4D177C8C860056D67A /* FSBuyCenterViewController.xib */,
+				02755A891781CEB800DFFF85 /* FSInvoiceViewController.h */,
+				02755A8A1781CEBA00DFFF85 /* FSInvoiceViewController.m */,
+				02755A8B1781CEBC00DFFF85 /* FSInvoiceViewController.xib */,
 				020281FE177DF37000201DF5 /* FSCommonTextShowViewController.h */,
 				020281FF177DF37000201DF5 /* FSCommonTextShowViewController.m */,
 				02028200177DF37100201DF5 /* FSCommonTextShowViewController.xib */,
@@ -2443,6 +2473,15 @@
 				02D285201780599D0017F744 /* FSOrderDetailViewController.h */,
 				02D285211780599D0017F744 /* FSOrderDetailViewController.m */,
 				02D285221780599D0017F744 /* FSOrderDetailViewController.xib */,
+				02755A7F178179CD00DFFF85 /* FSOrderRMAListViewController.h */,
+				02755A80178179CD00DFFF85 /* FSOrderRMAListViewController.m */,
+				02755A81178179CD00DFFF85 /* FSOrderRMAListViewController.xib */,
+				02755A84178179E600DFFF85 /* FSOrderRMARequestViewController.h */,
+				02755A85178179E600DFFF85 /* FSOrderRMARequestViewController.m */,
+				02755A86178179E600DFFF85 /* FSOrderRMARequestViewController.xib */,
+				02EA919F17826D7600BE8B2E /* FSOrderRMASuccessViewController.h */,
+				02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */,
+				02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */,
 			);
 			name = User;
 			sourceTree = "<group>";
@@ -2498,6 +2537,7 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				02755A741781160B00DFFF85 /* order_amount_bg@2x.png */,
 				0274F9CB177D86B000485646 /* buy_amount_bg@2x.png */,
 				0274F9C9177D5EB000485646 /* btn_property_normal@2x.png */,
 				027D90EF1751DC7400DA1C58 /* Splash1_5@2x.jpg */,
@@ -3143,6 +3183,9 @@
 				74630DEC1679E19100549D65 /* FSPostTableSelViewController.h */,
 				74630DED1679E19100549D65 /* FSPostTableSelViewController.m */,
 				74630DEE1679E19200549D65 /* FSPostTableSelViewController.xib */,
+				029182E31783B7F5004D624D /* FSTableMultiSelViewController.h */,
+				029182E41783B7F5004D624D /* FSTableMultiSelViewController.m */,
+				029182E51783B7F5004D624D /* FSTableMultiSelViewController.xib */,
 			);
 			name = ProUpload;
 			sourceTree = "<group>";
@@ -3547,6 +3590,12 @@
 				02028202177DF37100201DF5 /* FSCommonTextShowViewController.xib in Resources */,
 				02028211178010D100201DF5 /* FSOrderSuccessViewController.xib in Resources */,
 				02D285241780599D0017F744 /* FSOrderDetailViewController.xib in Resources */,
+				02755A751781160B00DFFF85 /* order_amount_bg@2x.png in Resources */,
+				02755A83178179CD00DFFF85 /* FSOrderRMAListViewController.xib in Resources */,
+				02755A88178179E600DFFF85 /* FSOrderRMARequestViewController.xib in Resources */,
+				02755A8D1781CEC000DFFF85 /* FSInvoiceViewController.xib in Resources */,
+				02EA91A317826D7600BE8B2E /* FSOrderRMASuccessViewController.xib in Resources */,
+				029182E71783B7F5004D624D /* FSTableMultiSelViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3842,6 +3891,11 @@
 				0202820C177FBC4600201DF5 /* FSPropertiesSelectView.m in Sources */,
 				02028210178010D100201DF5 /* FSOrderSuccessViewController.m in Sources */,
 				02D285231780599D0017F744 /* FSOrderDetailViewController.m in Sources */,
+				02755A82178179CD00DFFF85 /* FSOrderRMAListViewController.m in Sources */,
+				02755A87178179E600DFFF85 /* FSOrderRMARequestViewController.m in Sources */,
+				02755A8C1781CEC000DFFF85 /* FSInvoiceViewController.m in Sources */,
+				02EA91A217826D7600BE8B2E /* FSOrderRMASuccessViewController.m in Sources */,
+				029182E61783B7F5004D624D /* FSTableMultiSelViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

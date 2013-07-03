@@ -23,6 +23,7 @@
 #import "NSString+SBJSON.h"
 #import "FSContentViewController.h"
 #import "FSMeViewController.h"
+#import "FSMyPickerView.h"
 
 #import "PKRevealController.h"
 #import "LeftDemoViewController.h"
@@ -380,6 +381,24 @@ void uncaughtExceptionHandler(NSException *exception)
         return _array.count;
     }
     return 0;
+}
+
+-(void)hiddenPickerView
+{
+    for (UIView *item in self.window.subviews) {
+        if ([item isKindOfClass:[FSMyPickerView class]]) {
+            [(FSMyPickerView*)item hidenPickerView:YES];
+        }
+    }
+}
+
+-(void)cleanAllPickerView
+{
+    for (UIView *item in self.window.subviews) {
+        if ([item isKindOfClass:[FSMyPickerView class]]) {
+            [(FSMyPickerView*)item removeFromSuperview];
+        }
+    }
 }
 
 -(void)receivePushNotice:(NSNotification*)notification

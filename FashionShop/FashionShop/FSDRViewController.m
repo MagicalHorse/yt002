@@ -794,9 +794,10 @@
             block(item);
         else
             errorBlock();
-    } else
-    {
+    }
+    else {
         __block FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
+        /*
         FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
         request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
@@ -818,6 +819,37 @@
             
         }
         [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
+            if (!resp.isSuccess)
+            {
+                [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                errorBlock();
+            }
+            else
+            {
+                block(resp.responseData);
+            }
+        }];
+         */
+        
+        FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+        drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+        drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+        drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+        Class respClass;
+        if (favorCurrent.sourceType == FSSourceProduct)
+        {
+            drequest.pType = FSSourceProduct;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",[NSNumber numberWithInt:favorCurrent.sourceId]];
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            drequest.pType = FSSourcePromotion;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",[NSNumber numberWithInt:favorCurrent.sourceId]];
+            respClass = [FSProItemEntity class];
+        }
+        [drequest setBaseURL:2];
+        [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
             if (!resp.isSuccess)
             {
                 [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];

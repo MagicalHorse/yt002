@@ -70,7 +70,6 @@ typedef NSString *(^CacheKeyFilter)(NSURL *url);
  *	}];
  */
 @property (strong) CacheKeyFilter cacheKeyFilter;
-@property (nonatomic,assign) BOOL isFromCache;
 #endif
 
 

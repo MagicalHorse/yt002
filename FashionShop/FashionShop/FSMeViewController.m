@@ -682,7 +682,9 @@
     [_likeView addGestureRecognizer:tap];
     
     [self prepareRefreshLayout:_likeView withRefreshAction:^(dispatch_block_t action) {
+        _isInRefreshing = YES;
         [self loadILike:NO nextPage:1 withCallback:^{
+            _isInRefreshing = NO;
             action();
         }];
     }];
@@ -1113,8 +1115,8 @@
                 _toDetail = YES;
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
-                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
-                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField|SaleField];
+                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField|SaleField];
                 [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
                 uploadController.publishSource = FSSourceProduct;
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];
@@ -1541,6 +1543,7 @@
 #pragma FSProDetailItemSourceProvider
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
+    /*
     FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
     Class respClass;
     if (_userProfile.userLevelId == FSDARENUser)
@@ -1561,12 +1564,10 @@
         {
             request.pType = FSSourcePromotion;
             request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-            respClass = [FSProItemEntity class];
-            
+            respClass = [FSProItemEntity class];   
         }
-        
-    } else
-    {
+    }
+    else {
         FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
         request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
         request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
@@ -1590,6 +1591,56 @@
         }
     }
     [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        if (!resp.isSuccess)
+        {
+            [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+            errorBlock();
+        }
+        else
+        {
+            block(resp.responseData);
+        }
+    }];
+     */
+    
+    FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+    drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+    drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+    drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    Class respClass;
+    if (_userProfile.userLevelId == FSDARENUser) {
+        FSItemBase *itemCurrent = [view.navContext objectAtIndex:index];
+        if (itemCurrent.sourceType == FSSourceProduct)
+        {
+            drequest.pType = FSSourceProduct;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",[NSNumber numberWithInt:itemCurrent.sourceId]];
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            drequest.pType = FSSourcePromotion;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",[NSNumber numberWithInt:itemCurrent.sourceId]];
+            respClass = [FSProItemEntity class];
+        }
+    }
+    else{
+        FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
+        if (favorCurrent.sourceType == FSSourceProduct)
+        {
+            drequest.pType = FSSourceProduct;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",[NSNumber numberWithInt:favorCurrent.sourceId]];
+            respClass = [FSProdItemEntity class];
+        }
+        else
+        {
+            drequest.pType = FSSourcePromotion;
+            drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",[NSNumber numberWithInt:favorCurrent.sourceId]];
+            respClass = [FSProItemEntity class];
+        }
+    }
+    
+    [drequest setBaseURL:2];
+    [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
         if (!resp.isSuccess)
         {
             [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];

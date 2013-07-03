@@ -73,10 +73,21 @@ static FSMyPickerView *myPickerViewInstance;
     [theApp.window insertSubview:self atIndex:1000];
 }
 
+- (UIViewController*)viewController {
+    for (UIView* next = [self superview]; next; next = next.superview) {
+        UIResponder* nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+            return (UIViewController*)nextResponder;
+        }
+    }
+    return nil;
+}
+
 -(void)showPickerView
 {
     if (self.frame.origin.y <= MP_SCREEN_HIGH && !_pickerIsShow)
     {
+        [theApp hiddenPickerView];
         _pickerIsShow = YES;
         
         [UIView animateWithDuration:0.3f animations:^{

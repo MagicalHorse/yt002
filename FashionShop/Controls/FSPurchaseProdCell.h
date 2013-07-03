@@ -33,6 +33,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *title;
 @property (strong, nonatomic) IBOutlet UILabel *contentLb;
 @property (strong, nonatomic) IBOutlet UITextField *contentField;
+@property (strong, nonatomic) IBOutlet UIImageView *lines;
 
 @property (nonatomic) int cellHeight;
 

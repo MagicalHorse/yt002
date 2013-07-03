@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol FSOrderRMARequestViewControllerDelegate;
+
 @interface FSOrderDetailViewController : UIViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;

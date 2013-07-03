@@ -18,6 +18,7 @@
 #define RK_REQUEST_PROD_DETAIL @"/product/detail"
 #define RK_REQUEST_PROD_REMOVE @"/product/destroy"
 #define RK_REQUEST_PROD_AVAILOPERATIONS @"/product/availoperations"     //获取当前用户对产品详情的操作权限
+#define RK_REQUEST_TAG_PROPERTIES  @"/tag/property"    //获取tagid对应的商品属性
 
 @interface FSCommonProRequest : FSEntityRequestBase<RKRequestDelegate>
 
@@ -37,9 +38,12 @@
 @property(nonatomic,strong) NSDate* startdate;
 @property(nonatomic,strong) NSDate* enddate;
 @property(nonatomic,strong) NSNumber *price;
+@property(nonatomic,strong) NSNumber *originalPrice;
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
 @property(nonatomic,strong) NSString *fileName;
+@property(nonatomic,strong) NSNumber *is4sale;
+@property(nonatomic,strong) NSString *property;
 
 @property(nonatomic,strong) NSString *pID;
 

@@ -22,6 +22,7 @@
 @property (nonatomic,strong) NSMutableArray *properties;
 @property (nonatomic,strong) NSString *rmapolicy;//商家信誉
 @property (nonatomic,strong) NSMutableArray *supportpayments;//支持的支付方式
+@property (nonatomic,strong) NSMutableArray *invoicedetails;//支持的发票明细数组
 @property (nonatomic,strong) FSResource *productImage;
 @property (nonatomic,strong) FSResource *sizeImage;
 
@@ -48,6 +49,7 @@
 @property (nonatomic) int valueid;
 @property (nonatomic,strong) NSString *valuename;
 @property (nonatomic,strong) NSMutableArray *values;
+@property (nonatomic) BOOL isChecked;//是否选中
 
 @end
 

@@ -361,6 +361,7 @@
 -(void)proDetailViewDataFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index completeCallback:(UICallBackWith1Param)block errorCallback:(dispatch_block_t)errorBlock
 {
     __block FSCoupon * favorCurrent = [view.navContext objectAtIndex:index];
+    /*
     FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
     request.uToken = [FSModelManager sharedModelManager].loginToken;
     request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
@@ -382,6 +383,37 @@
         
     }
     [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        if (!resp.isSuccess)
+        {
+            [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+            errorBlock();
+        }
+        else
+        {
+            block(resp.responseData);
+        }
+    }];
+     */
+    
+    FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
+    drequest.uToken = [FSModelManager sharedModelManager].loginToken;
+    drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
+    drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
+    Class respClass;
+    if (favorCurrent.producttype == FSSourceProduct)
+    {
+        drequest.pType = FSSourceProduct;
+        drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",[NSNumber numberWithInt:favorCurrent.productid]];
+        respClass = [FSProdItemEntity class];
+    }
+    else
+    {
+        drequest.pType = FSSourcePromotion;
+        drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",[NSNumber numberWithInt:favorCurrent.productid]];
+        respClass = [FSProItemEntity class];
+    }
+    [drequest setBaseURL:2];
+    [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
         if (!resp.isSuccess)
         {
             [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];

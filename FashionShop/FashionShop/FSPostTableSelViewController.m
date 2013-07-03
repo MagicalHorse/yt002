@@ -41,6 +41,9 @@
     [super viewDidLoad];
     [self prepareData];
     [self presentControl];
+    
+    _tbContent.backgroundView = nil;
+    _tbContent.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 -(void) setDataSource:(PostTableDataSource)source step:(PostProgressStep)current selectedCallbackTarget:(id)target

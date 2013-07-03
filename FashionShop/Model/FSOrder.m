@@ -9,11 +9,11 @@
 #import "FSOrder.h"
 
 @implementation FSOrderInfo
-@synthesize orderno,totalamount;
+@synthesize orderno,totalamount,totalpoints,extendprice;
 @synthesize needinvoice,invoicedetail,invoicesubject;
 @synthesize canrma,rmas;
 @synthesize shippingaddress,shippingcontactperson,shippingcontactphone,shippingfee,shippingno,shippingvianame,shippingzipcode;
-@synthesize status,paymentname,createdate,resource,product,memo;
+@synthesize status,statust,paymentname,createdate,resource,product,memo;
 @synthesize canvoid,totalquantity;
 
 +(RKObjectMapping *)getRelationDataMap
@@ -27,13 +27,14 @@
     
     [relationMapping mapKeyPath:@"orderno" toAttribute:@"orderno"];
     [relationMapping mapKeyPath:@"totalamount" toAttribute:@"totalamount"];
+    [relationMapping mapKeyPath:@"totalpoints" toAttribute:@"totalpoints"];
+    [relationMapping mapKeyPath:@"extendprice" toAttribute:@"extendprice"];
     
     [relationMapping mapKeyPath:@"needinvoice" toAttribute:@"needinvoice"];
     [relationMapping mapKeyPath:@"invoicesubject" toAttribute:@"invoicesubject"];
     [relationMapping mapKeyPath:@"invoicedetail" toAttribute:@"invoicedetail"];
     
     [relationMapping mapKeyPath:@"canrma" toAttribute:@"canrma"];
-    [relationMapping mapKeyPath:@"rmas" toAttribute:@"rmas"];
     
     [relationMapping mapKeyPath:@"shippingaddress" toAttribute:@"shippingaddress"];
     [relationMapping mapKeyPath:@"shippingno" toAttribute:@"shippingno"];
@@ -44,6 +45,7 @@
     [relationMapping mapKeyPath:@"shippingcontactperson" toAttribute:@"shippingcontactperson"];
     
     [relationMapping mapKeyPath:@"status" toAttribute:@"status"];
+    [relationMapping mapKeyPath:@"statust" toAttribute:@"statust"];
     [relationMapping mapKeyPath:@"paymentname" toAttribute:@"paymentname"];
     [relationMapping mapKeyPath:@"createdate" toAttribute:@"createdate"];
     [relationMapping mapKeyPath:@"memo" toAttribute:@"memo"];
@@ -53,8 +55,59 @@
     
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
-    relationMap = [FSProdItemEntity getRelationDataMap];
+    relationMap = [FSOrderProduct getRelationDataMap];
     [relationMapping mapKeyPath:@"product" toRelationship:@"product" withMapping:relationMap];
+    relationMap = [FSOrderRMAItem getRelationDataMap];
+    [relationMapping mapKeyPath:@"rmas" toRelationship:@"rmas" withMapping:relationMap];
+    
+    return relationMapping;
+}
+
+@end
+
+@implementation FSOrderRMAItem
+@synthesize rejectreason,bankcard,bankaccount,rmatype,bankname,rmano,createdate,status;
+@synthesize chargegiftfee,rmaamount,rebatepostfee,chargepostfee,actualamount,reason;
+
++(RKObjectMapping *)getRelationDataMap
+{
+    RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
+    [relationMapping mapKeyPath:@"rejectreason" toAttribute:@"rejectreason"];
+    [relationMapping mapKeyPath:@"reason" toAttribute:@"reason"];
+    [relationMapping mapKeyPath:@"bankcard" toAttribute:@"bankcard"];
+    [relationMapping mapKeyPath:@"bankaccount" toAttribute:@"bankaccount"];
+    [relationMapping mapKeyPath:@"rmatype" toAttribute:@"rmatype"];
+    [relationMapping mapKeyPath:@"bankname" toAttribute:@"bankname"];
+    [relationMapping mapKeyPath:@"rmano" toAttribute:@"rmano"];
+    [relationMapping mapKeyPath:@"createdate" toAttribute:@"createdate"];
+    [relationMapping mapKeyPath:@"status" toAttribute:@"status"];
+    
+    [relationMapping mapKeyPath:@"chargepostfee" toAttribute:@"chargepostfee"];
+    [relationMapping mapKeyPath:@"rmaamount" toAttribute:@"rmaamount"];
+    [relationMapping mapKeyPath:@"rebatepostfee" toAttribute:@"rebatepostfee"];
+    [relationMapping mapKeyPath:@"chargegiftfee" toAttribute:@"chargegiftfee"];
+    [relationMapping mapKeyPath:@"actualamount" toAttribute:@"actualamount"];
+    
+    return relationMapping;
+}
+
+@end
+
+@implementation FSOrderProduct
+@synthesize itemdesc,itemno,quantity,price,productid,productname,properties,resource;
+
++(RKObjectMapping *)getRelationDataMap
+{
+    RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
+    [relationMapping mapKeyPath:@"itemdesc" toAttribute:@"itemdesc"];
+    [relationMapping mapKeyPath:@"itemno" toAttribute:@"itemno"];
+    [relationMapping mapKeyPath:@"quantity" toAttribute:@"quantity"];
+    [relationMapping mapKeyPath:@"price" toAttribute:@"price"];
+    [relationMapping mapKeyPath:@"productid" toAttribute:@"productid"];
+    [relationMapping mapKeyPath:@"productname" toAttribute:@"productname"];
+    [relationMapping mapKeyPath:@"properties" toAttribute:@"properties"];
+    RKObjectMapping *relationMap = [FSResource getRelationDataMap];
+    [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
     
     return relationMapping;
 }

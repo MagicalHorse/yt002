@@ -37,8 +37,11 @@
 @synthesize comment;
 @synthesize pType;
 @synthesize price;
+@synthesize originalPrice;
 @synthesize pID;
 @synthesize fileName;
+@synthesize is4sale;
+@synthesize property;
 
 @synthesize routeResourcePath;
 
@@ -53,6 +56,8 @@
     [map mapKeyPath:@"startdate" toAttribute:@"request.startdate"];
     [map mapKeyPath:@"enddate" toAttribute:@"request.enddate"];
     [map mapKeyPath:@"storeid" toAttribute:@"request.brandId"];
+    [map mapKeyPath:@"tagid" toAttribute:@"request.tagId"];
+    
     if (pType==FSSourceProduct)
     {
        [map mapKeyPath:@"productid" toAttribute:@"request.id"];
@@ -95,12 +100,19 @@
     [params setValue:startdate forParam:@"startdate"];
     [params setValue:enddate forParam:@"enddate"];
     [params setValue:storeId forParam:@"storeid"];
+    [params setValue:is4sale forParam:@"is4sale"];
     if (brandId)
         [params setValue:brandId forParam:@"brandid"];
     if (tagId)
         [params setValue:tagId forParam:@"tagid"];
     if (price)
         [params setValue:price forParam:@"price"];
+    if (originalPrice) {
+        [params setValue:originalPrice forParam:@"unitprice"];
+    }
+    if (property)
+        [params setValue:property forParam:@"property"];
+    
     int i =0;
     for (UIImage* img in imgs) {
         [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
@@ -115,7 +127,6 @@
             }
         }
     }
-    
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
     completeBlock = blockcomplete;
     errorBlock = blockerror;

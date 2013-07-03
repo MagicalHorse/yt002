@@ -12,6 +12,7 @@
 #import "FSMyPickerView.h"
 
 @protocol FSAddressManagerViewControllerDelegate;
+@protocol FSInvoiceViewControllerDelegate;
 
 @interface FSBuyCenterViewController : UIViewController<UIAlertViewDelegate,FSImageSlideDataSource,UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 

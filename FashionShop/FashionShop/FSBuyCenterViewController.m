@@ -17,13 +17,14 @@
 #import "FSPropertiesSelectView.h"
 #import "JSONKit.h"
 #import "FSOrderSuccessViewController.h"
+#import "FSInvoiceViewController.h"
 
 @interface FSBuyCenterViewController (){
     FSPurchase *_purchaseData;
     FSPurchase *_purchaseAmount;
     FSPurchaseForUpload *_uploadData;
     id activityField;
-    FSMyPickerView *voicePickerView;
+    FSMyPickerView *paywayPickerView;
 }
 
 @end
@@ -183,16 +184,23 @@
 
 - (void)viewDidUnload {
     [self setTbAction:nil];
+    [theApp cleanAllPickerView];
     [super viewDidUnload];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [theApp hiddenPickerView];
 }
 
 -(UIView*)createTableFooterView
 {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 60)];
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 80)];
     view.backgroundColor = [UIColor clearColor];
     
     int xOffset = 49;
-    int yOffset = 10;
+    int yOffset = 20;
     
     UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
     btnClean.frame = CGRectMake(xOffset, yOffset, 222, 40);
@@ -301,7 +309,7 @@
     BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
     [dic setValue:[NSNumber numberWithBool:!flag] forKey:@"needinvoice"];
     [dic setValue:_uploadData.invoicetitle forKey:@"invoicetitle"];
-    [dic setValue:@"写死了" forKey:@"invoicedetail"];//_uploadData.invoicedetail
+    [dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
     [dic setValue:_uploadData.memo forKey:@"memo"];
     
     NSMutableDictionary *paymentDic = [NSMutableDictionary dictionary];
@@ -456,7 +464,7 @@
             if (indexPath.row == 1) {
                 //尺码对照表
                 NSMutableArray *photoArray=[NSMutableArray arrayWithCapacity:1];
-                MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[_purchaseData.sizeImage absoluteUrlOrigin] name:nil];
+                MyPhoto *photo = [[MyPhoto alloc] initWithImageURL:[_purchaseData.sizeImage absoluteUrl320] name:nil];
                 [photoArray addObject:photo];
                 MyPhotoSource *source = [[MyPhotoSource alloc] initWithPhotos:photoArray];
                 EGOPhotoViewController *photoController = [[EGOPhotoViewController alloc] initWithPhotoSource:source];
@@ -484,20 +492,27 @@
         }
         else if(indexPath.row == 1) {
             //支付方式
-            if (!voicePickerView) {
-                voicePickerView = [[FSMyPickerView alloc] init];
-                voicePickerView.delegate = self;
-                voicePickerView.datasource = self;
+            if (!paywayPickerView) {
+                paywayPickerView = [[FSMyPickerView alloc] init];
+                paywayPickerView.delegate = self;
+                paywayPickerView.datasource = self;
             }
             //初始化选中项
             for (int i = 0; i < _purchaseData.supportpayments.count; i++) {
                 FSPurchaseSPaymentItem *item = _purchaseData.supportpayments[i];
                 if ([item.code isEqualToString:_uploadData.payment.code]) {
-                    [voicePickerView.picker selectRow:i inComponent:0 animated:NO];
+                    [paywayPickerView.picker selectRow:i inComponent:0 animated:NO];
                     break;
                 }
             }
-            [voicePickerView showPickerView];
+            [paywayPickerView showPickerView];
+        }
+        else if(indexPath.row == 2) {
+            FSInvoiceViewController *invoiceView = [[FSInvoiceViewController alloc] initWithNibName:@"FSInvoiceViewController" bundle:nil];
+            invoiceView.data = _purchaseData;
+            invoiceView.uploadData = _uploadData;
+            invoiceView.delegate = self;
+            [self.navigationController pushViewController:invoiceView animated:true];
         }
     }
 }
@@ -510,7 +525,11 @@
         FSPurchaseProdCell *cell = (FSPurchaseProdCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
         return cell.cellHeight;
     }
-    if (indexPath.section == 2) {
+    else if (indexPath.section == 1) {
+        FSPurchaseCommonCell *cell = (FSPurchaseCommonCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+        return cell.cellHeight;
+    }
+    else if (indexPath.section == 2) {
         FSPurchaseAmountCell *cell = (FSPurchaseAmountCell*)[tableView.dataSource tableView:tableView cellForRowAtIndexPath:indexPath];
         return cell.cellHeight;
     }
@@ -595,6 +614,15 @@
     [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+#pragma mark - FSInvoiceViewControllerDelegate
+
+-(void)completeInvoiceInput:(FSInvoiceViewController*)viewController
+{
+    _uploadData.invoicetitle = viewController.invoiceTitle.text;
+    _uploadData.invoicedetail = viewController.invoiceDetail.text;
+    [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -640,7 +668,7 @@
 
 - (NSInteger)numberOfComponentsInMyPickerView:(FSMyPickerView *)pickerView
 {
-    if (pickerView == voicePickerView) {
+    if (pickerView == paywayPickerView) {
         return 1;
     }
     return 0;
@@ -648,7 +676,7 @@
 
 - (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if (pickerView == voicePickerView) {
+    if (pickerView == paywayPickerView) {
         return _purchaseData.supportpayments.count;
     }
     return 0;
@@ -658,7 +686,7 @@
 
 - (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
 {
-    if (aMyPickerView == voicePickerView) {
+    if (aMyPickerView == paywayPickerView) {
         int index = [aMyPickerView.picker selectedRowInComponent:0];
         FSPurchaseSPaymentItem *aItem = _purchaseData.supportpayments[index];
         _uploadData.payment = aItem;

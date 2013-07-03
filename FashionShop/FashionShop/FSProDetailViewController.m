@@ -283,7 +283,7 @@
     [self hideCommentInputView:nil];
     
     //请求操作
-    [self performSelector:@selector(requestOperations:) withObject:itemId afterDelay:1.0f];
+    [self performSelector:@selector(requestOperations:) withObject:itemId afterDelay:.2f];
 }
 
 -(void)requestOperations:(NSNumber*)itemid

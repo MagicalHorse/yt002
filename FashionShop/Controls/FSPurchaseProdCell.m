@@ -22,23 +22,25 @@
     }
     data = aData;
     uploadData = aUpData;
-    int yGap = 9;
-    _cellHeight = yGap;
+    int yGap = 8;
+    _cellHeight = 10;
     
     BOOL flag =  NO;
     if (data.originprice && data.originprice > 0.000001) {
         flag = YES;
     }
-    else{
-        _cellHeight += yGap*2;
-    }
     
     //productImage
-    [_productImage setImageWithURL:[data.productImage absoluteUr:80] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+    [_productImage setImageWithURL:[data.productImage absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
     _productImage.layer.borderWidth = 1;
     _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    float pWidth = _productImage.frame.size.width;
+    float pHeight = data.productImage.height * pWidth / data.productImage.width;
+    CGRect rect = _productImage.frame;
+    rect.size.height = pHeight;
+    _productImage.frame = rect;
     
-    CGRect rect = _productName.frame;
+    rect = _productName.frame;
     UIFont *font = [UIFont systemFontOfSize:14];
     //productName
     _productName.text = data.name;
@@ -58,6 +60,9 @@
     _productDesc.lineBreakMode = NSLineBreakByTruncatingTail;
     _productDesc.textColor = [UIColor colorWithHexString:@"181818"];
     height = [data.description sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    if (height > 40) {
+        height = 40;
+    }
     rect.origin.y = _cellHeight;
     rect.size.height = height;
     _productDesc.frame = rect;
@@ -89,8 +94,8 @@
     }
     _cellHeight += 10;
     
-    if (_cellHeight < 120) {
-        _cellHeight = 120;
+    if (_cellHeight < pHeight + 20) {
+        _cellHeight = pHeight + 20;
     }
     
     [self initProperties];
@@ -192,13 +197,13 @@
                 _contentLb.frame = rect;
             }
             else{
-                _contentLb.text = [NSString stringWithFormat:@"收货人 : %@\n收货地址 : %@", data.address.shippingperson,data.address.displayaddress];
+                _contentLb.text = [NSString stringWithFormat:@"%@\n%@", data.address.shippingperson,data.address.displayaddress];
                 int height = [_contentLb.text sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(_contentLb.frame.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
-                if (height > 20) {
-                    _cellHeight += (height - 20);
-                }
                 CGRect rect = _contentLb.frame;
-                rect.size.height += height - 20;
+                rect.origin.y = 10;
+                rect.size.height = height;
+                _contentLb.frame = rect;
+                _cellHeight = height + 20;
                 _contentLb.textColor = [UIColor colorWithHexString:@"181818"];
             }
             _contentLb.numberOfLines = 0;
@@ -213,6 +218,9 @@
             if (!data.payment) {
                 _contentLb.text = @"请选择支付方式";
                 _contentLb.textColor = [UIColor lightGrayColor];
+                CGRect rect = _contentLb.frame;
+                rect.size.height = 40;
+                _contentLb.frame = rect;
             }
             else{
                 _contentLb.text = data.payment.name;
@@ -221,8 +229,6 @@
             CGRect rect = _contentLb.frame;
             rect.size.height = 40;
             _contentLb.frame = rect;
-            _contentLb.numberOfLines = 0;
-            _contentLb.lineBreakMode = NSLineBreakByCharWrapping;
             
             _contentField.hidden = YES;
             _contentLb.hidden = NO;
@@ -230,13 +236,34 @@
             break;
         case 2://发票
         {
-            _title.text = @"发票 : ";
-            if (![NSString isNilOrEmpty:data.invoicetitle]) {
-                _contentField.text = data.invoicetitle;
+            _title.text = @"发票抬头 : ";
+            if (![NSString isNilOrEmpty:data.memo]) {
+                _contentField.text = data.memo;
             }
-            _contentField.placeholder = @"点击填写发票信息";
+            _contentField.placeholder = @"点击填写发票抬头";
             _contentField.hidden = NO;
             _contentLb.hidden = YES;
+            /*
+            _title.text = @"发票 : ";
+            if ([NSString isNilOrEmpty:data.invoicetitle]) {
+                _contentLb.text = @"点击填写发票信息";
+                _contentLb.textColor = [UIColor lightGrayColor];
+            }
+            else{
+                _contentLb.text = [NSString stringWithFormat:@"抬头:%@  明细:%@",data.invoicetitle, data.invoicedetail];
+                _contentLb.textColor = [UIColor colorWithHexString:@"181818"];
+                int height = [_contentLb.text sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(_contentLb.frame.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+                CGRect rect = _contentLb.frame;
+                rect.origin.y = 10;
+                rect.size.height = height;
+                _contentLb.frame = rect;
+                _cellHeight = height + 20;
+            }
+            _contentLb.numberOfLines = 0;
+            _contentLb.lineBreakMode = NSLineBreakByCharWrapping;
+            _contentField.hidden = YES;
+            _contentLb.hidden = NO;
+             */
         }
             break;
         case 3://预订单备注
@@ -264,6 +291,16 @@
         default:
             break;
     }
+    
+    //lines
+    CGRect rect = _lines.frame;
+    rect.origin.y = _cellHeight - 2;
+    _lines.frame = rect;
+    
+    rect = _title.frame;
+    rect.origin.y = _contentLb.frame.origin.y;
+    rect.size.height = _contentLb.frame.size.height;
+    _title.frame = rect;
 }
 
 @end

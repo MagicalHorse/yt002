@@ -50,9 +50,6 @@
 @property (nonatomic, assign) NSInteger  type;
 @property (nonatomic, strong) NSDate * inDate;
 @property (nonatomic,strong) NSMutableArray *coupons;
-
-
-
 */
 
 @end

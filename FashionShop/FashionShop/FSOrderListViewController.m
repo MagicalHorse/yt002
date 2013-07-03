@@ -13,8 +13,6 @@
 #import "FSOrder.h"
 #import "FSOrderDetailViewController.h"
 
-#define USER_ORDER_LIST_TABLE_CELL @"FSOrderListCell"
-
 @interface FSOrderListViewController ()
 {
     FSOrderSortBy _currentSelIndex;
@@ -47,7 +45,6 @@
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     
-    [_contentView registerNib:[UINib nibWithNibName:@"FSOrderListCell" bundle:Nil] forCellReuseIdentifier:USER_ORDER_LIST_TABLE_CELL];
     _currentSelIndex = OrderSortByCarryOn;
     
     [self initArray];
@@ -65,7 +62,7 @@
         int currentPage = 1;
         FSPurchaseRequest *request = [self createRequest:currentPage];
         _inLoading = YES;
-        [request send:[FSOrderInfo class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedOrder class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             _inLoading = NO;
             action();
             if (resp.isSuccess)
@@ -195,6 +192,9 @@
 -(void) mergeLike:(FSPagedOrder *)response isInsert:(BOOL)isinsert
 {
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
+    if (!isinsert) {
+        [_likes removeAllObjects];
+    }
     if (response && response.items)
     {
         [response.items enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -260,15 +260,39 @@
     return 1;
 }
 
+#define Order_List_Cell_Indentifier @"FSOrderListCell"
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSOrderListCell *detailCell = (FSOrderListCell*)[_contentView dequeueReusableCellWithIdentifier:USER_ORDER_LIST_TABLE_CELL];
-    detailCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    detailCell.selectionStyle = UITableViewCellSelectionStyleGray;
+    FSOrderListCell *cell = (FSOrderListCell*)[tableView dequeueReusableCellWithIdentifier:Order_List_Cell_Indentifier];
+    if (cell == nil) {
+        NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
+        if (_array.count > 0) {
+            cell = (FSOrderListCell*)_array[0];
+        }
+        else{
+            cell = [[FSOrderListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Order_List_Cell_Indentifier];
+        }
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    }
+    
+    if (_currentSelIndex == OrderSortByCompletion) {
+        cell.priceLb.textColor = [UIColor colorWithHexString:@"#007f06"];
+        cell.orderNumber.textColor = [UIColor colorWithHexString:@"#007f06"];
+        cell.crateDate.textColor = [UIColor colorWithHexString:@"#007f06"];
+    }
+    else if(_currentSelIndex == OrderSortByDisable) {
+        cell.priceLb.textColor = [UIColor colorWithHexString:@"#666666"];
+        cell.orderNumber.textColor = [UIColor colorWithHexString:@"#666666"];
+        cell.crateDate.textColor = [UIColor colorWithHexString:@"#666666"];
+    }
+    
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     FSOrderInfo *order = [_likes objectAtIndex:indexPath.section];
-    [(FSOrderListCell *)detailCell setData:order];
-    return detailCell;
+    [(FSOrderListCell *)cell setData:order];
+    
+    return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -319,7 +343,7 @@
                 if (innerResp.totalPageCount <= currentPage+1)
                     [self setNoMore:YES selectedSegmentIndex:_currentSelIndex];
                 [self setPageIndex:currentPage+1 selectedSegmentIndex:_currentSelIndex];
-                [self mergeLike:innerResp isInsert:NO];
+                [self mergeLike:innerResp isInsert:YES];
                 
                 //统计
 //                NSString *value = _segFilters.selectedIndex==0?@"优惠券列表-未使用":(_segFilters.selectedIndex==1?@"优惠券列表-已使用":@"优惠券列表-已无效");

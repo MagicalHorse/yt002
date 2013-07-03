@@ -10,6 +10,7 @@
 #import "FSCommonProRequest.h"
 #import "TDSemiModalViewController.h"
 #import "FSPlaceHoldTextView.h"
+#import "TPKeyboardAvoidingScrollView.h"
 
 typedef enum {
     PTStartRecord = 1,
@@ -23,6 +24,7 @@ typedef enum {
 
 @interface FSProPostTitleViewController : TDSemiModalViewController<UITextFieldDelegate,UITextViewDelegate,AVAudioPlayerDelegate,FSCL_AudioDelegate>
 
+@property (strong, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *contentView;
 @property (strong, nonatomic) IBOutlet UILabel *lblName;
 @property (strong, nonatomic) IBOutlet UITextField *txtTitle;
 
@@ -31,6 +33,9 @@ typedef enum {
 
 @property (strong, nonatomic) IBOutlet UILabel *lblDescVoice;
 @property (strong, nonatomic) IBOutlet UIButton *btnRecord;
+
+@property (strong, nonatomic) IBOutlet UILabel *lbOriginalPrice;
+@property (strong, nonatomic) IBOutlet UITextField *txtOriginalPrice;
 
 @property (strong, nonatomic) IBOutlet UILabel *lblPrice;
 @property (strong, nonatomic) IBOutlet UITextField *txtPrice;

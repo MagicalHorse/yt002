@@ -54,6 +54,8 @@
     [self initRecordButton];
     
     _minRecordGap = 4;
+    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
+    self.view.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
 - (void)viewDidUnload {
@@ -70,6 +72,9 @@
     [self setLblDescVoice:nil];
     [self setBtnRecord:nil];
     [self setBtnReRecord:nil];
+    [self setContentView:nil];
+    [self setLbOriginalPrice:nil];
+    [self setTxtOriginalPrice:nil];
     [super viewDidUnload];
 }
 
@@ -164,6 +169,14 @@
     if (_publishSource==FSSourceProduct)
     {
         _txtDesc.placeholder = NSLocalizedString(@"Input Product Desc", nil);
+        _lbOriginalPrice.font = ME_FONT(14);
+        _lbOriginalPrice.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
+        _lbOriginalPrice.textAlignment = NSTextAlignmentRight;
+        [_txtOriginalPrice setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+        _txtOriginalPrice.layer.borderWidth = 1;
+        _txtOriginalPrice.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+        _txtOriginalPrice.delegate = self;
+        
         _lblPrice.font = ME_FONT(14);
         _lblPrice.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
         _lblPrice.textAlignment = NSTextAlignmentRight;
@@ -196,6 +209,9 @@
     else
     {
         _txtDesc.placeholder = NSLocalizedString(@"Input Promotion Desc", nil);
+        _lbOriginalPrice.layer.opacity = 0;
+        _txtOriginalPrice.layer.opacity = 0;
+        
         _lblPrice.layer.opacity = 0;
         _txtPrice.layer.opacity = 0;
         
@@ -292,6 +308,7 @@
     _txtTitle.text = @"";
     _txtDesc.text = @"";
     _txtPrice.text = @"";
+    _txtOriginalPrice.text = @"";
     _txtProDesc.text = @"";
     _txtProStartTime.text = @"";
     _txtProEndTime.text = @"";
@@ -377,12 +394,7 @@
 }
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-//    if (textField == _txtTitle) {
-//        if (textField.text.length > TITLE_MAX_LENGTH-1 && ![string isEqualToString:@""]) {
-//            return NO;
-//        }
-//    }
-    if (textField == _txtPrice) {
+    if (textField == _txtPrice || textField == _txtOriginalPrice) {
         if ([string isEqualToString:@""]) {
             return YES;
         }
@@ -390,7 +402,6 @@
             return NO;
         }
     }
-    
     return YES;
 }
 

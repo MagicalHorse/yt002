@@ -59,6 +59,7 @@
     _addressDetail.layer.shadowOffset = CGSizeMake(3, 3);
     _addressDetail.placeholder = NSLocalizedString(@"Address Detail Place Holder", nil);
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
+    self.view.backgroundColor = APP_TABLE_BG_COLOR;
     redColor = [UIColor redColor];
     
     fieldTextColor = _name.textColor;
@@ -70,10 +71,8 @@
         request.userToken = currentUser?currentUser.uToken:[FSModelManager sharedModelManager].loginToken;
         request.id = _addressID;
         request.routeResourcePath = REQUEST_ADDRESS_DETAIL;
-//        [self beginLoading:self.view];
         _inLoading = YES;
         [request send:[FSAddress class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-//            [self endLoading:self.view];
             _inLoading = NO;
             if (resp.isSuccess)
             {

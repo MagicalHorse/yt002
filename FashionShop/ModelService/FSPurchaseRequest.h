@@ -29,4 +29,12 @@
 
 @property(nonatomic,strong) NSString *orderno;//订单号
 
+//退货参数
+@property(nonatomic,strong) NSString *reason;//退货理由
+@property(nonatomic,strong) NSString *bankname;//银行名称
+@property(nonatomic,strong) NSString *bankcard;//银行卡号
+@property(nonatomic,strong) NSString *bankaccount;//银行用户名
+@property(nonatomic,strong) NSString *contactphone;//电话
+
+
 @end
