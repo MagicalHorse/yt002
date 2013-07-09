@@ -236,7 +236,8 @@
             }
         }
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-        [dic setValue:array forKey:item.propertyname];
+        [dic setValue:array forKey:@"values"];
+        [dic setValue:item.propertyname forKey:@"propertyname"];
         [pArray addObject:dic];
     }
     _proRequest.property = [pArray JSONString];

@@ -26,7 +26,7 @@
 #import "FSAudioShowView.h"
 #import "FSImageBrowserView.h"
 #import "FSBuyCenterViewController.h"
-#import "FSMyCommentController.h"
+#import "FSPLetterViewController.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -243,7 +243,7 @@
             respClass = [FSProItemEntity class];
         }
         [drequest setBaseURL:2];
-        self.paginatorView.scrollView.scrollEnabled = NO;
+        //self.paginatorView.scrollView.scrollEnabled = NO;
         [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
             if (resp.isSuccess)
             {
@@ -252,11 +252,12 @@
                 NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
                 if (blockSelf->_sourceType==FSSourcePromotion)
                     navTitle = NSLocalizedString(@"promotion detail", nil);
-                [blockSelf.navigationItem setTitle:navTitle] ;
+                [blockSelf.navigationItem setTitle:navTitle];
+                [self resetScrollViewSize:blockViewForRefresh];
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
             } else
             {
-                self.paginatorView.scrollView.scrollEnabled = YES;
+                //self.paginatorView.scrollView.scrollEnabled = YES;
                 [self endLoading:blockViewForRefresh];
                 _inLoading = NO;
                 [self onButtonCancel];
@@ -274,6 +275,7 @@
             if (blockSelf->_sourceType==FSSourcePromotion)
                 navTitle = NSLocalizedString(@"promotion detail", nil);
             [blockSelf.navigationItem setTitle:navTitle];
+            [self resetScrollViewSize:blockViewForRefresh];
             [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
             [self resetScrollViewSize:blockViewForRefresh];
         } errorCallback:^{
@@ -331,7 +333,7 @@
         [self endLoading:blockViewForRefresh];
         _inLoading = NO;
         //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
-        self.paginatorView.scrollView.scrollEnabled = YES;
+        //self.paginatorView.scrollView.scrollEnabled = YES;
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
@@ -602,6 +604,12 @@
     [[FSAnalysis instance] logEvent:CHECK_STORE_DETAIL withParameters:_dic];
 }
 
+- (IBAction)dailPhone:(id)sender {
+    FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", [view.data contactPhone]]];
+	[[UIApplication sharedApplication] openURL:url];
+}
+
 - (IBAction)goDR:(NSNumber *)userid {
 
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
@@ -649,11 +657,22 @@
     if (_inLoading) {
         return;
     }
+    __block FSDetailBaseView * currentView = (FSDetailBaseView*)self.paginatorView.currentPage;
+    FSUser * fromUser = [currentView.data valueForKey:@"fromUser"];
+    if ([fromUser.uid intValue] == [[FSUser localProfile].uid intValue]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"不能和自己联系" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+        [alert show];
+        return;
+    }
     
     [self localLogin:^{
         //to private letter list
-        FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
-        [self.navigationController pushViewController:controller animated:true];
+        
+        FSProdItemEntity *_item = currentView.data;
+        FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+        viewController.touchUser = _item.fromUser;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+         [self presentViewController:nav animated:YES completion:nil];
     }];
 }
 
@@ -749,7 +768,7 @@
     FSProCommentInputView *commentInput = (FSProCommentInputView*)[self.view viewWithTag:PRO_DETAIL_COMMENT_INPUT_TAG];
     if (!commentInput)
     {
-        commentInput = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentInputView" owner:self options:nil] lastObject];
+        commentInput = [[[NSBundle mainBundle] loadNibNamed:@"FSProCommentInputView" owner:self options:nil] objectAtIndex:0];
         CGFloat height = PRO_DETAIL_COMMENT_INPUT_HEIGHT;
         commentInput.frame = CGRectMake(0, self.view.frame.size.height-TOOLBAR_HEIGHT-height, self.view.frame.size.width, height);
         commentInput.txtComment.delegate = self;

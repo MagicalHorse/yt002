@@ -44,3 +44,23 @@
 }
 
 @end
+
+@implementation FSPLetterCommentInputView
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self prepareLayout];
+    }
+    return self;
+}
+
+-(void) prepareLayout
+{
+    self.layer.borderWidth = 0.5;
+    self.layer.borderColor = [UIColor colorWithRed:102 green:102 blue:102].CGColor;
+    self.clipsToBounds = YES;
+}
+
+@end

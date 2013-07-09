@@ -34,3 +34,16 @@
 }
 
 @end
+
+@implementation FSEnMessageItem
+
++(RKObjectMapping *) getRelationDataMap
+{
+    RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
+    [relationMap mapKeyPath:@"message" toAttribute:@"message"];
+    [relationMap mapKeyPath:@"key" toAttribute:@"key"];
+    
+    return relationMap;
+}
+
+@end

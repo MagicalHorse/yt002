@@ -14,6 +14,7 @@
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action ;
 -(void) beginLoadMoreLayout:(UIScrollView *)container;
 -(void) endLoadMore:(UIScrollView *)container;
+-(void)startRefresh:(id)view withCallback:(dispatch_block_t)callback;
 
 @property(nonatomic) BOOL isInRefresh;
 @property(nonatomic) BOOL inLoading;

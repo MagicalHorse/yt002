@@ -10,7 +10,9 @@
 #import "FSModelBase.h"
 
 @interface FSCoreModelBase : NSManagedObject<FSManagedModelMappable>
+
 @property(nonatomic,assign) BOOL isSuccess;
 @property(nonatomic,strong) NSString *errorDescrip;
 @property(nonatomic,assign) FSNetworkErrorType errorType;
+
 @end

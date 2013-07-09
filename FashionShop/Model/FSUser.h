@@ -13,10 +13,11 @@
 #import "FSModelBase.h"
 #import "FSCardInfo.h"
 #import "FSResource.h"
+#import "FSCoreUser.h"
 
 @interface FSUser : FSModelBase
 
-@property (nonatomic,strong) NSNumber *  uid;
+@property (nonatomic) NSNumber*  uid;
 @property (nonatomic,strong) NSString *uToken;
 @property (nonatomic,strong) NSString *nickie;
 @property (nonatomic,strong) NSString *phone;
@@ -55,6 +56,8 @@
 -(NSMutableArray *) localCoupons;
 
 - (void) save;
+
+-(FSUser*)copyUser:(FSCoreUser*)_aUser;
 
 
 @end

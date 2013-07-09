@@ -32,6 +32,8 @@
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong,nonatomic) FSCommon *versionData;
 @property (nonatomic,strong) NSMutableArray *allAddress;
+//通用提示语
+@property (nonatomic, strong) NSMutableArray *messageItems;
 
 @property (strong,nonatomic) UIViewController *root;
 
@@ -46,9 +48,13 @@
 
 - (void)registerDevicePushNotification;
 -(void)removeCommentID:(NSString *)commentID;
+-(void)removePLetterID:(NSString *)pletterID;
 -(void)removeCommentIDs:(NSArray *)ids;
+-(void)removePLetterIDs:(NSArray *)ids;
 -(int)newCommentCount;
+-(int)newCommentCount_pletter;
 -(void)hiddenPickerView;
 -(void)cleanAllPickerView;
+-(NSString*)messageForKey:(NSString *)key;
 
 @end

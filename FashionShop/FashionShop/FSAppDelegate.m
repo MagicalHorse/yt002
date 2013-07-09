@@ -27,12 +27,16 @@
 
 #import "PKRevealController.h"
 #import "LeftDemoViewController.h"
+#import "NSString+Extention.h"
+#import "FSPLetterViewController.h"
 
 //UMTrack
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 #include <net/if.h>
 #include <net/if_dl.h>
+
+#import "FSCoreMyLetter.h"
 
 @interface FSAppDelegate(){
     NSString *localToken;
@@ -64,7 +68,7 @@ void uncaughtExceptionHandler(NSException *exception)
     
     //setup exception handler
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
-#if defined ENVIRONMENT_STORE
+#if 1//defined ENVIRONMENT_STORE
     //setup analysis
     [self setupAnalys];
 #endif
@@ -124,9 +128,9 @@ void uncaughtExceptionHandler(NSException *exception)
     [[FSAnalysis instance] autoTrackPages:root];
     [self.window makeKeyAndVisible];
     
-    UINavigationController *con = root.viewControllers[3];
-    [[NSNotificationCenter defaultCenter] addObserver:con.topViewController selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
+//    UINavigationController *con = root.viewControllers[3];
+//    [[NSNotificationCenter defaultCenter] addObserver:con.topViewController selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
     
     //添加背景色
     NSArray *array = [root.view subviews];
@@ -144,16 +148,6 @@ void uncaughtExceptionHandler(NSException *exception)
         [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
         [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
     }
-/*
-    UIViewController *leftViewController = [[LeftDemoViewController alloc] init];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:leftViewController];
-    self.revealController = [PKRevealController revealControllerWithFrontViewController:root
-                                                                     leftViewController:nav
-                                                                    rightViewController:nil
-                                                                                options:nil];
-    //侧边栏设置，暂时保留
-    self.window.rootViewController = self.revealController;
-*/
     
     //地下的这点代码应该是判断如果是完全推出状态下，push进来做的操作，如果是完全退出状态下的话，这样会在home里面进行插入操作。
     NSDictionary *userInfo = [_launch objectForKey:@"UIApplicationLaunchOptionsRemoteNotificationKey"];
@@ -305,9 +299,12 @@ void uncaughtExceptionHandler(NSException *exception)
     if([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
         [self pushTo];
     }
+    id value = [dic objectForKey:@"targetvalue"];
     if (type == 3) {
-        id value = [dic objectForKey:@"targetvalue"];
         [self addNewCommentID:value];
+    }
+    else if (type == 4) {
+        [self addNewPLetterID:value];
     }
 }
 
@@ -337,9 +334,42 @@ void uncaughtExceptionHandler(NSException *exception)
     [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
 }
 
+-(void)addNewPLetterID:(NSString *)pletterID
+{
+    NSMutableArray *_array = nil;
+    id temp = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue_pletter"];
+    if (temp && [temp isKindOfClass:[NSMutableArray class]]) {
+        _array = [NSMutableArray arrayWithArray:temp];
+    }
+    else{
+        _array = [[NSMutableArray alloc] initWithCapacity:1];
+    }
+    BOOL flag = NO;
+    for (NSString *item in _array) {
+        if ([item intValue] == [pletterID intValue]) {
+            flag = YES;
+            break;
+        }
+    }
+    if (!flag) {
+        [_array addObject:pletterID];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue_pletter"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    if([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification_pletter" object:nil];
+    }
+}
+
 -(void)removeCommentID:(NSString *)commentID
 {
     [self removeCommentIDs:[NSArray arrayWithObject:commentID]];
+}
+
+-(void)removePLetterID:(NSString *)pletterID
+{
+    [self removePLetterIDs:[NSArray arrayWithObject:pletterID]];
 }
 
 -(void)removeCommentIDs:(NSArray *)ids
@@ -374,9 +404,50 @@ void uncaughtExceptionHandler(NSException *exception)
     }
 }
 
+-(void)removePLetterIDs:(NSArray *)ids
+{
+    if (!ids || ids.count <= 0) {
+        return;
+    }
+    id temp = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue_pletter"];
+    NSMutableArray *_array = [NSMutableArray arrayWithArray:temp];
+    if (!_array || _array.count <= 0) {
+        return;
+    }
+    NSMutableArray *toDelArray = [NSMutableArray array];
+    for (NSString *toDel in ids) {
+        NSString *delString = nil;
+        for (NSString *item in _array) {
+            if ([item intValue] == [toDel intValue]) {
+                delString = item;
+                break;
+            }
+        }
+        if (delString) {
+            [toDelArray addObject:delString];
+        }
+    }
+    if (toDelArray.count > 0) {
+        [_array removeObjectsInArray:toDelArray];
+        [[NSUserDefaults standardUserDefaults] setObject:_array forKey:@"targetvalue_pletter"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification_pletter" object:nil];
+    }
+}
+
 -(int)newCommentCount
 {
     NSMutableArray *_array = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue"];
+    if (_array && _array.count > 0) {
+        return _array.count;
+    }
+    return 0;
+}
+
+-(int)newCommentCount_pletter
+{
+    NSMutableArray *_array = [[NSUserDefaults standardUserDefaults] objectForKey:@"targetvalue_pletter"];
     if (_array && _array.count > 0) {
         return _array.count;
     }
@@ -399,6 +470,19 @@ void uncaughtExceptionHandler(NSException *exception)
             [(FSMyPickerView*)item removeFromSuperview];
         }
     }
+}
+
+-(NSString*)messageForKey:(NSString *)key
+{
+    if (!_messageItems || _messageItems.count <= 0) {
+        return nil;
+    }
+    for (FSEnMessageItem *item in _messageItems) {
+        if ([item.key isEqualToString:key]) {
+            return item.message;
+        }
+    }
+    return nil;
 }
 
 -(void)receivePushNotice:(NSNotification*)notification
@@ -464,7 +548,8 @@ void uncaughtExceptionHandler(NSException *exception)
      1-商品详情
      2-促销详情
      3-我的评论
-     4-URL
+     4-私信
+     5-URL
      
      返回形式：
      返回形式：
@@ -539,6 +624,7 @@ void uncaughtExceptionHandler(NSException *exception)
                         else
                         {
                             FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                            controller.originalIndex = 1;
                             [nav pushViewController:controller animated:true];
                         }
                     }];
@@ -550,11 +636,66 @@ void uncaughtExceptionHandler(NSException *exception)
             else
             {
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                controller.originalIndex = 1;
                 [nav pushViewController:controller animated:YES];
             }
         }
             break;
-        case 4://URL
+        case 4://私信
+        {
+            //导航到我的私信页
+            root.selectedIndex = 3;
+            UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+            //需要先判断是否登录
+            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
+            if (!isLogined)
+            {
+                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
+                __block FSMeViewController *blockMeController = loginController;
+                loginController.completeCallBack=^(BOOL isSuccess){
+                    
+                    [blockMeController dismissViewControllerAnimated:true completion:^{
+                        if (!isSuccess)
+                        {
+                            [nav reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                        }
+                        else
+                        {
+                            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                            [nav pushViewController:controller animated:NO];
+                            
+                            FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+                            FSUser *user = [[FSUser alloc] init];
+                            user.nickie = @"私信";
+                            user.uid = [NSNumber numberWithInt:[value intValue]];
+                            viewController.touchUser = user;
+                            viewController.lastConversationId = 0;
+                            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+                            [controller presentViewController:nav animated:YES completion:nil];
+                        }
+                    }];
+                };
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+                [nav presentViewController:navController animated:YES completion:nil];
+                
+            }
+            else
+            {
+                FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
+                [nav pushViewController:controller animated:NO];
+                
+                FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+                FSUser *user = [[FSUser alloc] init];
+                user.nickie = @"私信";
+                user.uid = [NSNumber numberWithInt:[value intValue]];
+                viewController.touchUser = user;
+                viewController.lastConversationId = 0;
+                UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+                [controller presentViewController:nav animated:YES completion:nil];
+            }
+        }
+            break;
+        case 5://URL
         {
             root.selectedIndex = 1;
             UINavigationController *nav = (UINavigationController*)root.selectedViewController;

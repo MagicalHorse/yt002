@@ -11,6 +11,7 @@
 #import "FSProdItemEntity.h"
 #import "FSThumView.h"
 #import "FSAudioButton.h"
+#import "RTLabel.h"
 
 @interface FSProdDetailView : FSDetailBaseView {
     int _viewHeight;
@@ -21,8 +22,8 @@
 @property (strong, nonatomic) IBOutlet UIView *imgNameView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet FSThumView *imgThumb;
+@property (strong, nonatomic) IBOutlet RTLabel *price;
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
-@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
 @property (strong, nonatomic) IBOutlet UIButton *btnBrand;
 
 @property (strong, nonatomic) IBOutlet UIView *descAddView;
@@ -34,6 +35,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnBuy;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
+@property (strong, nonatomic) IBOutlet UIButton *btnToDail;
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 

@@ -101,20 +101,26 @@
     _rect.origin.y = yOffset + _imgThumb.frame.size.height - 17;
     _lblNickie.frame = _rect;
     
-    //_btnPrice
-    if (_data.price && [_data.price intValue]>0)
-    {
-        _btnPrice.hidden = NO;
-        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%lld元",[_data.price longLongValue]] forState:UIControlStateNormal];
-        _btnPrice.backgroundColor = [UIColor clearColor];
-        [_btnPrice setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
-        _btnPrice.titleLabel.font = [UIFont systemFontOfSize:14];
-        CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
-        _btnPrice.frame = CGRectMake(0, 0, newsize.width, newsize.height);
-        _btnPrice.center = CGPointMake(160, yOffset + 35 - newsize.height/2);
+    NSMutableString *str = [NSMutableString stringWithString:@""];
+    BOOL flagUnitPrice = _data.unitPrice && [_data.unitPrice intValue]>0;
+    BOOL flagPrice = _data.price && [_data.price intValue]>0;
+    if (flagPrice) {
+        [str appendFormat:@"<font face='%@' size=18 color='#e5004f'>￥%d</font>",Font_Name_Bold, [_data.price intValue]];
     }
-    else {
-        _btnPrice.hidden = YES;
+    if (flagUnitPrice) {
+        [str appendFormat:@"<font face='%@' size=10 color='#666666'>   ￥%d</font>",Font_Name_Normal, [_data.unitPrice intValue]];
+    }
+    if ([NSString isNilOrEmpty:str]) {
+        _price.hidden = YES;
+    }
+    else{
+        _price.hidden = NO;
+        [_price setText:str];
+        _rect = _price.frame;
+        _rect.size.height = _price.optimumSize.height;
+        _rect.origin.y = yOffset + 28 - _rect.size.height/2;
+        _price.frame = _rect;
+        [_price setTextAlignment:kCTCenterTextAlignment];
     }
     
     //_btnBrand
@@ -197,16 +203,16 @@
     _rect.size.width = fitSize.width;
     _rect.size.height = fitSize.height;
     _lblDescrip.frame = _rect;
-    yOffset += _lblDescrip.frame.size.height + 10;
+    yOffset += _lblDescrip.frame.size.height + 15;
     
     //_btnStore
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
     if (distanceString.length > 0)
     {
-        [_btnStore setTitle:[NSString stringWithFormat:@"%@ \(%@)",_data.store.name,distanceString] forState:UIControlStateNormal];
+        [_btnStore setTitle:[NSString stringWithFormat:@"  %@ \(%@)",_data.store.name,distanceString] forState:UIControlStateNormal];
     } else
     {
-        [_btnStore setTitle:_data.store.name forState:UIControlStateNormal];
+        [_btnStore setTitle:[NSString stringWithFormat:@"  %@", _data.store.name] forState:UIControlStateNormal];
     }
     _btnStore.titleLabel.font = ME_FONT(14);
     [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
@@ -217,7 +223,27 @@
     _rect.size.width = storesize.width;
     _rect.size.height = storesize.height;
     _btnStore.frame = _rect;
-    yOffset += _btnStore.frame.size.height + 10;
+    yOffset += _btnStore.frame.size.height + 15;
+    
+    //_btnToDail
+    if (![NSString isNilOrEmpty:_data.contactPhone]) {
+        NSString *phoneString = [NSString stringWithFormat:@"专柜电话 : %@", _data.contactPhone];
+        _btnToDail.hidden = NO;
+        [_btnToDail setTitle:phoneString forState:UIControlStateNormal];
+        _btnToDail.titleLabel.font = ME_FONT(14);
+        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
+        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
+        CGSize phonesize =[_btnToDail sizeThatFits:_btnToDail.frame.size];
+        _rect = _btnToDail.frame;
+        _rect.origin.y = yOffset;
+        _rect.size.width = phonesize.width;
+        _rect.size.height = phonesize.height;
+        _btnToDail.frame = _rect;
+        yOffset += _btnToDail.frame.size.height + 15;
+    }
+    else{
+        _btnToDail.hidden = YES;
+    }
     
     _rect = _descAddView.frame;
     _rect.origin.y = _viewHeight;

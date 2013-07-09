@@ -23,7 +23,7 @@
 {
     int yCap = 12;
     int _cellHeight = _infomationDesc.frame.origin.y;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>温馨提示 : \n</font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal,Font_Name_Normal, content];
+    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=15 color='#181818'>温馨提示 : \n</font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Bold,Font_Name_Normal, content];
     [_infomationDesc setText:str];
     CGRect _rect = _infomationDesc.frame;
     _rect.origin.y = _cellHeight;

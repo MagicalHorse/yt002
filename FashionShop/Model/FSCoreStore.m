@@ -25,15 +25,23 @@
 {
     RKManagedObjectStore *objectStore = [FSModelManager sharedManager].objectStore;
     RKManagedObjectMapping *relationMapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:objectStore];
-    relationMapping.primaryKeyAttribute = @"id";
-    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",nil];
+    //relationMapping.primaryKeyAttribute = @"id";
+    //[relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",nil];
     return relationMapping;
     
+    relationMapping.primaryKeyAttribute = @"id";
+    [relationMapping mapKeyPath:@"id" toAttribute:@"id"];
+    [relationMapping mapKeyPath:@"name" toAttribute:@"name"];
+    [relationMapping mapKeyPath:@"location" toAttribute:@"address"];
+    [relationMapping mapKeyPath:@"tel" toAttribute:@"phone"];
+    [relationMapping mapKeyPath:@"lng" toAttribute:@"longit"];
+    [relationMapping mapKeyPath:@"lat" toAttribute:@"lantit"];
+    [relationMapping mapKeyPath:@"distance" toAttribute:@"distance"];
+    [relationMapping mapKeyPath:@"description" toAttribute:@"description"];
 }
 
 + (NSArray *) allStoresLocal
 {
-
     return [self findAllSortedBy:@"name" ascending:TRUE];
 }
 @end

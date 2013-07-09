@@ -39,6 +39,7 @@
 - (IBAction)doShare:(id)sender;
 - (IBAction)showBrand:(id)sender;
 - (IBAction)goStore:(id)sender;
+- (IBAction)dailPhone:(id)sender;
 - (IBAction)doFavor:(id)sender;
 - (IBAction)contact:(id)sender;
 - (IBAction)buy:(id)sender;

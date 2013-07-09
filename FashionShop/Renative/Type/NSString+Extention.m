@@ -9,6 +9,7 @@
 #import "NSString+Extention.h"
 #import <CommonCrypto/CommonDigest.h>
 #import "RegexKitLite.h"
+#include "GetIPAddress.h"
 
 const NSString* REG_EMAIL = @"\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
 const NSString* REG_MOBILE = @"^(13[0-9]|15[0-9]|18[0-9]|14[0-9])\\d{8}$";
@@ -121,6 +122,15 @@ const NSString* REG_IDCARD = @"^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]
 +(BOOL)isIDCardNum:(NSString *)idCard
 {
     return [idCard isMatchedByRegex:[NSString stringWithFormat:@"%@",REG_IDCARD]];
+}
+
++(NSString*)getDeviceIpaddress
+{
+    InitAddresses();
+    GetIPAddresses();
+    GetHWAddresses();
+    
+    return [NSString stringWithFormat:@"%s", ip_names[1]];
 }
 
 @end

@@ -11,9 +11,12 @@
 #import "FSThumView.h"
 #import "FSProDetailViewController.h"
 #import "FSAudioButton.h"
+#import "AKSegmentedControl.h"
 
-@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate,FSProDetailItemSourceProvider,FSAudioDelegate>
+@interface FSMyCommentController : FSRefreshableViewController<FSThumViewDelegate,FSProDetailItemSourceProvider,FSAudioDelegate,AKSegmentedControlDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
+@property (strong, nonatomic) IBOutlet AKSegmentedControl *segHeader;
+@property (nonatomic) int originalIndex;
 
 -(void)stopAllAudio;
 

@@ -100,7 +100,7 @@
     [params setValue:startdate forParam:@"startdate"];
     [params setValue:enddate forParam:@"enddate"];
     [params setValue:storeId forParam:@"storeid"];
-    [params setValue:is4sale forParam:@"is4sale"];
+    [params setValue:is4sale?@"true":@"false" forParam:@"is4sale"];
     if (brandId)
         [params setValue:brandId forParam:@"brandid"];
     if (tagId)
@@ -126,6 +126,10 @@
                 [params setData:data MIMEType:@"audio/x-m4a" forParam:@"audio.m4a"];
             }
         }
+    }
+    NSArray *keys = [params attachments];
+    for (RKParamsAttachment *item in keys) {
+        NSLog(@"%@:%@", item.name, item.value);
     }
     NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
     completeBlock = blockcomplete;

@@ -14,4 +14,7 @@
 @property(nonatomic,retain) NSString * name;
 @property(nonatomic) int16_t sort;
 @property(nonatomic,retain) NSString* desc;
+
++ (NSArray *) allLocal;
+
 @end

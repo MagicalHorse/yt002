@@ -21,6 +21,7 @@
 @synthesize favorTotal;
 @synthesize descrip;
 @synthesize price;
+@synthesize unitPrice;
 @synthesize is4sale;
 @synthesize contactPhone;
 
@@ -62,6 +63,7 @@
     [relationMap mapKeyPath:@"couponcount" toAttribute:@"couponTotal"];
     [relationMap mapKeyPath:@"description" toAttribute:@"descrip"];
     [relationMap mapKeyPath:@"price" toAttribute:@"price"];
+    [relationMap mapKeyPath:@"unitprice" toAttribute:@"unitPrice"];
     [relationMap mapKeyPath:@"is4sale" toAttribute:@"is4sale"];
     [relationMap mapKeyPath:@"contactphone" toAttribute:@"contactPhone"];
     

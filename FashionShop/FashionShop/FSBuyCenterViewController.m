@@ -210,6 +210,21 @@
     [btnClean addTarget:self action:@selector(submitProOrder:) forControlEvents:UIControlEventTouchUpInside];
     btnClean.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     [view addSubview:btnClean];
+    yOffset += 40 + 10;
+    
+    RTLabel *desc = [[RTLabel alloc] initWithFrame:CGRectMake(10, yOffset, 300, 20)];
+    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='666666'>%@</font>", Font_Name_Normal, [theApp messageForKey:EM_O_C_HELP]];
+    [desc setText:str];
+    CGRect _rect = desc.frame;
+    _rect.origin.y = yOffset;
+    _rect.size.height = desc.optimumSize.height;
+    desc.frame = _rect;
+    yOffset += _rect.size.height + 15;
+    [view addSubview:desc];
+    
+    _rect = view.frame;
+    _rect.size.height = yOffset;
+    view.frame = _rect;
 
     return view;
 }
@@ -246,7 +261,7 @@
         BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
         [msg appendFormat:@"是否需要发票 : %@\n", flag?@"否":@"是"];
         if (!flag) {
-            [msg appendFormat:@"发票内容 : %@\n", _uploadData.invoicetitle];
+            [msg appendFormat:@"发票抬头 : %@\n", _uploadData.invoicetitle];
         }
         if (![NSString isNilOrEmpty:_uploadData.memo]) {
             [msg appendFormat:@"订单备注 : %@\n", _uploadData.memo];
@@ -309,7 +324,7 @@
     BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
     [dic setValue:[NSNumber numberWithBool:!flag] forKey:@"needinvoice"];
     [dic setValue:_uploadData.invoicetitle forKey:@"invoicetitle"];
-    [dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
+    //[dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
     [dic setValue:_uploadData.memo forKey:@"memo"];
     
     NSMutableDictionary *paymentDic = [NSMutableDictionary dictionary];

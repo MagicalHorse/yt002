@@ -21,6 +21,7 @@
 #import "FSCommonProRequest.h"
 #import "FSPagedFavor.h"
 #import "FSProdItemEntity.h"
+#import "FSPLetterViewController.h"
 
 #define DR_DETAIL_CELL @"DRdetailcell"
 #define DR_FAVOR_DETAIL_CELL @"DR_FAVOR_DETAIL_CELL"
@@ -148,6 +149,12 @@
         if (resp.isSuccess)
         {
             _daren = resp.responseData;
+            if ([_daren.uid intValue] == [[FSUser localProfile].uid intValue]) {
+                _touchButn.hidden = YES;
+            }
+            else{
+                _touchButn.hidden = NO;
+            }
             [self presentData];
         }
         else
@@ -213,7 +220,7 @@
     [self.navigationItem setRightBarButtonItem:baritemSet];
     
     if ([FSModelManager sharedModelManager].localLoginUid &&
-        [_daren.uid isEqualToNumber:[FSModelManager sharedModelManager].localLoginUid])
+        [_daren.uid intValue] == [[FSModelManager sharedModelManager].localLoginUid intValue])
     {
         self.navigationItem.rightBarButtonItem.enabled = FALSE;
     }
@@ -466,7 +473,7 @@
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
-    request.likeUserId =[NSString stringWithFormat:@"%d",[_daren.uid intValue]];
+    request.likeUserId =[NSString stringWithFormat:@"%@",_daren.uid];
     request.routeResourcePath =isRemove?RK_REQUEST_LIKE_REMOVE: RK_REQUEST_LIKE_DO;
     __block FSDRViewController *blockSelf = self;
     
@@ -493,7 +500,7 @@
 {
     FSCommonUserRequest *request = [[FSCommonUserRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
-    request.likeUserId =[NSString stringWithFormat:@"%d",[_daren.uid intValue]];
+    request.likeUserId =[NSString stringWithFormat:@"%@",_daren.uid];
     request.routeResourcePath =isRemove?RK_REQUEST_LIKE_REMOVE: RK_REQUEST_LIKE_DO;
     __block FSDRViewController *blockSelf = self;
     [self updateLikeButtonStatus:isRemove canClick:FALSE];
@@ -889,6 +896,7 @@
     [self setThumLogo:nil];
     [self setSegHeader:nil];
     [self setImgView:nil];
+    [self setTouchButn:nil];
     [super viewDidUnload];
 }
 - (IBAction)goLikeView:(id)sender {
@@ -917,6 +925,13 @@
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
     [_dic setValue:@"达人详情页" forKey:@"来源页面"];
     [[FSAnalysis instance] logEvent:CHECK_FANS_LIST withParameters:_dic];
+}
+
+- (IBAction)contact:(id)sender {
+    FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+    viewController.touchUser = _daren;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 #pragma mark - FSThumbView Delegate

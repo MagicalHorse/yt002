@@ -42,4 +42,6 @@
 
 +(BOOL)isIDCardNum:(NSString *)idCard;
 
++(NSString*)getDeviceIpaddress;
+
 @end

@@ -148,3 +148,138 @@
 }
 
 @end
+
+@implementation FSMyLetterCell
+
+-(void)setData:(FSMyLetter *)data{
+    _data = data;
+    _imgThumb.ownerUser = data.fromuser;
+    int yOffset = 10;
+    
+    _name.hidden = NO;
+    _name.text = data.fromuser.nickie;
+    _name.lineBreakMode = NSLineBreakByTruncatingTail;
+    _name.font = BFONT(13);
+    _name.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    CGSize newSize =  [_name sizeThatFits:_name.frame.size];
+    if (newSize.height < 25) {
+        newSize.height = 25;
+    }
+    _name.frame = CGRectMake(_name.frame.origin.x, yOffset, 225, newSize.height);
+    _cellHeight = _name.frame.origin.y + _name.frame.size.height;
+    
+    _lblComment.hidden = NO;
+    _lblComment.text = data.msg;
+    _lblComment.lineBreakMode = NSLineBreakByTruncatingTail;
+    _lblComment.font = BFONT(13);
+    _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    _lblComment.numberOfLines = 0;
+    newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
+    _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _cellHeight, 225, newSize.height);
+    _cellHeight += _lblComment.frame.size.height + yOffset;
+    
+    //回复时间
+    _time.text = [data.createdate toLocalizedString];
+    _time.hidden = NO;
+    _time.font = ME_FONT(13);
+    _time.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    
+    if (_cellHeight < 74) {
+        _cellHeight = 74;
+    }
+    
+    CGRect _rect = _dotView.frame;
+    _rect.origin.y = (_cellHeight - 13)/2;
+    _dotView.frame = _rect;
+}
+
+@end
+
+@implementation FSMyLetterToCell
+
+-(void)setData:(FSCoreMyLetter *)data{
+    _data = data;
+    FSCoreUser *temp = nil;
+    FSUser *cur = [FSUser localProfile];
+    if ([cur.uid intValue] == data.fromuser.uid) {
+        temp = data.touser;
+    }
+    else{
+        temp = data.fromuser;
+    }
+    _imgThumb.ownerUser = [[FSUser alloc] copyUser:temp];;
+    int yOffset = 10;
+    
+    _lblComment.hidden = NO;
+    _lblComment.text = data.msg;
+    _lblComment.lineBreakMode = NSLineBreakByTruncatingTail;
+    _lblComment.font = BFONT(13);
+    _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    _lblComment.numberOfLines = 0;
+    CGSize newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
+    if (newSize.height < 30) {
+        newSize.height = 30;
+    }
+    _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, yOffset, 225, newSize.height);
+    _cellHeight = _lblComment.frame.origin.y + _lblComment.frame.size.height + yOffset;
+    
+    //回复时间
+    _time.text = [data.createdate toLocalizedString];//[NSString stringWithFormat:@"%@", data.createdate];//
+    _time.hidden = NO;
+    _time.frame = CGRectMake(_time.frame.origin.x, _cellHeight, 225, _time.frame.size.height);
+    _time.font = ME_FONT(13);
+    _time.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    _cellHeight += _time.frame.size.height + yOffset;
+    
+    if (_cellHeight < 74) {
+        _cellHeight = 74;
+    }
+}
+
+@end
+
+@implementation FSMyLetterFromCell
+
+-(void)setData:(FSCoreMyLetter *)data{
+    _data = data;
+    FSCoreUser *temp = nil;
+    FSUser *cur = [FSUser localProfile];
+    if ([cur.uid intValue] == data.fromuser.uid) {
+        temp = data.fromuser;
+    }
+    else{
+        temp = data.touser;
+    }
+    _imgThumb.ownerUser = [[FSUser alloc] copyUser:temp];;
+    int yOffset = 10;
+    
+    _lblComment.hidden = NO;
+    _lblComment.text = data.msg;
+    _lblComment.lineBreakMode = NSLineBreakByTruncatingTail;
+    _lblComment.font = BFONT(13);
+    _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
+    _lblComment.numberOfLines = 0;
+    CGSize newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
+    if (newSize.height > 25) {
+        _lblComment.textAlignment = UITextAlignmentLeft;
+    }
+    if (newSize.height < 30) {
+        newSize.height = 30;
+    }
+    _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, yOffset, 225, newSize.height);
+    _cellHeight = _lblComment.frame.origin.y + _lblComment.frame.size.height + yOffset;
+    
+    //回复时间
+    _time.text = [data.createdate toLocalizedString];
+    _time.hidden = NO;
+    _time.frame = CGRectMake(_time.frame.origin.x, _cellHeight, 225, _time.frame.size.height);
+    _time.font = ME_FONT(13);
+    _time.textColor = [UIColor colorWithRed:153 green:153 blue:153];
+    _cellHeight += _time.frame.size.height + yOffset;
+    
+    if (_cellHeight < 74) {
+        _cellHeight = 74;
+    }
+}
+
+@end

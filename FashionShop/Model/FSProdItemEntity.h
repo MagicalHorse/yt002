@@ -20,6 +20,7 @@
 @property (nonatomic,assign) NSInteger couponTotal;
 @property (nonatomic,assign) NSInteger favorTotal;
 @property (nonatomic,strong) NSNumber *price;
+@property (nonatomic,strong) NSNumber *unitPrice;
 @property (nonatomic, strong) NSString * descrip;
 @property (nonatomic) BOOL is4sale;
 @property (nonatomic, strong) NSString * contactPhone;

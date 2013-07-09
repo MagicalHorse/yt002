@@ -16,6 +16,8 @@
 #import "FSCoreStore.h"
 #import "FSCoreBrand.h"
 #import "FSGroupBrand.h"
+#import "FSCommonRequest.h"
+#import "FSCommon.h"
 
 @interface FSModelManager()
 {
@@ -30,7 +32,7 @@ static FSModelManager *_modelManager;
 @implementation FSModelManager
 
 - (void) initModelManager{
-    [RKManagedObjectStore deleteStoreInApplicationDataDirectoryWithFilename:@"FSShop.sqlite"];
+    //[RKManagedObjectStore deleteStoreInApplicationDataDirectoryWithFilename:@"FSShop.sqlite"];
     RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL];
     RKObjectManager *objectManager = [RKObjectManager objectManagerWithBaseURL:baseURL];
     //objectManager.client.baseURL = baseURL;
@@ -108,10 +110,12 @@ static FSModelManager *_modelManager;
 {
     return [FSUser localLoginToken];
 }
+
 -(NSNumber *) localLoginUid
 {
     return [FSUser localLoginUid];
 }
+
 -(void) forceReloadTags
 {
     [self enqueueBackgroundBlock:^{
@@ -181,12 +185,30 @@ static FSModelManager *_modelManager;
     }];
 }
 
+-(void) forceREloadEnviromentMessage
+{
+    [self enqueueBackgroundBlock:^{
+        FSCommonRequest *request = [[FSCommonRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_ENVIROMENT_MESSAGE;
+        request.rootKeyPath = @"data.items";
+        [request send:[FSEnMessageItem class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            if (req.isSuccess) {
+                theApp.messageItems = req.responseData;
+            }
+            else{
+                theApp.messageItems = nil;
+            }
+        }];
+    }];
+}
+
 -(void) initConfig
 {
     //延迟加载
     [self performSelector:@selector(forceReloadTags) withObject:nil afterDelay:1];
     [self performSelector:@selector(forceReloadAllBrands) withObject:nil afterDelay:3];
     [self performSelector:@selector(forceReloadStores) withObject:nil afterDelay:5];
+    [self performSelector:@selector(forceREloadEnviromentMessage) withObject:nil afterDelay:6];
 }
 
 -(SinaWeibo *)instantiateWeiboClient:(id<SinaWeiboDelegate>)delegate

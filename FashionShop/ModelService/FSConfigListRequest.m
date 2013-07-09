@@ -8,8 +8,6 @@
 
 #import "FSConfigListRequest.h"
 
-
-
 @implementation FSConfigListRequest
 
 @synthesize longit;

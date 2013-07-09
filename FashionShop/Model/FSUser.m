@@ -11,7 +11,6 @@
 #import "FSCoupon.h"
 #import "FSModelManager.h"
 
-
 #define LOCAL_STORE_USER_KEY @"useraccountprofile"
 #define LOCAL_STORE_USER_LOGIN_TOKEN @"userlogintoken"
 #define LOCAL_STORE_USER_LOGIN_UID @"userloginid"
@@ -39,6 +38,8 @@
 @synthesize isBindCard;
 @synthesize cardInfo;
 @synthesize logobg;
+@synthesize thumnailUrl200,thumnailUrl,thumnailUrlOrigin;
+@synthesize logobgURL;
 
 +(RKObjectMapping *) getRelationDataMap
 {
@@ -139,6 +140,18 @@
 //    int width = 320 * RetinaFactor;
 //    NSString *str = [NSString stringWithFormat:@"%@_%dx%d.jpg",logobg, width, width];
 //    return [NSURL URLWithString:str];
+}
+
+-(FSUser*)copyUser:(FSCoreUser*)_aUser
+{
+    FSUser *user = [[[self class] alloc] init];
+    user.uid = [NSNumber numberWithInt:_aUser.uid];
+    user.uToken = _aUser.uToken;
+    user.nickie = _aUser.nickie;
+    user.thumnail = _aUser.thumnail;
+    user.userLevelId = _aUser.userLevelId;
+    
+    return user;
 }
 
 @end

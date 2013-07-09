@@ -502,7 +502,6 @@
         [self refreshContent:TRUE withCallback:^(){
             action();
         }];
-        
     }];
     
     _cvContent.delegate = self;
@@ -585,8 +584,8 @@
             [self reportError:resp.errorDescrip];
         }
     }];
-    
 }
+
 -(FSProListRequest *)buildListRequest:(NSString *)route nextPage:(int)page isRefresh:(BOOL)isRefresh
 {
     FSProListRequest *request = [[FSProListRequest alloc] init];

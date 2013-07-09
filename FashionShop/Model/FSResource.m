@@ -16,7 +16,7 @@
 @synthesize width;
 @synthesize type;
 @synthesize order;
-
+@synthesize absoluteUrl,absoluteUrl120,absoluteUrl320,absoluteUrlOrigin;
 
 
 + (RKObjectMapping *)getRelationDataMap

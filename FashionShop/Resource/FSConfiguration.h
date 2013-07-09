@@ -8,6 +8,7 @@
 
 #include "FSConfiguration+Fonts.h"
 #import "FSAppDelegate.h"
+#include "GetIPAddress.h"
 
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
@@ -19,15 +20,15 @@
 //#define REST_API_URL_OUT @"http://api.youhuiin.com"
 //#define REST_API_APP_SECRET_KEY @"yintai123456"
 
-////预生产库-内网
-//#define REST_API_URL   @"http://10.92.200.109/api"
-//#define REST_API_URL_OUT @"http://stage.youhuiin.com"
-//#define REST_API_APP_SECRET_KEY @"yintai123456"
+//预生产库-内网
+    #define REST_API_URL   @"http://10.92.200.109/api"
+    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库
-#define REST_API_URL   @"http://apis.youhuiin.com/api"
-#define REST_API_URL_OUT @"http://stage.youhuiin.com"
-#define REST_API_APP_SECRET_KEY @"yintai123456"
+//    #define REST_API_URL   @"http://apis.youhuiin.com/api"
+//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+//    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
@@ -46,7 +47,10 @@
 #define QQ_CONNECT_APP_ID @"100382932"
 #define QQ_CONNECT_APP_KEY @"8acc22a900a6cf3a144c4e7364dafa78"
 
-#define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
+//正式环境
+//#define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
+//测试环境
+#define FLURRY_APP_KEY @"XSKSXR35ZFQ8CBVC9YD7"
 
 #define BAIDU_MAP_KEY @"D768745A12D429DEC85D896036A25C50A52313E6"
 
@@ -55,6 +59,11 @@
 #define LN_FAVOR_UPDATED @"LN_USER_FAVOR_UPDATED"
 #define LN_ITEM_UPDATED @"LN_USER_ITEM_UPDATED"
 #define COMMON_PAGE_SIZE 20
+
+//Enviroment Message
+#define EM_O_C_SUCC @"O_C_SUCC"
+#define EM_O_R_SUCC @"O_R_SUCC"
+#define EM_O_C_HELP @"O_C_HELP"
 
 #define CollectionView_Default_Height 100.0f
 

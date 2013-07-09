@@ -210,7 +210,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSNumber *userId = [(FSUser *)[_likes objectAtIndex:indexPath.row] uid] ;
+    NSNumber *userId = [(FSUser *)[_likes objectAtIndex:indexPath.row] uid];
     FSDRViewController *dr = [[FSDRViewController alloc] initWithNibName:@"FSDRViewController" bundle:nil];
     dr.userId = [userId intValue];
     [self.navigationController pushViewController:dr animated:TRUE];

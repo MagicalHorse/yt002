@@ -75,6 +75,9 @@
 		021716B116D242390098288A /* EGOPhotoCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169716D242390098288A /* EGOPhotoCaptionView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716B216D242390098288A /* EGOPhotoImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169A16D242390098288A /* EGOPhotoImageView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		021716B316D242390098288A /* EGOPhotoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0217169D16D242390098288A /* EGOPhotoScrollView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		02241B921785C64400541533 /* FSCoreMyLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 02241B911785C64300541533 /* FSCoreMyLetter.m */; };
+		02241B991785C72200541533 /* FSCoreUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02241B981785C72100541533 /* FSCoreUser.m */; };
+		02241B9C1785C83400541533 /* FSCoreResource.m in Sources */ = {isa = PBXBuildFile; fileRef = 02241B9B1785C83400541533 /* FSCoreResource.m */; };
 		0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 0229DD6C170526ED00BF02EB /* FSAudioButton.m */; };
 		0229DD751705392300BF02EB /* audio_play1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD721705392300BF02EB /* audio_play1@2x.png */; };
 		0229DD761705392300BF02EB /* audio_play2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0229DD731705392300BF02EB /* audio_play2@2x.png */; };
@@ -126,6 +129,8 @@
 		02660A9317223FB800156566 /* AGSimpleImageEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 02660A9217223FB800156566 /* AGSimpleImageEditorView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		02660A971722411700156566 /* FSImageEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02660A951722411700156566 /* FSImageEditViewController.m */; };
 		02660A981722411700156566 /* FSImageEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02660A961722411700156566 /* FSImageEditViewController.xib */; };
+		026CF2521786946D00BFCCD4 /* FSDBOperator.m in Sources */ = {isa = PBXBuildFile; fileRef = 026CF2511786946D00BFCCD4 /* FSDBOperator.m */; };
+		026CF254178696DB00BFCCD4 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 026CF253178696DA00BFCCD4 /* libsqlite3.dylib */; };
 		026F27D2174735B900DD69D0 /* daren_icon_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27D1174735B900DD69D0 /* daren_icon_2@2x.png */; };
 		026F27D81747C5D200DD69D0 /* thumb_side@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27D71747C5D100DD69D0 /* thumb_side@2x.png */; };
 		026F27DA1747CCB300DD69D0 /* camera_btn_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 026F27D91747CCB300DD69D0 /* camera_btn_normal@2x.png */; };
@@ -191,6 +196,11 @@
 		027F6DCB173CDE83004F7ACE /* nav_bg_2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 027F6DCA173CDE83004F7ACE /* nav_bg_2@2x.png */; };
 		027F6DCE173CE64F004F7ACE /* FSCommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 027F6DCD173CE64F004F7ACE /* FSCommon.m */; };
 		027F6DD3173D5952004F7ACE /* FSPagedGiftList.m in Sources */ = {isa = PBXBuildFile; fileRef = 027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */; };
+		02839169178520CB000DF412 /* FSPagedMyPLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 02839168178520CB000DF412 /* FSPagedMyPLetter.m */; };
+		0283917017852102000DF412 /* FSMyLetter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0283916F17852102000DF412 /* FSMyLetter.m */; };
+		02839174178544EB000DF412 /* FSPLetterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02839172178544E9000DF412 /* FSPLetterViewController.m */; };
+		02839175178544EB000DF412 /* FSPLetterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02839173178544EB000DF412 /* FSPLetterViewController.xib */; };
+		02839178178546D6000DF412 /* FSPLetterRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 02839177178546D6000DF412 /* FSPLetterRequest.m */; };
 		0284773D172CB33C002763F6 /* FSGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0284773A172CB33C002763F6 /* FSGiftListViewController.m */; };
 		0284773E172CB33C002763F6 /* FSGiftListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0284773C172CB33C002763F6 /* FSGiftListViewController.xib */; };
 		02847746172CC887002763F6 /* FSPointGiftListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02847744172CC887002763F6 /* FSPointGiftListViewController.m */; };
@@ -786,6 +796,12 @@
 		0217169A16D242390098288A /* EGOPhotoImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoImageView.m; sourceTree = "<group>"; };
 		0217169C16D242390098288A /* EGOPhotoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGOPhotoScrollView.h; sourceTree = "<group>"; };
 		0217169D16D242390098288A /* EGOPhotoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGOPhotoScrollView.m; sourceTree = "<group>"; };
+		02241B901785C64300541533 /* FSCoreMyLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCoreMyLetter.h; path = Model/CoreData/FSCoreMyLetter.h; sourceTree = "<group>"; };
+		02241B911785C64300541533 /* FSCoreMyLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCoreMyLetter.m; path = Model/CoreData/FSCoreMyLetter.m; sourceTree = "<group>"; };
+		02241B971785C72100541533 /* FSCoreUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCoreUser.h; path = Model/CoreData/FSCoreUser.h; sourceTree = "<group>"; };
+		02241B981785C72100541533 /* FSCoreUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCoreUser.m; path = Model/CoreData/FSCoreUser.m; sourceTree = "<group>"; };
+		02241B9A1785C83400541533 /* FSCoreResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSCoreResource.h; path = Model/CoreData/FSCoreResource.h; sourceTree = "<group>"; };
+		02241B9B1785C83400541533 /* FSCoreResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCoreResource.m; path = Model/CoreData/FSCoreResource.m; sourceTree = "<group>"; };
 		02288432176C44FA0024224E /* FSEventsConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSEventsConfig.h; path = Resource/FSEventsConfig.h; sourceTree = "<group>"; };
 		0229DD6B170526ED00BF02EB /* FSAudioButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSAudioButton.h; sourceTree = "<group>"; };
 		0229DD6C170526ED00BF02EB /* FSAudioButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSAudioButton.m; sourceTree = "<group>"; };
@@ -853,6 +869,9 @@
 		02660A941722411700156566 /* FSImageEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSImageEditViewController.h; sourceTree = "<group>"; };
 		02660A951722411700156566 /* FSImageEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSImageEditViewController.m; sourceTree = "<group>"; };
 		02660A961722411700156566 /* FSImageEditViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSImageEditViewController.xib; sourceTree = "<group>"; };
+		026CF2501786946D00BFCCD4 /* FSDBOperator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSDBOperator.h; path = Controls/Common/FSDBOperator.h; sourceTree = "<group>"; };
+		026CF2511786946D00BFCCD4 /* FSDBOperator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSDBOperator.m; path = Controls/Common/FSDBOperator.m; sourceTree = "<group>"; };
+		026CF253178696DA00BFCCD4 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		026F27D1174735B900DD69D0 /* daren_icon_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "daren_icon_2@2x.png"; sourceTree = "<group>"; };
 		026F27D71747C5D100DD69D0 /* thumb_side@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "thumb_side@2x.png"; sourceTree = "<group>"; };
 		026F27D91747CCB300DD69D0 /* camera_btn_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera_btn_normal@2x.png"; sourceTree = "<group>"; };
@@ -931,6 +950,15 @@
 		027F6DCD173CE64F004F7ACE /* FSCommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSCommon.m; path = Model/FSCommon.m; sourceTree = "<group>"; };
 		027F6DD1173D5951004F7ACE /* FSPagedGiftList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedGiftList.h; path = Model/FSPagedGiftList.h; sourceTree = "<group>"; };
 		027F6DD2173D5952004F7ACE /* FSPagedGiftList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedGiftList.m; path = Model/FSPagedGiftList.m; sourceTree = "<group>"; };
+		02839167178520CB000DF412 /* FSPagedMyPLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPagedMyPLetter.h; path = Model/FSPagedMyPLetter.h; sourceTree = "<group>"; };
+		02839168178520CB000DF412 /* FSPagedMyPLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPagedMyPLetter.m; path = Model/FSPagedMyPLetter.m; sourceTree = "<group>"; };
+		0283916E17852102000DF412 /* FSMyLetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSMyLetter.h; path = Model/FSMyLetter.h; sourceTree = "<group>"; };
+		0283916F17852102000DF412 /* FSMyLetter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSMyLetter.m; path = Model/FSMyLetter.m; sourceTree = "<group>"; };
+		02839171178544E9000DF412 /* FSPLetterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSPLetterViewController.h; sourceTree = "<group>"; };
+		02839172178544E9000DF412 /* FSPLetterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSPLetterViewController.m; sourceTree = "<group>"; };
+		02839173178544EB000DF412 /* FSPLetterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSPLetterViewController.xib; sourceTree = "<group>"; };
+		02839176178546D6000DF412 /* FSPLetterRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSPLetterRequest.h; path = ModelService/FSPLetterRequest.h; sourceTree = "<group>"; };
+		02839177178546D6000DF412 /* FSPLetterRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSPLetterRequest.m; path = ModelService/FSPLetterRequest.m; sourceTree = "<group>"; };
 		0284773A172CB33C002763F6 /* FSGiftListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSGiftListViewController.m; sourceTree = "<group>"; };
 		0284773B172CB33C002763F6 /* FSGiftListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSGiftListViewController.h; sourceTree = "<group>"; };
 		0284773C172CB33C002763F6 /* FSGiftListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSGiftListViewController.xib; sourceTree = "<group>"; };
@@ -1626,6 +1654,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				026CF254178696DB00BFCCD4 /* libsqlite3.dylib in Frameworks */,
 				02847771172D810E002763F6 /* CoreText.framework in Frameworks */,
 				02160E521703E98A00D77FE0 /* AudioToolbox.framework in Frameworks */,
 				02160E501703E58500D77FE0 /* AVFoundation.framework in Frameworks */,
@@ -1998,6 +2027,8 @@
 				021183B817799D6B00326DE9 /* FSAddressRequest.m */,
 				0274F9C1177D41BF00485646 /* FSPurchaseRequest.h */,
 				0274F9C2177D41BF00485646 /* FSPurchaseRequest.m */,
+				02839176178546D6000DF412 /* FSPLetterRequest.h */,
+				02839177178546D6000DF412 /* FSPLetterRequest.m */,
 			);
 			name = Request;
 			sourceTree = "<group>";
@@ -2013,6 +2044,12 @@
 				74B550C31666FA8200E402DC /* FSCoreTag.m */,
 				74B8FD421669F1DF00FD7539 /* FSCoreBrand.h */,
 				74B8FD431669F1DF00FD7539 /* FSCoreBrand.m */,
+				02241B901785C64300541533 /* FSCoreMyLetter.h */,
+				02241B911785C64300541533 /* FSCoreMyLetter.m */,
+				02241B971785C72100541533 /* FSCoreUser.h */,
+				02241B981785C72100541533 /* FSCoreUser.m */,
+				02241B9A1785C83400541533 /* FSCoreResource.h */,
+				02241B9B1785C83400541533 /* FSCoreResource.m */,
 			);
 			name = CoreData;
 			sourceTree = "<group>";
@@ -2066,6 +2103,8 @@
 				74F40CC9168FE49200840510 /* FSThumView.m */,
 				023EFC7816BE402800E96E30 /* FSTabBar.h */,
 				023EFC7916BE402800E96E30 /* FSTabBar.m */,
+				026CF2501786946D00BFCCD4 /* FSDBOperator.h */,
+				026CF2511786946D00BFCCD4 /* FSDBOperator.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -2139,12 +2178,12 @@
 		74712B5C16476C3800D31A0D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7433F49E16649C1100D19335 /* CoreData */,
 				74B8671F1684105D001E1C97 /* Paged */,
 				74CD28E71675D227001DFE4D /* FSModelBase.h */,
 				74CD28E81675D227001DFE4D /* FSModelBase.m */,
 				74CD28E41675D21A001DFE4D /* FSConfigEntity.h */,
 				74CD28E51675D21B001DFE4D /* FSConfigEntity.m */,
-				7433F49E16649C1100D19335 /* CoreData */,
 				74B493AB1654F31D00777CC8 /* FSSuggestEntity.h */,
 				74B493AC1654F31D00777CC8 /* FSSuggestEntity.m */,
 				74B493A11654EF7500777CC8 /* FSSuggestProItem.h */,
@@ -2201,6 +2240,8 @@
 				021183AB177924D300326DE9 /* FSAddress.m */,
 				0274F9BA177D21D100485646 /* FSPurchase.h */,
 				0274F9BB177D21D100485646 /* FSPurchase.m */,
+				0283916E17852102000DF412 /* FSMyLetter.h */,
+				0283916F17852102000DF412 /* FSMyLetter.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2449,6 +2490,9 @@
 				0216DF4817422D5800C6CA9B /* FSMyCommentController.h */,
 				0216DF4917422D5800C6CA9B /* FSMyCommentController.m */,
 				0216DF4A17422D5800C6CA9B /* FSMyCommentController.xib */,
+				02839171178544E9000DF412 /* FSPLetterViewController.h */,
+				02839172178544E9000DF412 /* FSPLetterViewController.m */,
+				02839173178544EB000DF412 /* FSPLetterViewController.xib */,
 				021220551775182B00C8D371 /* FSOrderListViewController.h */,
 				021220561775182B00C8D371 /* FSOrderListViewController.m */,
 				021220571775182B00C8D371 /* FSOrderListViewController.xib */,
@@ -2511,6 +2555,8 @@
 				0212205F17751FD600C8D371 /* FSPagedOrder.m */,
 				021183A31779249500326DE9 /* FSPagedAddress.h */,
 				021183A41779249500326DE9 /* FSPagedAddress.m */,
+				02839167178520CB000DF412 /* FSPagedMyPLetter.h */,
+				02839168178520CB000DF412 /* FSPagedMyPLetter.m */,
 			);
 			name = Paged;
 			sourceTree = "<group>";
@@ -3050,6 +3096,7 @@
 		74CD91951643A78500970F55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				026CF253178696DA00BFCCD4 /* libsqlite3.dylib */,
 				02847770172D810D002763F6 /* CoreText.framework */,
 				02160E511703E98900D77FE0 /* AudioToolbox.framework */,
 				02160E4F1703E58500D77FE0 /* AVFoundation.framework */,
@@ -3596,6 +3643,7 @@
 				02755A8D1781CEC000DFFF85 /* FSInvoiceViewController.xib in Resources */,
 				02EA91A317826D7600BE8B2E /* FSOrderRMASuccessViewController.xib in Resources */,
 				029182E71783B7F5004D624D /* FSTableMultiSelViewController.xib in Resources */,
+				02839175178544EB000DF412 /* FSPLetterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3896,6 +3944,14 @@
 				02755A8C1781CEC000DFFF85 /* FSInvoiceViewController.m in Sources */,
 				02EA91A217826D7600BE8B2E /* FSOrderRMASuccessViewController.m in Sources */,
 				029182E61783B7F5004D624D /* FSTableMultiSelViewController.m in Sources */,
+				02839169178520CB000DF412 /* FSPagedMyPLetter.m in Sources */,
+				0283917017852102000DF412 /* FSMyLetter.m in Sources */,
+				02839174178544EB000DF412 /* FSPLetterViewController.m in Sources */,
+				02839178178546D6000DF412 /* FSPLetterRequest.m in Sources */,
+				02241B921785C64400541533 /* FSCoreMyLetter.m in Sources */,
+				02241B991785C72200541533 /* FSCoreUser.m in Sources */,
+				02241B9C1785C83400541533 /* FSCoreResource.m in Sources */,
+				026CF2521786946D00BFCCD4 /* FSDBOperator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3971,8 +4027,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4003,8 +4059,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -4075,8 +4131,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4111,8 +4167,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
@@ -4127,8 +4183,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4159,8 +4215,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "024B33FE-9493-41C2-9E42-24A763313555";
+				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";

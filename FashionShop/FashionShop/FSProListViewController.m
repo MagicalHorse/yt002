@@ -54,6 +54,7 @@
     NSMutableArray *_refreshTimeList;
     NSMutableArray *_firstTimeList;
     BOOL _inLoading;
+    BOOL _isInRefreshing;
 }
 
 @end
@@ -102,6 +103,9 @@
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
+                if (response.items.count > 0 && blockSelf->_isInRefreshing) {
+                    [blockSelf setRefreshTime:[NSDate date] selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                }
                 [blockSelf reloadTableView];
             }
             if (uicallback)
@@ -132,13 +136,14 @@
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
+                if (response.items.count > 0 && blockSelf->_isInRefreshing) {
+                    [blockSelf setRefreshTime:[NSDate date] selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                }
                 [blockSelf reloadTableView];
             }
             if (uicallback)
                 uicallback();
-            
         }];
-        
     } forKey:PRO_LIST_FILTER_NEWEST];
     
     [_dataSourceProvider setValue:^(FSProListRequest *request,dispatch_block_t uicallback){
@@ -163,11 +168,13 @@
                 if (response.totalPageCount <= currentPage)
                     [blockSelf setNoMore:YES selectedSegmentIndex:blockSelf->_currentSearchIndex];
                 [blockSelf fillFetchResultInMemory:response];
+                if (response.items.count > 0 && blockSelf->_isInRefreshing) {
+                    [blockSelf setRefreshTime:[NSDate date] selectedSegmentIndex:blockSelf->_currentSearchIndex];
+                }
                 [blockSelf reloadTableView];
             }
             if (uicallback)
                 uicallback();
-            
         }];
         
     } forKey:PRO_LIST_FILTER_WILLPUBLISH];
@@ -374,12 +381,13 @@
         request.longit =  [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit = [NSNumber numberWithDouble:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.previousLatestDate = [_refreshTimeList objectAtIndex:_currentSearchIndex];
+        NSLog(@"request.previousLatestDate:%@", request.previousLatestDate);
         request.pageSize = COMMON_PAGE_SIZE;
+        _isInRefreshing = YES;
         block(request,^(){
+            _isInRefreshing = NO;
             action();
         });
-        
-        [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
     }];
     if ([FSLocationManager sharedLocationManager].locationAwared)
     {
@@ -546,7 +554,7 @@
     }
     if (isInsert)
     {
-        if (dateIndex ==NSNotFound)
+        if (dateIndex == NSNotFound)
             [_dateSource insertObject:formatDate atIndex:0];
         [indexDates insertObject:obj atIndex:0];
     }
@@ -617,7 +625,7 @@
 
 -(void)fillFetchResultInMemory:(FSProItems *)pros
 {
-    [self fillFetchResultInMemory:pros isInsert:false];
+    [self fillFetchResultInMemory:pros isInsert:_isInRefreshing];
 }
 
 -(void)loadMore{
@@ -930,6 +938,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+//    UITabBarController *root = [storyBoard instantiateInitialViewController];
+//    UITabBar *bar = root.tabBar;
+//    root.moreNavigationController.tabBarController.selectedIndex = 2;
+//    root.selectedIndex = 2;
+//    return;
+//    
+//    
     if (_inLoading) {
         return;
     }
@@ -1175,7 +1191,6 @@
         if (source == nil || source.count<=0)
         {
             [self setFirstTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
-            [self setRefreshTime:[NSDate date] selectedSegmentIndex:_currentSearchIndex];
             
             DataSourceProviderRequest2Block block = [_dataSourceProvider objectForKey:[self getKeyFromSelectedIndex]];
             FSProListRequest *request = [[FSProListRequest alloc] init];

@@ -30,3 +30,10 @@
 @property (nonatomic) int code;
 
 @end
+
+@interface FSEnMessageItem : FSModelBase
+
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSString *message;
+
+@end

@@ -48,7 +48,8 @@
 {   
     UIView *view = [[UIView alloc] init];
     int yOffset = 10;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=16 color='#181818'>注意事项\n</font><font face='%@' size=15 color='#181818'>%@</font>", Font_Name_Bold, Font_Name_Normal, @"退款时，请准备邮寄包裹的必要材料：面单和发票"];
+    NSString *msg = [theApp messageForKey:EM_O_R_SUCC];
+    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=16 color='#181818'>注意事项: \n</font><font face='%@' size=14 color='#181818'>%@</font>", Font_Name_Bold, Font_Name_Normal, msg];
     RTLabel *desc = [[RTLabel alloc] initWithFrame:CGRectMake(10, yOffset, 300, 0)];
     desc.backgroundColor = [UIColor clearColor];
     [desc setText:str];

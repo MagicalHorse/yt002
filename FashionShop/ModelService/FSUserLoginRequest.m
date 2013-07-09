@@ -24,8 +24,6 @@
     return RKRequestMethodPOST;
 }
 
-
-
 - (void) setMappingRequestAttribute:(RKObjectMapping *)map{
     [map mapKeyPath:@"outsitetoken" toAttribute:@"request.accessToken"];
     [map mapKeyPath:@"outsiteuid" toAttribute:@"request.thirdPartyUid"];

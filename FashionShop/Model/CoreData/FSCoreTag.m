@@ -29,4 +29,10 @@
     return relationMapping;
 }
 
++ (NSArray *) allLocal
+{
+    return [self findAllSortedBy:@"id" ascending:TRUE];
+}
+
+
 @end

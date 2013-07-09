@@ -23,3 +23,13 @@
 -(void)updateControls:(int)type;
 
 @end
+
+
+@interface FSPLetterCommentInputView : FSKeyboardAvoidingUIView<UITextViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UIView *txtView;
+@property (strong, nonatomic) IBOutlet UITextView *txtComment;
+@property (strong, nonatomic) IBOutlet UIButton *btnCancel;
+@property (strong, nonatomic) IBOutlet UIButton *btnComment;
+
+@end

@@ -44,7 +44,10 @@
         [footer.continueBtn addTarget:self action:@selector(clickToOrderDetail:) forControlEvents:UIControlEventTouchUpInside];
         [footer.backHomeBtn setTitle:@"返回首页" forState:UIControlStateNormal];
         [footer.backHomeBtn addTarget:self action:@selector(clickToContinue:) forControlEvents:UIControlEventTouchUpInside];
-        [footer initView:@"测试提示信息"];
+        NSString *msg = [theApp messageForKey:EM_O_C_SUCC];
+        if (msg) {
+            [footer initView:msg];
+        }
         _tbAction.tableFooterView = footer;
     }
 }

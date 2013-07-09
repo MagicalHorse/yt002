@@ -14,6 +14,7 @@
 @property(nonatomic,assign) int pageSize;
 @property(nonatomic,assign) int totalCount;
 @property(nonatomic,assign) int totalPageCount;
+@property(nonatomic,assign) BOOL isPaged;
 
 @property(nonatomic,strong) NSMutableArray *items;
 

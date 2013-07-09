@@ -179,6 +179,9 @@
     _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
     float pWidth = _productImage.frame.size.width;
     float pHeight = product.resource.height * pWidth / product.resource.width;
+    if (pHeight > 120) {
+        pHeight = 120;
+    }
     CGRect rect = _productImage.frame;
     rect.size.height = pHeight;
     _productImage.frame = rect;

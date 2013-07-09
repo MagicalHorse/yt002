@@ -345,12 +345,13 @@
         return;
     [_likePros removeObjectAtIndex:index];
     [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
-    
 }
+
 -(void)didItemPublished:(id)itemObj
 {
     [self egoRefreshTableHeaderDidTriggerRefresh:nil];
 }
+
 -(void)didCustomerChanged:(id)user
 {
     FSUser *newUser = [user valueForKey:@"object"];
@@ -545,8 +546,8 @@
     NSArray *_array = [NSArray arrayWithObjects:baritemSet,baritemletter, nil];
     [self.navigationItem setRightBarButtonItems:_array];
     
-    int commentCount = [theApp newCommentCount];
-    if (commentCount > 0) {
+    int totalCount = [theApp newCommentCount] + [theApp newCommentCount_pletter];
+    if (totalCount > 0) {
         [self showDotIcon:YES];
     }
 }
@@ -1043,6 +1044,8 @@
     {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFavorRemoved:) name:LN_FAVOR_UPDATED object:nil];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification:) name:@"ReceivePushNotification_pletter" object:nil];
 }
 
 -(void)unregisterLocalNotification
@@ -1052,11 +1055,11 @@
 
 -(void)receivePushNotification:(NSNotification*)notification
 {
-    int commentCount = [theApp newCommentCount];
-    if (commentCount > 0) {
+    int totalCount = [theApp newCommentCount] + [theApp newCommentCount_pletter];
+    if (totalCount > 0) {
         [self showDotIcon:YES];
-        self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", commentCount];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:commentCount];
+        self.navigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", totalCount];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:totalCount];
     }
     else{
         self.navigationController.tabBarItem.badgeValue = nil;

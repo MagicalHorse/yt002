@@ -10,9 +10,8 @@
 #import "FSCoreModelBase.h"
 #import <CoreData/CoreData.h>
 
-
-
 @interface FSCoreStore:FSCoreModelBase
+
 @property (nonatomic, retain) NSString * address;
 @property (nonatomic, retain) NSString * descrip;
 @property (nonatomic) double distance;

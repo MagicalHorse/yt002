@@ -17,4 +17,5 @@
 @property (nonatomic,retain) NSString * homeSite;
 
 +(NSArray *) allBrandsLocal;
+
 @end

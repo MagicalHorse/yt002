@@ -18,11 +18,13 @@
 
 - (IBAction)goLikeView:(id)sender;
 - (IBAction)goFanView:(id)sender;
+- (IBAction)contact:(id)sender;
 
 @property (strong, nonatomic) IBOutlet FSThumView *thumLogo;
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
 @property (strong, nonatomic) IBOutlet UIButton *btnLike;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
+@property (strong, nonatomic) IBOutlet UIButton *touchButn;
 
 @property (strong, nonatomic) IBOutlet UIButton *btnFans;
 @property (strong, nonatomic) IBOutlet PSUICollectionView *itemsView;

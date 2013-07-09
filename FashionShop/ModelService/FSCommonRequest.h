@@ -10,6 +10,7 @@
 
 #define RK_REQUEST_KEYWORD_LIST @"/hotword/list"
 #define RK_REQUEST_CHECK_VERSION @"/version/latest"
+#define RK_REQUEST_ENVIROMENT_MESSAGE @"/environment/messages"
 
 @interface FSCommonRequest : FSEntityRequestBase
 
