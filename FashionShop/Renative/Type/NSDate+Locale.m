@@ -14,6 +14,11 @@
 -(NSString *)toLocalizedString
 {
     NSTimeInterval timeInterval = abs([self timeIntervalSinceNow]);
+    if (timeInterval <= 300) {
+        NSDateFormatter *df = [[NSDateFormatter alloc] init];
+        [df setDateFormat:@"MM-dd HH:mm:ss"];
+        return [df stringFromDate:self];
+    }
     NSTimeInterval minutesInternal = 60;
     NSTimeInterval hourInternal = 60*60;
     NSTimeInterval dayInternal = 60*60*24;

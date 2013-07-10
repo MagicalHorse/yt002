@@ -14,6 +14,7 @@
 #import "FSMyCommentCell.h"
 #import "FSDRViewController.h"
 #import "FSPLetterViewController.h"
+#import "FSMessageViewController.h"
 #import "FSPLetterRequest.h"
 
 @interface FSMyCommentController ()
@@ -52,7 +53,6 @@
     [super viewDidLoad];
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
-    self.title = @"我的评论";
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
@@ -84,17 +84,6 @@
     }
 }
 
--(void)refreshData
-{
-    [self startRefresh:nil withCallback:^{
-        _isInRefreshing = YES;
-        _isLoadMore = NO;
-        [self requestDataWithCallback:^{
-            _isInRefreshing = NO;
-        }];
-    }];
-}
-
 -(void)receivePushNotification_pletter:(NSNotification*)notification
 {
     int totalCount = [theApp newCommentCount_pletter];
@@ -102,6 +91,20 @@
     if (_currentSelIndex == 0) {
         [self refreshData];
     }
+}
+
+-(void)refreshData
+{
+    if (_isInLoading) {
+        return;
+    }
+    [self startRefresh:nil withCallback:^{
+        _isInRefreshing = YES;
+        _isLoadMore = NO;
+        [self requestDataWithCallback:^{
+            _isInRefreshing = NO;
+        }];
+    }];
 }
 
 -(void)updateDotIcon
@@ -203,6 +206,7 @@
     
     [_segHeader setButtonsArray:@[btn1, btn2]];
     _segHeader.selectedIndex = _originalIndex;
+    self.title = _segHeader.selectedIndex==0?@"我的私信":@"我的评论";
     _isInRefreshing = NO;
     _isLoadMore = NO;
 }
@@ -514,7 +518,7 @@
         NSMutableArray *_plist = _dataSourceList[_currentSelIndex];
         FSMyLetter *item = _plist[indexPath.row];
         
-        FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+        FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
         if ([item.fromuser.uid intValue] == [[FSUser localProfile].uid intValue]) {
             viewController.touchUser = item.touser;
         }
@@ -763,6 +767,7 @@
             [_tbAction reloadData];
             [_tbAction setContentOffset:CGPointZero];
         }
+        self.title = _currentSelIndex==0?@"我的私信":@"我的评论";
         
         //统计
         //        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");

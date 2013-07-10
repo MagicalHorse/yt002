@@ -69,6 +69,26 @@
     [indicatorView removeFromSuperview];
     _inLoading = FALSE;
 }
+-(void) beginLoadData:(UIScrollView *)container
+{
+    if (_inLoading)
+        return;
+    _inLoading = TRUE;
+    
+    indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    indicatorView.frame = CGRectMake(container.frame.size.width/2-LOADMOREVIEW_HEIGHT/2,0, LOADMOREVIEW_HEIGHT, LOADMOREVIEW_HEIGHT);
+    [indicatorView startAnimating];
+    [container.superview addSubview:indicatorView];
+    
+    [container.superview setNeedsLayout];
+    [container.superview setNeedsDisplay];
+}
+-(void) endLoadData:(UIScrollView *)container
+{
+    [indicatorView stopAnimating];
+    [indicatorView removeFromSuperview];
+    _inLoading = FALSE;
+}
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action 
 {
     /*
@@ -83,6 +103,7 @@
      */
     {
         refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f,  -REFRESHINGVIEW_HEIGHT, container.frame.size.width,REFRESHINGVIEW_HEIGHT)];
+        refreshHeaderView.showNoText = _showNoText;
         [container addSubview:refreshHeaderView];
         refreshHeaderView.delegate = self;
     }

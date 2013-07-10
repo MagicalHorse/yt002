@@ -16,7 +16,7 @@
 @class PKRevealController;
 @protocol FSProDetailItemSourceProvider;
 
-@interface FSAppDelegate : UIResponder <UIApplicationDelegate,FSProDetailItemSourceProvider> {
+@interface FSAppDelegate : UIResponder <UIApplicationDelegate,FSProDetailItemSourceProvider,UITabBarControllerDelegate> {
     FSStartViewController *_startController;
     NSDictionary    *_launch;
 }

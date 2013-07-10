@@ -175,6 +175,9 @@ static FSModelManager *_modelManager;
         request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.routeResourcePath = RK_REQUEST_CONFIG_STORE_ALL;
         [request send:[FSCoreStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+            for (FSCoreStore *item in req.responseData) {
+                [item show];
+            }
             if (req.isSuccess) {
                 NSLog(@"store/all load success!");
             }

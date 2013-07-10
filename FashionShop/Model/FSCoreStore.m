@@ -27,7 +27,6 @@
     RKManagedObjectMapping *relationMapping = [RKManagedObjectMapping mappingForClass:[self class] inManagedObjectStore:objectStore];
     //relationMapping.primaryKeyAttribute = @"id";
     //[relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"location",@"address",@"tel",@"phone",@"lng",@"longit",@"lat",@"lantit",@"distance",@"distance",@"description",@"descrip",nil];
-    return relationMapping;
     
     relationMapping.primaryKeyAttribute = @"id";
     [relationMapping mapKeyPath:@"id" toAttribute:@"id"];
@@ -37,11 +36,32 @@
     [relationMapping mapKeyPath:@"lng" toAttribute:@"longit"];
     [relationMapping mapKeyPath:@"lat" toAttribute:@"lantit"];
     [relationMapping mapKeyPath:@"distance" toAttribute:@"distance"];
-    [relationMapping mapKeyPath:@"description" toAttribute:@"description"];
+    [relationMapping mapKeyPath:@"description" toAttribute:@"descrip"];
+    
+    return relationMapping;
 }
 
 + (NSArray *) allStoresLocal
 {
-    return [self findAllSortedBy:@"name" ascending:TRUE];
+    NSArray *array = [self findAllSortedBy:@"id" ascending:TRUE];
+    for (FSCoreStore *item in array) {
+        [item show];
+    }
+    return array;
 }
+
+-(void)show
+{
+    NSLog(@"------------------------------------------------");
+    NSLog(@"id:%d", self.id);
+    NSLog(@"name:%@", self.name);
+    NSLog(@"address:%@", self.address);
+    NSLog(@"phone:%@", self.phone);
+    NSLog(@"longit:%.2f", self.longit);
+    NSLog(@"lantit:%.2f", self.lantit);
+    NSLog(@"distance:%.2f", self.distance);
+    NSLog(@"descrip:%@", self.descrip);
+    NSLog(@"------------------------------------------------");
+}
+
 @end

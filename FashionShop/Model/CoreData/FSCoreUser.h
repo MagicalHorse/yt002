@@ -25,4 +25,6 @@
 
 +(FSCoreUser*)copyUser:(FSCoreUser*)_aUser;
 
+-(void)show;
+
 @end

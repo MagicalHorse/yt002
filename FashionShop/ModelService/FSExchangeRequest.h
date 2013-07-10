@@ -8,8 +8,8 @@
 
 #import "FSEntityRequestBase.h"
 
-#define RK_REQUEST_STOREPROMOTION_LIST @"/storepromotion/list"//积分兑换活动列表
-#define RK_REQUEST_STOREPROMOTION_DETAIL @"/storepromotion/detail"//积分兑换活动详情
+#define RK_REQUEST_STOREPROMOTION_LIST @"/storepromotion/list"//积点兑换活动列表
+#define RK_REQUEST_STOREPROMOTION_DETAIL @"/storepromotion/detail"//积点兑换活动详情
 #define RK_REQUEST_STOREPROMOTION_AMOUNT @"/storepromotion/amount"//积点兑换金钱
 
 #define RK_REQUEST_STOREPROMOTION_EXCHANGE @"/storepromotioncoupon/exchange"

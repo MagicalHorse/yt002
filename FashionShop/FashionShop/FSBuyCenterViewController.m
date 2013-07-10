@@ -25,6 +25,8 @@
     FSPurchaseForUpload *_uploadData;
     id activityField;
     FSMyPickerView *paywayPickerView;
+    BOOL _buyInfoLoading;
+    BOOL _amountLoading;
 }
 
 @end
@@ -91,10 +93,16 @@
     request.routeResourcePath = RK_REQUEST_PROD_BUY_INFO;
     request.id = [NSNumber numberWithInt:_productID];
     request.uToken = [[FSModelManager sharedModelManager] loginToken];
-    [self beginLoading:self.view];
+    if (!_amountLoading) {
+        [self beginLoading:self.view];
+    }
+    _buyInfoLoading = YES;
     _tbAction.hidden = YES;
     [request send:[FSPurchase class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:self.view];
+        if (!_amountLoading) {
+            [self endLoading:self.view];
+        }
+        _buyInfoLoading = NO;
         if (respData.isSuccess)
         {
             _purchaseData = respData.responseData;
@@ -121,9 +129,15 @@
     request.id = [NSNumber numberWithInt:_productID];
     request.quantity = [NSNumber numberWithInt:amount];
     request.uToken = [[FSModelManager sharedModelManager] loginToken];
-    [self beginLoading:self.view];
+    if (!_buyInfoLoading) {
+        [self beginLoading:self.view];
+    }
+    _amountLoading = YES;
     [request send:[FSPurchase class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
-        [self endLoading:self.view];
+        if (!_buyInfoLoading) {
+            [self endLoading:self.view];
+        }
+        _amountLoading = NO;
         if (respData.isSuccess)
         {
             _purchaseAmount = respData.responseData;

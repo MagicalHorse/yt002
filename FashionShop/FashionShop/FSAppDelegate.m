@@ -29,6 +29,7 @@
 #import "LeftDemoViewController.h"
 #import "NSString+Extention.h"
 #import "FSPLetterViewController.h"
+#import "FSMessageViewController.h"
 
 //UMTrack
 #include <sys/socket.h>
@@ -664,7 +665,7 @@ void uncaughtExceptionHandler(NSException *exception)
                             FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
                             [nav pushViewController:controller animated:NO];
                             
-                            FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+                            FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
                             FSUser *user = [[FSUser alloc] init];
                             user.nickie = @"私信";
                             user.uid = [NSNumber numberWithInt:[value intValue]];
@@ -684,7 +685,7 @@ void uncaughtExceptionHandler(NSException *exception)
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
                 [nav pushViewController:controller animated:NO];
                 
-                FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+                FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
                 FSUser *user = [[FSUser alloc] init];
                 user.nickie = @"私信";
                 user.uid = [NSNumber numberWithInt:[value intValue]];

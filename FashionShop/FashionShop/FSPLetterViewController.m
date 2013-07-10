@@ -21,6 +21,7 @@
 @interface FSPLetterViewController ()
 {
     BOOL _isInLoading;
+    BOOL _isSending;
     int currentPage;
     BOOL noMore;
     FSPLetterCommentInputView *commentView;
@@ -67,7 +68,6 @@
     if (array.count > 0) {
         [self fillDataArray:array isInsert:NO];
         _lastConversationId = [array[array.count - 1] id];
-        [_tbAction reloadData];
     }
     else{
         _lastConversationId = 0;
@@ -159,6 +159,9 @@
 
 -(void)requestData:(int)flag
 {
+    if (_isInLoading) {
+        return;
+    }
     FSPLetterRequest * request=[[FSPLetterRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_MY_PLETTER_CONVERSATION;
     request.nextPage = [NSNumber numberWithInt:currentPage];
@@ -196,13 +199,17 @@
 -(void)resetTableOffset:(BOOL)flag
 {
     _tbAction.contentOffset = originalContentOffset;
+    int height = _tbAction.contentSize.height;
+    if (height < _tbAction.frame.size.height) {
+        height = _tbAction.frame.size.height;
+    }
     if (flag) {
         [UIView animateWithDuration:0.33 animations:^{
             if (_tbAction.contentInset.bottom > 0) {
-                _tbAction.contentOffset = CGPointMake(0, _tbAction.contentSize.height - _tbAction.contentInset.bottom);
+                _tbAction.contentOffset = CGPointMake(0, height - _tbAction.contentInset.bottom);
             }
             else{
-                _tbAction.contentOffset = CGPointMake(0, _tbAction.contentSize.height - _tbAction.frame.size.height);
+                _tbAction.contentOffset = CGPointMake(0, height - _tbAction.frame.size.height);
             }
         } completion:^(BOOL finished) {
             //nil
@@ -210,10 +217,10 @@
     }
     else{
         if (_tbAction.contentInset.bottom > 0) {
-            _tbAction.contentOffset = CGPointMake(0, _tbAction.contentSize.height - _tbAction.contentInset.bottom);
+            _tbAction.contentOffset = CGPointMake(0, height - _tbAction.contentInset.bottom);
         }
         else{
-            _tbAction.contentOffset = CGPointMake(0, _tbAction.contentSize.height - _tbAction.frame.size.height);
+            _tbAction.contentOffset = CGPointMake(0, height - _tbAction.frame.size.height);
         }
     }
 }
@@ -318,6 +325,9 @@
 
 -(void)saveComment:(UIButton *)sender
 {
+    if (_isSending) {
+        return;
+    }
     NSString *trimedText = [commentView.txtComment.text stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([NSString isNilOrEmpty:trimedText]) {
         return;
@@ -328,9 +338,9 @@
     request.touchUser = _touchUser.uid;
     request.textmsg = trimedText;
     request.userToken = [FSModelManager sharedModelManager].loginToken;
-    _isInLoading = YES;
+    _isSending = YES;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [request send:[FSCoreMyLetter class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        _isInLoading = NO;
         if (resp.isSuccess)
         {
             FSCoreMyLetter *result = resp.responseData;
@@ -357,6 +367,8 @@
             [self hideCommentInputView];
             [self reportError:resp.errorDescrip];
         }
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        _isSending = NO;
     }];
 }
 

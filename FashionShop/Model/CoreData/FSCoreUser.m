@@ -47,4 +47,9 @@
     return user;
 }
 
+-(void)show
+{
+    NSLog(@"nickname:%@,id:%d,logo:%@_100x100.jpg", self.nickie, self.uid, self.thumnail);
+}
+
 @end

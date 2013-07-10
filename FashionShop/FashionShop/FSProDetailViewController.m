@@ -27,6 +27,7 @@
 #import "FSImageBrowserView.h"
 #import "FSBuyCenterViewController.h"
 #import "FSPLetterViewController.h"
+#import "FSMessageViewController.h"
 
 #import "FSCouponRequest.h"
 #import "FSFavorRequest.h"
@@ -669,7 +670,7 @@
         //to private letter list
         
         FSProdItemEntity *_item = currentView.data;
-        FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+        FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
         viewController.touchUser = _item.fromUser;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
          [self presentViewController:nav animated:YES completion:nil];

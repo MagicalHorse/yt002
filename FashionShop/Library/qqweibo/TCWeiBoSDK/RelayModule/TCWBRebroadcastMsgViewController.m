@@ -170,7 +170,7 @@ static float		g_keyboardFrameHeightLastTime = 216;		// 默认初始键盘高度
     [self.view addSubview:buttonLeft];
    
     // 发送
-    NSString *strSend = [main localizedStringForKey:kLanguageSend value:nil table:kTCWBTable];
+    NSString *strSend = NSLocalizedString(@"Send", nil);//[main localizedStringForKey:kLanguageSend value:nil table:kTCWBTable];
     UIButton *buttonRight = [UIButton buttonWithType:UIButtonTypeCustom];
 	buttonRight.frame = CGRectMake(263, 5, 52, 33);
     buttonRight.tag = ButtonRightTag;

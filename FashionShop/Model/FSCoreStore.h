@@ -22,5 +22,6 @@
 @property (nonatomic, retain) NSString * phone;
 
 + (NSArray *) allStoresLocal;
+-(void)show;
 
 @end

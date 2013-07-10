@@ -200,23 +200,17 @@
     
     [self setFilterType];
     [self initContentView];
-    [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_dataSourceBannerData.count > 0) {
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-    }
-    
+//    if (_dataSourceBannerData.count > 0) {
+//        [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    }
+    [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
     //统计
     [[FSAnalysis instance] logEvent:CHECK_PROLIST_PAGE withParameters:nil];
-}
-
--(void)dealloc
-{
-   // [[FSLocationManager sharedLocationManager] removeObserver:self forKeyPath:@"locationAwared"];
 }
 
 - (void)viewDidUnload {
@@ -232,13 +226,21 @@
     request.pageSize = COMMON_PAGE_SIZE;
     request.nextPage = 1;
     request.filterType = FSProSortByDate;
+    if (_dataSourceBannerData && _dataSourceBannerData.count > 0) {
+        [_dataSourceBannerData removeAllObjects];
+    }
     block(request,^(){
         if (_dataSourceBannerData.count > 0) {
             [self.navigationController setNavigationBarHidden:YES animated:YES];
+            UIView *aView = [self.view viewWithTag:4321];
+            if (aView) {
+                [aView removeFromSuperview];
+            }
             FSCycleScrollView *csView = [[FSCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, NAV_HIGH)];
             csView.delegate = self;
             csView.datasource = self;
             csView.pageControl.frame = CGRectMake(0, 27, APP_WIDTH, 19);
+            csView.tag = 4321;
             [self.view addSubview:csView];
             [self updateFrame];
         }
@@ -297,7 +299,7 @@
 -(void)updateFrame
 {
     CGRect rect;
-    if (_dataSourceBannerData.count > 0) {
+    if (_dataSourceBannerData.count > 0 && self.segFilters.frame.origin.y < NAV_HIGH) {
         rect =  self.contentView.frame;
         rect.origin.y += NAV_HIGH;
         rect.size.height -= NAV_HIGH;
@@ -306,7 +308,7 @@
         rect.origin.y += NAV_HIGH;
         self.segFilters.frame = rect;
     }
-    else{
+    else if(_dataSourceBannerData.count <= 0){
         rect =  self.contentView.frame;
         rect.origin.y -= NAV_HIGH;
         rect.size.height += NAV_HIGH;
@@ -940,12 +942,11 @@
 {
 //    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
 //    UITabBarController *root = [storyBoard instantiateInitialViewController];
-//    UITabBar *bar = root.tabBar;
-//    root.moreNavigationController.tabBarController.selectedIndex = 2;
+//    theApp.window.rootViewController = theApp.window.rootViewController;
 //    root.selectedIndex = 2;
 //    return;
-//    
-//    
+    
+    
     if (_inLoading) {
         return;
     }

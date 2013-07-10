@@ -57,7 +57,7 @@
 {
     _icons = [@[
               @[
-                @"order_icon.png",
+                @"gift_icon.png",
                 @"order_icon.png",],
               @[
                 @"eidit_icon.png",
@@ -270,7 +270,7 @@
             [self.navigationController pushViewController:nickieController animated:true];
         }
             break;
-        case FSMoreBindCard: //会员卡绑定和会员卡积分查询
+        case FSMoreBindCard: //会员卡绑定和会员卡积点查询
         {
             FSCardBindViewController *con = [[FSCardBindViewController alloc] initWithNibName:@"FSCardBindViewController" bundle:nil];
             con.currentUser = _currentUser;

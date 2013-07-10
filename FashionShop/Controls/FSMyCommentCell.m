@@ -207,7 +207,7 @@
     else{
         temp = data.fromuser;
     }
-    _imgThumb.ownerUser = [[FSUser alloc] copyUser:temp];;
+    _imgThumb.ownerUser = [[FSUser alloc] copyUser:temp];
     int yOffset = 10;
     
     _lblComment.hidden = NO;

@@ -22,6 +22,7 @@
 #import "FSPagedFavor.h"
 #import "FSProdItemEntity.h"
 #import "FSPLetterViewController.h"
+#import "FSMessageViewController.h"
 
 #define DR_DETAIL_CELL @"DRdetailcell"
 #define DR_FAVOR_DETAIL_CELL @"DR_FAVOR_DETAIL_CELL"
@@ -928,7 +929,7 @@
 }
 
 - (IBAction)contact:(id)sender {
-    FSPLetterViewController *viewController = [[FSPLetterViewController alloc] initWithNibName:@"FSPLetterViewController" bundle:nil];
+    FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
     viewController.touchUser = _daren;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:nav animated:YES completion:nil];

@@ -31,7 +31,11 @@
 
 -(void)show
 {
+    NSLog(@"----------------------------------------------------------------------");
     NSLog(@"id:%d,msg:%@,fromuserid:%d,touserid:%d",self.id, self.msg,self.fromuser.uid,self.touser.uid);
+    [self.fromuser show];
+    [self.touser show];
+    NSLog(@"----------------------------------------------------------------------");
 }
 
 + (NSArray *) allLettersLocal
