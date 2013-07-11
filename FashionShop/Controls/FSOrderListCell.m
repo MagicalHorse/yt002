@@ -118,7 +118,7 @@
         _invoicetitle.hidden = YES;
     }
     if (![NSString isNilOrEmpty:_data.memo]) {
-        [self initComponent:@"订单备注" value:_data.memo component:_ordermemo];
+        [self initComponent:@"预订单备注" value:_data.memo component:_ordermemo];
     }
     else{
         _ordermemo.hidden = YES;

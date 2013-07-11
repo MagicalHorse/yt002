@@ -9,7 +9,6 @@
 #import "FSOrderRMARequestViewController.h"
 #import "FSPurchaseRequest.h"
 #import "NSString+Extention.h"
-#import "FSOrder.h"
 #import "FSOrderRMASuccessViewController.h"
 
 @interface FSOrderRMARequestViewController ()
@@ -36,6 +35,7 @@
 {
     [super viewDidLoad];
     self.title = @"申请在线退货";
+    [self initControlData];
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
@@ -51,6 +51,16 @@
     
     redColor = [UIColor redColor];
     fieldTextColor = _bankName.textColor;
+}
+
+- (void)initControlData
+{
+    if (!_rmaData) {
+        return;
+    }
+    _bankName.text = _rmaData.bankname;
+    _bankNumber.text = _rmaData.bankcard;
+    _bankUserName.text = _rmaData.bankaccount;
 }
 
 - (void)viewDidUnload {

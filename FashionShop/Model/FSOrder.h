@@ -14,10 +14,10 @@
 
 @interface FSOrderInfo : FSModelBase
 
-@property (nonatomic, strong) NSString *orderno;//订单编号
-@property (nonatomic) float totalamount;//订单金额
-@property (nonatomic) int totalpoints;//订单金额
-@property (nonatomic) float extendprice;//订单金额
+@property (nonatomic, strong) NSString *orderno;//预订单编号
+@property (nonatomic) float totalamount;//预订单金额
+@property (nonatomic) int totalpoints;//预订单金额
+@property (nonatomic) float extendprice;//预订单金额
 
 @property (nonatomic) BOOL needinvoice;//是否需要发票
 @property (nonatomic,strong) NSString *invoicesubject;//发票抬头
@@ -34,15 +34,15 @@
 @property (nonatomic,strong) NSString *shippingcontactphone;//联系电话
 @property (nonatomic,strong) NSString *shippingcontactperson;//联系人名称
 
-@property (nonatomic,strong) NSString *status;//订单状态
-@property (nonatomic) int statust;//订单状态标志
+@property (nonatomic,strong) NSString *status;//预订单状态
+@property (nonatomic) int statust;//预订单状态标志
 @property (nonatomic,strong) NSString *paymentname;//支付方式
-@property (nonatomic,strong) NSDate *createdate;//订单创建时间
+@property (nonatomic,strong) NSDate *createdate;//预订单创建时间
 @property (nonatomic,strong) FSResource *resource;//商品图片资源
 @property (nonatomic,strong) FSOrderProduct *product;//商品信息
-@property (nonatomic,strong) NSString *memo;//订单备注
+@property (nonatomic,strong) NSString *memo;//预订单备注
 
-@property (nonatomic) BOOL canvoid;//是否可以取消订单
+@property (nonatomic) BOOL canvoid;//是否可以取消预订单
 @property (nonatomic) int totalquantity;//商品数量
 
 @end

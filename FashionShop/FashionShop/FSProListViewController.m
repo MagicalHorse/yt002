@@ -940,11 +940,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//    UITabBarController *root = [storyBoard instantiateInitialViewController];
-//    theApp.window.rootViewController = theApp.window.rootViewController;
-//    root.selectedIndex = 2;
-//    return;
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    UITabBarController *root = [storyBoard instantiateViewControllerWithIdentifier:@"root"];
+    root.selectedIndex = 2;
+    [self presentModalViewController:root.selectedViewController animated:YES];
+    return;
     
     
     if (_inLoading) {

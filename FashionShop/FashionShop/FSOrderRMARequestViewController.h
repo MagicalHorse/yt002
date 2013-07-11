@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSPlaceHoldTextView.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "FSOrder.h"
 
 @interface FSOrderRMARequestViewController : UIViewController
 
@@ -19,6 +20,8 @@
 @property (strong, nonatomic) IBOutlet UITextField *bankUserName;
 @property (strong, nonatomic) IBOutlet UITextField *telephone;
 @property (strong, nonatomic) IBOutlet UIButton *submitBtn;
+
+@property (strong, nonatomic) FSOrderRMAItem *rmaData;
 
 @property (nonatomic,strong) NSString *orderno;
 - (IBAction)requestRMA:(id)sender;

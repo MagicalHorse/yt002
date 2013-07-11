@@ -371,7 +371,7 @@
     _telephone.enabled = flag;
     _address.enabled = NO;
     _addressDetail.editable = flag;
-    _zipCode.enabled = NO;
+    _zipCode.enabled = flag;
 }
 
 - (void)viewDidUnload {

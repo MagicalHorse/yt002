@@ -41,7 +41,7 @@
 				<array class="NSMutableArray" key="NSSubviews">
 					<object class="IBUIScrollView" id="915495136">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">304</int>
+						<int key="NSvFlags">274</int>
 						<array class="NSMutableArray" key="NSSubviews">
 							<object class="IBUILabel" id="372461525">
 								<reference key="NSNextResponder" ref="915495136"/>
@@ -157,6 +157,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">12</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+									<int key="IBUIKeyboardType">4</int>
 									<int key="IBUIReturnKeyType">4</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
@@ -187,7 +188,7 @@
 							<object class="IBUITextField" id="734712804">
 								<reference key="NSNextResponder" ref="915495136"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{20, 183}, {280, 30}}</string>
+								<string key="NSFrame">{{10, 183}, {300, 30}}</string>
 								<reference key="NSSuperview" ref="915495136"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="208753786"/>

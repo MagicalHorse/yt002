@@ -39,7 +39,6 @@ typedef enum {
 } BubbleMessageStyle;
 
 
-
 @interface BubbleView : UIView
 
 @property (assign, nonatomic) BubbleMessageStyle style;

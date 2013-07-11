@@ -13,11 +13,13 @@
 #define IMAGE_MODAL_IDENTIFIER 2000
 @interface FSImageUploadCell()
 {
-    PSUICollectionView *imageView;
+    
 }
 
 @end
 @implementation FSImageUploadCell
+@synthesize imageContent;
+@synthesize sizeIndex;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -59,21 +61,30 @@
     layout.columnCount = I_LIKE_COLUMNS;
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 0, 5);
     layout.delegate = self;
+    
+    sizeIndex = -1;
 
-    imageView= [[PSUICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
-    imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    imageView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:imageView];
-    imageView.delegate = self;
-    imageView.dataSource = self;
-    imageView.scrollEnabled = FALSE;
+    imageContent= [[PSUICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
+    imageContent.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    imageContent.backgroundColor = [UIColor whiteColor];
+    [self addSubview:imageContent];
+    imageContent.delegate = self;
+    imageContent.dataSource = self;
+    imageContent.scrollEnabled = FALSE;
        
-    [imageView registerNib:[UINib nibWithNibName:@"FSImageCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"FSImageCollectionCell"];
+    [imageContent registerNib:[UINib nibWithNibName:@"FSImageCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"FSImageCollectionCell"];
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(selectSizeImage:)];
+    longPress.delegate = self;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)];
+    tap.delegate = self;
+    [self addGestureRecognizer:tap];
+    [self addGestureRecognizer:longPress];
 
 }
 -(void)refreshImages
 {
-    [imageView reloadData];
+    [imageContent reloadData];
 }
 -(void)setImages:(NSMutableArray *)images
 {
@@ -100,22 +111,34 @@
     if (index>=totalCount)
         return nil;
     UIImage *item = [_images objectAtIndex:index];
-     FSImageCollectionCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSImageCollectionCell" forIndexPath:indexPath];
+    FSImageCollectionCell *cell = [cv dequeueReusableCellWithReuseIdentifier:@"FSImageCollectionCell" forIndexPath:indexPath];
     cell.imageView.image = item;
     [cell.btnRemove addTarget:self action:@selector(doRemoveImage:) forControlEvents:UIControlEventTouchUpInside];
     cell.layer.borderWidth = 0.5;
     cell.layer.borderColor = [UIColor colorWithRed:151 green:151 blue:151].CGColor;
+    CGRect _rect = cell.btnSizeSel.frame;
+    _rect.origin.y = cell.frame.size.height - 30;
+    cell.btnSizeSel.frame = _rect;
+    if (sizeIndex == indexPath.row) {
+        [cell.btnSizeSel setImage:[UIImage imageNamed:@"selected_icon.png"] forState:UIControlStateNormal];
+    }
+    else{
+        [cell.btnSizeSel setImage:[UIImage imageNamed:@"unselect_icon.png"] forState:UIControlStateNormal];
+    }
     
     return cell;
 }
 -(void)doRemoveImage:(UIButton *)sender
 {
     FSImageCollectionCell *container = (FSImageCollectionCell*)sender.superview.superview;
-    NSIndexPath *indexPath = [imageView indexPathForCell:container ];
+    NSIndexPath *indexPath = [imageContent indexPathForCell:container ];
     if (indexPath)
     {
         [_images removeObjectAtIndex:indexPath.row];
-        [imageView deleteItemsAtIndexPaths:@[indexPath]];
+        [imageContent deleteItemsAtIndexPaths:@[indexPath]];
+        if (sizeIndex == indexPath.row) {
+            sizeIndex = -1;
+        }
         if (_images.count<=0 &&
             _imageRemoveDelegate &&
             [_imageRemoveDelegate respondsToSelector:@selector(didImageRemoveAll)])
@@ -124,8 +147,8 @@
         }
             
     }
-    
 }
+
 -(void)didHideModalImage
 {
     UIView *modalView = [theApp.window viewWithTag:IMAGE_MODAL_IDENTIFIER];
@@ -151,19 +174,67 @@
     return (cellWidth * data.size.height)/(data.size.width);
    
 }
+
+/*
 -(void)collectionView:(PSTCollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UIView *modalImageView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:modalImageView.frame];
-    imageView.image = [_images objectAtIndex:indexPath.row];
-    imageView.userInteractionEnabled = FALSE;
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-    [modalImageView addSubview:imageView];
+    UIImageView *_imageView = [[UIImageView alloc] initWithFrame:modalImageView.frame];
+    _imageView.image = [_images objectAtIndex:indexPath.row];
+    _imageView.userInteractionEnabled = FALSE;
+    _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    [modalImageView addSubview:_imageView];
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didHideModalImage)];
     [modalImageView addGestureRecognizer:tapGesture];
     modalImageView.tag = IMAGE_MODAL_IDENTIFIER;
     [theApp.window addSubview:modalImageView];
     [theApp.window bringSubviewToFront:modalImageView];
+}
+ */
+
+#pragma mark - gesture-recognition action methods
+
+-(void)tapImage:(UITapGestureRecognizer *)gr
+{
+    NSIndexPath *indexPath = [self.imageContent indexPathForItemAtPoint:[gr locationInView:self.imageContent]];
+    if (indexPath)
+    {
+        UIView *modalImageView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        UIImageView *_imageView = [[UIImageView alloc] initWithFrame:modalImageView.frame];
+        _imageView.image = [_images objectAtIndex:indexPath.row];
+        _imageView.userInteractionEnabled = FALSE;
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+        [modalImageView addSubview:_imageView];
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didHideModalImage)];
+        [modalImageView addGestureRecognizer:tapGesture];
+        modalImageView.tag = IMAGE_MODAL_IDENTIFIER;
+        [theApp.window addSubview:modalImageView];
+        [theApp.window bringSubviewToFront:modalImageView];
+    }
+}
+
+- (void)selectSizeImage:(UILongPressGestureRecognizer *)gr
+{
+    if (gr.state == UIGestureRecognizerStateBegan)
+    {
+        NSIndexPath *indexPath = [self.imageContent indexPathForItemAtPoint:[gr locationInView:self.imageContent]];
+        if (indexPath)
+        {
+            if (sizeIndex == indexPath.row) {
+                sizeIndex = -1;
+            }
+            else{
+                sizeIndex = indexPath.row;
+            }
+            if (_sizeSelDelegate && [_sizeSelDelegate respondsToSelector:@selector(selectSizeImageWithIndex:)]) {
+                id value = [_sizeSelDelegate performSelector:@selector(selectSizeImageWithIndex:) withObject:[NSNumber numberWithInt:sizeIndex]];
+                if (!value) {
+                    sizeIndex = -1;
+                }
+            }
+            [self.imageContent reloadData];
+        }
+    }
 }
 
 @end

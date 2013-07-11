@@ -42,6 +42,7 @@
 @synthesize fileName;
 @synthesize is4sale;
 @synthesize property;
+@synthesize sizeIndex;
 
 @synthesize routeResourcePath;
 
@@ -84,10 +85,7 @@
         loader.method = RKRequestMethodPOST;
         loader.delegate = self;
         loader.objectMapping = responseMap;
-        
     }];
-    
-    
 }
 
 
@@ -100,7 +98,7 @@
     [params setValue:startdate forParam:@"startdate"];
     [params setValue:enddate forParam:@"enddate"];
     [params setValue:storeId forParam:@"storeid"];
-    [params setValue:is4sale?@"true":@"false" forParam:@"is4sale"];
+    [params setValue:[is4sale boolValue]?@"true":@"false" forParam:@"is4sale"];
     if (brandId)
         [params setValue:brandId forParam:@"brandid"];
     if (tagId)
@@ -113,9 +111,14 @@
     if (property)
         [params setValue:property forParam:@"property"];
     
-    int i =0;
-    for (UIImage* img in imgs) {
-        [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i++]];
+    for (int i = 0;i < imgs.count; i++) {
+        UIImage* img = imgs[i];
+        if (sizeIndex && i == [sizeIndex integerValue]) {
+            [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d@cc.jpeg",i]];
+        }
+        else{
+            [params setData:UIImageJPEGRepresentation(img, 0.6) MIMEType:@"image/jpeg" forParam:[NSString stringWithFormat:@"resource%d.jpeg",i]];
+        }
     }
     if (fileName && ![fileName isEqualToString:@""]) {
         NSLog(@"fileName:%@",fileName);

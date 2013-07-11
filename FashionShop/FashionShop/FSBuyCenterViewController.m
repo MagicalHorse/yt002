@@ -163,14 +163,15 @@
     _uploadData.productid = _productID;
     _uploadData.quantity = 1;
     
-//    if (_purchaseData.supportpayments.count == 1) {
-//        _uploadData.payment = _purchaseData.supportpayments[0];
-//    }
+    if (_purchaseData.supportpayments.count == 1) {
+        _uploadData.payment = _purchaseData.supportpayments[0];
+    }
     
     //添加数量
     if (!_uploadData.properies) {
         _uploadData.properies = [NSMutableArray arrayWithCapacity:1];
     }
+    _uploadData.invoicetitle = @"个人";
     FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
     item.propertyid = Purchase_Count_Properties_Tag;
     item.propertyname = @"数量";
@@ -180,13 +181,17 @@
     //添加其他属性
     int count = _purchaseData.properties.count;
     if (count > 0) {
-        
         for (int i = 0; i < count; i++) {
             FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
-            item.propertyid = [_purchaseData.properties[i] propertyid];
-            item.propertyname = [_purchaseData.properties[i] propertyname];
+            FSPurchasePropertiesItem *_sub = _purchaseData.properties[i];
+            item.propertyid = [_sub propertyid];
+            item.propertyname = [_sub propertyname];
             item.valueid = -1;
             item.valuename = nil;
+            if (_sub.values.count == 1) {
+                item.valueid = [_sub.values[0] valueid];
+                item.valuename = [_sub.values[0] valuename];
+            }
             [_uploadData.properies addObject:item];
         }
     }
@@ -278,7 +283,7 @@
             [msg appendFormat:@"发票抬头 : %@\n", _uploadData.invoicetitle];
         }
         if (![NSString isNilOrEmpty:_uploadData.memo]) {
-            [msg appendFormat:@"订单备注 : %@\n", _uploadData.memo];
+            [msg appendFormat:@"预订单备注 : %@\n", _uploadData.memo];
         }
         [msg appendFormat:@"手机号码 : %@\n", _uploadData.telephone];
         [msg appendFormat:@"金额总计 : ￥%.2f\n", _purchaseAmount.extendprice];
@@ -572,7 +577,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *title = section==0?@"商品信息":(section==1?@"订单信息":@"预订单小计");
+    NSString *title = section==0?@"商品信息":(section==1?@"预订单信息":@"预订单小计");
     return [self createSectionHeader:title];
 }
 
@@ -609,7 +614,7 @@
 {
     FSOrderSuccessViewController *controller = [[FSOrderSuccessViewController alloc] initWithNibName:@"FSOrderSuccessViewController" bundle:nil];
     controller.data = info;
-    controller.title = @"订单创建成功";
+    controller.title = @"预订单创建成功";
     [self.navigationController pushViewController:controller animated:YES];
     
     //统计
@@ -640,6 +645,7 @@
 -(void)addressManagerViewControllerSetSelected:(FSAddressManagerViewController*)viewController
 {
     _uploadData.address = viewController.selectedAddress;
+    _uploadData.telephone = _uploadData.address.shippingphone;
     [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }
 

@@ -118,7 +118,7 @@
 	[self.text drawInRect:textFrame
                  withFont:[BubbleView font]
             lineBreakMode:NSLineBreakByWordWrapping
-                alignment:(self.style == BubbleMessageStyleOutgoing) ? NSTextAlignmentRight : NSTextAlignmentLeft];
+                alignment:(self.style == BubbleMessageStyleOutgoing) ? NSTextAlignmentLeft : NSTextAlignmentLeft];
 }
 
 #pragma mark - Bubble view
@@ -130,7 +130,9 @@
 + (CGSize)textSizeForText:(NSString *)txt
 {
     CGFloat width = [UIScreen mainScreen].applicationFrame.size.width * 0.60f;
-    int numRows = (txt.length / [BubbleView maxCharactersPerLine]) + 1;
+    //int numRows = (txt.length / [BubbleView maxCharactersPerLine]) + 1;
+    int height1 = [txt sizeWithFont:[BubbleView font] constrainedToSize:CGSizeMake(width, 10000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    int numRows = (height1 / [BubbleView maxCharactersPerLine]) + 1;
 
     CGFloat height = MAX(numRows, [txt numberOfLines]) * [MessageInputView textViewLineHeight];
     
@@ -153,7 +155,7 @@
 
 + (int)maxCharactersPerLine
 {
-    return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 33 : 109;
+    return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 20 : 109;
 }
 
 @end

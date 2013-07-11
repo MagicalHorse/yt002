@@ -7,26 +7,39 @@
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FashionShop/FSBuyCenterViewController.m"
-         timestampString = "395123781.006147"
+         filePath = "Controls/FSImageUploadCell.m"
+         timestampString = "395246462.954409"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "103"
-         endingLineNumber = "103"
-         landmarkName = "-requestBuyInfo"
+         startingLineNumber = "137"
+         endingLineNumber = "137"
+         landmarkName = "-doRemoveImage:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "FashionShop/FSBuyCenterViewController.m"
-         timestampString = "395123785.560928"
+         filePath = "ModelService/FSCommonProRequest.m"
+         timestampString = "395246847.642109"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "138"
-         endingLineNumber = "138"
-         landmarkName = "-requestBuyAmount:"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
+         landmarkName = "-upload:error:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "ModelService/FSCommonProRequest.m"
+         timestampString = "395246853.624584"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "137"
+         endingLineNumber = "137"
+         landmarkName = "-upload:error:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

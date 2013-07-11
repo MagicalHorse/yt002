@@ -240,8 +240,8 @@
         case 2://发票
         {
             _title.text = @"发票抬头 : ";
-            if (![NSString isNilOrEmpty:data.memo]) {
-                _contentField.text = data.memo;
+            if (![NSString isNilOrEmpty:data.invoicetitle]) {
+                _contentField.text = data.invoicetitle;
             }
             _contentField.placeholder = @"点击填写发票抬头";
             _contentField.hidden = NO;
@@ -275,7 +275,7 @@
             if (![NSString isNilOrEmpty:data.memo]) {
                 _contentField.text = data.memo;
             }
-            _contentField.placeholder = @"点击填写订单备注信息";
+            _contentField.placeholder = @"点击填写预订单备注信息";
             _contentField.hidden = NO;
             _contentLb.hidden = YES;
         }

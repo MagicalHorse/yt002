@@ -52,12 +52,21 @@
         [self fillDataArray:array isInsert:NO];
         _lastConversationId = [array[array.count - 1] id];
         [self.tableView reloadData];
+        if(array.count < 10) {
+            noMore = YES;
+        }
     }
     else{
         _lastConversationId = 0;
     }
     [self requestData:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification_pletter:) name:@"ReceivePushNotification_pletter" object:nil];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [theApp removePLetterID:[NSString stringWithFormat:@"%d", [_touchUser.uid intValue]]];
 }
 
 -(void)receivePushNotification_pletter:(NSNotification*)notification
@@ -86,7 +95,7 @@
             [paths addObject:_item];
         }
         [self.tableView beginUpdates];
-        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationBottom];
+        [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
     }
     else{
@@ -221,6 +230,7 @@
         NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"BubbleMessageCell" owner:self options:nil];
         if (_array.count > 0) {
             cell = (BubbleMessageCell*)_array[0];
+            cell = [cell initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
         }
         else{
             cell = [[BubbleMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellID];
@@ -229,8 +239,8 @@
         cell.backgroundColor = tableView.backgroundColor;
     }
     FSCoreMyLetter *item = [dataArray objectAtIndex:indexPath.row];
-    [cell updateControls:item showTime:[self needShowTime:indexPath.row]];
     cell.thumView.delegate = self;
+    [cell updateControls:item showTime:[self needShowTime:indexPath.row]];
     
     return cell;
 }
@@ -259,6 +269,24 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return dataArray.count;
+}
+
+-(BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return YES;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender{
+    if (action == @selector(copy:)) {
+        return YES;
+    }
+    return NO;
+}
+
+-(void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender{
+    BubbleMessageCell *cell = (BubbleMessageCell*)[tableView cellForRowAtIndexPath:indexPath];
+    if (action == @selector(copy:)) {
+        [UIPasteboard generalPasteboard].string = cell.bubbleView.text;
+    }
 }
 
 #pragma mark - Messages view controller

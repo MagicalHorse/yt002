@@ -7,7 +7,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="15">
             <objects>
-                <tabBarController id="4" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="root" id="4" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" alpha="0.90000000000000002" contentMode="scaleToFill" id="5">
                         <rect key="frame" x="0.0" y="431" width="320" height="49"/>
@@ -213,6 +213,68 @@
         <image name="bottom_nav_promotion_icon.png" width="24" height="18"/>
         <image name="bottom_nav_topic_icon.png" width="24" height="24"/>
     </resources>
+    <classes>
+        <class className="AKSegmentedControl" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/AKSegmentedControl.h"/>
+        </class>
+        <class className="FSMeViewController" superclassName="FSRefreshableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSMeViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="attentionXHYT:"/>
+                <relationship kind="action" name="doLogin:"/>
+                <relationship kind="action" name="doLoginQQ:"/>
+                <relationship kind="action" name="doLoginQQWeiBo:"/>
+                <relationship kind="action" name="doShowCoupons:"/>
+                <relationship kind="action" name="doShowFans:"/>
+                <relationship kind="action" name="doShowLikes:"/>
+                <relationship kind="action" name="doShowPoints:"/>
+                <relationship kind="action" name="doSuggest:"/>
+                <relationship kind="outlet" name="btnCoupons" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnFans" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnHeaderBg" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnHeaderImgV" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="btnLike" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnPoints" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="btnSuggest" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="imgLevel" candidateClass="UIImageView"/>
+                <relationship kind="outlet" name="lblNickie" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="likeContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="likeView" candidateClass="PSUICollectionView"/>
+                <relationship kind="outlet" name="segHeader" candidateClass="AKSegmentedControl"/>
+                <relationship kind="outlet" name="tbScroll" candidateClass="UIScrollView"/>
+                <relationship kind="outlet" name="thumbImg" candidateClass="FSThumView"/>
+            </relationships>
+        </class>
+        <class className="FSProListViewController" superclassName="FSRefreshableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSProListViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="contentView" candidateClass="UITableView"/>
+                <relationship kind="outlet" name="segFilters" candidateClass="AKSegmentedControl"/>
+            </relationships>
+        </class>
+        <class className="FSProdListViewController" superclassName="FSRefreshableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSProdListViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
+                <relationship kind="outlet" name="cvContent" candidateClass="PSUICollectionView"/>
+                <relationship kind="outlet" name="cvTags" candidateClass="PSUICollectionView"/>
+                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="tagContainer" candidateClass="UIView"/>
+            </relationships>
+        </class>
+        <class className="FSRefreshableViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSRefreshableViewController.h"/>
+        </class>
+        <class className="FSThumView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSThumView.h"/>
+        </class>
+        <class className="FSTopicViewController" superclassName="FSRefreshableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSTopicViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="tbAction" candidateClass="UITableView"/>
+            </relationships>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

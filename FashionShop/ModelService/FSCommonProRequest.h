@@ -42,8 +42,9 @@
 @property(nonatomic,strong) FSComment *comment;
 @property(nonatomic) FSSourceType pType;
 @property(nonatomic,strong) NSString *fileName;
-@property(nonatomic,strong) NSString *is4sale;
+@property(nonatomic,strong) NSNumber *is4sale;
 @property(nonatomic,strong) NSString *property;
+@property(nonatomic,strong) NSNumber *sizeIndex;
 
 @property(nonatomic,strong) NSString *pID;
 

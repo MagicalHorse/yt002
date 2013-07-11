@@ -12,7 +12,11 @@
 
 @interface FSImageUploadCell : UITableViewCell<SpringboardLayoutDelegate,PSUICollectionViewDataSource>
 @property(nonatomic,strong) NSMutableArray *images;
+@property(nonatomic) int sizeIndex;
+@property(nonatomic) id sizeSelDelegate;
 @property(nonatomic) id imageRemoveDelegate;;
+@property(nonatomic,strong) PSUICollectionView *imageContent;
+
 -(void)refreshImages;
 
 @end

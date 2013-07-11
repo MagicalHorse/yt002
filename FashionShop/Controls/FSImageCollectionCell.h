@@ -11,5 +11,6 @@
 @interface FSImageCollectionCell : PSUICollectionViewCell
 @property (strong, nonatomic) IBOutlet UIButton *btnRemove;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) IBOutlet UIButton *btnSizeSel;
 
 @end

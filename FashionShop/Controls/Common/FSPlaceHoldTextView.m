@@ -50,6 +50,12 @@
     }
 }
 
+- (void)setText:(NSString *)text
+{
+    [super setText:text];
+    [self textChanged:nil];
+}
+
 - (void)drawRect:(CGRect)rect
 {
     if( [[self placeholder] length] > 0 )

@@ -104,7 +104,7 @@
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil)];
          if (_mustFields & TitleField)
-        _totalFields++;
+             _totalFields++;
     }
     if (_availFields & DurationField)
     {
@@ -116,7 +116,7 @@
     {
         [_sections addObject:NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil)];
          if (_mustFields & BrandField)
-        _totalFields++;
+             _totalFields++;
     }
     if (_availFields & StoreField)
     {
@@ -263,6 +263,8 @@
         }
         [_msg appendFormat:@"%@:%@\n", item.propertyname, str];
     }
+    BOOL flag = _proRequest.sizeIndex && [_proRequest.sizeIndex intValue] >= 0;
+    [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Size_Selected:%@", nil), flag?@"YES":@"NO"];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Content Preview",nil) message:_msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     alert.tag = SAVE_INFO_TAG;
@@ -289,7 +291,7 @@
             else
                 [_proRequest.imgs removeAllObjects];
             //disable photo button if more than 3 imags
-            if (_proRequest.imgs.count>=3)
+            if (_proRequest.imgs.count>=5)
                 _btnPhoto.enabled = FALSE;
             else
                 _btnPhoto.enabled = TRUE;
@@ -346,7 +348,6 @@
         }
             break;
     }
-    [self updateSaveButton];
 }
 
 -(void)updateSaveButton
@@ -605,6 +606,7 @@
         }
             break;
     }
+    [self updateSaveButton];
 }
 
 -(void)requestTagProperties:(NSNumber*)tagId
@@ -717,8 +719,10 @@
                 _proRequest.imgs.count>0)
             {
                 detailCell = [tableView dequeueReusableCellWithIdentifier:@"FSImageUploadCell"];
-                [(FSImageUploadCell *)detailCell setImages:_proRequest.imgs];
-                [(FSImageUploadCell *)detailCell setImageRemoveDelegate:self];
+                FSImageUploadCell *_imageUploadCell = (FSImageUploadCell *)detailCell;
+                [_imageUploadCell setImages:_proRequest.imgs];
+                [_imageUploadCell setImageRemoveDelegate:self];
+                [_imageUploadCell setSizeSelDelegate:self];
             }
             else
             {
@@ -974,7 +978,7 @@
 {
     if (aMyPickerView == paywayPickerView) {
         int index = [aMyPickerView.picker selectedRowInComponent:0];
-        BOOL flag = index == 0?NO:YES;
+        BOOL flag = (index == 0?NO:YES);
         [self proPostStep:PostStepSaleTag didCompleteWithObject:@[[NSNumber numberWithBool:flag]]];
     }
 }
@@ -990,6 +994,20 @@
         }
     }
     return @"";
+}
+
+#pragma mark - sizeSelDelegate
+
+-(id)selectSizeImageWithIndex:(NSNumber*)aSizeIndex
+{
+    int index = [_proRequest.sizeIndex intValue];
+    if (_proRequest.sizeIndex && index == [aSizeIndex intValue]) {
+        _proRequest.sizeIndex = nil;
+    }
+    else{
+        _proRequest.sizeIndex = [NSNumber numberWithInt:[aSizeIndex intValue]];
+    }
+    return _proRequest.sizeIndex;
 }
 
 @end

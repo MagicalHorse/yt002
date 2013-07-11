@@ -60,22 +60,31 @@
     self.detailTextLabel.hidden = YES;
     
     self.bubbleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    
+//    [self attachTapHandler];
 }
 
 -(void)updateControls:(FSCoreMyLetter *)aData showTime:(BOOL)flag
 {
+    [aData show];
     CGRect _rect;
     int unit = 5;
     int yOffset = unit+5;
     if (flag) {
+        NSTimeInterval fromNow = abs([aData.createdate timeIntervalSinceNow]);
         NSDateFormatter *df = [[NSDateFormatter alloc] init];
-        [df setDateFormat:@"MM-dd HH:mm:ss"];
+        if (fromNow < 12 * 60 * 60) {
+            [df setDateFormat:@"HH:mm:ss"];
+        }
+        else{
+            [df setDateFormat:@"yy年MM月dd日 HH:mm:ss"];
+        }
         _time.text = [df stringFromDate:aData.createdate];
         _time.hidden = NO;
         _rect = _time.frame;
         _rect.origin.y = yOffset;
         _time.frame = _rect;
-        yOffset += _rect.size.height + unit;
+        yOffset += _rect.size.height;
     }
     else{
         _time.hidden = YES;
@@ -101,10 +110,10 @@
     {
         _rect.origin.x = SCREEN_WIDTH - _rect.size.width - 5;
     }
-    _thumView.ownerUser = [[FSUser alloc] copyUser:aData.fromuser];
-    _thumView.frame = _rect;
     _thumView.layer.cornerRadius = 8;
     _thumView.clipsToBounds = YES;
+    _thumView.ownerUser = [[FSUser alloc] copyUser:aData.fromuser];
+    _thumView.frame = _rect;
     
     _cellHeight = yOffset;
 }
@@ -151,6 +160,36 @@
 {
     [super setBackgroundColor:backgroundColor];
     [self.bubbleView setBackgroundColor:backgroundColor];
+}
+
+#pragma mark - menu
+
+//UILabel默认是不接收事件的，我们需要自己添加touch事件
+-(void)attachTapHandler{
+    self.userInteractionEnabled = YES;  //用户交互的总开关
+    //长按压
+    UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+    press.minimumPressDuration = 1.0;
+    [self addGestureRecognizer:press];
+}
+
+- (void)longPress:(UILongPressGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        [self becomeFirstResponder];
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        [menu setTargetRect:self.bubbleView.frame inView:self];
+        [menu setMenuVisible:YES animated:YES];
+    }
+}
+
+// default is NO
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
+//"反馈"关心的功能
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    return (action == @selector(copy:));
 }
 
 @end

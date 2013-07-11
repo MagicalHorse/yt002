@@ -9,11 +9,11 @@
 #import "FSEntityRequestBase.h"
 
 #define RK_REQUEST_PROD_BUY_INFO    @"/product/detail4p"        //获取实时商品购买详情
-#define RK_REQUEST_PROD_BUY_AMOUNT  @"/product/computeamount"   //计算订单金额
-#define RK_REQUEST_PROD_ORDER       @"/product/order"           //产生订单
-#define RK_REQUEST_ORDER_CANCEL     @"/order/void"              //取消订单
-#define RK_REQUEST_ORDER_LIST       @"/order/my"                //我的订单列表
-#define RK_REQUEST_ORDER_DETAIL     @"/order/detail"            //订单详情
+#define RK_REQUEST_PROD_BUY_AMOUNT  @"/product/computeamount"   //计算预订单金额
+#define RK_REQUEST_PROD_ORDER       @"/product/order"           //产生预订单
+#define RK_REQUEST_ORDER_CANCEL     @"/order/void"              //取消预订单
+#define RK_REQUEST_ORDER_LIST       @"/order/my"                //我的预订单列表
+#define RK_REQUEST_ORDER_DETAIL     @"/order/detail"            //预订单详情
 #define RK_REQUEST_ORDER_RMA        @"/order/rma"               //申请退货
 
 @interface FSPurchaseRequest : FSEntityRequestBase
@@ -27,7 +27,7 @@
 @property(nonatomic,strong) NSNumber* nextPage;
 @property(nonatomic,strong) NSNumber* pageSize;
 
-@property(nonatomic,strong) NSString *orderno;//订单号
+@property(nonatomic,strong) NSString *orderno;//预订单号
 
 //退货参数
 @property(nonatomic,strong) NSString *reason;//退货理由

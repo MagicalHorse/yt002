@@ -42,7 +42,7 @@ typedef enum{
 
 @end
 
-@interface FSProPostMainViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,FSProPostStepCompleteDelegate,UIAlertViewDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
+@interface FSProPostMainViewController : UIViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UITableViewDataSource,UITableViewDelegate,FSProPostStepCompleteDelegate,UIAlertViewDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate,UIGestureRecognizerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnPhoto;
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
