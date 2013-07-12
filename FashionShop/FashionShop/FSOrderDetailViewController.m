@@ -320,9 +320,10 @@
             if (respData.isSuccess)
             {
                 orderInfo = respData.responseData;
-                _tbAction.tableFooterView = [self createTableFooterView];
+                //_tbAction.tableFooterView = [self createTableFooterView];
+                //[_tbAction reloadData];
                 [self reportError:respData.message];
-                [_tbAction reloadData];
+                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0f];
             }
             else
             {
@@ -334,9 +335,11 @@
 
 #pragma mark - FSOrderRMARequestViewControllerDelegate
 
--(void)refreshViewController:(FSOrderRMARequestViewController*)controller needRefresh:(BOOL)flag
+-(void)refreshViewController:(UIViewController*)controller needRefresh:(BOOL)flag
 {
-    [self requestData];
+    if (flag) {
+        [self requestData];
+    }
 }
 
 

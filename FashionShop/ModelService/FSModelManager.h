@@ -46,4 +46,7 @@
 -(void)enqueueBackgoundOperation:(NSOperation *)operation;
 
 -(void) clearCache;
+
++(void)localLogin:(UIViewController *)con withBlock:(void (^)(void))block;
+
 @end

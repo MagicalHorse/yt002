@@ -1214,12 +1214,6 @@
                     _camera.sourceType = UIImagePickerControllerSourceTypeCamera;
                     _camera.mediaTypes = [[NSArray alloc] initWithObjects:(NSString*)kUTTypeImage, nil];
                     _camera.allowsEditing = YES;
-                    if (_takePhotoSource == 1) {
-                        
-                    }
-                    else{
-                        
-                    }
                     [self presentViewController:_camera animated:YES completion:nil];
                     
                 } else
@@ -1239,12 +1233,6 @@
                     _camera.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
                     _camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
                     _camera.allowsEditing = YES;
-                    if (_takePhotoSource == 1) {
-                        
-                    }
-                    else{
-                        
-                    }
                     [self presentViewController:_camera animated:YES completion:nil];
                     
                 }

@@ -177,6 +177,10 @@
         {
             [self reportError:resp.errorDescrip];
         }
+        if (![NSString isNilOrEmpty:_preSendMsg]) {
+            [self sendPressed:nil withText:_preSendMsg];
+            _preSendMsg = nil;
+        }
     }];
 }
 

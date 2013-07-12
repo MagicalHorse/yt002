@@ -399,7 +399,7 @@ BOOL networkIsWorking = NO;
         {
             galary.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
             galary.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-            galary.allowsEditing = YES;
+            galary.allowsEditing = NO;
             [self presentViewController:galary animated:YES completion:nil];
             
         }

@@ -42,6 +42,12 @@
 @end
 
 @interface FSPurchaseAmountCell : UITableViewCell
+@property (strong, nonatomic) IBOutlet UIImageView *bgImage;
+@property (strong, nonatomic) IBOutlet UILabel *quantityLb;
+@property (strong, nonatomic) IBOutlet UILabel *pointLb;
+@property (strong, nonatomic) IBOutlet UILabel *priceLb;
+@property (strong, nonatomic) IBOutlet UILabel *feeLb;
+@property (strong, nonatomic) IBOutlet UILabel *amountLb;
 
 @property (strong, nonatomic) IBOutlet UILabel *totalQuantity;
 @property (strong, nonatomic) IBOutlet UILabel *totalPoints;

@@ -43,6 +43,7 @@
 @synthesize is4sale;
 @synthesize property;
 @synthesize sizeIndex;
+@synthesize upccode;
 
 @synthesize routeResourcePath;
 
@@ -69,7 +70,33 @@
     }
 }
 
-
+- (void)clean
+{
+    imgs = nil;
+    descrip = nil;
+    tagId = nil;
+    tagName = nil;
+    storeId = nil;
+    brandId = nil;
+    title = nil;
+    brandName = nil;
+    storeName = nil;
+    self.id = nil;
+    longit = nil;
+    lantit = nil;
+    startdate = nil;
+    enddate = nil;
+    comment = nil;
+    pType = -1;
+    price = nil;
+    originalPrice = nil;
+    pID = nil;
+    fileName = nil;
+    is4sale = nil;
+    property = nil;
+    sizeIndex = nil;
+    upccode = nil;
+}
 
 -(void) send:(FSEntityRequestBase *)request completeCallBack:(dispatch_block_t)blockcomplete errorCallback:(dispatch_block_t)blockerror
 {
@@ -107,6 +134,9 @@
         [params setValue:price forParam:@"price"];
     if (originalPrice) {
         [params setValue:originalPrice forParam:@"unitprice"];
+    }
+    if (upccode) {
+        [params setValue:upccode forParam:@"upccode"];
     }
     if (property)
         [params setValue:property forParam:@"property"];

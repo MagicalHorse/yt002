@@ -175,6 +175,9 @@
     _lblComment.textColor = [UIColor colorWithRed:102 green:102 blue:102];
     _lblComment.numberOfLines = 0;
     newSize =  [_lblComment sizeThatFits:_lblComment.frame.size];
+    if (newSize.height > 100) {
+        newSize.height = 100;
+    }
     _lblComment.frame = CGRectMake(_lblComment.frame.origin.x, _cellHeight, 225, newSize.height);
     _cellHeight += _lblComment.frame.size.height + yOffset;
     

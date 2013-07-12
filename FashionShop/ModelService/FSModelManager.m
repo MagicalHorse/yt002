@@ -18,6 +18,7 @@
 #import "FSGroupBrand.h"
 #import "FSCommonRequest.h"
 #import "FSCommon.h"
+#import "FSMeViewController.h"
 
 @interface FSModelManager()
 {
@@ -284,6 +285,36 @@ static FSModelManager *_modelManager;
 
 - (void)onGetPermissionState:(int)iError
 {
+}
+
++(void)localLogin:(UIViewController *)con withBlock:(void (^)(void))block
+{
+    bool isLogined = [[FSModelManager sharedModelManager] isLogined];
+    if (!isLogined)
+    {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
+        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
+        __block FSMeViewController *blockMeController = loginController;
+        loginController.completeCallBack=^(BOOL isSuccess){
+            [blockMeController dismissViewControllerAnimated:true completion:^{
+                if (!isSuccess)
+                {
+                    [con reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
+                }
+                else
+                {
+                    block();
+                }
+            }];
+        };
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
+        [con presentViewController:navController animated:YES completion:nil];
+        [[FSAnalysis instance] autoTrackPages:navController];
+    }
+    else
+    {
+        block();
+    }
 }
 
 

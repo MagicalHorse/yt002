@@ -30,6 +30,9 @@
 #import "FSPointViewController.h"
 #import "FSMeViewController.h"
 
+#import "FSOrderListViewController.h"
+#import "FSOrderDetailViewController.h";
+
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
 #define PRO_LIST_FILTER_WILLPUBLISH @"willpublish"
@@ -940,13 +943,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-    UITabBarController *root = [storyBoard instantiateViewControllerWithIdentifier:@"root"];
-    root.selectedIndex = 2;
-    [self presentModalViewController:root.selectedViewController animated:YES];
-    return;
-    
-    
     if (_inLoading) {
         return;
     }
@@ -1115,37 +1111,11 @@
             break;
         case SkipTypePointEx://积点兑换
         {
-            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-            if (!isLogined)
-            {
-                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
-                __block FSMeViewController *blockMeController = loginController;
-                loginController.completeCallBack=^(BOOL isSuccess){
-                    [blockMeController dismissViewControllerAnimated:true completion:^{
-                        if (!isSuccess)
-                        {
-                            [blockMeController reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                        }
-                        else
-                        {
-                            FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
-                            pointView.currentUser = [FSUser localProfile];
-                            [self.navigationController pushViewController:pointView animated:TRUE];
-                        }
-                    }];
-                };
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-                [self presentViewController:navController animated:YES completion:nil];
-                
-                [[FSAnalysis instance] autoTrackPages:navController];
-            }
-            else
-            {
+            [FSModelManager localLogin:self withBlock:^{
                 FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
                 pointView.currentUser = [FSUser localProfile];
                 [self.navigationController pushViewController:pointView animated:TRUE];
-            }
+            }];
         }
             break;
         default:

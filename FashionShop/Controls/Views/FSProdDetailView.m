@@ -158,22 +158,38 @@
     
     yOffset = 0;
     //在线咨询按钮和在线订购
-    int _x = 15;
-    if (!_data.is4sale) {
-        _x = 93;
-        _btnBuy.hidden = YES;
+    
+    BOOL isMyself = [_data.fromUser.uid intValue] == [[FSUser localProfile].uid intValue];
+    //如果是本人
+    if (isMyself) {
+        _btnContact.hidden = YES;
+        if (_data.is4sale) {
+            _btnBuy.hidden = NO;
+            _btnBuy.center = CGPointMake(160, _btnBuy.frame.origin.y + _btnBuy.frame.size.height/2);
+            yOffset += 50;
+        }
+        else{
+            _btnBuy.hidden = YES;
+        }
     }
     else{
-        _btnBuy.hidden = NO;
-        _rect = _btnBuy.frame;
-        _rect.origin.x = _x + 20 + _btnContact.frame.size.width;
-        _btnBuy.frame = _rect;
+        int _x = 15;
+        if (!_data.is4sale) {
+            _x = 93;
+            _btnBuy.hidden = YES;
+        }
+        else{
+            _btnBuy.hidden = NO;
+            _rect = _btnBuy.frame;
+            _rect.origin.x = _x + 20 + _btnContact.frame.size.width;
+            _btnBuy.frame = _rect;
+        }
+        _rect = _btnContact.frame;
+        _rect.origin.x = _x;
+        _btnContact.hidden = NO;
+        _btnContact.frame = _rect;
+        yOffset += 50;
     }
-    _rect = _btnContact.frame;
-    _rect.origin.x = _x;
-    _btnContact.hidden = NO;
-    _btnContact.frame = _rect;
-    yOffset += 50;
     
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];

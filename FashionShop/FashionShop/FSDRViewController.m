@@ -437,37 +437,9 @@
 
 -(void)doLike:(BOOL)isRemove
 {
-    
-    bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    if (!isLogined)
-    {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
-        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
-        __block FSMeViewController *blockMeController = loginController;
-        loginController.completeCallBack=^(BOOL isSuccess){
-            __block FSMeViewController *blockMe = blockMeController;
-            [blockMeController dismissViewControllerAnimated:true completion:^{
-                if (!isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {   
-                    [self internalDoLike:isRemove];
-                    blockMe.completeCallBack = nil;
-                }
-            }];
-        };
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:false completion:nil];
-        
-        [[FSAnalysis instance] autoTrackPages:navController];
-    }
-    else
-    {
+    [FSModelManager localLogin:self withBlock:^{
         [self internalDoLike:isRemove];
-    }
-
+    }];
 }
 
 -(void) internalDoLike:(BOOL)isRemove withCallback:(dispatch_block_t)cleanup

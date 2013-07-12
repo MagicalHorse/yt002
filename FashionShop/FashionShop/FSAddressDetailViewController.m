@@ -158,7 +158,6 @@
         [self changePageState:FSAddressDetailStateEdit];
     }
     else if (pageState == FSAddressDetailStateEdit) {
-        [self changePageState:FSAddressDetailStateShow];
         //保存修改内容
         [self edit];
     }
@@ -202,6 +201,7 @@
             _inLoading = NO;
             if (resp.isSuccess)
             {
+                [self changePageState:FSAddressDetailStateShow];
                 [self reportError:resp.message];
             }
             else

@@ -75,6 +75,8 @@
     [self setContentView:nil];
     [self setLbOriginalPrice:nil];
     [self setTxtOriginalPrice:nil];
+    [self setLbUpccode:nil];
+    [self setTxtUpccode:nil];
     [super viewDidUnload];
 }
 
@@ -169,6 +171,14 @@
     if (_publishSource==FSSourceProduct)
     {
         _txtDesc.placeholder = NSLocalizedString(@"Input Product Desc", nil);
+        _lbUpccode.font = ME_FONT(14);
+        _lbUpccode.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
+        _lbUpccode.textAlignment = NSTextAlignmentRight;
+        [_txtUpccode setBackgroundColor:[UIColor colorWithRed:247 green:247 blue:247]];
+        _txtUpccode.layer.borderWidth = 1;
+        _txtUpccode.layer.borderColor = [UIColor colorWithRed:222 green:222 blue:222].CGColor;
+        _txtUpccode.delegate = self;
+        
         _lbOriginalPrice.font = ME_FONT(14);
         _lbOriginalPrice.textColor = [UIColor colorWithRed:76 green:86 blue:108];;
         _lbOriginalPrice.textAlignment = NSTextAlignmentRight;

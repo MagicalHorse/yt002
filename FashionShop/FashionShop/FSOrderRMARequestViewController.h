@@ -32,5 +32,5 @@
 
 @interface NSObject(FSOrderRMARequestViewControllerDelegate)
 
--(void)refreshViewController:(FSOrderRMARequestViewController*)controller needRefresh:(BOOL)flag;
+-(void)refreshViewController:(UIViewController*)controller needRefresh:(BOOL)flag;
 @end

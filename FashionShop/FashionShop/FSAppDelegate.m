@@ -609,37 +609,11 @@ void uncaughtExceptionHandler(NSException *exception)
             //导航到我的评论页
             root.selectedIndex = 3;
             UINavigationController *nav = (UINavigationController*)root.selectedViewController;
-            //需要先判断是否登录
-            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-            if (!isLogined)
-            {
-                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
-                __block FSMeViewController *blockMeController = loginController;
-                loginController.completeCallBack=^(BOOL isSuccess){
-                    
-                    [blockMeController dismissViewControllerAnimated:true completion:^{
-                        if (!isSuccess)
-                        {
-                            [nav reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                        }
-                        else
-                        {
-                            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
-                            controller.originalIndex = 1;
-                            [nav pushViewController:controller animated:true];
-                        }
-                    }];
-                };
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-                [nav presentViewController:navController animated:YES completion:nil];
-                
-            }
-            else
-            {
+            [FSModelManager localLogin:nav withBlock:^{
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
                 controller.originalIndex = 1;
-                [nav pushViewController:controller animated:YES];
-            }
+                [nav pushViewController:controller animated:true];
+            }];
         }
             break;
         case 4://私信
@@ -647,41 +621,7 @@ void uncaughtExceptionHandler(NSException *exception)
             //导航到我的私信页
             root.selectedIndex = 3;
             UINavigationController *nav = (UINavigationController*)root.selectedViewController;
-            //需要先判断是否登录
-            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-            if (!isLogined)
-            {
-                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
-                __block FSMeViewController *blockMeController = loginController;
-                loginController.completeCallBack=^(BOOL isSuccess){
-                    
-                    [blockMeController dismissViewControllerAnimated:true completion:^{
-                        if (!isSuccess)
-                        {
-                            [nav reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                        }
-                        else
-                        {
-                            FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
-                            [nav pushViewController:controller animated:NO];
-                            
-                            FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
-                            FSUser *user = [[FSUser alloc] init];
-                            user.nickie = @"私信";
-                            user.uid = [NSNumber numberWithInt:[value intValue]];
-                            viewController.touchUser = user;
-                            viewController.lastConversationId = 0;
-                            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
-                            [controller presentViewController:nav animated:YES completion:nil];
-                        }
-                    }];
-                };
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-                [nav presentViewController:navController animated:YES completion:nil];
-                
-            }
-            else
-            {
+            [FSModelManager localLogin:nav withBlock:^{
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
                 [nav pushViewController:controller animated:NO];
                 
@@ -693,7 +633,7 @@ void uncaughtExceptionHandler(NSException *exception)
                 viewController.lastConversationId = 0;
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
                 [controller presentViewController:nav animated:YES completion:nil];
-            }
+            }];
         }
             break;
         case 5://URL

@@ -23,6 +23,7 @@
 @property (nonatomic,strong) NSNumber *unitPrice;
 @property (nonatomic, strong) NSString * descrip;
 @property (nonatomic) BOOL is4sale;
+@property (nonatomic,strong) NSString *upccode;
 @property (nonatomic, strong) NSString * contactPhone;
 
 //@property (nonatomic, strong) NSString * recommendUser_id;

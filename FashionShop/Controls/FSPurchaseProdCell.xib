@@ -137,7 +137,6 @@
 								<string key="NSFrame">{{100, 101}, {210, 21}}</string>
 								<reference key="NSSuperview" ref="839663168"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -283,7 +282,6 @@
 								<string key="NSFrame">{{10, 38}, {300, 2}}</string>
 								<reference key="NSSuperview" ref="263086578"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -532,7 +530,6 @@
 								<string key="NSFrame">{{141, 113}, {159, 21}}</string>
 								<reference key="NSSuperview" ref="819376530"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -620,7 +617,6 @@
 								<string key="NSFrame">{{9, 38}, {282, 69}}</string>
 								<reference key="NSSuperview" ref="68874454"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<reference key="IBUIBackgroundColor" ref="276977754"/>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -755,7 +751,6 @@
 								<string key="NSFrame">{{103, 29}, {177, 40}}</string>
 								<reference key="NSSuperview" ref="714381980"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -918,6 +913,54 @@
 						<reference key="destination" ref="1020415684"/>
 					</object>
 					<int key="connectionID">49</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">pointLb</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="519823327"/>
+					</object>
+					<int key="connectionID">105</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">quantityLb</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="923536049"/>
+					</object>
+					<int key="connectionID">106</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">priceLb</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="671451718"/>
+					</object>
+					<int key="connectionID">107</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">feeLb</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="408370563"/>
+					</object>
+					<int key="connectionID">108</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">amountLb</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="805695613"/>
+					</object>
+					<int key="connectionID">109</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">bgImage</string>
+						<reference key="source" ref="1065554973"/>
+						<reference key="destination" ref="129342290"/>
+					</object>
+					<int key="connectionID">110</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -1218,7 +1261,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">102</int>
+			<int key="maxID">110</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1248,15 +1291,45 @@
 					<string key="className">FSPurchaseAmountCell</string>
 					<string key="superclassName">UITableViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="amountLb">UILabel</string>
+						<string key="bgImage">UIImageView</string>
 						<string key="extendPrice">UILabel</string>
+						<string key="feeLb">UILabel</string>
+						<string key="pointLb">UILabel</string>
+						<string key="priceLb">UILabel</string>
+						<string key="quantityLb">UILabel</string>
 						<string key="totalAmount">UILabel</string>
 						<string key="totalFee">UILabel</string>
 						<string key="totalPoints">UILabel</string>
 						<string key="totalQuantity">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="amountLb">
+							<string key="name">amountLb</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="bgImage">
+							<string key="name">bgImage</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="extendPrice">
 							<string key="name">extendPrice</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="feeLb">
+							<string key="name">feeLb</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="pointLb">
+							<string key="name">pointLb</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="priceLb">
+							<string key="name">priceLb</string>
+							<string key="candidateClassName">UILabel</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="quantityLb">
+							<string key="name">quantityLb</string>
 							<string key="candidateClassName">UILabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="totalAmount">

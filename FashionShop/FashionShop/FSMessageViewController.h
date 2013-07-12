@@ -15,5 +15,6 @@
 
 @property (nonatomic, strong) FSUser *touchUser;
 @property (nonatomic) int lastConversationId;
+@property (nonatomic, strong) NSString *preSendMsg;
 
 @end

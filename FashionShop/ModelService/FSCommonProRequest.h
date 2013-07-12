@@ -45,8 +45,10 @@
 @property(nonatomic,strong) NSNumber *is4sale;
 @property(nonatomic,strong) NSString *property;
 @property(nonatomic,strong) NSNumber *sizeIndex;
+@property(nonatomic,strong) NSString *upccode;
 
 @property(nonatomic,strong) NSString *pID;
 
 - (void)upload:(dispatch_block_t)blockcomplete error:(dispatch_block_t)blockerror;
+- (void)clean;
 @end

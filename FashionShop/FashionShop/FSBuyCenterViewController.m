@@ -171,7 +171,7 @@
     if (!_uploadData.properies) {
         _uploadData.properies = [NSMutableArray arrayWithCapacity:1];
     }
-    _uploadData.invoicetitle = @"个人";
+//    _uploadData.invoicetitle = @"个人";
     FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
     item.propertyid = Purchase_Count_Properties_Tag;
     item.propertyname = @"数量";

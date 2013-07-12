@@ -23,6 +23,7 @@
 @synthesize price;
 @synthesize unitPrice;
 @synthesize is4sale;
+@synthesize upccode;
 @synthesize contactPhone;
 
 //@synthesize recommendUser_id;
@@ -65,11 +66,11 @@
     [relationMap mapKeyPath:@"price" toAttribute:@"price"];
     [relationMap mapKeyPath:@"unitprice" toAttribute:@"unitPrice"];
     [relationMap mapKeyPath:@"is4sale" toAttribute:@"is4sale"];
+    [relationMap mapKeyPath:@"upccode" toAttribute:@"upccode"];
     [relationMap mapKeyPath:@"contactphone" toAttribute:@"contactPhone"];
     
 //    [relationMap mapKeyPath:@"recommenduser_id" toAttribute:@"recommendUser_id"];
 //    [relationMap mapKeyPath:@"recommendedreason" toAttribute:@"recommendedReason"];
-//    [relationMap mapKeyPath:@"unitprice" toAttribute:@"unitPrice"];
 //    [relationMap mapKeyPath:@"sharecount" toAttribute:@"shareCount"];
     
     RKObjectMapping *brandRelationMap = [FSBrand getRelationDataMap];

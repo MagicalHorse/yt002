@@ -149,15 +149,43 @@
 -(void)setData:(FSOrderInfo*)data
 {
     _data = data;
-    _cellHeight = 140;
+    _cellHeight = 5;
     
-    _totalAmount.text = [NSString stringWithFormat:@"￥%.2f", data.totalamount];
-    _totalFee.text = [NSString stringWithFormat:@"￥%.2f", data.shippingfee];
-    _totalPoints.text = [NSString stringWithFormat:@"%d", data.totalpoints];
-    _totalQuantity.text = [NSString stringWithFormat:@"%d件", data.totalquantity];
-    _extendPrice.text = [NSString stringWithFormat:@"￥%.2f", data.extendprice];
+    [self initComponents:_totalQuantity another:_quantityLb content:[NSString stringWithFormat:@"%d件", data.totalquantity]];
+    [self initComponents:_totalPoints another:_pointLb content:(data.totalpoints <= 0?nil:[NSString stringWithFormat:@"%d", data.totalpoints])];
+    [self initComponents:_extendPrice another:_priceLb content:[NSString stringWithFormat:@"￥%.2f", data.extendprice]];
+    [self initComponents:_totalFee another:_feeLb content:[NSString stringWithFormat:@"￥%.2f", data.shippingfee]];
+    [self initComponents:_totalAmount another:_amountLb content:[NSString stringWithFormat:@"￥%.2f", data.totalamount]];
     
-    self.clipsToBounds = YES;
+    _cellHeight += 5;
+    
+    _bgImage.image = [[UIImage imageNamed:@"order_amount_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(60, 0, 60, 0)];
+    CGRect _rect = self.bounds;
+    _rect.size.height = _cellHeight;
+    _rect.size.width = 300;
+    _bgImage.frame = _rect;
+}
+
+-(void)initComponents:(UILabel*)first another:(UILabel*)sec content:(NSString*)aContent
+{
+    if (!aContent) {
+        first.hidden = YES;
+        sec.hidden = YES;
+        return;
+    }
+    first.hidden = NO;
+    sec.hidden = NO;
+    
+    first.text = aContent;
+    CGRect _rect = first.frame;
+    _rect.origin.y = _cellHeight;
+    first.frame = _rect;
+    
+    _rect = sec.frame;
+    _rect.origin.y = _cellHeight;
+    sec.frame = _rect;
+    
+    _cellHeight += _rect.size.height + 5;
 }
 
 @end

@@ -373,38 +373,11 @@
         case SkipTypePointEx://积点兑换
         {
             value = @"积点兑换";
-            bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-            if (!isLogined)
-            {
-                UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-                FSMeViewController *loginController = [storyBoard instantiateViewControllerWithIdentifier:@"userProfile"];
-                __block FSMeViewController *blockMeController = loginController;
-                loginController.completeCallBack=^(BOOL isSuccess){
-                    [blockMeController dismissViewControllerAnimated:true completion:^{
-                        if (!isSuccess)
-                        {
-                            [blockMeController reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                        }
-                        else
-                        {
-                            FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
-                            pointView.currentUser = [FSUser localProfile];
-                            [self.navigationController pushViewController:pointView animated:TRUE];
-                        }
-                    }];
-                };
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-                [self presentViewController:navController animated:YES completion:nil];
-                
-                [[FSAnalysis instance] autoTrackPages:navController];
-                
-            }
-            else
-            {
+            [FSModelManager localLogin:self withBlock:^{
                 FSPointViewController *pointView = [[FSPointViewController alloc] initWithNibName:@"FSPointViewController" bundle:nil];
                 pointView.currentUser = [FSUser localProfile];
                 [self.navigationController pushViewController:pointView animated:TRUE];
-            }
+            }];
         }
             break;
         default:

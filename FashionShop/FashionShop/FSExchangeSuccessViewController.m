@@ -79,22 +79,25 @@
 
 -(void)clickToBackHome:(UIButton*)sender
 {
-    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-    _array = [_array subarrayWithRange:NSMakeRange(0, 1)];
-    NSMutableArray *_mutArray = [NSMutableArray arrayWithArray:_array];
-    FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
-    couponView.currentUser = [FSUser localProfile];
-    [_mutArray addObject:couponView];
-    FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
-    [_mutArray addObject:controller];
-    FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
-    detail.requestID = _data.storeProId;
-    [_mutArray addObject:detail];
-    
-    [self.navigationController setViewControllers:_mutArray animated:YES];
-    
-    //统计
-    [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_DETAIL withParameters:nil];
+    UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
+    root.selectedIndex = 3;
+    UINavigationController *nav = (UINavigationController*)root.selectedViewController;
+    [FSModelManager localLogin:nav withBlock:^{
+        NSMutableArray *_mutArray = [NSMutableArray arrayWithCapacity:3];
+        FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+        couponView.currentUser = [FSUser localProfile];
+        [_mutArray addObject:couponView];
+        FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
+        [_mutArray addObject:controller];
+        FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
+        detail.requestID = _data.storeProId;
+        [_mutArray addObject:detail];
+        
+        [self.navigationController setViewControllers:_mutArray animated:YES];
+        
+        //统计
+        [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_DETAIL withParameters:nil];
+    }];
 }
 
 #pragma mark - UITableViewDataSource

@@ -81,6 +81,11 @@
 
 -(void)clickRightButton:(UIButton*)sender
 {
+    if (_likes.count >= 10) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Address Allow Max Number", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK",nil), nil];
+        [alert show];
+        return;
+    }
     FSAddressDetailViewController *addressView = [[FSAddressDetailViewController alloc] initWithNibName:@"FSAddressDetailViewController" bundle:nil];
     addressView.pageState = FSAddressDetailStateNew;
     [self.navigationController pushViewController:addressView animated:YES];

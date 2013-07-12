@@ -42,6 +42,7 @@
 #import "UIBarButtonItem+Title.h"
 #import <PassKit/PassKit.h>
 #import "NSData+Base64.h"
+#import "NSString+Extention.h"
 
 #import "EGOPhotoGlobal.h"
 #import "MyPhoto.h"
@@ -256,6 +257,8 @@
                 [blockSelf.navigationItem setTitle:navTitle];
                 [self resetScrollViewSize:blockViewForRefresh];
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
+                //去除已经访问的评论
+                [theApp removeCommentID:[NSString stringWithFormat:@"%@", [blockViewForRefresh.data valueForKey:@"id"]]];
             } else
             {
                 //self.paginatorView.scrollView.scrollEnabled = YES;
@@ -279,6 +282,8 @@
             [self resetScrollViewSize:blockViewForRefresh];
             [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
             [self resetScrollViewSize:blockViewForRefresh];
+            //去除已经访问的评论
+            [theApp removeCommentID:[NSString stringWithFormat:@"%@", [blockViewForRefresh.data valueForKey:@"id"]]];
         } errorCallback:^{
             [self onButtonCancel];
         }];
@@ -541,7 +546,7 @@
         return;
     }
     
-    [self localLogin:^{
+    [FSModelManager localLogin:self withBlock:^{
         [self startProgress:NSLocalizedString(@"coupon use instruction", nil) withExeBlock:^(dispatch_block_t callback){
             [self internalGetCoupon:callback];
         } completeCallbck:^{
@@ -644,7 +649,7 @@
     
     __block id view = self.paginatorView.currentPage;
     
-    [self localLogin:^{
+    [FSModelManager localLogin:self withBlock:^{
         if ([view respondsToSelector:@selector(btnFavor)])
         {
             UIBarButtonItem *favorButton = [view btnFavor];
@@ -666,12 +671,18 @@
         return;
     }
     
-    [self localLogin:^{
+    [FSModelManager localLogin:self withBlock:^{
         //to private letter list
-        
         FSProdItemEntity *_item = currentView.data;
+        NSMutableString *msg = [NSMutableString stringWithFormat:@""];
+        [msg appendFormat:@"商品名称:%@\n",_item.title];
+        [msg appendFormat:@"品牌:%@\n", _item.brand.name];
+        if (![NSString isNilOrEmpty:_item.upccode]) {
+            [msg appendFormat:@"货码:%@\n", _item.upccode];
+        }
         FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
         viewController.touchUser = _item.fromUser;
+        viewController.preSendMsg = msg;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
          [self presentViewController:nav animated:YES completion:nil];
     }];
@@ -683,7 +694,7 @@
         return;
     }
     
-    [self localLogin:^{
+    [FSModelManager localLogin:self withBlock:^{
         //to buy
         FSBuyCenterViewController *controller = [[FSBuyCenterViewController alloc] initWithNibName:@"FSBuyCenterViewController" bundle:nil];
         FSDetailBaseView * currentView = (FSDetailBaseView*)self.paginatorView.currentPage;
@@ -691,36 +702,6 @@
         controller.productID = _item.id;
         [self.navigationController pushViewController:controller animated:YES];
     }];
-}
-
--(void)localLogin:(void (^)(void))block
-{
-    bool isLogined = [[FSModelManager sharedModelManager] isLogined];
-    if (!isLogined)
-    {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:[NSBundle mainBundle]];
-        FSMeViewController *loginController = [storyboard instantiateViewControllerWithIdentifier:@"userProfile"];
-        __block FSMeViewController *blockMeController = loginController;
-        loginController.completeCallBack=^(BOOL isSuccess){
-            [blockMeController dismissViewControllerAnimated:true completion:^{
-                if (!isSuccess)
-                {
-                    [self reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                }
-                else
-                {
-                    block();
-                }
-            }];
-        };
-        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginController];
-        [self presentViewController:navController animated:YES completion:nil];
-        [[FSAnalysis instance] autoTrackPages:navController];
-    }
-    else
-    {
-        block();
-    }
 }
 
 -(void)didTapProImage:(id) sender
@@ -911,7 +892,7 @@
         }
     }
     
-    [self localLogin:^{
+    [FSModelManager localLogin:self withBlock:^{
         [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil) withExeBlock:^(dispatch_block_t callback){
             [self internalDoComent:callback];
         } completeCallbck:^{

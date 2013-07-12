@@ -26,6 +26,7 @@
 
 #define EXIT_ALERT_TAG 1011
 #define SAVE_INFO_TAG 1012
+#define FILL_PRODUCT_CODE 1013
 
 
 @interface FSProPostMainViewController ()
@@ -173,7 +174,6 @@
 
 -(void) bindControl
 {
-
     [self.view setBackgroundColor:[UIColor colorWithRed:229 green:229 blue:229]];
     [_tbAction setBackgroundView:nil];
     [_tbAction setBackgroundColor:[UIColor clearColor]];
@@ -183,14 +183,16 @@
     _tbAction.delegate = self;
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
+    _tbAction.contentOffset = CGPointMake(0, 0);
     [_tbAction reloadData];
 }
 
 -(void) clearData
 {
-    _proRequest.imgs = nil;
+    [_proRequest clean];
     [self initActionsSource];
     [self bindControl];
+    [self updateSaveButton];
     
     //清空_titleSel里的内容
     [_titleSel cleanData];
@@ -226,21 +228,32 @@
             return;
         }
     }
-    //初始化property对象
-    NSMutableArray *pArray = [NSMutableArray array];
-    for (FSPurchasePropertiesItem *item in _properties) {
-        NSMutableArray *array = [NSMutableArray array];
-        for (FSPurchasePropertiesItem *sub in item.values) {
-            if (sub.isChecked) {
-                [array addObject:sub.valuename];
+    if (_publishSource == FSSourceProduct) {
+        //判断货码是否填写
+        if ([_proRequest.is4sale boolValue]) {
+            if ([NSString isNilOrEmpty:_proRequest.upccode]) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt",nil) message:NSLocalizedString(@"Fill Product Code", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+                alert.tag = FILL_PRODUCT_CODE;
+                [alert show];
+                return;
             }
         }
-        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
-        [dic setValue:array forKey:@"values"];
-        [dic setValue:item.propertyname forKey:@"propertyname"];
-        [pArray addObject:dic];
+        //初始化property对象
+        NSMutableArray *pArray = [NSMutableArray array];
+        for (FSPurchasePropertiesItem *item in _properties) {
+            NSMutableArray *array = [NSMutableArray array];
+            for (FSPurchasePropertiesItem *sub in item.values) {
+                if (sub.isChecked) {
+                    [array addObject:sub.valuename];
+                }
+            }
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [dic setValue:array forKey:@"values"];
+            [dic setValue:item.propertyname forKey:@"propertyname"];
+            [pArray addObject:dic];
+        }
+        _proRequest.property = [pArray JSONString];
     }
-    _proRequest.property = [pArray JSONString];
     //做预发布
     NSMutableString *_msg = [NSMutableString string];
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Title:%@", nil), _proRequest.title];
@@ -250,24 +263,37 @@
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Price:%@", nil), _proRequest.price];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_BrandName:%@", nil), _proRequest.brandName];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_TagType:%@", nil), _proRequest.tagName];
+        for (FSPurchasePropertiesItem *item in _properties) {
+            NSMutableString *str = [NSMutableString string];
+            for (FSPurchasePropertiesItem *subItem in item.values) {
+                if (!subItem.isChecked) {
+                    continue;
+                }
+                [str appendFormat:@"%@;", subItem.valuename];
+            }
+            [_msg appendFormat:@"%@:%@\n", item.propertyname, str];
+        }
+        BOOL flag = _proRequest.sizeIndex && [_proRequest.sizeIndex intValue] >= 0;
+        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Size_Selected:%@", nil), flag?@"YES":@"NO"];
     }
     else {
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Pro_StartTime:%@", nil), _proRequest.startdate];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Pro_EndTime:%@", nil), _proRequest.enddate];
     }
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_StoreName:%@", nil), _proRequest.storeName];
-    for (FSPurchasePropertiesItem *item in _properties) {
-        NSMutableString *str = [NSMutableString string];
-        for (FSPurchasePropertiesItem *subItem in item.values) {
-            [str appendFormat:@"%@;", subItem.valuename];
-        }
-        [_msg appendFormat:@"%@:%@\n", item.propertyname, str];
-    }
-    BOOL flag = _proRequest.sizeIndex && [_proRequest.sizeIndex intValue] >= 0;
-    [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Size_Selected:%@", nil), flag?@"YES":@"NO"];
     
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Content Preview",nil) message:_msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
     alert.tag = SAVE_INFO_TAG;
+    //左对齐
+    for(UIView *subview in alert.subviews)
+    {
+        if([[subview class] isSubclassOfClass:[UILabel class]])
+        {
+            UILabel *label = (UILabel*)subview;
+            if([label.text isEqualToString:_msg])
+                label.textAlignment = UITextAlignmentLeft;
+        }
+    }
     [alert show];
 }
 
@@ -306,6 +332,7 @@
             _proRequest.price =[NSNumber numberWithInt:[price intValue]];
             price = [(NSArray *)value objectAtIndex:4];
             _proRequest.originalPrice =[NSNumber numberWithInt:[price intValue]];
+            _proRequest.upccode = [(NSArray *)value objectAtIndex:5];
             break;
         }
         case PostStep3Finished:
@@ -409,7 +436,6 @@
     {
         camera.sourceType = UIImagePickerControllerSourceTypeCamera;
         camera.mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        camera.allowsEditing = false;
         [self decorateOverlayToCamera:camera];
         [UIView animateWithDuration:0.2 animations:nil completion:^(BOOL finished) {
             [self presentViewController:camera animated:YES completion:nil];
@@ -912,7 +938,7 @@
     else{
         _fileName = @"";
     }
-    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text, viewController.txtOriginalPrice.text]];
+    [self proPostStep:PostStep2Finished didCompleteWithObject:@[viewController.txtTitle.text, _desc, _fileName, viewController.txtPrice.text, viewController.txtOriginalPrice.text,viewController.txtUpccode.text]];
     [viewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 
@@ -938,6 +964,9 @@
             [self endProgress];
             [[NSNotificationCenter defaultCenter] postNotificationName:LN_ITEM_UPDATED object:nil];
         }];
+    }
+    if (alertView.tag == FILL_PRODUCT_CODE && buttonIndex == 1) {
+        [self doTakeDescrip:nil];
     }
 }
 

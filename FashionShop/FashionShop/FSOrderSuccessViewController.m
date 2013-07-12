@@ -9,6 +9,10 @@
 #import "FSOrderSuccessViewController.h"
 #import "FSPurchaseProdCell.h"
 #import "FSPointExSuccessFooter.h"
+#import "FSMoreViewController.h"
+#import "FSMeViewController.h"
+#import "FSOrderListViewController.h"
+#import "FSOrderDetailViewController.h"
 
 @interface FSOrderSuccessViewController ()
 
@@ -68,24 +72,26 @@
 
 -(void)clickToOrderDetail:(UIButton*)sender
 {
-    /*
-    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-    _array = [_array subarrayWithRange:NSMakeRange(0, 1)];
-    NSMutableArray *_mutArray = [NSMutableArray arrayWithArray:_array];
-    FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
-    couponView.currentUser = [FSUser localProfile];
-    [_mutArray addObject:couponView];
-    FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
-    [_mutArray addObject:controller];
-    FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
-    detail.requestID = _data.storeProId;
-    [_mutArray addObject:detail];
-    
-    [self.navigationController setViewControllers:_mutArray animated:YES];
-    
-    //统计
-    [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_DETAIL withParameters:nil];
-     */
+    [self dismissModalViewControllerAnimated:YES];
+    UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
+    root.selectedIndex = 3;
+    UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
+    [FSModelManager localLogin:nav withBlock:^{
+        NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.topViewController];
+        FSMoreViewController *controller = [[FSMoreViewController alloc] initWithNibName:@"FSMoreViewController" bundle:nil];
+        controller.delegate = (FSMeViewController*)nav.topViewController;
+        controller.currentUser = [FSUser localProfile];
+        [_mutArray addObject:controller];
+        
+        FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
+        [_mutArray addObject:orderView];
+        
+        FSOrderDetailViewController *detailView = [[FSOrderDetailViewController alloc] initWithNibName:@"FSOrderDetailViewController" bundle:nil];
+        detailView.orderno = _data.orderno;
+        [_mutArray addObject:detailView];
+        
+        [nav setViewControllers:_mutArray animated:YES];
+    }];
 }
 
 #pragma mark - UITableViewDataSource

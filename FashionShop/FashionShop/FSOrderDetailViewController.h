@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FSProDetailViewController.h"
 
 @protocol FSOrderRMARequestViewControllerDelegate;
 
-@interface FSOrderDetailViewController : UIViewController
+@interface FSOrderDetailViewController : UIViewController<FSProDetailItemSourceProvider>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic,strong) NSString *orderno;

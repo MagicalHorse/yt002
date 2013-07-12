@@ -34,6 +34,9 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet UILabel *lblDescVoice;
 @property (strong, nonatomic) IBOutlet UIButton *btnRecord;
 
+@property (strong, nonatomic) IBOutlet UILabel *lbUpccode;
+@property (strong, nonatomic) IBOutlet UITextField *txtUpccode;
+
 @property (strong, nonatomic) IBOutlet UILabel *lbOriginalPrice;
 @property (strong, nonatomic) IBOutlet UITextField *txtOriginalPrice;
 

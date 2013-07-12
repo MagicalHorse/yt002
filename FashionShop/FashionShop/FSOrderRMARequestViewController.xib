@@ -203,7 +203,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">12</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
-									<int key="IBUIKeyboardType">1</int>
+									<int key="IBUIKeyboardType">2</int>
 									<int key="IBUIReturnKeyType">4</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
@@ -304,6 +304,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">12</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+									<int key="IBUIKeyboardType">2</int>
 									<int key="IBUIReturnKeyType">9</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
@@ -316,7 +317,6 @@
 								<string key="NSFrame">{{45, 427}, {230, 35}}</string>
 								<reference key="NSSuperview" ref="800606467"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -532,7 +532,6 @@
 							<reference ref="100504996"/>
 							<reference ref="556257421"/>
 							<reference ref="139754958"/>
-							<reference ref="102972622"/>
 							<reference ref="1011157271"/>
 							<reference ref="1000046306"/>
 							<reference ref="801965645"/>
@@ -540,6 +539,7 @@
 							<reference ref="521832272"/>
 							<reference ref="630648734"/>
 							<reference ref="174475333"/>
+							<reference ref="102972622"/>
 						</array>
 						<reference key="parent" ref="191373211"/>
 					</object>
