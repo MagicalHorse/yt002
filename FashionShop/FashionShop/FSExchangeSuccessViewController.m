@@ -81,23 +81,18 @@
 {
     UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
     root.selectedIndex = 3;
-    UINavigationController *nav = (UINavigationController*)root.selectedViewController;
-    [FSModelManager localLogin:nav withBlock:^{
-        NSMutableArray *_mutArray = [NSMutableArray arrayWithCapacity:3];
-        FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
-        couponView.currentUser = [FSUser localProfile];
-        [_mutArray addObject:couponView];
-        FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
-        [_mutArray addObject:controller];
-        FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
-        detail.requestID = _data.storeProId;
-        [_mutArray addObject:detail];
-        
-        [self.navigationController setViewControllers:_mutArray animated:YES];
-        
-        //统计
-        [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_DETAIL withParameters:nil];
-    }];
+    UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
+    NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.topViewController];
+    FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
+    couponView.currentUser = [FSUser localProfile];
+    [_mutArray addObject:couponView];
+    FSPointGiftListViewController *controller= [[FSPointGiftListViewController alloc] initWithNibName:@"FSPointGiftListViewController" bundle:nil];
+    [_mutArray addObject:controller];
+    FSPointGiftDetailViewController *detail = [[FSPointGiftDetailViewController alloc] initWithNibName:@"FSPointGiftDetailViewController" bundle:nil];
+    detail.requestID = _data.storeProId;
+    [_mutArray addObject:detail];
+    
+    [nav setViewControllers:_mutArray animated:YES];
 }
 
 #pragma mark - UITableViewDataSource

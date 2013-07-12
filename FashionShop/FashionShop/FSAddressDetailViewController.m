@@ -180,7 +180,7 @@
             {
                 [self reportError:resp.message];
                 //2秒钟后返回上一级页面
-                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:2.0];
+                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0];
             }
             else
             {
@@ -203,6 +203,7 @@
             {
                 [self changePageState:FSAddressDetailStateShow];
                 [self reportError:resp.message];
+                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0f];
             }
             else
             {
@@ -210,6 +211,7 @@
             }
         }];
     }
+    [activityField resignFirstResponder];
 }
 
 -(FSAddressRequest*)createRequest:(NSString *)routePath
@@ -328,17 +330,12 @@
 
 -(void)changePageState:(FSAddressDetailState)state
 {
-    int height = 110;
-    CGSize size = _contentView.contentSize;
     pageState = state;
     switch (pageState) {
         case FSAddressDetailStateShow:
         {
             [self setControlEnable:NO];
             _deleteBtn.hidden = NO;
-            if (size.height < 500) {
-                size.height += height;
-            }
             [self showRightButton:@"修改"];
         }
             break;
@@ -346,7 +343,6 @@
         {
             [self setControlEnable:YES];
             _deleteBtn.hidden = YES;
-            size.height -= height;
             [self showRightButton:@"保存"];
             [_name becomeFirstResponder];
         }
@@ -355,14 +351,12 @@
         {
             [self setControlEnable:YES];
             _deleteBtn.hidden = YES;
-            size.height -= height;
             [self showRightButton:@"保存"];
         }
             break;
         default:
             break;
     }
-    [_contentView setContentSize:size];
 }
 
 -(void)setControlEnable:(BOOL)flag
@@ -646,8 +640,8 @@
             if (resp.isSuccess)
             {
                 [self reportError:resp.message];
-                //2秒钟后返回上一级页面
-                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:2.0];
+                //1秒钟后返回上一级页面
+                [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0];
             }
             else
             {

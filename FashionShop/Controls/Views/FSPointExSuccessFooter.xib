@@ -68,11 +68,11 @@
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">btn_bg.png</string>
 						</object>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
+						<object class="IBUIFontDescription" key="IBUIFontDescription" id="810527918">
 							<int key="type">2</int>
 							<double key="pointSize">17</double>
 						</object>
-						<object class="NSFont" key="IBUIFont">
+						<object class="NSFont" key="IBUIFont" id="1060455438">
 							<string key="NSName">Helvetica-Bold</string>
 							<double key="NSSize">17</double>
 							<int key="NSfFlags">16</int>
@@ -100,15 +100,8 @@
 						</object>
 						<reference key="IBUINormalTitleShadowColor" ref="205271877"/>
 						<reference key="IBUINormalBackgroundImage" ref="375543406"/>
-						<object class="IBUIFontDescription" key="IBUIFontDescription">
-							<int key="type">2</int>
-							<double key="pointSize">16</double>
-						</object>
-						<object class="NSFont" key="IBUIFont">
-							<string key="NSName">Helvetica-Bold</string>
-							<double key="NSSize">16</double>
-							<int key="NSfFlags">16</int>
-						</object>
+						<reference key="IBUIFontDescription" ref="810527918"/>
+						<reference key="IBUIFont" ref="1060455438"/>
 					</object>
 					<object class="IBUIView" id="226344471">
 						<reference key="NSNextResponder" ref="346092194"/>
@@ -117,7 +110,6 @@
 						<string key="NSFrame">{{15, 112}, {291, 69}}</string>
 						<reference key="NSSuperview" ref="346092194"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<object class="NSColor" key="IBUIBackgroundColor" id="445890655">
 							<int key="NSColorSpace">3</int>

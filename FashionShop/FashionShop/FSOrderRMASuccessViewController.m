@@ -38,10 +38,9 @@
 }
 
 - (IBAction)onButtonBack:(id)sender {
-//    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-//    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
-//    [self.navigationController setViewControllers:_array animated:YES];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
+    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
+    [self.navigationController setViewControllers:_array animated:YES];
 }
 
 -(UIView*)createTableFooter
@@ -61,7 +60,7 @@
     
     UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
     btnClean.frame = CGRectMake(49, yOffset, 222, 40);
-    [btnClean setTitle:@"返回首页" forState:UIControlStateNormal];
+    [btnClean setTitle:@"查看订单" forState:UIControlStateNormal];
     [btnClean setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
     [btnClean setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btnClean addTarget:self action:@selector(backToHome:) forControlEvents:UIControlEventTouchUpInside];
@@ -79,7 +78,7 @@
 -(void)backToHome:(UIButton*)sender
 {
     NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
+    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-3)];
     [self.navigationController setViewControllers:_array animated:YES];
 }
 

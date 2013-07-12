@@ -22,7 +22,7 @@
     }
     data = aData;
     uploadData = aUpData;
-    int yGap = 8;
+    int yGap = 10;
     _cellHeight = 10;
     
     BOOL flag =  NO;
@@ -52,11 +52,13 @@
     _productName.textColor = [UIColor colorWithHexString:@"181818"];
     int height = [data.name sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
     rect.origin.y = _cellHeight;
-    rect.size.height = height;
+    rect.size.height = height + 15;
     _productName.frame = rect;
-    _cellHeight += rect.size.height + yGap;
+    _cellHeight += rect.size.height + yGap/2;
     
+    _productDesc.hidden = YES;
     //productDesc
+    /*
     rect = _productDesc.frame;
     _productDesc.text = data.description;
     _productDesc.numberOfLines = 0;
@@ -70,6 +72,7 @@
     rect.size.height = height;
     _productDesc.frame = rect;
     _cellHeight += height + yGap;
+     */
     
     //prodPrice
     rect = _prodPrice.frame;

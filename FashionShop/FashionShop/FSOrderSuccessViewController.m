@@ -46,7 +46,7 @@
         FSCommonSuccessFooter *footer = (FSCommonSuccessFooter*)_array[0];
         [footer.continueBtn setTitle:@"查看预订单" forState:UIControlStateNormal];
         [footer.continueBtn addTarget:self action:@selector(clickToOrderDetail:) forControlEvents:UIControlEventTouchUpInside];
-        [footer.backHomeBtn setTitle:@"返回首页" forState:UIControlStateNormal];
+        [footer.backHomeBtn setTitle:@"继 续 购 物" forState:UIControlStateNormal];
         [footer.backHomeBtn addTarget:self action:@selector(clickToContinue:) forControlEvents:UIControlEventTouchUpInside];
         NSString *msg = [theApp messageForKey:EM_O_C_SUCC];
         if (msg) {
@@ -63,35 +63,33 @@
 
 -(void)clickToContinue:(UIButton*)sender
 {
-    NSArray *_array = (NSArray*)self.navigationController.viewControllers;
-    _array = [_array subarrayWithRange:NSMakeRange(0, _array.count-2)];
-    [self.navigationController setViewControllers:_array animated:YES];
-    
-    //[[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS_CONTINUE withParameters:nil];
+    [self dismissModalViewControllerAnimated:YES];
+    UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
+    root.selectedIndex = 2;
+    UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
+    [nav popToRootViewControllerAnimated:YES];
 }
 
 -(void)clickToOrderDetail:(UIButton*)sender
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissModalViewControllerAnimated:NO];
     UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
     root.selectedIndex = 3;
     UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
-    [FSModelManager localLogin:nav withBlock:^{
-        NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.topViewController];
-        FSMoreViewController *controller = [[FSMoreViewController alloc] initWithNibName:@"FSMoreViewController" bundle:nil];
-        controller.delegate = (FSMeViewController*)nav.topViewController;
-        controller.currentUser = [FSUser localProfile];
-        [_mutArray addObject:controller];
-        
-        FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
-        [_mutArray addObject:orderView];
-        
-        FSOrderDetailViewController *detailView = [[FSOrderDetailViewController alloc] initWithNibName:@"FSOrderDetailViewController" bundle:nil];
-        detailView.orderno = _data.orderno;
-        [_mutArray addObject:detailView];
-        
-        [nav setViewControllers:_mutArray animated:YES];
-    }];
+    NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.topViewController];
+    FSMoreViewController *controller = [[FSMoreViewController alloc] initWithNibName:@"FSMoreViewController" bundle:nil];
+    controller.delegate = (FSMeViewController*)nav.topViewController;
+    controller.currentUser = [FSUser localProfile];
+    [_mutArray addObject:controller];
+    
+    FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
+    [_mutArray addObject:orderView];
+    
+    FSOrderDetailViewController *detailView = [[FSOrderDetailViewController alloc] initWithNibName:@"FSOrderDetailViewController" bundle:nil];
+    detailView.orderno = _data.orderno;
+    [_mutArray addObject:detailView];
+    
+    [nav setViewControllers:_mutArray animated:YES];
 }
 
 #pragma mark - UITableViewDataSource

@@ -40,7 +40,11 @@
     
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
-    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self requestData];
 }
 
@@ -59,6 +63,7 @@
         {
             orderInfo = respData.responseData;
             _tbAction.tableFooterView = [self createTableFooterView];
+            _tbAction.contentOffset = CGPointMake(0, 0);
             [_tbAction reloadData];
         }
         else
@@ -139,7 +144,7 @@
     if (!orderInfo) {
         return 0;
     }
-    if (section == 2) {
+    if (section == 1) {
         return 2;
     }
     else if(section == 3) {
@@ -168,22 +173,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        FSOrderInfoAddressCell *cell = (FSOrderInfoAddressCell*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Address_Cell_Indentifier];
-        if (cell == nil) {
-            NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
-            if (_array.count > 1) {
-                cell = (FSOrderInfoAddressCell*)_array[1];
-            }
-            else{
-                cell = [[FSOrderInfoAddressCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:OrderInfo_Address_Cell_Indentifier];
-            }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        [cell setData:orderInfo];
-        
-        return cell;
-    }
-    else if (indexPath.section == 1) {
         FSOrderInfoMessageCell *cell = (FSOrderInfoMessageCell*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Message_Cell_Indentifier];
         if (cell == nil) {
             NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
@@ -199,8 +188,8 @@
         
         return cell;
     }
-    else if (indexPath.section == 2) {
-        if (indexPath.row == 0) { 
+    else if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
             FSOrderInfoProductCell *cell = (FSOrderInfoProductCell*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Product_Cell_Indentifier];
             if (cell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
@@ -233,6 +222,22 @@
             return cell;
         }
     }
+    else if (indexPath.section == 2) {
+        FSOrderInfoAddressCell *cell = (FSOrderInfoAddressCell*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Address_Cell_Indentifier];
+        if (cell == nil) {
+            NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
+            if (_array.count > 1) {
+                cell = (FSOrderInfoAddressCell*)_array[1];
+            }
+            else{
+                cell = [[FSOrderInfoAddressCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:OrderInfo_Address_Cell_Indentifier];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        [cell setData:orderInfo];
+        
+        return cell;
+    }
     else if (indexPath.section == 3) {
         FSOrderRMAListCell *cell = (FSOrderRMAListCell*)[tableView dequeueReusableCellWithIdentifier:Order_RMA_List_Cell_Indentifier];
         if (cell == nil) {
@@ -259,13 +264,13 @@
 {
     switch (section) {
         case 0:
-            return @"收货信息";
-            break;
-        case 1:
             return @"预订单信息";
             break;
-        case 2:
+        case 1:
             return @"商品清单";
+            break;
+        case 2:
+            return @"收货信息";
             break;
         case 3:
             return @"退货信息";
