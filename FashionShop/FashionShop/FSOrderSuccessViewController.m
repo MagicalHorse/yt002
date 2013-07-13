@@ -68,6 +68,8 @@
     root.selectedIndex = 2;
     UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
     [nav popToRootViewControllerAnimated:YES];
+    
+    [[FSAnalysis instance] logEvent:BUY_CONTINE withParameters:nil];
 }
 
 -(void)clickToOrderDetail:(UIButton*)sender
@@ -90,6 +92,14 @@
     [_mutArray addObject:detailView];
     
     [nav setViewControllers:_mutArray animated:YES];
+    
+    [[FSAnalysis instance] logEvent:BUY_LOOK_ORDER withParameters:nil];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+    [_dic setValue:@"订单提交成功页" forKey:@"来源页面"];
+    [_dic setValue:[NSString stringWithFormat:@"%@", _data.orderno] forKey:@"订单号"];
+    [[FSAnalysis instance] logEvent:CHECK_ORDER_DETAIL withParameters:_dic];
 }
 
 #pragma mark - UITableViewDataSource

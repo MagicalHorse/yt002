@@ -245,8 +245,9 @@
             respClass = [FSProItemEntity class];
         }
         [drequest setBaseURL:2];
-        //self.paginatorView.scrollView.scrollEnabled = NO;
         [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
+            [self endLoading:blockViewForRefresh];
+            _inLoading = NO;
             if (resp.isSuccess)
             {
                 [blockViewForRefresh setData:resp.responseData];
@@ -259,11 +260,9 @@
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
                 //去除已经访问的评论
                 [theApp removeCommentID:[NSString stringWithFormat:@"%@", [blockViewForRefresh.data valueForKey:@"id"]]];
-            } else
+            }
+            else
             {
-                //self.paginatorView.scrollView.scrollEnabled = YES;
-                [self endLoading:blockViewForRefresh];
-                _inLoading = NO;
                 [self onButtonCancel];
             }
         }];
@@ -335,11 +334,9 @@
     request.pageSize = @100;
     request.refreshTime = [[NSDate alloc] init];
     request.rootKeyPath = @"data.comments";
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        [self endLoading:blockViewForRefresh];
-        _inLoading = NO;
-        //[(id)blockViewForRefresh svContent].scrollEnabled = YES;
-        //self.paginatorView.scrollView.scrollEnabled = YES;
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
@@ -614,6 +611,17 @@
     FSDetailBaseView * view = (FSDetailBaseView*)self.paginatorView.currentPage;
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@", [view.data contactPhone]]];
 	[[UIApplication sharedApplication] openURL:url];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:7];
+    [_dic setValue:[view.data contactPhone] forKey:@"电话号码"];
+    [_dic setValue:[[view.data brand] name] forKey:@"品牌"];
+    [_dic setValue:[[view.data store] name] forKey:@"实体店名称"];
+    [_dic setValue:[view.data title] forKey:@"商品名称"];
+    [_dic setValue:[view.data fromUser].nickie forKey:@"商品上传者"];
+    [_dic setValue:[view.data fromUser].uid forKey:@"商品上传者ID"];
+    [_dic setValue:@"商品详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:DIAL_PRODUCT_PHONE withParameters:_dic];
 }
 
 - (IBAction)goDR:(NSNumber *)userid {
@@ -685,6 +693,12 @@
         viewController.preSendMsg = msg;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
          [self presentViewController:nav animated:YES completion:nil];
+        
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"商品详情页" forKey:@"来源页面"];
+        [_dic setValue:viewController.touchUser.nickie forKey:@"私信对象名称"];
+        [_dic setValue:viewController.touchUser.uid forKey:@"私信对象ID"];
+        [[FSAnalysis instance] logEvent:CHECK_MESSAGE_PAGE withParameters:_dic];
     }];
 }
 
@@ -701,6 +715,16 @@
         FSProdItemEntity *_item = currentView.data;
         controller.productID = _item.id;
         [self.navigationController pushViewController:controller animated:YES];
+        
+        //统计
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:6];
+        [_dic setValue:_item.upccode forKey:@"商品货号"];
+        [_dic setValue:_item.brand.name forKey:@"品牌"];
+        [_dic setValue:_item.store.name forKey:@"实体店名称"];
+        [_dic setValue:_item.title forKey:@"商品名称"];
+        [_dic setValue:@"商品详情页" forKey:@"来源页面"];
+        [_dic setValue:[NSString stringWithFormat:@"%.2f", [_item.price floatValue]] forKey:@"商品价格"];
+        [[FSAnalysis instance] logEvent:PRODUCT_BUY_INFO withParameters:_dic];
     }];
 }
 
@@ -1354,6 +1378,7 @@
     if (lastButton) {
         [lastButton stop];
     }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 #pragma mark - FSProDetailItemSourceProvider

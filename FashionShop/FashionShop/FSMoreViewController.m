@@ -254,13 +254,18 @@
             //统计
             NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
             [_dic setValue:@"更多页" forKey:@"来源页面"];
-            [[FSAnalysis instance] logEvent:CHECK_GIFT_LIST withParameters:_dic];
+            [[FSAnalysis instance] logEvent:CHECK_ORDER_LIST withParameters:_dic];
         }
             break;
         case FSMoreOrder:
         {
             FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
             [self.navigationController pushViewController:orderView animated:true];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+            [_dic setValue:@"更多页" forKey:@"来源页面"];
+            [[FSAnalysis instance] logEvent:CHECK_GIFT_LIST withParameters:_dic];
         }
             break;
         case FSMoreEdit:    //编辑个人资料

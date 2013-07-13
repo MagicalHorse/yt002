@@ -587,6 +587,12 @@ void uncaughtExceptionHandler(NSException *exception)
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [nav presentViewController:navControl animated:true completion:nil];
+            
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+            [_dic setValue:@"push推送" forKey:@"来源页面"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", [value intValue]] forKey:@"商品ID"];
+            [_dic setValue:nil forKey:@"商品名称"];
+            [[FSAnalysis instance] logEvent:CHECK_PRODUCT_LIST_DETAIL withParameters:_dic];
         }
             break;
         case 2://促销详情
@@ -602,6 +608,12 @@ void uncaughtExceptionHandler(NSException *exception)
             detailView.dataProviderInContext = self;
             UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:detailView];
             [nav presentViewController:navControl animated:true completion:nil];
+            
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+            [_dic setValue:@"push推送" forKey:@"来源页面"];
+            [_dic setValue:[NSString stringWithFormat:@"%d", [value intValue]] forKey:@"活动ID"];
+            [_dic setValue:nil forKey:@"活动名称"];
+            [[FSAnalysis instance] logEvent:CHECK_COUPON_DETAIL withParameters:_dic];
         }
             break;
         case 3://我的评论
@@ -613,6 +625,10 @@ void uncaughtExceptionHandler(NSException *exception)
                 FSMyCommentController *controller = [[FSMyCommentController alloc] initWithNibName:@"FSMyCommentController" bundle:nil];
                 controller.originalIndex = 1;
                 [nav pushViewController:controller animated:true];
+                
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
+                [_dic setValue:@"push推送" forKey:@"来源页面"];
+                [[FSAnalysis instance] logEvent:CHECK_COMMENT_PAGE withParameters:_dic];
             }];
         }
             break;
@@ -633,6 +649,12 @@ void uncaughtExceptionHandler(NSException *exception)
                 viewController.lastConversationId = 0;
                 UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
                 [controller presentViewController:nav animated:YES completion:nil];
+                
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+                [_dic setValue:@"push推送" forKey:@"来源页面"];
+                [_dic setValue:viewController.touchUser.nickie forKey:@"私信对象名称"];
+                [_dic setValue:viewController.touchUser.uid forKey:@"私信对象ID"];
+                [[FSAnalysis instance] logEvent:CHECK_MESSAGE_PAGE withParameters:_dic];
             }];
         }
             break;
@@ -644,6 +666,12 @@ void uncaughtExceptionHandler(NSException *exception)
             controller.fileName = value;
             controller.title = [[pushInfoDic objectForKey:@"aps"] objectForKey:@"alert"];
             [nav pushViewController:controller animated:YES];
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+            [_dic setValue:@"指定网址" forKey:@"类型"];
+            [_dic setValue:@"push推送" forKey:@"标题"];
+            [[FSAnalysis instance] logEvent:CHECK_TOPIC_DETAIL withParameters:_dic];
         }
             break;
         default:

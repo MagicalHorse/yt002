@@ -126,6 +126,12 @@
     FSOrderRMARequestViewController *controller = [[FSOrderRMARequestViewController alloc] initWithNibName:@"FSOrderRMARequestViewController" bundle:nil];
     controller.orderno = orderno;
     [self.navigationController pushViewController:controller animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+    [_dic setValue:@"订单详情页" forKey:@"来源页面"];
+    [_dic setValue:[NSString stringWithFormat:@"%@", orderInfo.orderno] forKey:@"订单号"];
+    [[FSAnalysis instance] logEvent:CLICK_ORDER_RMA withParameters:_dic];
 }
 
 #define Request_Cancel_Tag 200
@@ -325,8 +331,6 @@
             if (respData.isSuccess)
             {
                 orderInfo = respData.responseData;
-                //_tbAction.tableFooterView = [self createTableFooterView];
-                //[_tbAction reloadData];
                 [self reportError:respData.message];
                 [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0f];
             }
@@ -334,6 +338,13 @@
             {
                 [self reportError:respData.errorDescrip];
             }
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+            [_dic setValue:@"订单详情页" forKey:@"来源页面"];
+            [_dic setValue:[NSString stringWithFormat:@"%@", orderInfo.orderno] forKey:@"订单号"];
+            [_dic setValue:(respData.isSuccess?@"取消成功":@"取消失败") forKey:@"取消状态"];
+            [[FSAnalysis instance] logEvent:ORDER_CANCEL withParameters:_dic];
         }];
     }
 }

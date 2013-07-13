@@ -605,6 +605,15 @@
             {
                 [self reportError:respData.errorDescrip];
             }
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+            [_dic setValue:_purchaseData.name forKey:@"商品名称"];
+            [_dic setValue:[NSString stringWithFormat:@"%.2f", _purchaseData.price] forKey:@"商品单价"];
+            [_dic setValue:_uploadData.address.displayaddress forKey:@"送货地址"];
+            [_dic setValue:_uploadData.payment.name forKey:@"支付方式"];
+            [_dic setValue:[NSString stringWithFormat:@"%.2f", _purchaseData.totalamount] forKey:@"共需支付"];
+            [[FSAnalysis instance] logEvent:PRODUCT_BUY withParameters:_dic];
         }];
     }
 }
@@ -616,15 +625,9 @@
     controller.title = @"预订单创建成功";
     [self.navigationController pushViewController:controller animated:YES];
     
-    //统计
-//    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:6];
-//    [_dic setValue:@"兑换活动详情页" forKey:@"来源页面"];
-//    [_dic setValue:[NSString stringWithFormat:@"%d", _data.id] forKey:@"兑换活动ID"];
-//    [_dic setValue:_data.name forKey:@"活动名称"];
-//    [_dic setValue:[NSString stringWithFormat:@"%d", sucData.points] forKey:@"兑换积点"];
-//    [_dic setValue:[NSString stringWithFormat:@"%.2f", sucData.amount] forKey:@"兑换金额"];
-//    [_dic setValue:sucData.giftCode forKey:@"代金券码"];
-//    [[FSAnalysis instance] logEvent:EXCHANGE_SUCCESS withParameters:_dic];
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+    [_dic setValue:info.orderno forKey:@"预订单编号"];
+    [[FSAnalysis instance] logEvent:BUY_SUCCESS_PAGE withParameters:_dic];
 }
 
 #pragma mark - FSImageSlide datasource

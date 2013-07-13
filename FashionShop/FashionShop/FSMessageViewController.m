@@ -12,6 +12,7 @@
 #import "FSPLetterRequest.h"
 #import "FSCoreMyLetter.h"
 #import "FSDRViewController.h"
+#import "MessageInputView.h"
 
 @interface FSMessageViewController ()
 {
@@ -59,7 +60,7 @@
     else{
         _lastConversationId = 0;
     }
-    [self requestData:YES];
+    [self requestData:NO];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receivePushNotification_pletter:) name:@"ReceivePushNotification_pletter" object:nil];
 }
 
@@ -67,12 +68,13 @@
 {
     [super viewWillDisappear:animated];
     [theApp removePLetterID:[NSString stringWithFormat:@"%d", [_touchUser.uid intValue]]];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 -(void)receivePushNotification_pletter:(NSNotification*)notification
 {
     //获取最新的数据
-    [self requestData:NO];
+    [self requestData:YES];
 }
 
 -(void)addLastData:(dispatch_block_t)action
@@ -154,11 +156,11 @@
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.userid = _touchUser.uid;
     request.lastconversationid = [NSNumber numberWithInt:_lastConversationId];
-    if(flag)[self beginLoading:self.view];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     _isInLoading = YES;
     request.rootKeyPath = @"data.items";
     [request send:[FSCoreMyLetter class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-        if(flag)[self endLoading:self.view];
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         _isInLoading = NO;
         if (resp.isSuccess)
         {
@@ -169,6 +171,9 @@
                 }
                 [self fillDataArray:array isInsert:NO];
                 _lastConversationId = [dataArray[dataArray.count - 1] id];
+                if (flag) {
+                    [MessageSoundEffect playMessageReceivedSound];
+                }
             }
             [self.tableView reloadData];
             [self scrollToBottomAnimated:YES];
@@ -178,8 +183,7 @@
             [self reportError:resp.errorDescrip];
         }
         if (![NSString isNilOrEmpty:_preSendMsg]) {
-            [self sendPressed:nil withText:_preSendMsg];
-            _preSendMsg = nil;
+            [self sendPressed:self.inputView.sendButton withText:_preSendMsg];
         }
     }];
 }
@@ -340,15 +344,24 @@
                     [self fillDataArray:[NSArray arrayWithObject:result1] isInsert:NO];
                     _lastConversationId = result1.id;
                     [self finishSend];
+                    [MessageSoundEffect playMessageSentSound];
                 }
             }
         }
         else
         {
+            [self hidenKeyboard];
             [self reportError:resp.errorDescrip];
         }
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         _isSending = NO;
+        
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+        [_dic setValue:@"私信对话页" forKey:@"来源页面"];
+        [_dic setValue:_touchUser.nickie forKey:@"私信对象名称"];
+        [_dic setValue:_touchUser.uid forKey:@"私信对象ID"];
+        [_dic setValue:text forKey:@"对话内容"];
+        [[FSAnalysis instance] logEvent:MESSAGE_SEND withParameters:_dic];
     }];
 }
 
@@ -379,7 +392,6 @@
         _isLoadData = YES;
         [self performSelector:@selector(addLastData:) withObject:nil afterDelay:0.5];
     }
-    
 }
 
 @end

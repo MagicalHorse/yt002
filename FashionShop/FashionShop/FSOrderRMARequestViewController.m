@@ -245,6 +245,7 @@
         request.orderno = _orderno;
         request.uToken = [[FSModelManager sharedModelManager] loginToken];
         [self beginLoading:self.view];
+        [activityField resignFirstResponder];
         [request send:[FSOrderRMAItem class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
             [self endLoading:self.view];
             if (respData.isSuccess)
@@ -262,6 +263,17 @@
             {
                 [self reportError:respData.errorDescrip];
             }
+            
+            //统计
+            NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:7];
+            [_dic setValue:[NSString stringWithFormat:@"%@", _orderno] forKey:@"订单号"];
+            [_dic setValue:(respData.isSuccess?@"申请退货成功":@"申请退货失败") forKey:@"申请退货状态"];
+            [_dic setValue:_reason.text forKey:@"退货原因"];
+            [_dic setValue:_bankName.text forKey:@"银行名称"];
+            [_dic setValue:_bankNumber.text forKey:@"银行卡号"];
+            [_dic setValue:_bankUserName.text forKey:@"银行账户"];
+            [_dic setValue:_telephone.text forKey:@"联系方式"];
+            [[FSAnalysis instance] logEvent:ORDER_RMA withParameters:_dic];
         }];
     }
 }

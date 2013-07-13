@@ -310,15 +310,10 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     //统计
-//    FSCoupon *coupon = [_likes objectAtIndex:indexPath.section];
-//    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
-//    [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
-//    [_dic setValue:[NSString stringWithFormat:@"%d", coupon.promotion.id] forKey:@"活动ID"];
-//    [_dic setValue:coupon.promotion.title forKey:@"活动名称"];
-//    [_dic setValue:coupon.code forKey:@"优惠券码"];
-//    [[FSAnalysis instance] logEvent:CHECK_COUPON_DETAIL withParameters:_dic];
-//    
-//    [[FSAnalysis instance] autoTrackPages:navControl];
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+    [_dic setValue:@"订单列表页" forKey:@"来源页面"];
+    [_dic setValue:[NSString stringWithFormat:@"%@", item.orderno] forKey:@"订单号"];
+    [[FSAnalysis instance] logEvent:CHECK_ORDER_DETAIL withParameters:_dic];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -346,11 +341,11 @@
                 [self mergeLike:innerResp isInsert:YES];
                 
                 //统计
-//                NSString *value = _segFilters.selectedIndex==0?@"优惠券列表-未使用":(_segFilters.selectedIndex==1?@"优惠券列表-已使用":@"优惠券列表-已无效");
-//                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-//                [_dic setValue:value forKey:@"来源"];
-//                [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
-//                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
+                NSString *value = _segFilters.selectedIndex==0?@"订单列表-进行中":(_segFilters.selectedIndex==1?@"订单列表-已完成":@"订单列表-已失效");
+                NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                [_dic setValue:value forKey:@"来源"];
+                [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
+                [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
             }
             else
             {
@@ -385,11 +380,11 @@
         }
         
         //统计
-//        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");
-//        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-//        [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
-//        [_dic setValue:value forKey:@"分类名称"];
-//        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
+        NSString *value = index == 0?@"进行中":(index == 1?@"已完成":@"已失效");
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"订单列表页" forKey:@"来源页面"];
+        [_dic setValue:value forKey:@"分类名称"];
+        [[FSAnalysis instance] logEvent:CHECK_ORDERLIST_TAB withParameters:_dic];
     }
 }
 

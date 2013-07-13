@@ -259,8 +259,13 @@
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Title:%@", nil), _proRequest.title];
     [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Desc:%@", nil), _proRequest.descrip];
     if (_publishSource == FSSourceProduct) {
-        [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Original_Price:%@", nil), _proRequest.originalPrice];
+        if (_proRequest.originalPrice && [_proRequest.originalPrice intValue] > 0) {
+            [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Original_Price:%@", nil), _proRequest.originalPrice];
+        }
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Price:%@", nil), _proRequest.price];
+        if (![NSString isNilOrEmpty:_proRequest.upccode]) {
+            [_msg appendFormat:NSLocalizedString(@"Upload_Preview_PCode:%@", nil), _proRequest.upccode];
+        }
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_BrandName:%@", nil), _proRequest.brandName];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_TagType:%@", nil), _proRequest.tagName];
         for (FSPurchasePropertiesItem *item in _properties) {

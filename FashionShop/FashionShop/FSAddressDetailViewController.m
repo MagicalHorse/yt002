@@ -173,6 +173,7 @@
         FSAddressRequest *request = [self createRequest:REQUEST_ADDRESS_CREATE];
         [self beginLoading:self.view];
         _inLoading = YES;
+        [self hiddenControl];
         [request send:[FSAddress class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:self.view];
             _inLoading = NO;
@@ -196,6 +197,7 @@
         FSAddressRequest *request = [self createRequest:REQUEST_ADDRESS_EDIT];
         [self beginLoading:self.view];
         _inLoading = YES;
+        [self hiddenControl];
         [request send:[FSAddress class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:self.view];
             _inLoading = NO;
@@ -212,6 +214,12 @@
         }];
     }
     [activityField resignFirstResponder];
+}
+
+-(void)hiddenControl
+{
+    [activityField resignFirstResponder];
+    [self hidenPickerView:YES];
 }
 
 -(FSAddressRequest*)createRequest:(NSString *)routePath

@@ -16,6 +16,7 @@
 #define STATISTICS_TURNS_PAGE   @"翻页统计"
 
 #define DIAL_STORE_PHONE        @"拨打实体店电话"
+#define DIAL_PRODUCT_PHONE      @"波胆专柜电话"
 #define CHECK_STORE_MAP         @"查看实体店地图"
 #define CHECK_PRODUCT_LIST      @"查看商品列表页"
 #define COMMON_SHARE            @"分享"
@@ -75,5 +76,21 @@
 #define CHECK_PROLIST_PAGE      @"促销页查看"
 #define CHECK_TOPIC_PAGE        @"专题页查看"
 #define CHECK_DONGDONG_PAGE     @"东东页查看"
+
+#define CHECK_MESSAGE_PAGE      @"打开私信对话框"
+#define MESSAGE_SEND            @"私信消息发送"
+#define MESSAGE_LOAD_LAST       @"私信历史加载"
+#define CHECK_COMMENT_PAGE      @"查看我的评论列表"
+#define PRODUCT_BUY_INFO        @"获取商品购买信息"
+#define PRODUCT_BUY             @"商品购买"
+#define BUY_CONTINE             @"点击继续购物按钮"
+#define BUY_LOOK_ORDER          @"点击查看预订单按钮"
+#define BUY_SUCCESS_PAGE        @"预订单成功页"
+#define CHECK_ORDER_LIST        @"查看预订单列表"
+#define CHECK_ORDER_DETAIL      @"查看订单详情"
+#define CHECK_ORDERLIST_TAB     @"查看订单列表分类标签"
+#define ORDER_CANCEL            @"取消预订单"
+#define CLICK_ORDER_RMA         @"点击申请退货按钮"
+#define ORDER_RMA               @"申请退货"
 
 #endif

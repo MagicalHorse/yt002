@@ -905,6 +905,12 @@
     viewController.touchUser = _daren;
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
     [self presentViewController:nav animated:YES completion:nil];
+    
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+    [_dic setValue:@"达人详情页" forKey:@"来源页面"];
+    [_dic setValue:viewController.touchUser.nickie forKey:@"私信对象名称"];
+    [_dic setValue:viewController.touchUser.uid forKey:@"私信对象ID"];
+    [[FSAnalysis instance] logEvent:CHECK_MESSAGE_PAGE withParameters:_dic];
 }
 
 #pragma mark - FSThumbView Delegate

@@ -1028,6 +1028,9 @@
 
 - (UIView *)pageAtIndex:(NSInteger)index
 {
+    if (!_dataSourceBannerData || _dataSourceBannerData.count <= 0) {
+        return nil;
+    }
     FSProItemEntity * item = _dataSourceBannerData[index];
     NSURL *url = [(FSResource *)item.resource[0] absoluteUr:APP_WIDTH height:NAV_HIGH];
     UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, NAV_HIGH)];

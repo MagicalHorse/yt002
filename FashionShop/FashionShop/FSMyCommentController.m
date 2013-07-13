@@ -242,10 +242,14 @@
         request.nextPage = [NSNumber numberWithInt:currentPage + (_isLoadMore?1:0)];
         request.pageSize = @COMMON_PAGE_SIZE;
         request.userToken = [FSModelManager sharedModelManager].loginToken;
-        _isLoadMore?[self beginLoadMoreLayout:_tbAction]:[self beginLoading:self.view];
+        if (!_isInRefreshing) {
+            _isLoadMore?[self beginLoadMoreLayout:_tbAction]:[self beginLoading:self.view];
+        }
         _isInLoading = YES;
         [request send:[FSPagedMyPLetter class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            _isLoadMore?[self endLoadMore:_tbAction]:[self endLoading:self.view];
+            if (!_isInRefreshing) {
+                _isLoadMore?[self endLoadMore:_tbAction]:[self endLoading:self.view];
+            }
             _isInLoading = NO;
             if (resp.isSuccess)
             {
@@ -265,6 +269,13 @@
                 if (!_isLoadMore) {
                     //更新badge存储内容
                     [self updateBadgeData];
+                }
+                if (_isLoadMore) {
+                    //统计
+                    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+                    [_dic setValue:@"我的私信列表页" forKey:@"来源"];
+                    [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
+                    [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
                 }
             }
             else
@@ -361,7 +372,6 @@
             }
         }];
     }
-    /*
     else if(_currentSelIndex == 0) {
         [_asyncQueue addOperationWithBlock:^{
             NSMutableArray *plist = _dataSourceList[_currentSelIndex];
@@ -388,7 +398,6 @@
             }
         }];
     }
-     */
 }
 
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
@@ -507,6 +516,14 @@
         _isLoadMore = YES;
         _isInRefreshing = NO;
         [self requestDataWithCallback:nil];
+        
+        //统计
+        NSString *value = _segHeader.selectedIndex==0?@"我的私信":@"我的评论";
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:value forKey:@"来源"];
+        int currentPage = [[_pageIndexList objectAtIndex:_currentSelIndex] intValue];
+        [_dic setValue:[NSString stringWithFormat:@"%d", currentPage+1] forKey:@"页码"];
+        [[FSAnalysis instance] logEvent:STATISTICS_TURNS_PAGE withParameters:_dic];
     }
 }
 
@@ -530,6 +547,14 @@
         [self presentViewController:nav animated:YES completion:nil];
         [theApp removePLetterID:[NSString stringWithFormat:@"%d", [item.fromuser.uid intValue]]];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
+        
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"我的私信列表" forKey:@"来源页面"];
+        [_dic setValue:viewController.touchUser.nickie forKey:@"私信对象名称"];
+        [_dic setValue:viewController.touchUser.uid forKey:@"私信对象ID"];
+        [[FSAnalysis instance] logEvent:CHECK_MESSAGE_PAGE withParameters:_dic];
+        
+        [[FSAnalysis instance] autoTrackPages:nav];
     }
     else{
         NSMutableArray *_comments = _dataSourceList[_currentSelIndex];
@@ -770,11 +795,11 @@
         self.title = _currentSelIndex==0?@"我的私信":@"我的评论";
         
         //统计
-        //        NSString *value = index == 0?@"未使用":(index == 1?@"已使用":@"已失效");
-        //        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
-        //        [_dic setValue:@"优惠券列表页" forKey:@"来源页面"];
-        //        [_dic setValue:value forKey:@"分类名称"];
-        //        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
+        NSString *value = index == 0?@"我的私信":@"我的评论";
+        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
+        [_dic setValue:@"私信评论列表页" forKey:@"来源页面"];
+        [_dic setValue:value forKey:@"分类名称"];
+        [[FSAnalysis instance] logEvent:CHECK_COUPONT_LIST_TAB withParameters:_dic];
     }
 }
 
