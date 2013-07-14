@@ -459,7 +459,8 @@ void uncaughtExceptionHandler(NSException *exception)
 {
     for (UIView *item in self.window.subviews) {
         if ([item isKindOfClass:[FSMyPickerView class]]) {
-            [(FSMyPickerView*)item hidenPickerView:YES];
+            FSMyPickerView *_item = (FSMyPickerView*)item;
+            [_item hidenPickerView:YES action:nil];
         }
     }
 }

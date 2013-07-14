@@ -183,7 +183,8 @@
             [self reportError:resp.errorDescrip];
         }
         if (![NSString isNilOrEmpty:_preSendMsg]) {
-            [self sendPressed:self.inputView.sendButton withText:_preSendMsg];
+            self.previousTextViewContentHeight = 36;
+            [self sendPressed:nil withText:_preSendMsg];
         }
     }];
 }

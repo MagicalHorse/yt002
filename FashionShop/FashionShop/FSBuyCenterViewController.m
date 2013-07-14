@@ -538,7 +538,9 @@
                     break;
                 }
             }
-            [paywayPickerView showPickerView];
+            [paywayPickerView showPickerView:^{
+                [activityField resignFirstResponder];
+            }];;
         }
         else if(indexPath.row == 2) {
             FSInvoiceViewController *invoiceView = [[FSInvoiceViewController alloc] initWithNibName:@"FSInvoiceViewController" bundle:nil];
@@ -665,6 +667,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     activityField = textField;
+    [paywayPickerView hidenPickerView:YES action:nil];
     FSPurchaseCommonCell *cell = (FSPurchaseCommonCell*)textField.superview.superview;
     [_tbAction scrollToRowAtIndexPath:[_tbAction indexPathForCell:cell] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }

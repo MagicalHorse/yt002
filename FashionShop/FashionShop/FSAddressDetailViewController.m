@@ -169,7 +169,8 @@
 
 -(void)save
 {
-    if ([self check]) {
+    NSString *error = nil;
+    if ([self check:&error]) {
         FSAddressRequest *request = [self createRequest:REQUEST_ADDRESS_CREATE];
         [self beginLoading:self.view];
         _inLoading = YES;
@@ -189,11 +190,16 @@
             }
         }];
     }
+    else{
+        [self reportError:error];
+    }
+    [activityField resignFirstResponder];
 }
 
 -(void)edit
 {
-    if ([self check]) {
+    NSString *error = nil;
+    if ([self check:&error]) {
         FSAddressRequest *request = [self createRequest:REQUEST_ADDRESS_EDIT];
         [self beginLoading:self.view];
         _inLoading = YES;
@@ -212,6 +218,9 @@
                 [self reportError:resp.errorDescrip];
             }
         }];
+    }
+    else{
+        [self reportError:error];
     }
     [activityField resignFirstResponder];
 }
@@ -247,28 +256,37 @@
     return request;
 }
 
--(BOOL)check
+-(BOOL)check:(NSString **)error
 {
     BOOL flag = YES;
     {
         //判断是否合理
         //收货人
         if (_name.text.length <= 0) {
-            _name.text = _name.placeholder;
-            _name.textColor = redColor;
+//            _name.text = _name.placeholder;
+//            _name.textColor = redColor;
+            if ([NSString isNilOrEmpty:*error]) {
+                *error = _name.placeholder;
+            }
             
             flag = NO;
         }
         else {
             if ([_name.textColor isEqual:redColor]) {
                 flag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _name.text;
+                }
             }
         }
         
         //手机号码
         if (_telephone.text.length <= 0) {
-            _telephone.text = _telephone.placeholder;
-            _telephone.textColor = redColor;
+//            _telephone.text = _telephone.placeholder;
+//            _telephone.textColor = redColor;
+            if ([NSString isNilOrEmpty:*error]) {
+                *error = _telephone.placeholder;
+            }
             flag = NO;
         }
         else {
@@ -276,10 +294,16 @@
             if ([_telephone.textColor isEqual:redColor]) {
                 flag = NO;
                 tempFlag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _telephone.text;
+                }
             }
             if (tempFlag && ![NSString isMobileNum:_telephone.text]) {
-                _telephone.text = @"请输入正确的联系方式";
-                _telephone.textColor = redColor;
+//                _telephone.text = @"请输入正确的联系方式";
+//                _telephone.textColor = redColor;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = @"请输入正确的联系方式";
+                }
                 
                 flag = NO;
             }
@@ -290,10 +314,16 @@
             if ([_telephone.textColor isEqual:redColor]) {
                 flag = NO;
                 tempFlag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _telephone.text;
+                }
             }
             if (tempFlag && ![NSString isPhoneNum:_telephone.text]) {
-                _telephone.text = @"请输入正确的联系方式";
-                _telephone.textColor = redColor;
+//                _telephone.text = @"请输入正确的联系方式";
+//                _telephone.textColor = redColor;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = @"请输入正确的联系方式";
+                }
                 
                 flag = NO;
             }
@@ -301,35 +331,54 @@
         
         //收获地区
         if (_address.text.length <= 0) {
-            _address.text = _address.placeholder;
-            _address.textColor = redColor;
+//            _address.text = _address.placeholder;
+//            _address.textColor = redColor;
+            if ([NSString isNilOrEmpty:*error]) {
+                *error = _address.placeholder;
+            }
         }
         else {
             if ([_address.textColor isEqual:redColor]) {
                 flag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _address.text;
+                }
             }
         }
         
         //收获地址
         if (_addressDetail.text.length <= 0) {
-            _addressDetail.text = _addressDetail.placeholder;
-            _addressDetail.textColor = redColor;
+//            _addressDetail.text = _addressDetail.placeholder;
+//            _addressDetail.textColor = redColor;
+            if ([NSString isNilOrEmpty:*error]) {
+                *error = _addressDetail.placeholder;
+            }
+            flag = NO;
         }
         else {
             if ([_addressDetail.textColor isEqual:redColor]) {
                 flag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _addressDetail.text;
+                }
             }
         }
         //邮编
         if (_zipCode.text.length <= 0) {
-            _zipCode.text = _zipCode.placeholder;
-            _zipCode.textColor = redColor;
+//            _zipCode.text = _zipCode.placeholder;
+//            _zipCode.textColor = redColor;
+            if ([NSString isNilOrEmpty:*error]) {
+                *error = _zipCode.placeholder;
+            }
             
             flag = NO;
         }
         else {
             if ([_zipCode.textColor isEqual:redColor]) {
                 flag = NO;
+                if ([NSString isNilOrEmpty:*error]) {
+                    *error = _zipCode.text;
+                }
             }
         }
     }

@@ -222,43 +222,55 @@
     yOffset += _lblDescrip.frame.size.height + 15;
     
     //_btnStore
+    _rect = _btnStore.frame;
+    _rect.origin.y = yOffset;
+    _rect.size.width = 290;
+    _btnStore.frame = _rect;
+    [self bringSubviewToFront:_btnStore];
+    
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
     if (distanceString.length > 0)
     {
-        [_btnStore setTitle:[NSString stringWithFormat:@"  %@ \(%@)",_data.store.name,distanceString] forState:UIControlStateNormal];
-    } else
-    {
-        [_btnStore setTitle:[NSString stringWithFormat:@"  %@", _data.store.name] forState:UIControlStateNormal];
+        distanceString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>%@ \(%@)</u></font>",Font_Name_Normal, _data.store.name,distanceString];
     }
-    _btnStore.titleLabel.font = ME_FONT(14);
-    [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
-    [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
-    CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
-    _rect = _btnStore.frame;
+    else
+    {
+        distanceString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>%@</u></font>",Font_Name_Normal, _data.store.name];
+    }
+    [_lbStore setText:distanceString];
+    _lbStore.textColor = [UIColor colorWithHexString:@"#e5004f"];
+    _rect = _lbStore.frame;
     _rect.origin.y = yOffset;
-    _rect.size.width = storesize.width;
-    _rect.size.height = storesize.height;
-    _btnStore.frame = _rect;
-    yOffset += _btnStore.frame.size.height + 15;
+    _rect.origin.x = _btnStore.frame.origin.x + 20;
+    _rect.size.width = 270;
+    _rect.size.height = _lbStore.optimumSize.height;
+    _lbStore.frame = _rect;
+    yOffset += _lbStore.frame.size.height + 15;
     
     //_btnToDail
+    _rect = _btnToDail.frame;
+    _rect.origin.y = yOffset;
+    _rect.size.width = 290;
+    _btnToDail.frame = _rect;
+    [self bringSubviewToFront:_btnToDail];
+    
     if (![NSString isNilOrEmpty:_data.contactPhone]) {
-        NSString *phoneString = [NSString stringWithFormat:@"专柜电话 : %@", _data.contactPhone];
         _btnToDail.hidden = NO;
-        [_btnToDail setTitle:phoneString forState:UIControlStateNormal];
-        _btnToDail.titleLabel.font = ME_FONT(14);
-        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
-        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
-        CGSize phonesize =[_btnToDail sizeThatFits:_btnToDail.frame.size];
-        _rect = _btnToDail.frame;
+        _lbToDail.hidden = NO;
+        NSString *phoneString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>专柜电话 : %@</u></font>", Font_Name_Normal, _data.contactPhone];
+        [_lbToDail setText:phoneString];
+        _lbToDail.textColor = [UIColor colorWithHexString:@"#e5004f"];
+        _rect = _lbToDail.frame;
         _rect.origin.y = yOffset;
-        _rect.size.width = phonesize.width;
-        _rect.size.height = phonesize.height;
-        _btnToDail.frame = _rect;
-        yOffset += _btnToDail.frame.size.height + 15;
+        _rect.origin.x = _btnToDail.frame.origin.x + 20;
+        _rect.size.width = 270;
+        _rect.size.height = _lbToDail.optimumSize.height;
+        _lbToDail.frame = _rect;
+        yOffset += _lbToDail.frame.size.height + 15;
     }
     else{
         _btnToDail.hidden = YES;
+        _lbToDail.hidden = YES;
     }
     
     _rect = _descAddView.frame;

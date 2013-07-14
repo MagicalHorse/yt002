@@ -260,6 +260,7 @@
                 [blockSelf delayLoadComments:[blockViewForRefresh.data valueForKey:@"id"]];
                 //去除已经访问的评论
                 [theApp removeCommentID:[NSString stringWithFormat:@"%@", [blockViewForRefresh.data valueForKey:@"id"]]];
+                [self requestOperations:itemId];
             }
             else
             {
@@ -283,6 +284,7 @@
             [self resetScrollViewSize:blockViewForRefresh];
             //去除已经访问的评论
             [theApp removeCommentID:[NSString stringWithFormat:@"%@", [blockViewForRefresh.data valueForKey:@"id"]]];
+            [self requestOperations:itemId];
         } errorCallback:^{
             [self onButtonCancel];
         }];
@@ -290,7 +292,7 @@
     [self hideCommentInputView:nil];
     
     //请求操作
-    [self performSelector:@selector(requestOperations:) withObject:itemId afterDelay:.2f];
+    //[self performSelector:@selector(requestOperations:) withObject:itemId afterDelay:.2f];
 }
 
 -(void)requestOperations:(NSNumber*)itemid
@@ -300,15 +302,15 @@
     drequest.routeResourcePath = blockViewForRefresh.pType == FSSourceProduct?RK_REQUEST_PROD_AVAILOPERATIONS:RK_REQUEST_PRO_AVAILOPERATIONS;
     drequest.pType = _sourceType;
     drequest.id = itemid;
+    _inLoading = YES;
     drequest.uToken = [FSModelManager sharedModelManager].loginToken;
     [drequest send:[FSProdItemEntity class] withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
+        _inLoading = NO;
         if (resp.isSuccess)
         {
             FSProdItemEntity *item = resp.responseData;
             BOOL flag = item.isCouponed;
             [blockViewForRefresh updateToolBar:flag];
-            //更新喜欢按钮状态
-            item.isFavored = item.isFavored;
             if ([blockViewForRefresh.data isKindOfClass:[FSProdItemEntity class]])
             {
                 ((FSProdItemEntity *)blockViewForRefresh.data).isFavored = item.isFavored;
@@ -334,9 +336,11 @@
     request.pageSize = @100;
     request.refreshTime = [[NSDate alloc] init];
     request.rootKeyPath = @"data.comments";
+    _inLoading = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [request send:[FSComment class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        _inLoading = NO;
         if (resp.isSuccess)
         {
             [[blockViewForRefresh data] setComments:resp.responseData];
@@ -528,14 +532,16 @@
 }
 
 - (IBAction)doComment:(id)sender {
-    if (_inLoading) {
-        return;
-    }
-    id currentView =  self.paginatorView.currentPage;
-    isReplyToAll = YES;
-    
-    //[(UIScrollView *)[currentView tbComment].superview scrollRectToVisible:[currentView tbComment].frame animated:TRUE];
-    [self displayCommentInputView:currentView];
+    [FSModelManager localLogin:self withBlock:^{
+        if (_inLoading) {
+            return;
+        }
+        
+        id currentView =  self.paginatorView.currentPage;
+        isReplyToAll = YES;
+        
+        [self displayCommentInputView:currentView];
+    }];
 }
 
 - (IBAction)doGetCoupon:(id)sender {
@@ -553,9 +559,9 @@
 }
 
 - (IBAction)doShare:(id)sender {
-    if (_inLoading) {
-        return;
-    }
+//    if (_inLoading) {
+//        return;
+//    }
     NSMutableArray *shareItems = [@[] mutableCopy];
     id view = self.paginatorView.currentPage;
     NSString *title = [self.itemSource valueForKey:@"title"];
@@ -668,9 +674,10 @@
 
 - (IBAction)contact:(id)sender {
     //跳转私信列表，需要提前登录
-    if (_inLoading) {
-        return;
-    }
+//    if (_inLoading) {
+//        return;
+//    }
+    
     __block FSDetailBaseView * currentView = (FSDetailBaseView*)self.paginatorView.currentPage;
     FSUser * fromUser = [currentView.data valueForKey:@"fromUser"];
     if ([fromUser.uid intValue] == [[FSUser localProfile].uid intValue]) {
@@ -704,9 +711,9 @@
 
 - (IBAction)buy:(id)sender {
     //点击购买，需要提前登录
-    if (_inLoading) {
-        return;
-    }
+//    if (_inLoading) {
+//        return;
+//    }
     
     [FSModelManager localLogin:self withBlock:^{
         //to buy
@@ -916,12 +923,10 @@
         }
     }
     
-    [FSModelManager localLogin:self withBlock:^{
-        [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil) withExeBlock:^(dispatch_block_t callback){
-            [self internalDoComent:callback];
-        } completeCallbck:^{
-            [self endProgress];
-        }];
+    [self startProgress:NSLocalizedString(@"FS_PRODETAIL_COMMING",nil) withExeBlock:^(dispatch_block_t callback){
+        [self internalDoComent:callback];
+    } completeCallbck:^{
+        [self endProgress];
     }];
 }
 
@@ -1451,6 +1456,7 @@
     if (_inLoading) {
         return;
     }
+    
     if (_isRecording) {
         _recordState = PTRecording;
         return;
@@ -1461,6 +1467,7 @@
         [self endRecord];
         return;
     }
+    
     _recordState = PTRecording;
     if (lastButton) {
         [lastButton pause];

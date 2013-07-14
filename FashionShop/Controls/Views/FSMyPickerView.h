@@ -37,8 +37,8 @@
 @property (nonatomic) BOOL pickerIsShow;  //当前picker是否显示
 @property (nonatomic,strong) UIPickerView *picker;
 
--(void)showPickerView;
--(void)hidenPickerView:(BOOL)animated;
+-(void)showPickerView:(void (^)(void))action;
+-(void)hidenPickerView:(BOOL)animated action:(void (^)(void))Aaction;
 
 +(FSMyPickerView*)sharedInstance;
 

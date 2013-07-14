@@ -484,7 +484,12 @@
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
     if (tmpPros.count < 1) {
-        [self showNoResultImage:_tbAction withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:100];
+        if (_currentSelIndex == 0) {
+            [self showNoResultImage:_tbAction withImage:@"blank_message.png" withText:NSLocalizedString(@"TipInfo_Private_Letter_None", nil)  originOffset:100];
+        }
+        else{
+            [self showNoResultImage:_tbAction withImage:@"blank_comment.png" withText:NSLocalizedString(@"TipInfo_Comment_None", nil)  originOffset:100];
+        }
     }
     else{
         [self hideNoResultImage:_tbAction];

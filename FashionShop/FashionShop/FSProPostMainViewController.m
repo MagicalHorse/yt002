@@ -550,7 +550,7 @@
         index = 0;
     }
     [paywayPickerView.picker selectRow:index inComponent:0 animated:NO];
-    [paywayPickerView showPickerView];
+    [paywayPickerView showPickerView:nil];
 }
 
 #pragma FSProPostStepCompleteDelegate

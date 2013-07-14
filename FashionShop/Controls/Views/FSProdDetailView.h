@@ -35,7 +35,9 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnBuy;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
+@property (strong, nonatomic) IBOutlet RTLabel *lbStore;
 @property (strong, nonatomic) IBOutlet UIButton *btnToDail;
+@property (strong, nonatomic) IBOutlet RTLabel *lbToDail;
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 

@@ -115,7 +115,7 @@
         }
     }
     [activityField resignFirstResponder];
-    [invoicePickerView showPickerView];
+    [invoicePickerView showPickerView:nil];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -123,7 +123,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     activityField = textField;
-    [invoicePickerView hidenPickerView:YES];
+    [invoicePickerView hidenPickerView:YES action:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField

@@ -108,7 +108,7 @@
 -(void)clickSelectButton:(UIButton*)sender
 {
     if (myPickerView.pickerIsShow) {
-        [myPickerView hidenPickerView:YES];
+        [myPickerView hidenPickerView:YES action:nil];
     }
     else{
         NSString *title = nil;
@@ -117,7 +117,7 @@
             index = 0;
         }
         [myPickerView.picker selectRow:index inComponent:0 animated:NO];
-        [myPickerView showPickerView];
+        [myPickerView showPickerView:nil];
         [theApp.window bringSubviewToFront:myPickerView];
     }
 }

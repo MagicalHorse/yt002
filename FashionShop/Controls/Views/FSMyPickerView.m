@@ -83,7 +83,7 @@ static FSMyPickerView *myPickerViewInstance;
     return nil;
 }
 
--(void)showPickerView
+-(void)showPickerView:(void (^)(void))action
 {
     if (self.frame.origin.y <= MP_SCREEN_HIGH && !_pickerIsShow)
     {
@@ -95,12 +95,15 @@ static FSMyPickerView *myPickerViewInstance;
             rect.origin.y -= self.frame.size.height;
             self.frame = rect;
         } completion:nil];
+        if (action) {
+            action();
+        }
         
         [_picker reloadAllComponents];
     }
 }
 
--(void)hidenPickerView:(BOOL)animated
+-(void)hidenPickerView:(BOOL)animated action:(void (^)(void))Aaction
 {
     if (self.frame.origin.y <= MP_SCREEN_HIGH - self.frame.size.height && _pickerIsShow)
     {
@@ -118,12 +121,15 @@ static FSMyPickerView *myPickerViewInstance;
             rect.origin.y += self.frame.size.height;
             self.frame = rect;
         }
+        if (Aaction) {
+            Aaction();
+        }
     }
 }
 
 -(void)cancelPickerView:(UIButton*)sender
 {
-    [self hidenPickerView:YES];
+    [self hidenPickerView:YES action:nil];
     if ([_delegate respondsToSelector:@selector(didClickCancelButton:)]) {
         [_delegate didClickCancelButton:self];
     }
@@ -131,7 +137,7 @@ static FSMyPickerView *myPickerViewInstance;
 
 -(void)okPickerView:(UIButton*)sender
 {
-    [self hidenPickerView:YES];
+    [self hidenPickerView:YES action:nil];
     if ([_delegate respondsToSelector:@selector(didClickOkButton:)]) {
         [_delegate didClickOkButton:self];
     }
