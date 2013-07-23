@@ -234,6 +234,18 @@
     [textView resignFirstResponder];
 }
 
+- (BOOL)textView:(UITextView *)atextView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if (atextView.text.length >= 500 && range.length == 0)
+    {
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
     CGFloat maxHeight = [MessageInputView maxHeight];

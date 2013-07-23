@@ -230,17 +230,20 @@
     [view addSubview:btnClean];
     yOffset += 40 + 10;
     
-    RTLabel *desc = [[RTLabel alloc] initWithFrame:CGRectMake(10, yOffset, 300, 20)];
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='666666'>%@</font>", Font_Name_Normal, [theApp messageForKey:EM_O_C_HELP]];
-    [desc setText:str];
-    CGRect _rect = desc.frame;
-    _rect.origin.y = yOffset;
-    _rect.size.height = desc.optimumSize.height;
-    desc.frame = _rect;
-    yOffset += _rect.size.height + 15;
-    [view addSubview:desc];
+    NSString *value = [theApp messageForKey:EM_O_C_HELP];
+    if (value) {
+        RTLabel *desc = [[RTLabel alloc] initWithFrame:CGRectMake(15, yOffset, 290, 20)];
+        NSString *str = [NSString stringWithFormat:@"<font face='%@' size=13 color='#666666'>%@</font>", Font_Name_Normal, value];
+        [desc setText:str];
+        CGRect _rect = desc.frame;
+        _rect.origin.y = yOffset;
+        _rect.size.height = desc.optimumSize.height;
+        desc.frame = _rect;
+        yOffset += _rect.size.height + 15;
+        [view addSubview:desc];
+    }
     
-    _rect = view.frame;
+    CGRect _rect = view.frame;
     _rect.size.height = yOffset;
     view.frame = _rect;
 
@@ -455,7 +458,7 @@
         }
         if (indexPath.row <= 1) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.selectionStyle = UITableViewCellSelectionStyleGray;
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         }
         else{
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -728,9 +731,11 @@
 {
     if (aMyPickerView == paywayPickerView) {
         int index = [aMyPickerView.picker selectedRowInComponent:0];
-        FSPurchaseSPaymentItem *aItem = _purchaseData.supportpayments[index];
-        _uploadData.payment = aItem;
-        [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        if (index < _purchaseData.supportpayments.count) {
+            FSPurchaseSPaymentItem *aItem = _purchaseData.supportpayments[index];
+            _uploadData.payment = aItem;
+            [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
+        }
     }
 }
 

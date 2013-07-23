@@ -25,7 +25,7 @@
 -(BOOL) isConfigLoaded;
 
 -(void) forceReloadTags;
--(void) forceReloadBrands;
+//-(void) forceReloadBrands;
 -(void) forceReloadAllBrands;//下载带分组品牌数据
 -(void) forceReloadStores;
 -(void) forceREloadEnviromentMessage;

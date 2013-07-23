@@ -1188,8 +1188,10 @@
             request.requestType = 1;
             
             [self beginLoading:self.view];
+            _contentView.scrollEnabled = NO;
             block(request,^(){
                 [self endLoading:self.view];
+                _contentView.scrollEnabled = YES;
                 [_contentView setContentOffset:CGPointZero];
                 [self reloadTableView];
             });

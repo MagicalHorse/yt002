@@ -164,19 +164,22 @@
         _isInLoading = NO;
         if (resp.isSuccess)
         {
-            NSArray *array = [FSCoreMyLetter fetchData:_lastConversationId one:[[FSModelManager sharedModelManager].localLoginUid intValue] two:[_touchUser.uid intValue] length:[resp.responseData count] ascending:YES];
-            if (array.count > 0) {
-                if (!dataArray) {
-                    dataArray = [NSMutableArray arrayWithCapacity:5];
+            NSArray *__temp = resp.responseData;
+            if (__temp.count > 0) {
+                NSArray *array = [FSCoreMyLetter fetchData:_lastConversationId one:[[FSModelManager sharedModelManager].localLoginUid intValue] two:[_touchUser.uid intValue] length:[resp.responseData count] ascending:YES];
+                if (array.count > 0) {
+                    if (!dataArray) {
+                        dataArray = [NSMutableArray arrayWithCapacity:5];
+                    }
+                    [self fillDataArray:array isInsert:NO];
+                    _lastConversationId = [dataArray[dataArray.count - 1] id];
+                    if (flag) {
+                        [MessageSoundEffect playMessageReceivedSound];
+                    }
                 }
-                [self fillDataArray:array isInsert:NO];
-                _lastConversationId = [dataArray[dataArray.count - 1] id];
-                if (flag) {
-                    [MessageSoundEffect playMessageReceivedSound];
-                }
+                [self.tableView reloadData];
+                [self scrollToBottomAnimated:YES];
             }
-            [self.tableView reloadData];
-            [self scrollToBottomAnimated:YES];
         }
         else
         {
@@ -335,6 +338,8 @@
     [request send:[FSCoreMyLetter class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         if (resp.isSuccess)
         {
+            FSCoreMyLetter *respData = (FSCoreMyLetter*)resp.responseData;
+            [respData show];
             if (!dataArray) {
                 dataArray = [NSMutableArray arrayWithCapacity:5];
             }

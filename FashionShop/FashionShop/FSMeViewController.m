@@ -720,14 +720,18 @@
 
 -(void) loadILike:(BOOL)showProgress nextPage:(int)pageIndex withCallback:(dispatch_block_t)callback
 {
-    if (showProgress)
+    if (showProgress) {
         [self beginLoading:_tbScroll];
+        _likeView.scrollEnabled = NO;
+    }
     _favorPageIndex = pageIndex;
     FSEntityRequestBase *request = [self createRequest:pageIndex];
     NSString *blockKey = _segHeader.selectedIndex==0?LOGIN_GET_USER_LIKE:LOGIN_GET_USER_SHARE;
     ((DataSourceProviderRequest2Block)[_dataSourceProvider objectForKey:blockKey])(request,^{
-        if (showProgress)
+        if (showProgress) {
             [self endLoading:_tbScroll];
+            _likeView.scrollEnabled = YES;
+        }
         if (callback)
             callback();
     });
@@ -1190,12 +1194,15 @@
                         [self hideNoResultImage:_likeView];
                     }
                     
-                    //统计
-                    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
-                    [_dic setValue:@"Me的主页" forKey:@"来源页面"];
-                    [_dic setValue:@"取消喜欢" forKey:@"操作类型"];
-                    [_dic setValue:item.title forKey:@"标题"];
-                    [[FSAnalysis instance] logEvent:COMMON_LIKE_UNLIKE withParameters:_dic];
+                    if (_segHeader.selectedIndex == 0) {
+                        NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
+                        [_dic setValue:@"Me的主页" forKey:@"来源页面"];
+                        [_dic setValue:@"取消喜欢" forKey:@"操作类型"];
+                        [[FSAnalysis instance] logEvent:COMMON_LIKE_UNLIKE withParameters:_dic];
+                    }
+                    else{
+                        [[FSAnalysis instance] logEvent:COMMON_SHARE_DEL withParameters:nil];
+                    }
                 }
             }];
             

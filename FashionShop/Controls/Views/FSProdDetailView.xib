@@ -569,10 +569,6 @@
 								<int key="IBUISystemItemIdentifier">6</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="1065620402">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_like_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="661765441"/>
 								<object class="NSColor" key="IBUITintColor">
@@ -586,10 +582,6 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="277876020">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_comment_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="661765441"/>
 							</object>
@@ -599,10 +591,6 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="1743453">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_promo-code_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="661765441"/>
 							</object>
@@ -862,6 +850,14 @@
 						<reference key="destination" ref="897420491"/>
 					</object>
 					<int key="connectionID">494</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">btnComment</string>
+						<reference key="source" ref="467063917"/>
+						<reference key="destination" ref="277876020"/>
+					</object>
+					<int key="connectionID">495</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -1204,13 +1200,24 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">494</int>
+			<int key="maxID">495</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<object class="IBPartialClassDescription">
 					<string key="className">FSDetailBaseView</string>
 					<string key="superclassName">SYPageView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">myToolBar</string>
+						<string key="NS.object.0">UIToolbar</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">myToolBar</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">myToolBar</string>
+							<string key="candidateClassName">UIToolbar</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/FSDetailBaseView.h</string>
@@ -1219,6 +1226,79 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">FSProDetailViewController</string>
 					<string key="superclassName">SYPaginatorViewController</string>
+					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="buy:">id</string>
+						<string key="contact:">id</string>
+						<string key="dailPhone:">id</string>
+						<string key="doBack:">id</string>
+						<string key="doComment:">id</string>
+						<string key="doFavor:">id</string>
+						<string key="doGetCoupon:">id</string>
+						<string key="doShare:">id</string>
+						<string key="goStore:">id</string>
+						<string key="showBrand:">id</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="buy:">
+							<string key="name">buy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="contact:">
+							<string key="name">contact:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="dailPhone:">
+							<string key="name">dailPhone:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doBack:">
+							<string key="name">doBack:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doComment:">
+							<string key="name">doComment:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doFavor:">
+							<string key="name">doFavor:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doGetCoupon:">
+							<string key="name">doGetCoupon:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="doShare:">
+							<string key="name">doShare:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="goStore:">
+							<string key="name">goStore:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showBrand:">
+							<string key="name">showBrand:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="_thumView">FSThumView</string>
+						<string key="arrowLeft">UIImageView</string>
+						<string key="arrowRight">UIImageView</string>
+					</dictionary>
+					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="_thumView">
+							<string key="name">_thumView</string>
+							<string key="candidateClassName">FSThumView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="arrowLeft">
+							<string key="name">arrowLeft</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="arrowRight">
+							<string key="name">arrowRight</string>
+							<string key="candidateClassName">UIImageView</string>
+						</object>
+					</dictionary>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/FSProDetailViewController.h</string>
@@ -1230,6 +1310,7 @@
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="btnBrand">UIButton</string>
 						<string key="btnBuy">UIButton</string>
+						<string key="btnComment">UIBarButtonItem</string>
 						<string key="btnContact">UIButton</string>
 						<string key="btnCoupon">UIBarButtonItem</string>
 						<string key="btnFavor">UIBarButtonItem</string>
@@ -1263,6 +1344,10 @@
 						<object class="IBToOneOutletInfo" key="btnBuy">
 							<string key="name">btnBuy</string>
 							<string key="candidateClassName">UIButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="btnComment">
+							<string key="name">btnComment</string>
+							<string key="candidateClassName">UIBarButtonItem</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="btnContact">
 							<string key="name">btnContact</string>
@@ -1367,6 +1452,22 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">FSThumView</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/FSThumView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">RTLabel</string>
+					<string key="superclassName">UIView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/RTLabel.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">SYPageView</string>
 					<string key="superclassName">UIView</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1389,9 +1490,6 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="bottom_nav_comment_icon.png">{21, 28}</string>
-			<string key="bottom_nav_like_icon.png">{20, 28}</string>
-			<string key="bottom_nav_promo-code_icon.png">{27, 28}</string>
 			<string key="brand_bg.png">{101, 22}</string>
 			<string key="btn_bg.png">{16, 16}</string>
 			<string key="favorite_tag.png">{16, 16}</string>

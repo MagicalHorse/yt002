@@ -19,11 +19,11 @@
 @property (nonatomic,strong) NSString *msg;
 @property (nonatomic,strong) NSDate *createdate;
 
-+ (NSArray *) allLettersLocal;
 + (NSArray*) fetchData:(int)latestId one:(int)oneId two:(int)twoId length:(int)length ascending:(BOOL)flag;
 +(int) lastConversationId:(int)oneId two:(int)twoId;
 +(FSCoreMyLetter*)findLetterByConversationId:(int)id;
 +(NSArray*) fetchLatestLetters:(int)length one:(int)oneId two:(int)twoId;
++(void) cleanMessage;
 
 -(void)show;
 

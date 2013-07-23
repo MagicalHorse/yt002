@@ -15,6 +15,7 @@
 #import "FSOrderListViewController.h"
 #import "FSAddressManagerViewController.h"
 #import "FSCommonRequest.h"
+#import "FSCoreMyLetter.h"
 
 @interface FSMoreViewController () {
     NSMutableArray *_titles;
@@ -344,6 +345,7 @@
         {
             [self beginLoading:self.view];
             [[FSModelManager sharedModelManager] clearCache];
+            [FSCoreMyLetter cleanMessage];
             [self performSelector:@selector(stopLoading) withObject:nil afterDelay:2.0f];
             
             //统计

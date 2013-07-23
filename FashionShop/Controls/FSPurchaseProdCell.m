@@ -76,7 +76,7 @@
     
     //prodPrice
     rect = _prodPrice.frame;
-    _prodPrice.text = [NSString stringWithFormat:@"标牌价：￥%.2f元", data.price];
+    _prodPrice.text = [NSString stringWithFormat:@"销售价：￥%.2f元", data.price];
     _prodPrice.textColor = [UIColor colorWithHexString:@"e5004f"];
     height = [_prodPrice.text sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
     rect.origin.y = _cellHeight;
@@ -87,7 +87,7 @@
     //prodOriginalPrice
     if (flag) {
         rect = _prodOriginalPrice.frame;
-        _prodOriginalPrice.text = [NSString stringWithFormat:@"原价：￥%.2f元", data.originprice];
+        _prodOriginalPrice.text = [NSString stringWithFormat:@"吊牌价：￥%.2f元", data.originprice];
         _prodOriginalPrice.textColor = [UIColor colorWithHexString:@"181818"];
         height = [_prodOriginalPrice.text sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
         rect.origin.y = _cellHeight;
@@ -272,24 +272,24 @@
              */
         }
             break;
-        case 3://预订单备注
-        {
-            _title.text = @"预订单备注 : ";
-            if (![NSString isNilOrEmpty:data.memo]) {
-                _contentField.text = data.memo;
-            }
-            _contentField.placeholder = @"点击填写预订单备注信息";
-            _contentField.hidden = NO;
-            _contentLb.hidden = YES;
-        }
-            break;
-        case 4://手机号码
+        case 3://手机号码
         {
             _title.text = @"手机号码 : ";
             if (![NSString isNilOrEmpty:data.telephone]) {
                 _contentField.text = data.telephone;
             }
             _contentField.placeholder = @"点击填写手机号码";
+            _contentField.hidden = NO;
+            _contentLb.hidden = YES;
+        }
+            break;
+        case 4://预订单备注
+        {
+            _title.text = @"预订单备注 : ";
+            if (![NSString isNilOrEmpty:data.memo]) {
+                _contentField.text = data.memo;
+            }
+            _contentField.placeholder = @"点击填写预订单备注信息";
             _contentField.hidden = NO;
             _contentLb.hidden = YES;
         }

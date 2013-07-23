@@ -16,7 +16,6 @@
 #import "FSBrand.h"
 
 #import "FSTag.h"
-#import "FSCoreTag.h"
 #import "FSProListRequest.h"
 #import "FSResource.h"
 #import "FSLocationManager.h"
@@ -127,7 +126,7 @@
     
     NSDate *_refreshLatestDate;
     NSDate * _firstLoadDate;
-    FSCoreTag * _currentTag;
+    FSTag * _currentTag;
     
     bool _noMoreResult;
     BOOL _isSearching;
@@ -137,7 +136,7 @@
     BOOL isAnimating;
     
     UIImageView *imageTagBgV;
-    FSCoreTag *_currentSelTag;
+    FSTag *_currentSelTag;
 }
 
 @property(nonatomic, strong, readwrite) FSSearchBar *searchBar;
@@ -273,7 +272,8 @@
             [self collectionView:_cvTags didSelectItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [self resetTagFrameIfNeed];
             _firstTimeLoadDone  = true;
-        } else
+        }
+        else
         {
             [self prepareData];
         }
@@ -296,7 +296,9 @@
     
      _actualTagWidth = 0;
     [self zeroMemoryBlock];
-    [_tags addObjectsFromArray:[FSTag localTags]];
+    if (theApp.allTags) {
+        [_tags addObjectsFromArray:theApp.allTags];
+    }
     if (!_tags ||
         _tags.count<1)
     {
@@ -304,7 +306,7 @@
         __block FSProdListViewController *blockSelf = self;
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
-        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [blockSelf endLoading:_cvTags];
             if (blockSelf->_tags.count>0) {
                 return;
@@ -319,14 +321,15 @@
     }
    
 }
+
 -(void)endPrepareData
 {
     if (!_tags ||
         _tags.count<1)
         return;
     [_cvTags reloadData];
-
 }
+
 -(void) zeroMemoryBlock
 {
     _prodPageIndex = 0;
@@ -555,7 +558,7 @@
     [self fillProdInMemory:prods isInsert:isinserted needReload:FALSE];
 }
 
--(void)beginSwitchTag:(FSCoreTag *)tag
+-(void)beginSwitchTag:(FSTag *)tag
 {
     [self zeroMemoryBlock];
     [self beginLoading:self.view];
@@ -566,8 +569,10 @@
     FSProListRequest *request =
     [self buildListRequest:RK_REQUEST_PROD_LIST nextPage:1 isRefresh:FALSE];
     __block FSProdListViewController *blockSelf = self;
+    _cvContent.scrollEnabled = NO;
     [request send:[FSBothItems class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
         [self endLoading:self.view];
+        _cvContent.scrollEnabled = YES;
         _isInLoading = NO;
         if (resp.isSuccess)
         {
@@ -749,9 +754,11 @@
 {
     if(collectionView == _cvTags)
     {
+        //首先结束上一次的loading动画
+        [self endLoading:self.view];
         [[collectionView cellForItemAtIndexPath:indexPath] setSelected:TRUE];
         [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:TRUE];
-        FSCoreTag *tag = [_tags objectAtIndex:indexPath.row];
+        FSTag *tag = [_tags objectAtIndex:indexPath.row];
         [self beginSwitchTag:tag];
         _currentSelTag = tag;
         

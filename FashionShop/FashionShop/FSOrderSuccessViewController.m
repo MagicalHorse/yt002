@@ -87,9 +87,12 @@
     FSOrderListViewController *orderView = [[FSOrderListViewController alloc] initWithNibName:@"FSOrderListViewController" bundle:nil];
     [_mutArray addObject:orderView];
     
+    /*
+     //跳转到订单列表，就不需要此处的代码
     FSOrderDetailViewController *detailView = [[FSOrderDetailViewController alloc] initWithNibName:@"FSOrderDetailViewController" bundle:nil];
     detailView.orderno = _data.orderno;
     [_mutArray addObject:detailView];
+    */
     
     [nav setViewControllers:_mutArray animated:YES];
     

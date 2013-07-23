@@ -215,7 +215,7 @@
 {
     [super viewWillAppear:animated];
     //每次进行页面刷新
-    _isInRefreshing = YES;
+    _isInRefreshing = NO;
     _isLoadMore = NO;
     [self requestDataWithCallback:nil];
     //更新小红点
@@ -641,7 +641,7 @@
             }
         }
         cellMy.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
+        cellMy.selectionStyle = UITableViewCellSelectionStyleBlue;
         NSMutableArray *plist = _dataSourceList[_currentSelIndex];
         FSMyLetter *item = [plist objectAtIndex:indexPath.row];
         [cellMy setData:item];
@@ -674,7 +674,7 @@
             }
         }
         cellMy.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cellMy.selectionStyle = UITableViewCellSelectionStyleNone;
+        cellMy.selectionStyle = UITableViewCellSelectionStyleBlue;
         NSMutableArray *_comments = _dataSourceList[_currentSelIndex];
         FSComment *item = [_comments objectAtIndex:indexPath.row];
         [cellMy setData:item];

@@ -169,7 +169,7 @@
     //_rect.size.height = 0;
     _tbComment.frame = _rect;
     
-    [self updateInteraction];
+    //[self updateInteraction];
     
     //self.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH);
     self.svContent.frame = CGRectMake(0, 0, APP_WIDTH, APP_HIGH - NAV_HIGH - TOOLBAR_HEIGHT);
@@ -278,7 +278,7 @@
         double _height = [_tbComment.delegate tableView:_tbComment heightForRowAtIndexPath:[NSIndexPath indexPathForItem:commentCount inSection:section]];
         totalHeight += _height;
     }
-    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?0:50);
+    origiFrame.size.height = totalHeight + PRO_DETAIL_COMMENT_HEADER_HEIGHT + (isBind?70:0) + (_data.comments.count>0?0:40);
     [table setFrame:origiFrame];
     CGSize originContent = self.svContent.contentSize;
     originContent.height = origiFrame.size.height + _viewHeight;
@@ -311,6 +311,9 @@
 
 -(void)updateToolBar:(BOOL)flag
 {
+    [_btnFavor setImage:[UIImage imageNamed:@"bottom_nav_like_icon.png"]];
+    [_btnComment setImage:[UIImage imageNamed:@"bottom_nav_comment_icon.png"]];
+    [_btnCoupon setImage:[UIImage imageNamed:@"bottom_nav_promo-code_icon.png"]];
     //更新优惠按钮
     if (!flag) {
         _btnCoupon.enabled = NO;

@@ -28,6 +28,8 @@
 @property (strong,nonatomic) FSLocationManager *locationManager;
 
 @property (strong,nonatomic) NSMutableArray *allBrands;
+@property (strong,nonatomic) NSMutableArray *allTags;
+@property (strong,nonatomic) NSMutableArray *allStores;
 @property (strong,nonatomic) CL_AudioRecorder* audioRecoder;
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong,nonatomic) FSCommon *versionData;

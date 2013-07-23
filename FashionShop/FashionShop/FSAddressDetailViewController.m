@@ -103,6 +103,12 @@
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self hidenPickerView:YES];
+}
+
 -(void)requestAddressDatabase
 {
     //同步请求地址数据库列表
@@ -333,6 +339,7 @@
         if (_address.text.length <= 0) {
 //            _address.text = _address.placeholder;
 //            _address.textColor = redColor;
+            flag = NO;
             if ([NSString isNilOrEmpty:*error]) {
                 *error = _address.placeholder;
             }
@@ -570,17 +577,25 @@
 -(void)showSelect
 {
     firstRow = [_picker selectedRowInComponent:0];
-    FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[firstRow];
-    secondRow = [_picker selectedRowInComponent:1];
-    FSAddressDB *addr2 = addr.items[secondRow];
-    thirdRow = [_picker selectedRowInComponent:2];
-    FSAddressDB *addr3 = [addr2.items objectAtIndex:thirdRow];
-    
-    _address.text = [NSString stringWithFormat:@"%@%@%@", addr.province, addr2.city, addr3.district];
-    _zipCode.text = addr3.zipCode;
-    
-    _address.textColor = fieldTextColor;
-    _zipCode.textColor = fieldTextColor;
+    if (firstRow < theApp.allAddress.count) {
+        FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[firstRow];
+        secondRow = [_picker selectedRowInComponent:1];
+        if (secondRow < addr.items.count) {
+            FSAddressDB *addr2 = addr.items[secondRow];
+            thirdRow = [_picker selectedRowInComponent:2];
+            if (thirdRow < addr2.items.count) {
+                FSAddressDB *addr3 = [addr2.items objectAtIndex:thirdRow];
+                
+                _address.text = [NSString stringWithFormat:@"%@%@%@", addr.province, addr2.city, addr3.district];
+                _zipCode.text = addr3.zipCode;
+                
+                _address.textColor = fieldTextColor;
+                _zipCode.textColor = fieldTextColor;
+            }
+            
+        }
+        
+    }
 }
 
 #pragma mark - UIPickerViewDataSource
@@ -600,16 +615,20 @@
 		case 1:
         {
             int first = [_pickerView selectedRowInComponent:0];
-            FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
-			row = [addr.items count];
+            if (theApp.allAddress.count > first) {
+                FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
+                row = [addr.items count];
+            }
         }
 			break;
 		case 2:
         {
             int first = [_pickerView selectedRowInComponent:0];
-            FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
-            int second = [_pickerView selectedRowInComponent:1];
-			row = [[addr.items[second] items] count];
+            if (theApp.allAddress.count > first) {
+                FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
+                int second = [_pickerView selectedRowInComponent:1];
+                row = [[addr.items[second] items] count];
+            }
         }
 			break;
 		default:

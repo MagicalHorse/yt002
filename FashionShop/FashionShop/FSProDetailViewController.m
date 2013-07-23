@@ -693,7 +693,7 @@
         [msg appendFormat:@"商品名称:%@\n",_item.title];
         [msg appendFormat:@"品牌:%@\n", _item.brand.name];
         if (![NSString isNilOrEmpty:_item.upccode]) {
-            [msg appendFormat:@"货码:%@\n", _item.upccode];
+            [msg appendFormat:@"货号:%@\n", _item.upccode];
         }
         FSMessageViewController *viewController = [[FSMessageViewController alloc] init];
         viewController.touchUser = _item.fromUser;

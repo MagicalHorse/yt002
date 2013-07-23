@@ -38,60 +38,74 @@
     NSLog(@"----------------------------------------------------------------------");
 }
 
-+ (NSArray *) allLettersLocal
-{
-    return [self findAllSortedBy:@"id" ascending:TRUE];
-}
-
 + (NSArray*) fetchData:(int)latestId one:(int)oneId two:(int)twoId length:(int)length ascending:(BOOL)flag
 {
-    NSArray *array = [self findAllSortedBy:@"id" ascending:TRUE];
     NSString *str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id < %d)", oneId, twoId, twoId, oneId, latestId];
     if (flag) {
         str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id > %d)", oneId, twoId, twoId, oneId, latestId];
     }
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
-    NSArray *array2 = [array filteredArrayUsingPredicate:predicate];
-    if (array2.count <= length) {
-        return array2;
+    NSArray *array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true withPredicate:predicate];
+    if (array.count <= length) {
+        return array;
     }
-    NSArray *_toSub = [array2 subarrayWithRange:NSMakeRange(array2.count - length, length)];
+    NSArray *_toSub = [array subarrayWithRange:NSMakeRange(array.count - length, length)];
     return _toSub;
 }
 
-+(NSArray*) fetchLatestLetters:(int)length one:(int)oneId two:(int)twoId{
-    NSArray *array = [self findAllSortedBy:@"id" ascending:TRUE];
++(NSArray*) fetchLatestLetters:(int)length one:(int)oneId two:(int)twoId
+{
     NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
-    NSArray *array2 = [array filteredArrayUsingPredicate:predicate];
-    if (array2.count <= length) {
-        return array2;
+    NSArray* array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true withPredicate:predicate];
+    if (array.count <= length) {
+        return array;
     }
-    NSArray *_toSub = [array2 subarrayWithRange:NSMakeRange(array2.count - length, length)];
+    NSArray *_toSub = [array subarrayWithRange:NSMakeRange(array.count - length, length)];
     return _toSub;
 }
 
 +(int) lastConversationId:(int)oneId two:(int)twoId
 {
-    NSArray *array = [self findAllSortedBy:@"id" ascending:TRUE];
     NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
-    NSArray *array2 = [array filteredArrayUsingPredicate:predicate];
-    FSCoreMyLetter *letter = array2[array2.count - 1];
-    return letter.id;
+    NSArray *array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true withPredicate:predicate];
+    if (array.count > 0) {
+        FSCoreMyLetter *letter = array[array.count - 1];
+        return letter.id;
+    }
+    return -1;
 }
 
 +(FSCoreMyLetter*)findLetterByConversationId:(int)id
 {
-    NSArray *array = [self findAllSortedBy:@"id" ascending:TRUE];
     NSString *str = [NSString stringWithFormat:@"id == %d", id];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
-    NSArray *array2 = [array filteredArrayUsingPredicate:predicate];
-    if(array2.count > 0) {
-        return array2[0];
+    NSArray *array = [FSCoreMyLetter findAllWithPredicate:predicate];
+    if(array.count > 0) {
+        return array[0];
     }
     else{
         return nil;
+    }
+}
+
++(void) cleanMessage
+{
+    //保留100条数据
+    NSArray *array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true];
+    if (array.count <= 100) {
+        return;
+    }
+    NSManagedObjectContext *context = [FSCoreMyLetter currentContext];
+    for (int i = 0; i < array.count - 100; i++) {
+        id item = array[i];
+        [context deleteObject:item];
+    }
+    
+    NSError *error;
+    if (![context save:&error]) {
+        NSLog(@"Unresolved error %@ %@", error, [error userInfo]);
     }
 }
 

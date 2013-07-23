@@ -229,7 +229,7 @@
         }
     }
     if (_publishSource == FSSourceProduct) {
-        //判断货码是否填写
+        //判断货号是否填写
         if ([_proRequest.is4sale boolValue]) {
             if ([NSString isNilOrEmpty:_proRequest.upccode]) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt",nil) message:NSLocalizedString(@"Fill Product Code", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
@@ -353,8 +353,8 @@
         }
         case PostStep4Finished:
         {
-            _proRequest.brandId = [(FSCoreBrand *)value valueForKey:@"id"];
-            _proRequest.brandName = [(FSCoreBrand *)value valueForKey:@"name"];
+            _proRequest.brandId = [(FSBrand *)value valueForKey:@"id"];
+            _proRequest.brandName = [(FSBrand *)value valueForKey:@"name"];
             break;
         }
         case PostStepStoreFinished:
@@ -370,8 +370,8 @@
         }
         case PostStepTagFinished:
         {
-            _proRequest.tagId =[(FSCoreTag *)value valueForKey:@"id"];
-            _proRequest.tagName = [(FSCoreTag *)value valueForKey:@"name"];
+            _proRequest.tagId =[(FSTag *)value valueForKey:@"id"];
+            _proRequest.tagName = [(FSTag *)value valueForKey:@"name"];
             break;
         }
         default:
@@ -471,7 +471,7 @@
 - (IBAction)doSelStore:(id)sender {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
     [ tableSelect setDataSource:^id{
-        return [FSCoreStore allStoresLocal];
+        return theApp.allStores;//[FSCoreStore allStoresLocal];
     } step:PostStepStoreFinished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_STORE_NOTEXT", nil);
     [self.navigationController pushViewController:tableSelect animated:TRUE];
@@ -491,7 +491,7 @@
 {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
     [tableSelect setDataSource:^id{
-       return [FSCoreTag findAllSortedBy:@"name" ascending:TRUE];
+        return theApp.allTags;//[FSCoreTag findAllSortedBy:@"name" ascending:TRUE];
     } step:PostStepTagFinished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_TAG_NOTEXT", nil);
     [self.navigationController pushViewController:tableSelect animated:TRUE];

@@ -42,6 +42,7 @@
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnFavor;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *btnComment;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *btnCoupon;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem1;
 @property (strong, nonatomic) IBOutlet UIBarButtonItem *fixibleItem2;

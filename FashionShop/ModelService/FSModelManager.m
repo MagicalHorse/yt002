@@ -122,11 +122,13 @@ static FSModelManager *_modelManager;
     [self enqueueBackgroundBlock:^{
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
-        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        [request send:[FSTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
+                theApp.allTags = req.responseData;
                 NSLog(@"tag/all load success!");
             }
             else{
+                theApp.allTags = nil;
                 NSLog(@"tag/all load failed!");
             }
         }];
@@ -134,22 +136,26 @@ static FSModelManager *_modelManager;
 
 }
 
+/*
 -(void) forceReloadBrands
 {
     [self enqueueBackgroundBlock:^{
         
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_BRAND_ALL;
-        [request send:[FSCoreBrand class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        [request send:[FSBrand class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
+                theApp.allBrands = req.responseData;
                 NSLog(@"brand/all load success!");
             }
             else{
+                theApp.allBrands = nil;
                 NSLog(@"brand/all load failed!");
             }
         }];
     }];
 }
+ */
 
 -(void) forceReloadAllBrands
 {
@@ -162,6 +168,7 @@ static FSModelManager *_modelManager;
                 NSLog(@"groupbrand/all load success");
             }
             else{
+                theApp.allBrands = nil;
                 NSLog(@"groupbrand/all load failed");
             }
         }];
@@ -175,14 +182,13 @@ static FSModelManager *_modelManager;
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.routeResourcePath = RK_REQUEST_CONFIG_STORE_ALL;
-        [request send:[FSCoreStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
-            for (FSCoreStore *item in req.responseData) {
-                [item show];
-            }
+        [request send:[FSStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
+                theApp.allStores = req.responseData;
                 NSLog(@"store/all load success!");
             }
             else{
+                theApp.allStores = nil;
                 NSLog(@"store/all load failed!");
             }
         }];
@@ -198,9 +204,11 @@ static FSModelManager *_modelManager;
         [request send:[FSEnMessageItem class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
                 theApp.messageItems = req.responseData;
+                NSLog(@"messages/all load success!");
             }
             else{
                 theApp.messageItems = nil;
+                NSLog(@"message/all load failed!");
             }
         }];
     }];

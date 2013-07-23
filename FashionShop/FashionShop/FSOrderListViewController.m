@@ -274,7 +274,7 @@
             cell = [[FSOrderListCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Order_List_Cell_Indentifier];
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     
     if (_currentSelIndex == OrderSortByCompletion) {

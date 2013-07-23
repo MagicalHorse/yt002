@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1552</int>
-		<string key="IBDocument.SystemVersion">12C3012</string>
+		<string key="IBDocument.SystemVersion">12E55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">3084</string>
-		<string key="IBDocument.AppKitVersion">1187.34</string>
-		<string key="IBDocument.HIToolboxVersion">625.00</string>
+		<string key="IBDocument.AppKitVersion">1187.39</string>
+		<string key="IBDocument.HIToolboxVersion">626.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">2083</string>
@@ -510,10 +510,6 @@
 								<int key="IBUISystemItemIdentifier">6</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="629695296">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_like_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="214290843"/>
 							</object>
@@ -523,10 +519,6 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="846382321">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_comment_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="214290843"/>
 							</object>
@@ -536,10 +528,6 @@
 								<int key="IBUISystemItemIdentifier">5</int>
 							</object>
 							<object class="IBUIBarButtonItem" id="935260649">
-								<object class="NSCustomResource" key="IBUIImage">
-									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">bottom_nav_promo-code_icon.png</string>
-								</object>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<reference key="IBUIToolbar" ref="214290843"/>
 							</object>
@@ -1002,7 +990,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">378</int>
+			<int key="maxID">379</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1029,6 +1017,7 @@
 					<string key="className">FSProDetailView</string>
 					<string key="superclassName">FSDetailBaseView</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="btnComment">UIBarButtonItem</string>
 						<string key="btnCoupon">UIBarButtonItem</string>
 						<string key="btnFavor">UIBarButtonItem</string>
 						<string key="btnStore">UIButton</string>
@@ -1050,6 +1039,10 @@
 						<string key="titleDurationView">UIView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="btnComment">
+							<string key="name">btnComment</string>
+							<string key="candidateClassName">UIBarButtonItem</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="btnCoupon">
 							<string key="name">btnCoupon</string>
 							<string key="candidateClassName">UIBarButtonItem</string>
@@ -1136,21 +1129,30 @@
 					<string key="className">FSProDetailViewController</string>
 					<string key="superclassName">SYPaginatorViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="buy:">id</string>
+						<string key="contact:">id</string>
+						<string key="dailPhone:">id</string>
 						<string key="doBack:">id</string>
 						<string key="doComment:">id</string>
 						<string key="doFavor:">id</string>
 						<string key="doGetCoupon:">id</string>
 						<string key="doShare:">id</string>
-						<string key="goDR:">NSNumber</string>
 						<string key="goStore:">id</string>
-						<string key="recordTouchDown:">id</string>
-						<string key="recordTouchDragEnter:">id</string>
-						<string key="recordTouchDragExit:">id</string>
-						<string key="recordTouchUpInside:">id</string>
-						<string key="recordTouchUpOutside:">id</string>
 						<string key="showBrand:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="buy:">
+							<string key="name">buy:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="contact:">
+							<string key="name">contact:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="dailPhone:">
+							<string key="name">dailPhone:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="doBack:">
 							<string key="name">doBack:</string>
 							<string key="candidateClassName">id</string>
@@ -1171,32 +1173,8 @@
 							<string key="name">doShare:</string>
 							<string key="candidateClassName">id</string>
 						</object>
-						<object class="IBActionInfo" key="goDR:">
-							<string key="name">goDR:</string>
-							<string key="candidateClassName">NSNumber</string>
-						</object>
 						<object class="IBActionInfo" key="goStore:">
 							<string key="name">goStore:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="recordTouchDown:">
-							<string key="name">recordTouchDown:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="recordTouchDragEnter:">
-							<string key="name">recordTouchDragEnter:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="recordTouchDragExit:">
-							<string key="name">recordTouchDragExit:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="recordTouchUpInside:">
-							<string key="name">recordTouchUpInside:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="recordTouchUpOutside:">
-							<string key="name">recordTouchUpOutside:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showBrand:">
@@ -1259,9 +1237,6 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<dictionary class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="bottom_nav_comment_icon.png">{21, 28}</string>
-			<string key="bottom_nav_like_icon.png">{20, 28}</string>
-			<string key="bottom_nav_promo-code_icon.png">{27, 28}</string>
 			<string key="favorite_tag.png">{16, 16}</string>
 			<string key="list_title_bg.png">{16, 16}</string>
 			<string key="location_icon.png">{15, 15}</string>

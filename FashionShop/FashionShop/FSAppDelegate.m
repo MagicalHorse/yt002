@@ -52,7 +52,7 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 
 @implementation FSAppDelegate
-@synthesize allBrands;
+@synthesize allBrands,allStores,allTags,allAddress;
 
 @synthesize modelManager,locationManager;
 

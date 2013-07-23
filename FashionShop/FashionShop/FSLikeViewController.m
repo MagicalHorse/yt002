@@ -181,6 +181,7 @@
 {
     FSLikeDetailCell *detailCell = [_contentView dequeueReusableCellWithIdentifier:USER_LIKE_TABLE_CELL];
     detailCell.data = [_likes objectAtIndex:indexPath.row];
+    detailCell.selectionStyle = UITableViewCellSelectionStyleBlue;
     return detailCell;
 }
 

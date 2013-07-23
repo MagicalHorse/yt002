@@ -9,8 +9,8 @@
 #import "FSPostTableSelViewController.h"
 #import "FSGroupBrand.h"
 #import "FSConfigListRequest.h"
-#import "FSCoreStore.h"
-#import "FSCoreTag.h"
+#import "FSStore.h"
+#import "FSTag.h"
 
 @interface FSPostTableSelViewController ()
 {
@@ -98,7 +98,7 @@
         request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         request.lantit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         request.routeResourcePath = RK_REQUEST_CONFIG_STORE_ALL;
-        [request send:[FSCoreStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        [request send:[FSStore class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
                 _data = req.responseData;
                 NSLog(@"store/all load success!");
@@ -112,7 +112,7 @@
     else if(_currentStep == PostStepTagFinished) {
         FSConfigListRequest *request = [[FSConfigListRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
-        [request send:[FSCoreTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        [request send:[FSTag class] withRequest:request completeCallBack:^(FSEntityBase *req) {
             if (req.isSuccess) {
                 _data = req.responseData;
                 [_tbContent reloadData];

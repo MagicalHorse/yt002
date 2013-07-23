@@ -21,6 +21,7 @@
 #define CHECK_PRODUCT_LIST      @"查看商品列表页"
 #define COMMON_SHARE            @"分享"
 #define COMMON_LIKE_UNLIKE      @"喜欢/取消喜欢"
+#define COMMON_SHARE_DEL        @"删除分享"
 
 #define COMMON_COMMENT          @"发表评论"
 #define COMMON_GET_COUPON       @"获取优惠码"
