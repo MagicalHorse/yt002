@@ -38,8 +38,14 @@
     NSLog(@"----------------------------------------------------------------------");
 }
 
++ (NSArray *) allLettersLocal
+{
+    return [self findAllSortedBy:@"id" ascending:TRUE];
+}
+
 + (NSArray*) fetchData:(int)latestId one:(int)oneId two:(int)twoId length:(int)length ascending:(BOOL)flag
 {
+    /*
     NSString *str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id < %d)", oneId, twoId, twoId, oneId, latestId];
     if (flag) {
         str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id > %d)", oneId, twoId, twoId, oneId, latestId];
@@ -51,13 +57,37 @@
     }
     NSArray *_toSub = [array subarrayWithRange:NSMakeRange(array.count - length, length)];
     return _toSub;
+     */
+    NSArray *__array = [self allLettersLocal];
+    NSString *str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id < %d)", oneId, twoId, twoId, oneId, latestId];
+    if (flag) {
+        str = [NSString stringWithFormat:@"((fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)) AND (id > %d)", oneId, twoId, twoId, oneId, latestId];
+    }
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
+    NSArray *array = [__array filteredArrayUsingPredicate:predicate];
+    if (array.count <= length) {
+        return array;
+    }
+    NSArray *_toSub = [array subarrayWithRange:NSMakeRange(array.count - length, length)];
+    return _toSub;
 }
 
 +(NSArray*) fetchLatestLetters:(int)length one:(int)oneId two:(int)twoId
 {
+    /*
     NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
     NSArray* array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true withPredicate:predicate];
+    if (array.count <= length) {
+        return array;
+    }
+    NSArray *_toSub = [array subarrayWithRange:NSMakeRange(array.count - length, length)];
+    return _toSub;
+     */
+    NSArray *__array = [self allLettersLocal];
+    NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
+    NSArray* array = [__array filteredArrayUsingPredicate:predicate];
     if (array.count <= length) {
         return array;
     }
@@ -67,9 +97,20 @@
 
 +(int) lastConversationId:(int)oneId two:(int)twoId
 {
+    /*
     NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
     NSArray *array = [FSCoreMyLetter findAllSortedBy:@"id" ascending:true withPredicate:predicate];
+    if (array.count > 0) {
+        FSCoreMyLetter *letter = array[array.count - 1];
+        return letter.id;
+    }
+    return -1;
+     */
+    NSArray *__array = [self allLettersLocal];
+    NSString *str = [NSString stringWithFormat:@"(fromuser.uid == %d AND touser.uid == %d) OR (fromuser.uid == %d AND touser.uid == %d)", oneId, twoId, twoId, oneId];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
+    NSArray *array = [__array filteredArrayUsingPredicate:predicate];
     if (array.count > 0) {
         FSCoreMyLetter *letter = array[array.count - 1];
         return letter.id;
@@ -79,9 +120,21 @@
 
 +(FSCoreMyLetter*)findLetterByConversationId:(int)id
 {
+    /*
     NSString *str = [NSString stringWithFormat:@"id == %d", id];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
     NSArray *array = [FSCoreMyLetter findAllWithPredicate:predicate];
+    if(array.count > 0) {
+        return array[0];
+    }
+    else{
+        return nil;
+    }
+     */
+    NSArray *__array = [self allLettersLocal];
+    NSString *str = [NSString stringWithFormat:@"id == %d", id];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:str];
+    NSArray *array = [__array filteredArrayUsingPredicate:predicate];
     if(array.count > 0) {
         return array[0];
     }

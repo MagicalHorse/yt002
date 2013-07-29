@@ -1122,8 +1122,12 @@
                 _toDetail = YES;
                 FSProPostMainViewController *uploadController = [[FSProPostMainViewController alloc] initWithNibName:@"FSProPostMainViewController" bundle:nil];
                 uploadController.currentUser = _userProfile;
+                /*
                 [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField|SaleField];
                 [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField|SaleField];
+                 */
+                [uploadController setAvailableFields:ImageField|TitleField|BrandField|TagField|StoreField];
+                [uploadController setMustFields:ImageField|TitleField|BrandField|TagField|StoreField];
                 [uploadController setRoute:RK_REQUEST_PROD_UPLOAD];
                 uploadController.publishSource = FSSourceProduct;
                 UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:uploadController];

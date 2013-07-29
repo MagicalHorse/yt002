@@ -47,6 +47,12 @@
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
 }
 
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [_txtContent becomeFirstResponder];
+}
+
 -(void) bindControl
 {
     _txtContent.layer.borderWidth = 0;
@@ -132,6 +138,7 @@
                 [_txtContent setNeedsDisplay];
                 [_txtPhone resignFirstResponder];
                 _txtPhone.text = @"";
+                [_txtContent becomeFirstResponder];
                 
                 NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:3];
                 [_dic setValue:request.content forKey:@"反馈内容"];

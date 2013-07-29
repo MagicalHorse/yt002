@@ -877,6 +877,14 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">doFavor:</string>
+						<reference key="source" ref="1065620402"/>
+						<reference key="destination" ref="841351856"/>
+					</object>
+					<int key="connectionID">496</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">showBrand:</string>
 						<reference key="source" ref="723802405"/>
 						<reference key="destination" ref="841351856"/>
@@ -1200,7 +1208,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">495</int>
+			<int key="maxID">496</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1235,7 +1243,13 @@
 						<string key="doFavor:">id</string>
 						<string key="doGetCoupon:">id</string>
 						<string key="doShare:">id</string>
+						<string key="goDR:">NSNumber</string>
 						<string key="goStore:">id</string>
+						<string key="recordTouchDown:">id</string>
+						<string key="recordTouchDragEnter:">id</string>
+						<string key="recordTouchDragExit:">id</string>
+						<string key="recordTouchUpInside:">id</string>
+						<string key="recordTouchUpOutside:">id</string>
 						<string key="showBrand:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
@@ -1271,8 +1285,32 @@
 							<string key="name">doShare:</string>
 							<string key="candidateClassName">id</string>
 						</object>
+						<object class="IBActionInfo" key="goDR:">
+							<string key="name">goDR:</string>
+							<string key="candidateClassName">NSNumber</string>
+						</object>
 						<object class="IBActionInfo" key="goStore:">
 							<string key="name">goStore:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="recordTouchDown:">
+							<string key="name">recordTouchDown:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="recordTouchDragEnter:">
+							<string key="name">recordTouchDragEnter:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="recordTouchDragExit:">
+							<string key="name">recordTouchDragExit:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="recordTouchUpInside:">
+							<string key="name">recordTouchUpInside:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="recordTouchUpOutside:">
+							<string key="name">recordTouchUpOutside:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showBrand:">
@@ -1457,6 +1495,22 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/FSThumView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSNumber</string>
+					<string key="superclassName">NSValue</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSNumber.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSValue</string>
+					<string key="superclassName">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NSValue.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

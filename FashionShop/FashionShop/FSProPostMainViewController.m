@@ -85,12 +85,21 @@
 
 -(void) initActionsSource
 {
+    /*
     _keySections = [@[NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_SALE_LABEL", nil),
+                    NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)
+                    ] mutableCopy];
+     */
+    _keySections = [@[NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil),
+                    NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil),
                     NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)
                     ] mutableCopy];
     _sections = [@[] mutableCopy];
@@ -137,7 +146,7 @@
         if (_mustFields & TagField)
             _totalFields++;
     }
-    
+    /*
     _rows = [@{NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil):NSLocalizedString(@"PRO_POST_IMG_NOTEXT", Nil),
              NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil):NSLocalizedString(@"PRO_POST_TITLE_NOTEXT", Nil),
             NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil):
@@ -147,6 +156,15 @@
             NSLocalizedString(@"PRO_POST_SALE_LABEL", nil):NSLocalizedString(@"PRO_POST_SALE_NOTEXT", nil),
             NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
             } mutableCopy];
+     */
+    _rows = [@{NSLocalizedString(@"PRO_POST_IMG_LABEL", Nil):NSLocalizedString(@"PRO_POST_IMG_NOTEXT", Nil),
+             NSLocalizedString(@"PRO_POST_TITLE_LABEL", Nil):NSLocalizedString(@"PRO_POST_TITLE_NOTEXT", Nil),
+             NSLocalizedString(@"PRO_POST_DURATION_LABEL", Nil):
+             [@[NSLocalizedString(@"PRO_POST_DURATION_STARTTEXT", Nil),NSLocalizedString(@"PRO_POST_DURATION_ENDTEXT", Nil)] mutableCopy],
+             NSLocalizedString(@"PRO_POST_BRAND_LABEL", Nil):NSLocalizedString(@"PRO_POST_BRAND_NOTEXT", Nil),
+             NSLocalizedString(@"PRO_POST_STORE_LABEL", Nil):NSLocalizedString(@"PRO_POST_STORE_NOTEXT", Nil),
+             NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil):NSLocalizedString(@"PRO_POST_TAG_NOTEXT", Nil),
+             } mutableCopy];
     _rowDone = [@{} mutableCopy];
 }
 
@@ -363,11 +381,13 @@
             _proRequest.storeName = [(FSStore *)value name];
             break;
         }
+            /*
         case PostStepSaleTag:
         {
             _proRequest.is4sale = value[0];
             break;
         }
+             */
         case PostStepTagFinished:
         {
             _proRequest.tagId =[(FSTag *)value valueForKey:@"id"];
@@ -405,8 +425,9 @@
     _proRequest.enddate&&(_mustFields &DurationField)?finishedFields++:finishedFields;
     _proRequest.brandId&&(_mustFields &TagField)?finishedFields++:finishedFields;
     _proRequest.storeId&&(_mustFields &StoreField)?finishedFields++:finishedFields;
-    _proRequest.is4sale&&(_mustFields &SaleField)?finishedFields++:finishedFields;
+    //_proRequest.is4sale&&(_mustFields &SaleField)?finishedFields++:finishedFields;
     _proRequest.tagId&&(_mustFields &TagField)?finishedFields++:finishedFields;
+    /*
     if (_properties.count > 0) {
         for (FSPurchasePropertiesItem *item in _properties) {
             BOOL flag = NO;
@@ -421,6 +442,7 @@
             }
         }
     }
+     */
     return _totalFields==0?0:(float)finishedFields/(float)totalFields;
 }
 
@@ -598,6 +620,7 @@
             [_tbAction reloadData];
             break;
         }
+            /*
         case PostStepSaleTag:
         {
             BOOL flag = [object[0] boolValue];
@@ -605,16 +628,18 @@
             [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationNone];
             break;
         }
+             */
         case PostStepTagFinished:
         {
             [_rows setValue:_proRequest.tagName forKey:NSLocalizedString(@"PRO_POST_TAG_LABEL", Nil)];
             [_tbAction reloadData];
             //请求tagid对应的数据
-            [self requestTagProperties:_proRequest.tagId];
+            //[self requestTagProperties:_proRequest.tagId];
             break;
         }
         default:
         {
+            /*
             int index = step- PostStepProperties;
             if (index < 0 || index >= _properties.count) {
                 return;
@@ -634,6 +659,7 @@
                 [_rows setValue:desc forKey:item.propertyname];
             }
             [_tbAction reloadData];
+             */
         }
             break;
     }
@@ -816,19 +842,21 @@
             [self doSelStore:nil];
             break;
         }
+            /*
         case 50:
         {
             [self doSelSale:nil];
             break;
         }
-        case 60:
+             */
+        case 50:
         {
             [self doSelTag:nil];
             break;
         }
         default:
         {
-            [self doSelProperties:indexPath.section];
+            //[self doSelProperties:indexPath.section];
         }
             break;
     }

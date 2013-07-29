@@ -91,8 +91,8 @@ const NSString* REG_IDCARD = @"^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]
 {
     if (input <= 0)
         return @"";
-    int kilos = 1000;
-    double numberOfKilos = input/kilos;
+//    int kilos = 1000;
+    double numberOfKilos = input;//input/kilos;
     if (numberOfKilos > 10000) {
         return @"";
     }

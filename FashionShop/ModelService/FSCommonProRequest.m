@@ -125,7 +125,7 @@
     [params setValue:startdate forParam:@"startdate"];
     [params setValue:enddate forParam:@"enddate"];
     [params setValue:storeId forParam:@"storeid"];
-    [params setValue:[is4sale boolValue]?@"true":@"false" forParam:@"is4sale"];
+    //[params setValue:[is4sale boolValue]?@"true":@"false" forParam:@"is4sale"];
     if (brandId)
         [params setValue:brandId forParam:@"brandid"];
     if (tagId)
@@ -138,8 +138,10 @@
     if (upccode) {
         [params setValue:upccode forParam:@"upccode"];
     }
+    /*
     if (property)
         [params setValue:property forParam:@"property"];
+     */
     
     for (int i = 0;i < imgs.count; i++) {
         UIImage* img = imgs[i];

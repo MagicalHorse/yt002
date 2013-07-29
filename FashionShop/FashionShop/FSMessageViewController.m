@@ -50,6 +50,9 @@
     
     NSArray *array = [FSCoreMyLetter fetchLatestLetters:10 one:[[FSModelManager sharedModelManager].localLoginUid intValue] two:[_touchUser.uid intValue]];
     if (array.count > 0) {
+        for (FSCoreMyLetter *item in array) {
+            [item show];
+        }
         [self fillDataArray:array isInsert:NO];
         _lastConversationId = [array[array.count - 1] id];
         [self.tableView reloadData];
@@ -168,6 +171,9 @@
             if (__temp.count > 0) {
                 NSArray *array = [FSCoreMyLetter fetchData:_lastConversationId one:[[FSModelManager sharedModelManager].localLoginUid intValue] two:[_touchUser.uid intValue] length:[resp.responseData count] ascending:YES];
                 if (array.count > 0) {
+                    for (FSCoreMyLetter *item in array) {
+                        [item show];
+                    }
                     if (!dataArray) {
                         dataArray = [NSMutableArray arrayWithCapacity:5];
                     }
@@ -305,6 +311,7 @@
 - (BubbleMessageStyle)messageStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FSCoreMyLetter *item = [dataArray objectAtIndex:indexPath.row];
+    [item show];
     int _id = item.fromuser.uid;
     if (_id != [[FSModelManager sharedModelManager].localLoginUid intValue] && _id != 0) {
         return BubbleMessageStyleIncoming;
@@ -328,6 +335,17 @@
     if ([NSString isNilOrEmpty:text]) {
         return;
     }
+    NSArray *array = [self separateString:text];
+    for (int i = 0; i < array.count; i++) {
+        [self performSelector:@selector(sendMessage:) withObject:array[i] afterDelay:i * 0.5];
+    }
+//    for (int i = 0; i < 99999; i++) {
+//        [self performSelector:@selector(sendMessage:) withObject:[NSString stringWithFormat:@"%f", i * 3.141592653] afterDelay:i * 0.3];
+//    }
+}
+
+-(void)sendMessage:(NSString*)text
+{
     FSPLetterRequest * request=[[FSPLetterRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_MY_PLETTER_SAY;
     request.touchUser = _touchUser.uid;
@@ -345,6 +363,9 @@
             }
             NSArray *array = [FSCoreMyLetter fetchLatestLetters:1 one:[[FSModelManager sharedModelManager].localLoginUid intValue] two:[_touchUser.uid intValue]];
             if (array.count > 0) {
+                for (FSCoreMyLetter *item in array) {
+                    [item show];
+                }
                 FSCoreMyLetter *result1 = array[0];
                 if (result1) {
                     [self fillDataArray:[NSArray arrayWithObject:result1] isInsert:NO];
@@ -369,6 +390,26 @@
         [_dic setValue:text forKey:@"对话内容"];
         [[FSAnalysis instance] logEvent:MESSAGE_SEND withParameters:_dic];
     }];
+}
+
+-(NSArray *)separateString:(NSString *)text
+{
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:1];
+    int length = text.length;
+    int _location = 0;
+    int const max = 500;
+    do {
+        NSRange range;
+        range.location = _location;
+        range.length = length-_location>max?max:length-_location;
+        NSString *sub = [text substringWithRange:range];
+        if (sub) {
+            [array addObject:sub];
+        }
+        _location += max;
+    } while (_location <= length);
+    
+    return array;
 }
 
 #pragma mark - FSThumbView delegate
