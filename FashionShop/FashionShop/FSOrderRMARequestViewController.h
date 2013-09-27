@@ -11,7 +11,7 @@
 #import "TPKeyboardAvoidingScrollView.h"
 #import "FSOrder.h"
 
-@interface FSOrderRMARequestViewController : UIViewController
+@interface FSOrderRMARequestViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *contentView;
 @property (strong, nonatomic) IBOutlet FSPlaceHoldTextView *reason;

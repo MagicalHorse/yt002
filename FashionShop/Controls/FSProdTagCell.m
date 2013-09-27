@@ -50,7 +50,6 @@
     {
         _lblTag = [[FSVAlignLabel alloc] initWithFrame:self.bounds];
         _lblTag.contentMode = UIViewContentModeCenter;
-       
     }
 
     [self.contentView addSubview:_lblTag];
@@ -58,7 +57,7 @@
     _lblTag.font = ME_FONT(12);
     _lblTag.numberOfLines = 0;
     _lblTag.backgroundColor = [UIColor clearColor];
-    _lblTag.textColor = RGBCOLOR(75, 73, 72);//[UIColor colorWithRed:153 green:153 blue:153];
+    _lblTag.textColor = RGBCOLOR(75, 73, 72);
     _lblTag.textAlignment = NSTextAlignmentCenter;
  
 
@@ -69,17 +68,16 @@
     [super setSelected:selected];
     if (selected)
     {
-        _lblTag.textColor= RGBCOLOR(218, 33, 85);//[UIColor colorWithRed:255 green:254 blue:254];
+        _lblTag.textColor= RGBCOLOR(218, 33, 85);
         _lblTag.font = [UIFont boldSystemFontOfSize:12];
        
     } else
     {
         _lblTag.font = ME_FONT(12);
-        _lblTag.textColor = RGBCOLOR(75, 73, 72);//[UIColor colorWithRed:153 green:153 blue:153];
+        _lblTag.textColor = RGBCOLOR(75, 73, 72);
     }
     [self switchBackground];
     [self setNeedsDisplay];
-    
 }
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSUseScopeViewController : UIViewController
+@interface FSUseScopeViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (strong, nonatomic) NSMutableArray *stores;

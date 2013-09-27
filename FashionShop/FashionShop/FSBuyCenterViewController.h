@@ -14,7 +14,7 @@
 @protocol FSAddressManagerViewControllerDelegate;
 @protocol FSInvoiceViewControllerDelegate;
 
-@interface FSBuyCenterViewController : UIViewController<UIAlertViewDelegate,FSImageSlideDataSource,UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
+@interface FSBuyCenterViewController : FSBaseViewController<UIAlertViewDelegate,FSImageSlideDataSource,UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic) int productID;

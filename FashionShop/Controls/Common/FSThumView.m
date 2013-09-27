@@ -72,6 +72,17 @@
         return;
     _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
     
+    if (IOS7) {
+        _imgView=[[UIImageView alloc] initWithImage:nil];
+        _imgView.contentMode=UIViewContentModeScaleAspectFit;
+        _imgView.frame = _imgButton.frame;
+        UIImageView *imgV = [[UIImageView alloc] initWithFrame:_imgButton.bounds];
+        imgV.image = [UIImage imageNamed:@"thumb_side.png"];
+        imgV.contentMode = UIViewContentModeScaleToFill;
+        [_imgButton addSubview:_imgView];
+        [self addSubview:_imgButton];
+        return;
+    }
     UIImage *backgroundImage = [UIImage imageNamed:@"default_icon50.png"];
     _imgView=[[UIImageView alloc] initWithImage:backgroundImage];
     _imgView.contentMode=UIViewContentModeScaleAspectFit;

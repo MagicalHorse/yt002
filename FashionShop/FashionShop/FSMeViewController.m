@@ -285,7 +285,8 @@
     if (!_toDetail) {
         [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-        self.navigationController.navigationBar.translucent = NO;
+        if(!IOS7)
+            self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
         self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
     }
@@ -344,7 +345,10 @@
     if (index ==NSNotFound)
         return;
     [_likePros removeObjectAtIndex:index];
-    [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+    if (!IOS7) {
+        [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+    }
+    [_likeView reloadData];
 }
 
 -(void)didItemPublished:(id)itemObj
@@ -673,7 +677,8 @@
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
     
-    [_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
+    //[_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
+    [_likeView registerClass:[FSFavorProCell class] forCellWithReuseIdentifier:@"FSFavorProCell"];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateDeletionMode:)];
     longPress.delegate = self;
@@ -804,16 +809,17 @@
             if (index== NSNotFound)
             {
                 [_likePros addObject:obj];
-                if (!isInsert)
+                if (!isInsert && !IOS7)
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
             }
         }];
-        if (isInsert){
+        if ((isInsert && !IOS7) || IOS7){
             [_likeView reloadData];
             [self resetScrollViewSize];
         }
+        
         if (_likePros.count<1)
         {
             //加载空视图
@@ -848,16 +854,17 @@
             if (index== NSNotFound)
             {
                 [_likePros addObject:obj];
-                if (!isInsert)
+                if (!isInsert && !IOS7)
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
             }
         }];
-        if (isInsert) {
+        if ((isInsert && !IOS7) || IOS7) {
             [_likeView reloadData];
             [self resetScrollViewSize];
         }
+        
         if (_likePros.count<1)
         {
             //加载空视图
@@ -1182,7 +1189,10 @@
                 {
                     FSProdItemEntity *item = [(FSFavorProCell *)cell data];
                     [_likePros removeObject:item];
-                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+                    if (!IOS7) {
+                        [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+                    }
+                    [_likeView reloadData];
                     if (_likePros.count<1)
                     {
                         //加载空视图

@@ -61,7 +61,13 @@
     
     self.bubbleView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     
-//    [self attachTapHandler];
+    _bubbleView = [[BubbleView alloc] init];
+    [self.contentView addSubview:_bubbleView];
+    
+    _thumView = [[FSThumView alloc] initWithFrame:CGRectMake(10, 0, 40, 40)];
+    [self.contentView addSubview:_thumView];
+    
+    //[self attachTapHandler];
 }
 
 -(void)updateControls:(FSCoreMyLetter *)aData showTime:(BOOL)flag
@@ -96,6 +102,7 @@
                                        yOffset,
                                        self.contentView.frame.size.width - 90,
                                        height);
+    
     yOffset += height + unit;
     
     _rect = _thumView.frame;

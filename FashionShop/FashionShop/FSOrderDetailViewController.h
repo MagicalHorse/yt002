@@ -11,7 +11,7 @@
 
 @protocol FSOrderRMARequestViewControllerDelegate;
 
-@interface FSOrderDetailViewController : UIViewController<FSProDetailItemSourceProvider>
+@interface FSOrderDetailViewController : FSBaseViewController<FSProDetailItemSourceProvider>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic,strong) NSString *orderno;

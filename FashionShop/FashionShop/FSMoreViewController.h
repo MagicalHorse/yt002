@@ -25,7 +25,7 @@ enum FSMorePageStatus {
 
 @protocol FSMoreCompleteDelegate;
 
-@interface FSMoreViewController : UIViewController<UITableViewDataSource,UITableViewDelegate> {
+@interface FSMoreViewController : FSBaseViewController<UITableViewDataSource,UITableViewDelegate> {
     
 }
 

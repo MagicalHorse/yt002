@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
 
-@interface FSGiftListViewController : UIViewController<UITableViewDataSource,UITableViewDelegate> {
+@interface FSGiftListViewController : FSBaseViewController<UITableViewDataSource,UITableViewDelegate> {
     
 }
 

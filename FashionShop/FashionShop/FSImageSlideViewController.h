@@ -19,7 +19,7 @@
 -(void)imageSlide:(FSImageSlideViewController *)view didShareTap:(BOOL)shared;
 
 @end
-@interface FSImageSlideViewController : UIViewController<UIScrollViewDelegate>
+@interface FSImageSlideViewController : FSBaseViewController<UIScrollViewDelegate>
 @property (strong, nonatomic) IBOutlet UIScrollView *svContent;
 @property (nonatomic) id<FSImageSlideDataSource> source;
 

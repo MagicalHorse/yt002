@@ -444,7 +444,7 @@
             [theApp.audioRecoder stopRecord];
         });
     });
-    dispatch_release(stopQueue);
+    //dispatch_release(stopQueue);
 }
 
 -(void)endRecordAndDelete
@@ -458,7 +458,7 @@
             [theApp.audioRecoder stopAndDeleteRecord];
         });
     });
-    dispatch_release(stopQueue);
+    //dispatch_release(stopQueue);
 }
 
 -(void)startPlay

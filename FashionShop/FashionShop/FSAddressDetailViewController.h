@@ -10,7 +10,7 @@
 #import "FSPlaceHoldTextView.h"
 #import "TPKeyboardAvoidingScrollView.h"
 
-@interface FSAddressDetailViewController : UIViewController<UIPickerViewDataSource,UIPickerViewDelegate,UIAlertViewDelegate> {
+@interface FSAddressDetailViewController : FSBaseViewController<UIPickerViewDataSource,UIPickerViewDelegate,UIAlertViewDelegate> {
     FSAddressDetailState pageState;
 }
 

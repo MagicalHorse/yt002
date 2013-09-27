@@ -11,10 +11,10 @@
 #import "UIImageView+WebCache.h"
 
 @interface FSProdDetailCell : PSUICollectionViewCell<ImageContainerDownloadDelegate>
-@property (strong, nonatomic) IBOutlet UIImageView *imgPic;
+@property (strong, nonatomic) UIImageView *imgPic;
 
-@property (strong, nonatomic) IBOutlet UIButton *btnPrice;
-@property (strong, nonatomic) IBOutlet UIButton *btnPro;
+@property (strong, nonatomic) UIButton *btnPrice;
+@property (strong, nonatomic) UIButton *btnPro;
 
 @property(nonatomic,strong) FSProdItemEntity *data;
 

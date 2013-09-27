@@ -1443,7 +1443,8 @@ static BOOL G_LOGOUT = NO;
         CFRunLoopRef currentRunLoop = CFRunLoopGetCurrent();
         AuthorizeDelegate *authDelegate = [[AuthorizeDelegate alloc] initWithRunLoop:currentRunLoop];
         [authViewController setDelegate:authDelegate];    
-        [rootViewController presentModalViewController:nav animated:YES]; 
+//        [rootViewController presentModalViewController:nav animated:YES];
+        [rootViewController presentViewController:nav animated:YES completion:nil];
         [authViewController release];
         [nav release];
         CFRunLoopRun();
@@ -1478,7 +1479,8 @@ static BOOL G_LOGOUT = NO;
         }
         TCWBRebroadcastMsgViewController *tCWBRebroadcastMsgViewController = [[TCWBRebroadcastMsgViewController alloc] initWithEngine:self parameter:dic];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:tCWBRebroadcastMsgViewController];
-        [self.rootViewController presentModalViewController:nvc animated:YES];
+//        [self.rootViewController presentModalViewController:nvc animated:YES];
+        [self.rootViewController presentViewController:nvc animated:YES completion:nil];
         [tCWBRebroadcastMsgViewController release];
         [nvc release];
     }
@@ -1511,7 +1513,8 @@ static BOOL G_LOGOUT = NO;
         CFRunLoopRef currentRunLoop = CFRunLoopGetCurrent();
         AuthorizeDelegate *authDelegate = [[AuthorizeDelegate alloc] initWithRunLoop:currentRunLoop];
         [authViewController setDelegate:authDelegate];    
-        [rootViewController presentModalViewController:nav animated:YES]; 
+//        [rootViewController presentModalViewController:nav animated:YES];
+        [rootViewController presentViewController:nav animated:YES completion:nil];
         [authViewController release];
         [nav release];
         CFRunLoopRun();
@@ -1549,7 +1552,8 @@ static BOOL G_LOGOUT = NO;
         }
         TCWBRepeatViewController *tCWBRebroadcastMsgViewController = [[TCWBRepeatViewController alloc] initWithEngine:self parameter:dic];
         UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:tCWBRebroadcastMsgViewController];
-        [self.rootViewController presentModalViewController:nvc animated:YES];
+//        [self.rootViewController presentModalViewController:nvc animated:YES];
+        [self.rootViewController presentViewController:nvc animated:YES completion:nil];
         [tCWBRebroadcastMsgViewController release];
         [nvc release];
         

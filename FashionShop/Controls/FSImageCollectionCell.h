@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "PSTCollectionView.h"
 @interface FSImageCollectionCell : PSUICollectionViewCell
-@property (strong, nonatomic) IBOutlet UIButton *btnRemove;
-@property (strong, nonatomic) IBOutlet UIImageView *imageView;
+@property (strong, nonatomic) UIButton *btnRemove;
+@property (strong, nonatomic) UIImageView *imageView;
 @property (strong, nonatomic) IBOutlet UIButton *btnSizeSel;
 
 @end

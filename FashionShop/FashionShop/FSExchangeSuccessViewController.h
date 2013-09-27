@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSExchange.h"
 
-@interface FSExchangeSuccessViewController : UIViewController
+@interface FSExchangeSuccessViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic, strong) FSExchangeSuccess *data;

@@ -11,7 +11,7 @@
 #import "FSMyPickerView.h"
 #import "FSPurchase.h"
 
-@interface FSInvoiceViewController : UIViewController<UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
+@interface FSInvoiceViewController : FSBaseViewController<UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 
 @property (strong, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *contentView;
 @property (strong, nonatomic) IBOutlet UITextField *invoiceTitle;

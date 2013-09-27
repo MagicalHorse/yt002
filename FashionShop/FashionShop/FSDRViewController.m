@@ -179,8 +179,10 @@
     [_itemsContainer addSubview:_itemsView];
     _itemsView.dataSource = self;
     _itemsView.delegate = self;
-    [_itemsView registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:DR_DETAIL_CELL];
-    [_itemsView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
+    //[_itemsView registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:DR_DETAIL_CELL];
+    [_itemsView registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:DR_DETAIL_CELL];
+    //[_itemsView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
+    [_itemsView registerClass:[FSFavorProCell class] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
     [self prepareRefreshLayout:_itemsView withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^{
             action();

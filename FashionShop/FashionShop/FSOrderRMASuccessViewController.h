@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSOrder.h"
 
-@interface FSOrderRMASuccessViewController : UIViewController
+@interface FSOrderRMASuccessViewController : FSBaseViewController
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic,strong) FSOrderRMAItem *data;
 @end

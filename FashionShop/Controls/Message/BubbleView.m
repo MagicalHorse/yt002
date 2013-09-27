@@ -60,8 +60,8 @@
 #pragma mark - Initialization
 - (void)setup
 {
-    self.backgroundColor = [UIColor clearColor];
     self.incomingBackground = [[UIImage imageNamed:@"messageBubbleGray"] stretchableImageWithLeftCapWidth:23 topCapHeight:15];
+    
     self.outgoingBackground = [[UIImage imageNamed:@"messageBubbleBlue"] stretchableImageWithLeftCapWidth:15 topCapHeight:15];
 }
 
@@ -105,7 +105,6 @@
                                     kMarginTop,
                                     bubbleSize.width,
                                     bubbleSize.height);
-    
 	[image drawInRect:bubbleFrame];
 	
 	CGSize textSize = [BubbleView textSizeForText:self.text];
@@ -119,6 +118,8 @@
                  withFont:[BubbleView font]
             lineBreakMode:NSLineBreakByWordWrapping
                 alignment:(self.style == BubbleMessageStyleOutgoing) ? NSTextAlignmentLeft : NSTextAlignmentLeft];
+    
+    NSLog(@"bubbleFrame height:%.0f\ntextFrame height:%.0f", bubbleFrame.size.height, textFrame.size.height);
 }
 
 #pragma mark - Bubble view

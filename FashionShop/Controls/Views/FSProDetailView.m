@@ -311,9 +311,13 @@
 
 -(void)updateToolBar:(BOOL)flag
 {
-    [_btnFavor setImage:[UIImage imageNamed:@"bottom_nav_like_icon.png"]];
-    [_btnComment setImage:[UIImage imageNamed:@"bottom_nav_comment_icon.png"]];
-    [_btnCoupon setImage:[UIImage imageNamed:@"bottom_nav_promo-code_icon.png"]];
+    UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+    [_btnFavor setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
+    image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+    [_btnComment setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
+    image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+    [_btnCoupon setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]:image];
+    //[_btnCoupon setImage:image];
     //更新优惠按钮
     if (!flag) {
         _btnCoupon.enabled = NO;

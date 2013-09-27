@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSUser.h"
 
-@interface FSNickieViewController : UIViewController<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate> 
+@interface FSNickieViewController : FSBaseViewController<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate> 
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 - (IBAction)doSave:(id)sender;

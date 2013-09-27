@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSPointGiftDetailViewController : UIViewController<UIAlertViewDelegate>
+@interface FSPointGiftDetailViewController : FSBaseViewController<UIAlertViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic) int requestID;
 

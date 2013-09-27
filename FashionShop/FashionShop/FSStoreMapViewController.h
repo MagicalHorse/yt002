@@ -11,7 +11,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "FSStore.h"
 
-@interface FSStoreMapViewController : UIViewController<MKMapViewDelegate, CLLocationManagerDelegate>
+@interface FSStoreMapViewController : FSBaseViewController<MKMapViewDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic, assign) CLLocationCoordinate2D currentCoordinate;

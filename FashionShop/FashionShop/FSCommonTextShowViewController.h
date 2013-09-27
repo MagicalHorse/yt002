@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FSPurchase.h"
 
-@interface FSCommonTextShowViewController : UIViewController
+@interface FSCommonTextShowViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (strong, nonatomic) FSPurchase *purchase;

@@ -361,7 +361,7 @@
             int width = 100;
             photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
             photoController.source = self;
-            [self presentModalViewController:photoController animated:YES];
+            [self presentViewController:photoController animated:YES completion:nil];
             
             //统计
             NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];

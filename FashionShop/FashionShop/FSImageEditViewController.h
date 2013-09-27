@@ -11,7 +11,7 @@
 
 @protocol FSMeViewControllerDelegate;
 
-@interface FSImageEditViewController : UIViewController
+@interface FSImageEditViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet AGSimpleImageEditorView *editView;
 @property (strong, nonatomic) UIImage *image;

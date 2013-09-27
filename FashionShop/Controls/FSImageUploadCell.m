@@ -72,7 +72,8 @@
     imageContent.dataSource = self;
     imageContent.scrollEnabled = FALSE;
        
-    [imageContent registerNib:[UINib nibWithNibName:@"FSImageCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"FSImageCollectionCell"];
+    //[imageContent registerNib:[UINib nibWithNibName:@"FSImageCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"FSImageCollectionCell"];
+    [imageContent registerClass:[FSImageCollectionCell class] forCellWithReuseIdentifier:@"FSImageCollectionCell"];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(selectSizeImage:)];
     longPress.delegate = self;
@@ -135,7 +136,10 @@
     if (indexPath)
     {
         [_images removeObjectAtIndex:indexPath.row];
-        [imageContent deleteItemsAtIndexPaths:@[indexPath]];
+        if (!IOS7) {
+            [imageContent deleteItemsAtIndexPaths:@[indexPath]];
+        }
+        [imageContent reloadData];
         if (sizeIndex == indexPath.row) {
             sizeIndex = -1;
         }

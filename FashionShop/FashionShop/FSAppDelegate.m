@@ -129,10 +129,6 @@ void uncaughtExceptionHandler(NSException *exception)
     [[FSAnalysis instance] autoTrackPages:root];
     [self.window makeKeyAndVisible];
     
-//    UINavigationController *con = root.viewControllers[3];
-//    [[NSNotificationCenter defaultCenter] addObserver:con.topViewController selector:@selector(receivePushNotification:) name:@"ReceivePushNotification" object:nil];
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"ReceivePushNotification" object:nil];
-    
     //添加背景色
     NSArray *array = [root.view subviews];
     UITabBar *_tabbar = [array objectAtIndex:1];
@@ -142,9 +138,16 @@ void uncaughtExceptionHandler(NSException *exception)
     [_tabbar insertSubview:_vImage atIndex:1];
     for (int i = 0; i < _tabbar.items.count; i++) {
         UITabBarItem *item = _tabbar.items[i];
-        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
-        UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
-        [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        if (IOS7) {
+            UIImage *img = [[UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *img_sel = [[UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            item = [item initWithTitle:[[NSArray arrayWithObjects:@"促销",@"专题",@"东东",@"我", nil] objectAtIndex:i] image:img selectedImage:img_sel];
+        }
+        else {
+            UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
+            UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
+            [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        }
         
         [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
         [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];
@@ -506,12 +509,6 @@ void uncaughtExceptionHandler(NSException *exception)
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application NS_AVAILABLE_IOS(4_0)
 {
-    //test
-//    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
-//    UITabBarController *root = [storyBoard instantiateInitialViewController];
-//    int index = root.selectedIndex;
-//    UINavigationController *con = root.viewControllers[index];
-//    [con reportError:@"Test"];
 }
 
 -(void)pushTo
@@ -534,9 +531,16 @@ void uncaughtExceptionHandler(NSException *exception)
     [_tabbar insertSubview:_vImage atIndex:1];
     for (int i = 0; i < _tabbar.items.count; i++) {
         UITabBarItem *item = _tabbar.items[i];
-        UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
-        UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
-        [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        if (IOS7) {
+            UIImage *img = [[UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            UIImage *img_sel = [[UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+            item = [item initWithTitle:[[NSArray arrayWithObjects:@"促销",@"专题",@"东东",@"我", nil] objectAtIndex:i] image:img selectedImage:img_sel];
+        }
+        else {
+            UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d.png", i + 1]];
+            UIImage *img_sel = [UIImage imageNamed:[NSString stringWithFormat:@"tab_bar_%d_sel.png", i + 1]];
+            [item setFinishedSelectedImage:img_sel withFinishedUnselectedImage:img];
+        }
         
         [item setTitlePositionAdjustment:UIOffsetMake(0, -3)];
         [item setImageInsets:UIEdgeInsetsMake(4, 0, -4, 0)];

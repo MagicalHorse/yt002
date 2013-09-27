@@ -12,7 +12,7 @@
 typedef id (^PostTableDataSource)();
 
 
-@interface FSPostTableSelViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@interface FSPostTableSelViewController : FSBaseViewController<UITableViewDataSource,UITableViewDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *tbContent;
 
 -(void) setDataSource:(PostTableDataSource)source step:(PostProgressStep)current selectedCallbackTarget:(id)target;

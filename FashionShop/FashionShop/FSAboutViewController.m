@@ -36,11 +36,6 @@
     _versionLb.text = [NSString stringWithFormat:@"喜欢银泰 V%@", [infoDict objectForKey:@"CFBundleVersion"]];
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
     
-    _verView.layer.borderWidth = 0;
-    _verView.layer.cornerRadius = 10;
-    _verView.backgroundColor = [UIColor whiteColor];
-    [self.view bringSubviewToFront:_verView];
-    
     if ([UIDevice isRunningOniPhone5]) {
         CGRect _rect = _verView.frame;
         _rect.origin.y += 44;
@@ -50,6 +45,11 @@
         _rect.origin.y += 44;
         _desc.frame = _rect;
     }
+    
+    _verView.layer.borderWidth = 0;
+    _verView.layer.cornerRadius = 10;
+    _verView.backgroundColor = [UIColor whiteColor];
+    [self.view bringSubviewToFront:_verView];
     
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
     [_dic setValue:@"关于喜欢银泰页" forKey:@"来源页面"];

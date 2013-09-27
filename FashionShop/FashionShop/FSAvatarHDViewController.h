@@ -16,7 +16,7 @@
 
 @end
 
-@interface FSAvatarHDViewController : UIViewController<ImageDownloaderDelegate>
+@interface FSAvatarHDViewController : FSBaseViewController<ImageDownloaderDelegate>
 
 @property (nonatomic,strong) UIImageView *avatarImgV;
 @property (nonatomic,strong) UIImage *avatarImg;

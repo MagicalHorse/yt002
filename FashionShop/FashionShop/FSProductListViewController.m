@@ -25,6 +25,7 @@
 @interface FSProductListViewController ()
 {
     NSMutableArray *_prods;
+    PSUICollectionView *_productContent;
     
     UIActivityIndicatorView * moreIndicator;
     BOOL _isInLoading;
@@ -216,9 +217,13 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
-    [_productContent setCollectionViewLayout:clayout];
+    
+    _productContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
+    [_contentView addSubview:_productContent];
+    
     _productContent.backgroundColor = [UIColor whiteColor];
-    [_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    //[_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    [_productContent registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_productContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:YES withCallback:^(){
             action();
@@ -259,14 +264,21 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
-                [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
+                if (!IOS7) {
+                    [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
+                }
             } else
             {
                 [_prods insertObject:obj atIndex:0];
-                [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                if (!IOS7) {
+                    [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                }
             }
         }
     }];
+    if (IOS7) {
+        [_productContent reloadData];
+    }
     if (_prods.count<1)
     {
         //加载空视图
@@ -535,7 +547,6 @@
 }
 
 - (void)viewDidUnload {
-    [self setProductContent:nil];
     [super viewDidUnload];
 }
 @end

@@ -14,9 +14,23 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        [self prepareControl];
     }
     return self;
+}
+
+-(void)prepareControl
+{
+    _btnSizeSel = [[UIButton alloc] initWithFrame:CGRectMake(40, 119, 20, 20)];
+    [_btnSizeSel setImage:[UIImage imageNamed:@"unselect_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnSizeSel];
+    
+    _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -5, 100, 116)];
+    [self.contentView addSubview:_imageView];
+    
+    _btnRemove = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
+    [_btnRemove setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnRemove];
 }
 
 /*

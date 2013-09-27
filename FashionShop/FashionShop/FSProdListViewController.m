@@ -376,7 +376,8 @@
     _cvTags.scrollEnabled = NO;
     _tagContainer.clipsToBounds = YES;
     [_tagContainer addSubview:_cvTags];
-    [_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
+    //[_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
+    [_cvTags registerClass:[FSProdTagCell class] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
     _tagContainer.contentMode = UIViewContentModeCenter;
     _cvTags.showsHorizontalScrollIndicator = NO;
     _cvTags.delegate = self;
@@ -500,7 +501,8 @@
     [_contentContainer addSubview:_cvContent];
     [_cvContent setCollectionViewLayout:clayout];
     _cvContent.backgroundColor = RGBCOLOR(242, 242, 242);//[UIColor whiteColor];
-    [_cvContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    //[_cvContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    [_cvContent registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_cvContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^(){
             action();
@@ -529,17 +531,20 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
-                if (!shouldReload)
-                    [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
-            } else
+                if (!shouldReload && !IOS7) {
+                    NSIndexPath *path = [NSIndexPath indexPathForItem:_prods.count-1 inSection:0];
+                    [_cvContent insertItemsAtIndexPaths:@[path]];
+                }
+            }
+            else
             {
                 [_prods insertObject:obj atIndex:0];
-                if (!shouldReload)
-                [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                if (!shouldReload && !IOS7)
+                    [_cvContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
         }
     }];
-    if (shouldReload)
+    if (shouldReload || IOS7)
       [_cvContent reloadData];
     
     if (_prods.count<1)
@@ -803,10 +808,17 @@
     if (collectionView == _cvTags &&
         _tags)
     {
-        CGSize actualSize = [[(FSTag *)[_tags objectAtIndex:indexPath.row] name] sizeWithFont:ME_FONT(12)];
-        CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);
-        _actualTagWidth+=width+5;
-        return CGSizeMake(width, MAX(actualSize.height, Tag_Item_Height));
+        id _temp = [_tags objectAtIndex:indexPath.row];
+        if ([_temp isKindOfClass:[FSTag class]]) {
+            FSTag *tag = (FSTag*)_temp;
+            if (tag.name) {
+                CGSize actualSize = [tag.name sizeWithFont:ME_FONT(12)];
+                CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);
+                _actualTagWidth+=width+5;
+                return CGSizeMake(width, MAX(actualSize.height, Tag_Item_Height));
+            }
+            return CGSizeZero;
+        }
     }
     return  CGSizeMake(ITEM_CELL_WIDTH, ITEM_CELL_WIDTH);
 }
@@ -936,6 +948,16 @@
 
 #pragma mark - Search Delegate
 
+//- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
+//{
+//    if (searchBar.tag == Default_SearchBar_Tag) {
+//        [searchBar resignFirstResponder];
+//        [self onSearch:nil];
+//    }
+//    
+//    return YES;
+//}
+
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     if (searchBar.tag == Default_SearchBar_Tag) {
@@ -998,6 +1020,7 @@
     dr.isModel = YES;
     UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController:dr];
     [self presentModalViewController:navControl animated:YES];
+    //[self presentViewController:navControl animated:YES completion:nil];
     
     //统计1
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];

@@ -1839,7 +1839,7 @@ static void PSTCollectionViewCommonSetup(PSTCollectionView *_self) {
 
 @end
 
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+//#if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
 @implementation NSIndexPath (PSTCollectionViewAdditions)
 
 // Simple NSIndexPath addition to allow using "item" instead of "row".
@@ -1850,8 +1850,9 @@ static void PSTCollectionViewCommonSetup(PSTCollectionView *_self) {
 - (NSInteger)item {
     return self.row;
 }
+
 @end
-#endif
+//#endif
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Runtime Additions to create UICollectionView

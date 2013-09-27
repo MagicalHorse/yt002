@@ -14,8 +14,8 @@
 
 @interface FSFavorProCell : PSUICollectionViewCell<ImageContainerDownloadDelegate>
 
-@property (assign, nonatomic) IBOutlet UIImageView *imgResource;
-@property (strong, nonatomic) IBOutlet UIButton *btnPro;
+@property (strong, nonatomic) UIImageView *imgResource;
+@property (strong, nonatomic) UIButton *btnPro;
 
 @property (strong,nonatomic) id data;
 @property (strong,nonatomic) UIButton *deleteButton;

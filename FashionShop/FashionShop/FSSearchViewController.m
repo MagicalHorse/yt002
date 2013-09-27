@@ -96,7 +96,6 @@
 
 -(void) prepareLayout
 {
-    
     [self replaceBackItem];
     SpringboardLayout *clayout = [[SpringboardLayout alloc] init];
     clayout.itemWidth = ITEM_CELL_WIDTH;
@@ -120,7 +119,6 @@
     
 }
 
-
 -(void) fillProdInMemory:(NSArray *)prods isInsert:(BOOL)isinserted
 {
     
@@ -140,19 +138,21 @@
             if (!isinserted)
             {
                 [_prods addObject:obj];
-                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
+                if (!IOS7) {
+                    [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
+                }
             } else
             {
                 [_prods insertObject:obj atIndex:0];
-                [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                if (!IOS7) {
+                    [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
+                }
             }
-            
-
-            
-            
         }
     }];
-    
+    if (IOS7) {
+        [_brandContent reloadData];
+    }
 }
 
 

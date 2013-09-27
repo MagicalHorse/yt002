@@ -305,7 +305,8 @@ static const NSUInteger kDomainSection = 1;
 	}
 #endif
 
-	[[self presentingController] presentModalViewController:self animated:YES];
+//	[[self presentingController] presentModalViewController:self animated:YES];
+    [[self presentingController] presentViewController:self animated:YES completion:nil];
 }
 
 #pragma mark button callbacks

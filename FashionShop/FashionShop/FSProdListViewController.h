@@ -34,6 +34,6 @@
 @property (strong, nonatomic) IBOutlet UIView *contentContainer;
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
 
-@property (strong, nonatomic) IBOutlet PSUICollectionView *cvContent;
+@property (strong, nonatomic) PSUICollectionView *cvContent;
 
 @end

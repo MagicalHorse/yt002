@@ -1041,6 +1041,9 @@
 
 - (void)didClickPage:(FSCycleScrollView *)csView atIndex:(NSInteger)index
 {
+    if (_dataSourceBannerData.count <= 0) {
+        return;
+    }
     FSProItemEntity *proItem = [_dataSourceBannerData objectAtIndex:index];
     switch (proItem.targetType) {
         case SkipTypeDefault:

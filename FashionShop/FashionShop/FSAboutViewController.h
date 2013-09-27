@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSAboutViewController : UIViewController
+@interface FSAboutViewController : FSBaseViewController
 @property (strong, nonatomic) IBOutlet UILabel *versionLb;
 @property (strong, nonatomic) IBOutlet UIView *verView;
 @property (strong, nonatomic) IBOutlet UILabel *desc;

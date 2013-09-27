@@ -59,6 +59,7 @@
     _icons = [@[
               @[
                 @"gift_icon.png",
+                //@"order_icon.png",
                 ],//@"order_icon.png",
               @[
                 @"eidit_icon.png",
@@ -86,6 +87,7 @@
     _titles = [@[
                 @[
                     NSLocalizedString(@"Gift List", nil),
+                    //NSLocalizedString(@"Pre Order Title", nil),
                     ],//NSLocalizedString(@"Pre Order Title", nil)
                 @[
                     NSLocalizedString(@"Edit Personal Info",nil),
@@ -333,7 +335,11 @@
                 _currentUser.appID = @"615975780";
             }
             NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@",_currentUser.appID];
+            if (IOS7) {
+                str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/guang-dian-bi-zhi/id%@?mt=8", _currentUser.appID];
+            }
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+            
             
             //统计
             NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];

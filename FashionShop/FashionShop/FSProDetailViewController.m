@@ -511,6 +511,7 @@
     [[FSAnalysis instance] logEvent:COMMON_LIKE_UNLIKE withParameters:_dic];
     
 }
+
 -(void) updateFavorButtonStatus:(UIBarButtonItem *)button canFavored:(BOOL)canfavored
 {
     NSString *name = canfavored?@"bottom_nav_like_icon":@"bottom_nav_notlike_icon";
@@ -754,7 +755,8 @@
     int width = 100;
     photoController.beginRect = CGRectMake((APP_WIDTH-width)/2, (APP_HIGH-width)/2, width, width);
     photoController.source = self;
-    [self presentModalViewController:photoController animated:YES];
+    //[self presentModalViewController:photoController animated:YES];
+    [self presentViewController:photoController animated:YES completion:nil];
     
     //统计
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:2];
@@ -1433,7 +1435,7 @@
             [theApp.audioRecoder stopRecord];
         });
     });
-    dispatch_release(stopQueue);
+    //dispatch_release(stopQueue);
 }
 
 -(void)endRecordAndDelete
@@ -1446,7 +1448,7 @@
             [theApp.audioRecoder stopAndDeleteRecord];
         });
     });
-    dispatch_release(stopQueue);
+    //dispatch_release(stopQueue);
 }
 
 #pragma mark button action

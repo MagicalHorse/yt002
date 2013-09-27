@@ -103,7 +103,9 @@
 #pragma mark - Methods to Override
 - (void)prepareLayout
 {
-    [super prepareLayout];
+    if (!IOS7) {
+        [super prepareLayout];
+    }
     
     _itemCount = [[self collectionView] numberOfItemsInSection:0];
     

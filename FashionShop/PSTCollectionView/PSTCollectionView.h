@@ -120,6 +120,7 @@ typedef NS_OPTIONS(NSUInteger, UICollectionViewScrollPosition) {
 
 // To dynamically switch between PSTCollectionView and UICollectionView, use the PSUICollectionView* classes.
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < 60000
+
 #define PSUICollectionView PSUICollectionView_
 #define PSUICollectionViewCell PSUICollectionViewCell_
 #define PSUICollectionReusableView PSUICollectionReusableView_

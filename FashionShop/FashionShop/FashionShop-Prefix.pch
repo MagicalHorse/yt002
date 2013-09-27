@@ -36,6 +36,7 @@
 #import "FSEventsConfig.h"
 #import "UIColor+RGB.h"
 #import "UIDevice+Extention.h"
+#import "FSBaseViewController.h"
 
 #endif
 

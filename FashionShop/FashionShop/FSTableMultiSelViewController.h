@@ -11,7 +11,7 @@
 
 typedef id (^PostTableDataSource)();
 
-@interface FSTableMultiSelViewController : UIViewController
+@interface FSTableMultiSelViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 

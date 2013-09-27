@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "EGORefreshTableHeaderView.h"
 
-@interface FSRefreshableViewController : UIViewController<EGORefreshTableHeaderDelegate,UIScrollViewDelegate>
+@interface FSRefreshableViewController : FSBaseViewController<EGORefreshTableHeaderDelegate,UIScrollViewDelegate>
 
 -(void) prepareRefreshLayout:(UIScrollView *)container withRefreshAction:(UICallBackWith1Param)action ;
 -(void) beginLoadMoreLayout:(UIScrollView *)container;

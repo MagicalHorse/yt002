@@ -10,7 +10,7 @@
 
 @interface FSTag : FSModelBase
 @property(nonatomic) int id;
-@property(nonatomic,strong) NSString *name;
+@property(nonatomic) NSString *name;
 
 
 +(NSArray *)localTags;

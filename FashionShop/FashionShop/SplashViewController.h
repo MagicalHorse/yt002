@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 Fashion. All rights reserved.
 //
 
-@interface SplashViewController : UIViewController <UIScrollViewDelegate> {
+@interface SplashViewController : FSBaseViewController <UIScrollViewDelegate> {
 	UIScrollView *m_pagesView;
 	UIPageControl *m_pageControl;
     UIButton *m_entryButton;

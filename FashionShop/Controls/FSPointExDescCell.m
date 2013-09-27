@@ -163,11 +163,14 @@
             [self initArray];
         }
         PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
-        _additionalView.collectionViewLayout = layout;
+        if (!IOS7) {
+            _additionalView.collectionViewLayout = layout;
+        }
         _additionalView.hidden = NO;
         _additionalView.frame = CGRectMake(10, _cellHeight, 300, (_changeDaga.rules.count+1)*30);
         _additionalView.backgroundColor = [UIColor clearColor];
-        [_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
+        //[_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
+        [_additionalView registerClass:[FSScopeCell class] forCellWithReuseIdentifier:@"FSScopeCell"];
         _additionalView.showsHorizontalScrollIndicator = NO;
         _additionalView.showsVerticalScrollIndicator = NO;
         _additionalView.scrollEnabled = NO;

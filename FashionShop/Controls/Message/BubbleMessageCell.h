@@ -38,9 +38,9 @@
 
 @interface BubbleMessageCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet BubbleView *bubbleView;
+@property (strong, nonatomic) BubbleView *bubbleView;
 @property (strong, nonatomic) IBOutlet UILabel *time;
-@property (strong, nonatomic) IBOutlet FSThumView *thumView;
+@property (strong, nonatomic) FSThumView *thumView;
 
 @property (nonatomic) int cellHeight;
 

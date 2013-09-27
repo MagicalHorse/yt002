@@ -1,13 +1,14 @@
 
 #import <UIKit/UIKit.h>
 #import "FSCache.h"
+#import "FSBaseViewController.h"
 
 /*!
  @class FSStartViewController
  @discussion 启动图片类
  @superclass UIViewController
  */
-@interface FSStartViewController : UIViewController {
+@interface FSStartViewController : FSBaseViewController {
     /*!@var splashImageView 启动图片背景视图*/ 
     UIImageView *splashImageView;
     /*!@var fileCache  缓存object到临时目录的文件中

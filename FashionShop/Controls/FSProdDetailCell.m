@@ -15,19 +15,37 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        [self prepareControl];
     }
     return self;
 }
+
+-(void)prepareControl
+{
+    _btnPrice = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 24)];
+    [_btnPrice setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnPrice];
+    
+    _imgPic = [[UIImageView alloc] initWithFrame:self.bounds];
+    [self.contentView addSubview:_imgPic];
+    _imgPic.clipsToBounds = YES;
+    
+    _btnPro = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    [_btnPro setImage:[UIImage imageNamed:@"promotion_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnPro];
+}
+
 -(void)prepareForReuse
 {
     _imgPic.image = nil;
 }
+
 -(void)setData:(FSProdItemEntity *)data
 {
     _data = data;
     self.layer.borderWidth = 0.5;
     self.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    _imgPic.frame = self.bounds;
     
     if (_data.price &&
         [_data.price intValue]>0)

@@ -649,7 +649,8 @@
 			UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
 			
 			navController.modalPresentationStyle = UIModalPresentationFullScreen;
-			[self.navigationController presentModalViewController:navController animated:NO];
+//			[self.navigationController presentModalViewController:navController animated:NO];
+            [self.navigationController presentViewController:navController animated:YES completion:nil];
 			[controller moveToPhotoAtIndex:_pageIndex animated:NO];
 			
 			[navController release];
@@ -983,7 +984,8 @@
 	}
 #endif
 	
-	[self presentModalViewController:mailViewController animated:YES];
+//	[self presentModalViewController:mailViewController animated:YES];
+    [self presentViewController:mailViewController animated:YES completion:nil];
 	[mailViewController release];
 	
 }

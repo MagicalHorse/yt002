@@ -58,5 +58,6 @@
 -(void)hiddenPickerView;
 -(void)cleanAllPickerView;
 -(NSString*)messageForKey:(NSString *)key;
+-(void) setGlobalLayout;
 
 @end

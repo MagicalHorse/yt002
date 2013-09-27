@@ -128,7 +128,8 @@
 }
 
 #pragma mark - Actions
-- (void)sendPressed:(UIButton *)sender withText:(NSString *)text { } // override in subclass
+- (void)sendPressed:(UIButton *)sender withText:(NSString *)text {
+} // override in subclass
 
 - (void)sendPressed:(UIButton *)sender
 {
@@ -246,23 +247,23 @@
     }
 }
 
-- (void)textViewDidChange:(UITextView *)textView
+- (void)changeTextViewCharacter:(UITextView *)textView
 {
     CGFloat maxHeight = [MessageInputView maxHeight];
     CGFloat textViewContentHeight = textView.contentSize.height;
     CGFloat changeInHeight = textViewContentHeight - self.previousTextViewContentHeight;
-
+    
     changeInHeight = (textViewContentHeight + changeInHeight >= maxHeight) ? 0.0f : changeInHeight;
-
+    
     if(changeInHeight != 0.0f) {
         [UIView animateWithDuration:0.25f
                          animations:^{
                              UIEdgeInsets insets = UIEdgeInsetsMake(0.0f, 0.0f, self.tableView.contentInset.bottom + changeInHeight, 0.0f);
                              self.tableView.contentInset = insets;
                              self.tableView.scrollIndicatorInsets = insets;
-                            
+                             
                              [self scrollToBottomAnimated:NO];
-                            
+                             
                              CGRect inputViewFrame = self.inputView.frame;
                              self.inputView.frame = CGRectMake(0.0f,
                                                                inputViewFrame.origin.y - changeInHeight,
@@ -276,6 +277,11 @@
     }
     
     self.inputView.sendButton.enabled = ([textView.text trimWhitespace].length > 0);
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    [self changeTextViewCharacter:textView];
 }
 
 #pragma mark - Keyboard notifications

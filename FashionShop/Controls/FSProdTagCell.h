@@ -12,7 +12,7 @@
 
 @interface FSProdTagCell : PSUICollectionViewCell
 
-@property (strong, nonatomic) IBOutlet FSVAlignLabel *lblTag;
+@property (strong, nonatomic) FSVAlignLabel *lblTag;
 
 @property(strong ,nonatomic) FSTag *data;
 @end

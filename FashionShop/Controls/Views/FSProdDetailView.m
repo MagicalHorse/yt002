@@ -159,8 +159,10 @@
     yOffset = 0;
     //在线咨询按钮和在线订购
     
+    
     _btnBuy.hidden = YES;
     BOOL isMyself = [_data.fromUser.uid intValue] == [[FSUser localProfile].uid intValue];
+    
     if(isMyself)
     {
         _btnContact.hidden = YES;
@@ -170,6 +172,7 @@
         _btnContact.center = CGPointMake(SCREEN_WIDTH/2, _btnContact.frame.origin.y + _btnContact.frame.size.height/2);
         yOffset += 50;
     }
+    
     /*
     //如果是本人
     if (isMyself) {
@@ -202,7 +205,7 @@
         _btnContact.frame = _rect;
         yOffset += 50;
     }
-     */
+    */
     
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];
@@ -387,9 +390,12 @@
 
 -(void)updateToolBar:(BOOL)flag
 {
-    [_btnFavor setImage:[UIImage imageNamed:@"bottom_nav_like_icon.png"]];
-    [_btnComment setImage:[UIImage imageNamed:@"bottom_nav_comment_icon.png"]];
-    [_btnCoupon setImage:[UIImage imageNamed:@"bottom_nav_promo-code_icon.png"]];
+    UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+    [_btnFavor setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
+    image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+    [_btnComment setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
+    image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+    [_btnCoupon setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
     //更新优惠按钮
     if (!flag) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];

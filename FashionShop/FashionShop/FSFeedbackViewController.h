@@ -13,7 +13,7 @@
 
 
 
-@interface FSFeedbackViewController : UIViewController<UITextFieldDelegate,UITextViewDelegate>
+@interface FSFeedbackViewController : FSBaseViewController<UITextFieldDelegate,UITextViewDelegate>
 
 @property (strong, nonatomic) FSUser *currentUser;
 

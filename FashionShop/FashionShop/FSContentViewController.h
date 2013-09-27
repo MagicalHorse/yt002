@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FSContentViewController : UIViewController
+@interface FSContentViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (nonatomic,strong) NSString *fileName;

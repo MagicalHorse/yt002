@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TDSemiModalViewController : UIViewController
+@interface TDSemiModalViewController : FSBaseViewController
 
 @property (nonatomic, strong) UIView *coverView;
 

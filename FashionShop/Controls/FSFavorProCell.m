@@ -54,9 +54,16 @@
 
 -(void) prepareRemoveClick
 {
+    _imgResource = [[UIImageView alloc] initWithFrame:self.bounds];
+    [self.contentView addSubview:_imgResource];
+    _imgResource.clipsToBounds = YES;
+    
+    _btnPro = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    [_btnPro setImage:[UIImage imageNamed:@"promotion_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnPro];
+    
     deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 24)];
     [deleteButton setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
-     
     [self.contentView addSubview:deleteButton];
 }
 
@@ -64,6 +71,7 @@
 -(void) setData:(id)dataSource{
     if (dataSource){
         _data = dataSource;
+        _imgResource.frame = self.bounds;
     }
 }
 

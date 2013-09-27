@@ -13,7 +13,7 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.2.3"
+#define REST_API_CLIENT_VERSION @"2.2.4"
 
 //正式库
 #define REST_API_URL   @"http://itoo.yintai.com/api"
@@ -27,7 +27,7 @@
 
 //预生产库
 //    #define REST_API_URL   @"http://apis.youhuiin.com/api"
-//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+//    #define REST_API_URL_OUT @"http://stage2.youhuiin.com"
 //    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博
@@ -47,7 +47,7 @@
 #define QQ_CONNECT_APP_ID @"100382932"
 #define QQ_CONNECT_APP_KEY @"8acc22a900a6cf3a144c4e7364dafa78"
 
-//Flurry
+//Flurry hangzhou
 //正式环境
 #define FLURRY_APP_KEY @"BVP8QWHDDXKCBPZRPFT4"
 //测试环境
@@ -67,6 +67,9 @@
 #define EM_O_C_HELP @"O_C_HELP"
 
 #define CollectionView_Default_Height 100.0f
+
+//判断系统是否是iOS7
+#define IOS7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 ? YES : NO)
 
 #define NAV_HIGH        44
 #define TAB_HIGH        49

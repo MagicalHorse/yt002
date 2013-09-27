@@ -11,7 +11,7 @@
 
 typedef void (^FSBindCompleteDelegate) (BOOL isSuccess);
 
-@interface FSCardBindViewController : UIViewController
+@interface FSCardBindViewController : FSBaseViewController
 @property (strong, nonatomic) IBOutlet UIView *bindView;
 @property (strong, nonatomic) IBOutlet UITextField *cardNumField;
 @property (strong, nonatomic) IBOutlet UITextField *cardPwField;
