@@ -36,6 +36,7 @@
 {
     _type = type;
     RKObjectManager *manager = [RKObjectManager sharedManager];
+    NSLog(@"manager.baseURL.absoluteString:%@",manager.baseURL.absoluteString);
     if ([manager.baseURL.absoluteString isEqualToString:REST_API_URL] && type == 2) {
         RKURL *baseURL = [RKURL URLWithBaseURLString:REST_API_URL_OUT];
         manager.client.baseURL = baseURL;

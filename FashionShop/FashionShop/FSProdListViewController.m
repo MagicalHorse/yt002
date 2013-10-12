@@ -808,9 +808,8 @@
     if (collectionView == _cvTags &&
         _tags)
     {
-        id _temp = [_tags objectAtIndex:indexPath.row];
-        if ([_temp isKindOfClass:[FSTag class]]) {
-            FSTag *tag = (FSTag*)_temp;
+        if ([[_tags objectAtIndex:indexPath.row] isKindOfClass:[FSTag class]] && [_tags objectAtIndex:indexPath.row]) {
+            FSTag *tag = (FSTag*)[_tags objectAtIndex:indexPath.row];
             if (tag.name) {
                 CGSize actualSize = [tag.name sizeWithFont:ME_FONT(12)];
                 CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);

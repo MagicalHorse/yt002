@@ -12,48 +12,56 @@
 {
     FSMyPickerView *myPickerView;
     UIButton *slectedButton;
+    UILabel *titleLb;
 }
 
 @end
 
 @implementation FSPropertiesSelectView
-@synthesize data,uploadData;
+@synthesize showData,uploadData,title,selectedKey,delegate,selectedIndex;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        self.backgroundColor = [UIColor clearColor];
+        for (id item in self.subviews) {
+            [item removeFromSuperview];
+        }
     }
     return self;
 }
 
--(void)setData:(FSPurchasePropertiesItem *)aData upLoadData:(FSPurchaseForUpload *)aUpData
+//首先设置title
+-(void)setTitle:(NSString *)aTitle
 {
-    if (!aData) {
+    if (!aTitle) {
         return;
     }
-    data = aData;
-    uploadData = aUpData;
-    for (id item in self.subviews) {
-        [item removeFromSuperview];
-    }
-    self.backgroundColor = [UIColor clearColor];
-    self.tag = data.propertyid + 9999999;
+    title = aTitle;
     
     //add title
     UIFont *font = [UIFont systemFontOfSize:14];
-    NSString *_title = [NSString stringWithFormat:@"%@ : ", data.propertyname];
+    NSString *_title = [NSString stringWithFormat:@"%@ : ", title];
     int _titleW = [_title sizeWithFont:font].width;
     if (_titleW > 225) {
         _titleW = 225;
     }
-    UILabel *titleLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _titleW, 30)];
+    titleLb = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, _titleW, 30)];
     titleLb.text = _title;
     titleLb.backgroundColor = [UIColor clearColor];
     titleLb.font = font;
     titleLb.textColor = [UIColor colorWithHexString:@"181818"];
     [self addSubview:titleLb];
+}
+
+//再设置data
+-(void)setShowData:(NSArray *)aData
+{
+    if (!aData) {
+        return;
+    }
+    showData = aData;
     
     //add button
     if (!slectedButton) {
@@ -64,6 +72,7 @@
     UIEdgeInsets edge = slectedButton.contentEdgeInsets;
     edge.right = 20;
     slectedButton.contentEdgeInsets = edge;
+    UIFont *font = [UIFont systemFontOfSize:14];
     [slectedButton.titleLabel setFont:font];
     slectedButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     slectedButton.titleLabel.minimumFontSize = 10;
@@ -74,34 +83,31 @@
         myPickerView.delegate = self;
         myPickerView.datasource = self;
     }
-    NSString *title = nil;
-    int index = [self getSelectIndex:&title];
+    NSString *__title = nil;
+    int index = [self getSelectIndex:&__title];
     if (index == -1) {
-        title = @"请选择";
+        __title = @"请选择";
     }
     else{
         [myPickerView.picker selectRow:index inComponent:0 animated:NO];
     }
-    [slectedButton setTitle:title forState:UIControlStateNormal];
+    [slectedButton setTitle:__title forState:UIControlStateNormal];
     [slectedButton addTarget:self action:@selector(clickSelectButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self didClickOkButton:nil];
     
     self.frame = CGRectMake(0, 0, titleLb.frame.size.width + slectedButton.frame.size.width, 30);
 }
 
--(int)getSelectIndex:(NSString**)title
+-(int)getSelectIndex:(NSString**)aTitle
 {
-    for (int i = 0; i < uploadData.properies.count; i ++) {
-        FSPurchasePropertiesItem *item = uploadData.properies[i];
-        if (item.propertyid == data.propertyid) {
-            for (int j = 0; j < data.values.count; j++) {
-                FSPurchasePropertiesItem *subItem = data.values[j];
-                if (subItem.valueid == item.valueid) {
-                    *title = subItem.valuename;
-                    return j;
-                }
-            }
+    for (int i = 0; i < showData.count; i++) {
+        FSKeyValueItem *item = showData[i];
+        if (item.key == selectedKey) {
+            *aTitle = item.value;
+            return i;
         }
     }
+    *aTitle = @"请选择";
     return -1;
 }
 
@@ -111,8 +117,8 @@
         [myPickerView hidenPickerView:YES action:nil];
     }
     else{
-        NSString *title = nil;
-        int index = [self getSelectIndex:&title];
+        NSString *aTitle = nil;
+        int index = [self getSelectIndex:&aTitle];
         if (index == -1) {
             index = 0;
         }
@@ -131,28 +137,17 @@
 
 - (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return data.values.count;
+    return showData.count;
 }
 
 #pragma mark - FSMyPickerViewDelegate
 
 - (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
 {
-    int index = [myPickerView.picker selectedRowInComponent:0];
-    FSPurchasePropertiesItem *aItem = data.values[index];
-    for (int i = 0; i < uploadData.properies.count; i ++) {
-        FSPurchasePropertiesItem *item = uploadData.properies[i];
-        if (item.propertyid == data.propertyid) {
-            item.valueid = aItem.valueid;
-            item.valuename = aItem.valuename;
-            [slectedButton setTitle:aItem.valuename forState:UIControlStateNormal];
-            if (item.propertyid == Purchase_Count_Properties_Tag) {
-                //发送请求数据通知
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"RequestAmountData" object:[NSNumber numberWithInt:item.valueid]];
-                uploadData.quantity = item.valueid;
-            }
-            break;
-        }
+    FSKeyValueItem *item = showData[selectedIndex];
+    [slectedButton setTitle:item.value forState:UIControlStateNormal];
+    if (delegate && [delegate respondsToSelector:@selector(didClickOkButton:)]) {
+        [delegate didClickOkButton:self];
     }
 }
 
@@ -163,13 +158,15 @@
 
 - (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    FSPurchasePropertiesItem *item = data.values[row];
-    return item.valuename;
+    FSKeyValueItem *item = showData[row];
+    return item.value;
 }
 
 - (void)myPickerView:(FSMyPickerView *)aMyPickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    //do　ｎｏｔｈｉｎｇ
+    FSKeyValueItem *item = showData[row];
+    selectedIndex = row;
+    selectedKey = item.key;
 }
 
 @end

@@ -44,7 +44,7 @@
 
 - (IBAction)onButtonBack:(id)sender {
     for (int i = 0; i < _checkState.count; i++) {
-        ((FSPurchasePropertiesItem*)_data[i]).isChecked = [_checkState[i] boolValue];
+        ((FSPurchaseSaleColorsItem*)_data[i]).isChecked = [_checkState[i] boolValue];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -94,7 +94,7 @@
             [_checkState removeAllObjects];
         }
         for (int i = 0; i < _data.count; i++) {
-            FSPurchasePropertiesItem *item = _data[i];
+            FSPurchaseSaleColorsItem *item = _data[i];
             [_checkState addObject:[NSNumber numberWithBool:item.isChecked]];
         }
     }
@@ -120,8 +120,8 @@
         detailCell.textLabel.font = ME_FONT(14);
         detailCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    FSPurchasePropertiesItem *item = _data[indexPath.row];
-    detailCell.textLabel.text = item.valuename;
+    FSPurchaseSaleColorsItem *item = _data[indexPath.row];
+    detailCell.textLabel.text = item.colorName;
     if (item.isChecked) {
         detailCell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
@@ -133,7 +133,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FSPurchasePropertiesItem *item = _data[indexPath.row];
+    FSPurchaseSaleColorsItem *item = _data[indexPath.row];
     item.isChecked = !item.isChecked;
     [_tbAction reloadRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }

@@ -258,16 +258,16 @@
         }
         //初始化property对象
         NSMutableArray *pArray = [NSMutableArray array];
-        for (FSPurchasePropertiesItem *item in _properties) {
+        for (FSPurchaseSaleColorsItem *item in _properties) {
             NSMutableArray *array = [NSMutableArray array];
-            for (FSPurchasePropertiesItem *sub in item.values) {
+            for (FSPurchaseSaleColorsItem *sub in item.sizes) {
                 if (sub.isChecked) {
-                    [array addObject:sub.valuename];
+                    [array addObject:sub.colorName];
                 }
             }
             NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:1];
             [dic setValue:array forKey:@"values"];
-            [dic setValue:item.propertyname forKey:@"propertyname"];
+            [dic setValue:item.colorName forKey:@"propertyname"];
             [pArray addObject:dic];
         }
         _proRequest.property = [pArray JSONString];
@@ -286,15 +286,15 @@
         }
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_BrandName:%@", nil), _proRequest.brandName];
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_TagType:%@", nil), _proRequest.tagName];
-        for (FSPurchasePropertiesItem *item in _properties) {
+        for (FSPurchaseSaleColorsItem *item in _properties) {
             NSMutableString *str = [NSMutableString string];
-            for (FSPurchasePropertiesItem *subItem in item.values) {
+            for (FSPurchaseSaleColorsItem *subItem in item.sizes) {
                 if (!subItem.isChecked) {
                     continue;
                 }
-                [str appendFormat:@"%@;", subItem.valuename];
+                [str appendFormat:@"%@;", subItem.colorName];
             }
-            [_msg appendFormat:@"%@:%@\n", item.propertyname, str];
+            [_msg appendFormat:@"%@:%@\n", item.colorName, str];
         }
         BOOL flag = _proRequest.sizeIndex && [_proRequest.sizeIndex intValue] >= 0;
         [_msg appendFormat:NSLocalizedString(@"Upload_Preview_Size_Selected:%@", nil), flag?@"YES":@"NO"];
@@ -429,9 +429,9 @@
     _proRequest.tagId&&(_mustFields &TagField)?finishedFields++:finishedFields;
     /*
     if (_properties.count > 0) {
-        for (FSPurchasePropertiesItem *item in _properties) {
+        for (FSPurchaseSaleColorsItem *item in _properties) {
             BOOL flag = NO;
-            for (FSPurchasePropertiesItem *sub in item.values) {
+            for (FSPurchaseSaleColorsItem *sub in item.values) {
                 if (sub.isChecked) {
                     flag = YES;
                     break;
@@ -548,11 +548,11 @@
     if (index < 0 || index >= _properties.count) {
         return;
     }
-    FSPurchasePropertiesItem *item = _properties[index];
+    FSPurchaseSaleColorsItem *item = _properties[index];
     [tableSelect setDataSource:^id{
-        return item.values;
+        return item.sizes;
     } step:PostStepProperties+index selectedCallbackTarget:self];
-    tableSelect.navigationItem.title = [NSString stringWithFormat:@"选择%@", item.propertyname];
+    tableSelect.navigationItem.title = [NSString stringWithFormat:@"选择%@", item.colorName];
     [self.navigationController pushViewController:tableSelect animated:TRUE];
 }
 
@@ -644,10 +644,10 @@
             if (index < 0 || index >= _properties.count) {
                 return;
             }
-            FSPurchasePropertiesItem *item = _properties[index];
+            FSPurchaseSaleColorsItem *item = _properties[index];
             NSMutableString *desc = [NSMutableString string];
             for (int i = 0; i < item.values.count; i++) {
-                FSPurchasePropertiesItem *_item = item.values[i];
+                FSPurchaseSaleColorsItem *_item = item.values[i];
                 if (_item.isChecked) {
                     [desc appendFormat:@"%@;", _item.valuename];
                 }
@@ -675,7 +675,7 @@
     request.rootKeyPath = @"data.items";
     [self beginLoading:self.view];
     _tbAction.userInteractionEnabled = NO;
-    [request send:[FSPurchasePropertiesItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
+    [request send:[FSPurchaseSaleColorsItem class] withRequest:request completeCallBack:^(FSEntityBase *response) {
         [self endLoading:self.view];
         _tbAction.userInteractionEnabled = YES;
         if (response.isSuccess) {
@@ -683,9 +683,9 @@
             [self resetProperties];
             _properties = response.responseData;
             for (int i = 0; i < _properties.count; i++) {
-                FSPurchasePropertiesItem *item = _properties[i];
-                NSString* key = item.propertyname;
-                NSString* value = [NSString stringWithFormat:@"请选择%@", item.propertyname];
+                FSPurchaseSaleColorsItem *item = _properties[i];
+                NSString* key = item.colorName;
+                NSString* value = [NSString stringWithFormat:@"请选择%@", item.colorName];
                 [_sections addObject:key];
                 [_keySections addObject:value];
                 [_rows setValue:value forKey:key];
@@ -710,9 +710,9 @@
         if (_sections.count <= 6) {
             break;
         }
-        FSPurchasePropertiesItem *item = _properties[i];
-        NSString* key = item.propertyname;
-        NSString* value = [NSString stringWithFormat:@"请选择%@", item.propertyname];
+        FSPurchaseSaleColorsItem *item = _properties[i];
+        NSString* key = item.colorName;
+        NSString* value = [NSString stringWithFormat:@"请选择%@", item.colorName];
         [_rows removeObjectForKey:key];
         [_sections removeObject:key];
         [_keySections removeObject:value];

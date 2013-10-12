@@ -8,7 +8,7 @@
 
 #import "FSPointExSuccessFooter.h"
 
-//礼券兑换成功或预订单成功Cell之footer
+//礼券兑换成功或订单成功Cell之footer
 @implementation FSCommonSuccessFooter
 
 - (id)initWithFrame:(CGRect)frame

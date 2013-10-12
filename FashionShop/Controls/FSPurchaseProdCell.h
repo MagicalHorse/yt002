@@ -10,8 +10,14 @@
 #import "FSPurchase.h"
 #import "RTLabel.h"
 #import "FSOrder.h"
+#import "FSPropertiesSelectView.h"
 
-@interface FSPurchaseProdCell : UITableViewCell
+@class FSPurchaseProdCell;
+@protocol FSPurchaseProdCellDelegate<NSObject>
+-(void)updateAmountInfo:(FSPurchaseProdCell*)cell count:(int)num;
+@end
+
+@interface FSPurchaseProdCell : UITableViewCell<FSPropertiesSelectViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *productImage;
 @property (strong, nonatomic) IBOutlet UILabel *productName;
@@ -23,6 +29,8 @@
 @property (nonatomic) int cellHeight;
 @property (nonatomic,strong) FSPurchase *data;
 @property (nonatomic,strong) FSPurchaseForUpload *uploadData;
+
+@property (nonatomic) id<FSPurchaseProdCellDelegate> delegate;
 
 -(void)setData:(FSPurchase *)aData upLoadData:(FSPurchaseForUpload *)aUpData;
 
@@ -75,6 +83,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *orderNumber;
 @property (strong, nonatomic) IBOutlet UILabel *orderAmount;
+@property (strong, nonatomic) IBOutlet UIButton *buyButton;
 
 @property (nonatomic) int cellHeight;
 @property (nonatomic,strong) FSOrderInfo *data;

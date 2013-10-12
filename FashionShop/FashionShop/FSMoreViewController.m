@@ -59,11 +59,12 @@
     _icons = [@[
               @[
                 @"gift_icon.png",
-                //@"order_icon.png",
+                @"order_icon.png",
                 ],//@"order_icon.png",
               @[
                 @"eidit_icon.png",
                 @"bindcard_icon.png",
+                @"address_icon.png",
                 ],//@"address_icon.png"
               @[
                 @"feedback_icon.png",
@@ -87,11 +88,12 @@
     _titles = [@[
                 @[
                     NSLocalizedString(@"Gift List", nil),
-                    //NSLocalizedString(@"Pre Order Title", nil),
+                    NSLocalizedString(@"Pre Order Title", nil),
                     ],//NSLocalizedString(@"Pre Order Title", nil)
                 @[
                     NSLocalizedString(@"Edit Personal Info",nil),
                     ([_currentUser.isBindCard boolValue]?NSLocalizedString(@"Card Info Query", nil):NSLocalizedString(@"Bind Member Card",nil)),
+                    NSLocalizedString(@"Address Manager", nil),
                     ],//NSLocalizedString(@"Address Manager", nil)
                 @[
                     NSLocalizedString(@"FeedBack",nil),

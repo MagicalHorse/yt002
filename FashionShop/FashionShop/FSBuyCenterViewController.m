@@ -45,11 +45,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"预定中心";
+    self.title = @"预购中心";
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
-    [self addRightButton:@"提交"];
+    [self addRightButton:@"提交订单"];
     
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
@@ -75,7 +75,7 @@
 
 -(void)addRightButton:(NSString*)title
 {
-    UIImage *btnNormal = [[UIImage imageNamed:@"btn_normal.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];
+    UIImage *btnNormal = [[UIImage imageNamed:@"btn_big_normal.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:5];
     UIButton *sheepButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [sheepButton setTitle:title forState:UIControlStateNormal];
     [sheepButton addTarget:self action:@selector(submitProOrder:) forControlEvents:UIControlEventTouchUpInside];
@@ -91,6 +91,7 @@
 {
     FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_PROD_BUY_INFO;
+    _productID = 976;//976;//882;//893;////////////////////////////////////////////////////temp test
     request.id = [NSNumber numberWithInt:_productID];
     request.uToken = [[FSModelManager sharedModelManager] loginToken];
     if (!_amountLoading) {
@@ -160,39 +161,21 @@
 -(void)initUploadData
 {
     _uploadData = [[FSPurchaseForUpload alloc] init];
-    _uploadData.productid = _productID;
-    _uploadData.quantity = 1;
-    
-    if (_purchaseData.supportpayments.count == 1) {
-        _uploadData.payment = _purchaseData.supportpayments[0];
-    }
+    //此处只会有一件商品，所以直接可赋值
+    //先初始化商品数组
+    FSPurchaseProductItem *__product = [[FSPurchaseProductItem alloc] init];
+    __product.productid = _productID;
+    __product.quantity = 1;
     
     //添加数量
-    if (!_uploadData.properies) {
-        _uploadData.properies = [NSMutableArray arrayWithCapacity:1];
+    if (!__product.properties) {
+        __product.properties = [NSMutableDictionary dictionaryWithCapacity:4];
     }
-    FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
-    item.propertyid = Purchase_Count_Properties_Tag;
-    item.propertyname = @"数量";
-    item.valueid = 1;
-    item.valuename = @"1";
-    [_uploadData.properies addObject:item];
-    //添加其他属性
-    int count = _purchaseData.properties.count;
-    if (count > 0) {
-        for (int i = 0; i < count; i++) {
-            FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
-            FSPurchasePropertiesItem *_sub = _purchaseData.properties[i];
-            item.propertyid = [_sub propertyid];
-            item.propertyname = [_sub propertyname];
-            item.valueid = -1;
-            item.valuename = nil;
-            if (_sub.values.count == 1) {
-                item.valueid = [_sub.values[0] valueid];
-                item.valuename = [_sub.values[0] valuename];
-            }
-            [_uploadData.properies addObject:item];
-        }
+    _uploadData.products = [[NSMutableArray alloc] initWithObjects:__product, nil];
+    
+    //如果服务器只传递一个支付方式，则默认选中
+    if (_purchaseData.supportpayments.count == 1) {
+        _uploadData.payment = _purchaseData.supportpayments[0];
     }
 }
 
@@ -272,11 +255,12 @@
     if ([self check:&error]) {
         //订单预览
         NSMutableString *msg = [NSMutableString stringWithString:@""];
+        FSPurchaseProductItem *__p = _uploadData.products[0];
         [msg appendFormat:@"商品名称 : %@\n", _purchaseData.name];
         [msg appendFormat:@"商品单价 : ￥%.2f\n", _purchaseData.price];
-        for (FSPurchasePropertiesItem *item in _uploadData.properies) {
-            [msg appendFormat:@"%@ : %@\n", item.propertyname, item.valuename];
-        }
+        [msg appendFormat:@"颜色：%@\n", [__p.properties objectForKey:@"colorvaluename"]];
+        [msg appendFormat:@"尺码：%@\n", [__p.properties objectForKey:@"sizevaluename"]];
+        [msg appendFormat:@"购买数量 : %d\n", __p.quantity];
         [msg appendFormat:@"送货地址 : %@\n", _uploadData.address.displayaddress];
         [msg appendFormat:@"支付方式 : %@\n", _uploadData.payment.name];
         BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
@@ -285,7 +269,7 @@
             [msg appendFormat:@"发票抬头 : %@\n", _uploadData.invoicetitle];
         }
         if (![NSString isNilOrEmpty:_uploadData.memo]) {
-            [msg appendFormat:@"预订单备注 : %@\n", _uploadData.memo];
+            [msg appendFormat:@"订单备注 : %@\n", _uploadData.memo];
         }
         [msg appendFormat:@"手机号码 : %@\n", _uploadData.telephone];
         [msg appendFormat:@"金额总计 : ￥%.2f\n", _purchaseAmount.extendprice];
@@ -313,12 +297,18 @@
 
 -(BOOL)check:(NSString **)error
 {
-    for (int i = 0; i < _uploadData.properies.count; i++) {
-        FSPurchasePropertiesItem *item = _uploadData.properies[i];
-        if (item.valueid < 0) {
-            *error = [NSString stringWithFormat:@"请选择%@", item.propertyname];
-            return NO;
-        }
+    if (_uploadData.products.count <= 0) {
+        *error = @"当前商品信息有误：商品数量为0";
+        return NO;
+    }
+    FSPurchaseProductItem *__product = _uploadData.products[0];
+    if (![__product.properties objectForKey:@"sizevalueid"]) {
+        *error = @"请选择尺码";
+        return NO;
+    }
+    if (![__product.properties objectForKey:@"colorvalueid"]) {
+        *error = @"请选择颜色";
+        return NO;
     }
     if (!_uploadData.address) {
         *error = @"请选择送货地址";
@@ -337,21 +327,29 @@
 
 -(NSString*)getOrderData
 {
+    if (_uploadData.products.count <= 0) {
+        return nil;
+    }
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    NSMutableArray *__ps = [NSMutableArray array];
     
-    [dic setValue:[NSNumber numberWithInt:_productID] forKey:@"productid"];
-    [dic setValue:_purchaseData.name forKey:@"desc"];
-    [dic setValue:[NSNumber numberWithInt:_uploadData.quantity] forKey:@"quantity"];
+    for (FSPurchaseProductItem *__p in _uploadData.products) {
+        NSMutableDictionary *dic1 = [NSMutableDictionary dictionary];
+        [dic1 setValue:[NSNumber numberWithInt:__p.productid] forKey:@"productid"];
+        [dic1 setValue:_purchaseData.name forKey:@"desc"];
+        [dic1 setValue:[NSNumber numberWithInt:__p.quantity] forKey:@"quantity"];
+        
+        [dic1 setValue:__p.properties forKey:@"properties"];
+        
+        [__ps addObject:dic1];
+    }
+    [dic setValue:__ps forKey:@"products"];
+    
     BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
     [dic setValue:[NSNumber numberWithBool:!flag] forKey:@"needinvoice"];
     [dic setValue:_uploadData.invoicetitle forKey:@"invoicetitle"];
-    //[dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
+    [dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
     [dic setValue:_uploadData.memo forKey:@"memo"];
-    
-    NSMutableDictionary *paymentDic = [NSMutableDictionary dictionary];
-    [paymentDic setValue:_uploadData.payment.code forKey:@"paymentcode"];
-    [paymentDic setValue:_uploadData.payment.name forKey:@"paymentname"];
-    [dic setValue:paymentDic forKey:@"payment"];
     
     NSMutableDictionary *addressDic = [NSMutableDictionary dictionary];
     [addressDic setValue:_uploadData.address.shippingperson forKey:@"shippingcontactperson"];
@@ -360,19 +358,10 @@
     [addressDic setValue:_uploadData.address.displayaddress forKey:@"shippingaddress"];
     [dic setValue:addressDic forKey:@"shippingaddress"];
     
-    NSMutableArray *array = [NSMutableArray array];
-    for (FSPurchasePropertiesItem *item in _uploadData.properies) {
-        if (item.propertyid == Purchase_Count_Properties_Tag) {
-            continue;
-        }
-        NSMutableDictionary *propertiesItemDic = [NSMutableDictionary dictionary];
-        [propertiesItemDic setValue:[NSNumber numberWithInt:item.propertyid] forKey:@"propertyid"];
-        [propertiesItemDic setValue:item.propertyname forKey:@"propertyname"];
-        [propertiesItemDic setValue:[NSNumber numberWithInt:item.valueid] forKey:@"valueid"];
-        [propertiesItemDic setValue:item.valuename forKey:@"valuename"];
-        [array addObject:propertiesItemDic];
-    }
-    [dic setValue:array forKey:@"properties"];
+    NSMutableDictionary *paymentDic = [NSMutableDictionary dictionary];
+    [paymentDic setValue:_uploadData.payment.code forKey:@"paymentcode"];
+    [paymentDic setValue:_uploadData.payment.name forKey:@"paymentname"];
+    [dic setValue:paymentDic forKey:@"payment"];
     
     return [dic JSONString];
 }
@@ -420,6 +409,7 @@
                 }
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.delegate = self;
             }
             [cell setData:_purchaseData upLoadData:_uploadData];
             
@@ -440,7 +430,7 @@
             index = 2;
         }
         if (indexPath.row == index) {
-            cell.textLabel.text = @"商家信誉保证";
+            cell.textLabel.text = @"退换货政策";
         }
         return cell;
     }
@@ -582,7 +572,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    NSString *title = section==0?@"商品信息":(section==1?@"预订单信息":@"预订单小计");
+    NSString *title = section==0?@"商品信息":(section==1?@"订单信息":@"订单小计");
     return [self createSectionHeader:title];
 }
 
@@ -628,11 +618,12 @@
 {
     FSOrderSuccessViewController *controller = [[FSOrderSuccessViewController alloc] initWithNibName:@"FSOrderSuccessViewController" bundle:nil];
     controller.data = info;
-    controller.title = @"预订单创建成功";
+    controller.title = @"订单创建成功";
+    controller.payWay = _uploadData.payment;
     [self.navigationController pushViewController:controller animated:YES];
     
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
-    [_dic setValue:info.orderno forKey:@"预订单编号"];
+    [_dic setValue:info.orderno forKey:@"订单编号"];
     [[FSAnalysis instance] logEvent:BUY_SUCCESS_PAGE withParameters:_dic];
 }
 
@@ -678,15 +669,22 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField
 {
-    FSPurchaseCommonCell *cell = (FSPurchaseCommonCell*)textField.superview.superview;
+    [NSString logControl:_tbAction];
+    FSPurchaseCommonCell *cell;
+    if (!IOS7) {
+        cell = (FSPurchaseCommonCell*)textField.superview.superview;
+    }
+    else {
+        cell = (FSPurchaseCommonCell*)textField.superview.superview.superview;
+    }
     NSIndexPath *path = [_tbAction indexPathForCell:cell];
     if (path.row == 2) {
         _uploadData.invoicetitle = textField.text;
     }
-    else if (path.row == 3) {
+    else if (path.row == 4) {
         _uploadData.memo = textField.text;
     }
-    else if (path.row == 4) {
+    else if (path.row == 3) {
         _uploadData.telephone = textField.text;
     }
 }
@@ -744,6 +742,12 @@
 {
     FSPurchaseSPaymentItem *item = _purchaseData.supportpayments[row];
     return item.name;
+}
+
+#pragma mark - FSPurchaseProdCellDelegate
+-(void)updateAmountInfo:(FSPurchaseProdCell*)cell count:(int)num
+{
+    [self requestBuyAmount:num];
 }
 
 @end

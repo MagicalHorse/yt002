@@ -34,7 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"预订单详情";
+    self.title = @"订单详情";
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     
@@ -107,7 +107,7 @@
     if (orderInfo.canvoid) {
         UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
         btnClean.frame = CGRectMake(xOffset, height, 222, 40);
-        [btnClean setTitle:@"取消预订单" forState:UIControlStateNormal];
+        [btnClean setTitle:@"取消订单" forState:UIControlStateNormal];
         [btnClean setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
         [btnClean setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btnClean addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
@@ -138,7 +138,7 @@
 
 -(void)cancelOrder:(UIButton*)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您确定要取消该预订单吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"您确定要取消该订单吗？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     alert.tag = Request_Cancel_Tag;
     [alert show];
 }
@@ -151,7 +151,7 @@
         return 0;
     }
     if (section == 1) {
-        return 2;
+        return orderInfo.products.count + 1;
     }
     else if(section == 3) {
         return orderInfo.rmas.count;
@@ -195,7 +195,7 @@
         return cell;
     }
     else if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
+        if (indexPath.row < orderInfo.products.count) {
             FSOrderInfoProductCell *cell = (FSOrderInfoProductCell*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Product_Cell_Indentifier];
             if (cell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
@@ -207,11 +207,11 @@
                 }
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
-            [cell setData:orderInfo];
+            [cell setData:orderInfo.products[indexPath.row]];
             
             return cell;
         }
-        else if (indexPath.row == 1) {
+        else {
             FSOrderInfoAmount *cell = (FSOrderInfoAmount*)[tableView dequeueReusableCellWithIdentifier:OrderInfo_Amount_Cell_Indentifier];
             if (cell == nil) {
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSOrderListCell" owner:self options:nil];
@@ -270,7 +270,7 @@
 {
     switch (section) {
         case 0:
-            return @"预订单信息";
+            return @"订单信息";
             break;
         case 1:
             return @"商品清单";

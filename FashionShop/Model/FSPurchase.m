@@ -14,11 +14,13 @@
 @synthesize description;
 @synthesize price;
 @synthesize originprice;
-@synthesize properties;
 @synthesize rmapolicy;
+@synthesize saleColors;
 @synthesize supportpayments;
-@synthesize productImage;
 @synthesize sizeImage;
+@synthesize selectColorIndex;
+@synthesize selectSizeIndex;
+@synthesize selectCountIndex;
 
 //amount info
 @synthesize totalamount,totalfee,totalpoints,totalquantity,extendprice;
@@ -33,18 +35,18 @@
     [relationMapping mapKeyPath:@"price" toAttribute:@"price"];
     [relationMapping mapKeyPath:@"originprice" toAttribute:@"originprice"];
     [relationMapping mapKeyPath:@"rmapolicy" toAttribute:@"rmapolicy"];
+    [relationMapping mapKeyPath:@"brandid" toAttribute:@"brandId"];
+    [relationMapping mapKeyPath:@"brandname" toAttribute:@"brandName"];
     
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
-    [relationMapping mapKeyPath:@"resource" toRelationship:@"productImage" withMapping:relationMap];
-    
-    relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"dimension" toRelationship:@"sizeImage" withMapping:relationMap];
     
-    relationMap = [FSPurchasePropertiesItem getRelationDataMap];
-    [relationMapping mapKeyPath:@"properties" toRelationship:@"properties" withMapping:relationMap];
+    relationMap = [FSPurchaseSaleColorsItem getRelationDataMap];
+    [relationMapping mapKeyPath:@"salecolors" toRelationship:@"saleColors" withMapping:relationMap];
     
     relationMap = [FSPurchaseSPaymentItem getRelationDataMap];
     [relationMapping mapKeyPath:@"supportpayments" toRelationship:@"supportpayments" withMapping:relationMap];
+    
     
     //请求计算金额返回数据
     [relationMapping mapKeyPath:@"totalamount" toAttribute:@"totalamount"];
@@ -58,35 +60,41 @@
 
 @end
 
-@implementation FSPurchasePropertiesItem
-@synthesize propertyid;
-@synthesize propertyname;
-@synthesize valueid;
-@synthesize valuename;
-@synthesize values;
+@implementation FSPurchaseSaleColorsItem
+@synthesize colorId;
+@synthesize colorName;
+@synthesize sizes;
+@synthesize resource;
+@synthesize isChecked;
 
 +(RKObjectMapping *)getRelationDataMap
 {
-    static int index = 0;
-    
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
     
-    if (index == 0) {
-        [relationMapping mapKeyPath:@"propertyid" toAttribute:@"propertyid"];
-        [relationMapping mapKeyPath:@"propertyname" toAttribute:@"propertyname"];
-    }
-    else {
-        [relationMapping mapKeyPath:@"valueid" toAttribute:@"valueid"];
-        [relationMapping mapKeyPath:@"valuename" toAttribute:@"valuename"];
-    }
+    [relationMapping mapKeyPath:@"colorid" toAttribute:@"colorId"];
+    [relationMapping mapKeyPath:@"colorname" toAttribute:@"colorName"];
+    RKObjectMapping *relationMap = [FSResource getRelationDataMap];
+    [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
+    relationMap = [FSPurchaseSaleSizeItem getRelationDataMap];
+    [relationMapping mapKeyPath:@"sizes" toRelationship:@"sizes" withMapping:relationMap];
     
-    if (++index <= 1) {
-        RKObjectMapping *relationMap = [FSPurchasePropertiesItem getRelationDataMap];
-        [relationMapping mapKeyPath:@"values" toRelationship:@"values" withMapping:relationMap];
-    }
-    else{
-        index = 0;
-    }
+    return relationMapping;
+}
+
+@end
+
+@implementation FSPurchaseSaleSizeItem
+@synthesize sizeId;
+@synthesize sizeName;
+@synthesize is4sale;
+
++(RKObjectMapping *)getRelationDataMap
+{
+    RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
+    
+    [relationMapping mapKeyPath:@"sizeid" toAttribute:@"sizeId"];
+    [relationMapping mapKeyPath:@"sizename" toAttribute:@"sizeName"];
+    [relationMapping mapKeyPath:@"is4sale" toAttribute:@"is4sale"];
     
     return relationMapping;
 }
@@ -107,16 +115,48 @@
 
 @end
 
+
 @implementation FSPurchaseForUpload
-@synthesize productid,desc,quantity,needinvoice,invoicetitle,invoicedetail,telephone,memo,payment,address,properies;
+@synthesize products,needinvoice,invoicetitle,invoicedetail,memo,payment,address,telephone;
 
 -(id)init
 {
     self = [super init];
     if (self) {
-        productid = -1;
-        quantity = -1;
-        needinvoice = NO;
+        [self reset];
+    }
+    return self;
+}
+
+-(void)reset
+{
+    needinvoice = NO;
+    [products removeAllObjects];
+    products = nil;
+    invoicetitle = nil;
+    invoicedetail = nil;
+    memo = nil;
+    telephone = nil;
+    payment = nil;
+    address = nil;
+}
+
+@end
+
+@implementation FSKeyValueItem
+
+@synthesize key,value;
+
+@end
+
+@implementation FSPurchaseProductItem
+@synthesize productid,desc,quantity,properties;
+
+-(id)init
+{
+    self = [super init];
+    if (self) {
+        [self reset];
     }
     return self;
 }
@@ -124,17 +164,9 @@
 -(void)reset
 {
     productid = -1;
-    desc = nil;
     quantity = -1;
-    needinvoice = NO;
-    invoicetitle = nil;
-    invoicedetail = nil;
-    telephone = nil;
-    memo = nil;
-    payment = nil;
-    address = nil;
-    [properies removeAllObjects];
-    properies = nil;
+    properties = nil;
+    desc = nil;
 }
 
 @end

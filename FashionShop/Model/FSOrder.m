@@ -13,7 +13,7 @@
 @synthesize needinvoice,invoicedetail,invoicesubject;
 @synthesize canrma,rmas;
 @synthesize shippingaddress,shippingcontactperson,shippingcontactphone,shippingfee,shippingno,shippingvianame,shippingzipcode;
-@synthesize status,statust,paymentname,createdate,resource,product,memo;
+@synthesize status,statust,paymentname,paymentcode,createdate,resource,products,memo;
 @synthesize canvoid,totalquantity;
 
 +(RKObjectMapping *)getRelationDataMap
@@ -47,6 +47,7 @@
     [relationMapping mapKeyPath:@"status" toAttribute:@"status"];
     [relationMapping mapKeyPath:@"statust" toAttribute:@"statust"];
     [relationMapping mapKeyPath:@"paymentname" toAttribute:@"paymentname"];
+    [relationMapping mapKeyPath:@"paymentcode" toAttribute:@"paymentcode"];
     [relationMapping mapKeyPath:@"createdate" toAttribute:@"createdate"];
     [relationMapping mapKeyPath:@"memo" toAttribute:@"memo"];
     
@@ -56,7 +57,7 @@
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
     relationMap = [FSOrderProduct getRelationDataMap];
-    [relationMapping mapKeyPath:@"product" toRelationship:@"product" withMapping:relationMap];
+    [relationMapping mapKeyPath:@"products" toRelationship:@"products" withMapping:relationMap];
     relationMap = [FSOrderRMAItem getRelationDataMap];
     [relationMapping mapKeyPath:@"rmas" toRelationship:@"rmas" withMapping:relationMap];
     
@@ -94,7 +95,7 @@
 @end
 
 @implementation FSOrderProduct
-@synthesize itemdesc,itemno,quantity,price,productid,productname,properties,resource;
+@synthesize itemdesc,itemno,quantity,price,productid,productname,properties,resource,productdesc;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -105,6 +106,7 @@
     [relationMapping mapKeyPath:@"price" toAttribute:@"price"];
     [relationMapping mapKeyPath:@"productid" toAttribute:@"productid"];
     [relationMapping mapKeyPath:@"productname" toAttribute:@"productname"];
+    [relationMapping mapKeyPath:@"productdesc" toAttribute:@"productdesc"];
     [relationMapping mapKeyPath:@"properties" toAttribute:@"properties"];
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];

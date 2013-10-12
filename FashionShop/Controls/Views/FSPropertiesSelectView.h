@@ -10,11 +10,21 @@
 #import "FSPurchase.h"
 #import "FSMyPickerView.h"
 
+@protocol FSPropertiesSelectViewDelegate;
+
 @interface FSPropertiesSelectView : UIView<FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 
-@property (nonatomic,strong) FSPurchasePropertiesItem *data;
+@property (nonatomic,strong) NSString *title;//标题
+@property (nonatomic,strong) NSArray *showData; //存放的是FSKeyValueItem对象
 @property (nonatomic, strong) FSPurchaseForUpload *uploadData;
+@property (nonatomic) int selectedKey;//选中的Key值
+@property (nonatomic) int selectedIndex;
+@property (nonatomic) id<FSPropertiesSelectViewDelegate> delegate;
 
--(void)setData:(FSPurchasePropertiesItem *)aData upLoadData:(FSPurchaseForUpload *)aUpData;
+@end
+
+@protocol FSPropertiesSelectViewDelegate <NSObject>
+
+-(void)didClickOkButton:(FSPropertiesSelectView*)controller;
 
 @end

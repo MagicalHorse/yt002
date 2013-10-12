@@ -10,7 +10,6 @@
 #import "UIImageView+WebCache.h"
 #import <QuartzCore/QuartzCore.h>
 #import "NSString+Extention.h"
-#import "FSPropertiesSelectView.h"
 
 @implementation FSPurchaseProdCell
 @synthesize data,uploadData;
@@ -30,12 +29,20 @@
         flag = YES;
     }
     
+    float pHeight = 80;
     //productImage
-    [_productImage setImageWithURL:[data.productImage absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
-    _productImage.layer.borderWidth = 1;
-    _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    float pWidth = _productImage.frame.size.width;
-    float pHeight = data.productImage.height * pWidth / data.productImage.width;
+    if (aData.selectColorIndex < aData.saleColors.count) {
+        FSPurchaseSaleColorsItem *item = aData.saleColors[aData.selectColorIndex];
+        [_productImage setImageWithURL:[item.resource absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+        _productImage.layer.borderWidth = 1;
+        _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        
+        float pWidth = _productImage.frame.size.width;
+        pHeight = item.resource.height * pWidth / item.resource.width;
+        if (isnan(pHeight)) {
+            pHeight = 80;
+        }
+    }
     if (pHeight > 120) {
         pHeight = 120;
     }
@@ -45,40 +52,49 @@
     
     rect = _productName.frame;
     UIFont *font = [UIFont systemFontOfSize:14];
-    //productName
-    _productName.text = data.name;
-    _productName.numberOfLines = 0;
-    _productName.lineBreakMode = NSLineBreakByCharWrapping;
-    _productName.textColor = [UIColor colorWithHexString:@"181818"];
-    int height = [data.name sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
-    rect.origin.y = _cellHeight;
-    rect.size.height = height + 15;
-    _productName.frame = rect;
-    _cellHeight += rect.size.height + yGap/2;
     
-    _productDesc.hidden = YES;
-    //productDesc
-    /*
-    rect = _productDesc.frame;
-    _productDesc.text = data.description;
-    _productDesc.numberOfLines = 0;
-    _productDesc.lineBreakMode = NSLineBreakByTruncatingTail;
-    _productDesc.textColor = [UIColor colorWithHexString:@"181818"];
-    height = [data.description sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
-    if (height > 40) {
-        height = 40;
+    //productName
+    if (![NSString isNilOrEmpty:data.name]) {
+        _productName.text = data.name;
+        _productName.numberOfLines = 0;
+        _productName.lineBreakMode = NSLineBreakByCharWrapping;
+        _productName.textColor = [UIColor colorWithHexString:@"181818"];
+        int height = [data.name sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+        rect.origin.y = _cellHeight;
+        rect.size.height = height + 15;
+        _productName.frame = rect;
+        _cellHeight += rect.size.height + yGap/2;
+        _productName.hidden = NO;
     }
-    rect.origin.y = _cellHeight;
-    rect.size.height = height;
-    _productDesc.frame = rect;
-    _cellHeight += height + yGap;
-     */
+    else
+        _productName.hidden = YES;
+    
+    //product brand
+    if (![NSString isNilOrEmpty:data.brandName]) {
+        rect = _productDesc.frame;
+        _productDesc.text = data.brandName;
+        _productDesc.numberOfLines = 0;
+        _productDesc.lineBreakMode = NSLineBreakByTruncatingTail;
+        _productDesc.textColor = [UIColor colorWithHexString:@"181818"];
+        int height = [data.description sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+        if (height > 40) {
+            height = 40;
+        }
+        rect.origin.y = _cellHeight;
+        rect.size.height = height;
+        _productDesc.frame = rect;
+        _cellHeight += height + yGap/2;
+        _productDesc.hidden = NO;
+    }
+    else {
+        _productDesc.hidden = YES;
+    }
     
     //prodPrice
     rect = _prodPrice.frame;
     _prodPrice.text = [NSString stringWithFormat:@"销售价：￥%.2f元", data.price];
     _prodPrice.textColor = [UIColor colorWithHexString:@"e5004f"];
-    height = [_prodPrice.text sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    int height = [_prodPrice.text sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
     rect.origin.y = _cellHeight;
     rect.size.height = height;
     _prodPrice.frame = rect;
@@ -114,71 +130,196 @@
     _lines.frame = rect;
 }
 
+#define Properties_Color_Tag 900
+#define Properties_Size_Tag 901
+#define Properties_Count_Tag 902
+
 -(void)initProperties
 {
-    //添加属性
-    int xOffset = 10;
-    if (data.properties.count > 0) {
-        for (int i = 0; i < data.properties.count; i++) {
-            FSPurchasePropertiesItem *item = [data.properties objectAtIndex:i];
-            id last = [self viewWithTag:item.propertyid + 9999999];
-            UIView *view = [self propertiesView:item];
-            if (xOffset + view.frame.size.width > 310) {
-                _cellHeight += 45;
-                xOffset = 10;
-                CGRect _rect = view.frame;
-                _rect.origin.y = _cellHeight;
-                _rect.origin.x = xOffset;
-                view.frame = _rect;
-                if (!last) {
-                    [self addSubview:view];
-                }
-            }
-            else{
-                CGRect _rect = view.frame;
-                _rect.origin.y = _cellHeight;
-                _rect.origin.x = xOffset;
-                view.frame = _rect;
-                if (!last) {
-                    [self addSubview:view];
-                }
-                xOffset += view.frame.size.width + 25;
-            }
-            if (i == data.properties.count - 1) {
-                _cellHeight += 45;
-            }
-        }
+    if (data.saleColors.count == 0) {
+        return;
     }
+    //添加颜色属性
+    NSMutableArray *__array = [NSMutableArray array];
+    for (int i = 0; i < data.saleColors.count; i++) {
+        FSPurchaseSaleColorsItem *item = data.saleColors[i];
+        FSKeyValueItem *sub = [[FSKeyValueItem alloc] init];
+        sub.key = item.colorId;
+        sub.value = item.colorName;
+        [__array addObject:sub];
+    }
+    if ([self viewWithTag:Properties_Color_Tag]) {
+        id item = [self viewWithTag:Properties_Color_Tag];
+        [item removeFromSuperview];
+    }
+    FSPropertiesSelectView *view = [[FSPropertiesSelectView alloc] init];
+    view.title = @"颜色";
+    FSKeyValueItem *item = __array[data.selectColorIndex];
+    view.selectedKey = item.key;
+    view.showData = __array;
+    view.delegate = self;
+    view.tag = Properties_Color_Tag;
     
-    //添加数量选择
-    FSPurchasePropertiesItem *item = [[FSPurchasePropertiesItem alloc] init];
-    item.propertyid = Purchase_Count_Properties_Tag;
-    id last = [self viewWithTag:item.propertyid + 9999999];
-    if (!last) {
-        item.propertyname = @"数量";
-        item.values = [NSMutableArray arrayWithCapacity:5];
-        for (int i = 1; i < 6; i ++) {
-            FSPurchasePropertiesItem *_item = [[FSPurchasePropertiesItem alloc] init];
-            _item.valueid = i;
-            _item.valuename = [NSString stringWithFormat:@"%d", i];
-            [item.values addObject:_item];
-        }
-        UIView *view = [self propertiesView:item];
+    int xOffset = 10;
+    CGRect _rect = view.frame;
+    _rect.origin.y = _cellHeight;
+    _rect.origin.x = xOffset;
+    view.frame = _rect;
+    [self addSubview:view];
+    xOffset += view.frame.size.width + 25;
+    
+    //添加尺码属性
+    __array = [NSMutableArray array];
+    NSArray *sizeArray = [data.saleColors[data.selectColorIndex] sizes];
+    for (int i = 0; i < sizeArray.count; i++) {
+        FSPurchaseSaleSizeItem *item = sizeArray[i];
+        FSKeyValueItem *sub = [[FSKeyValueItem alloc] init];
+        sub.key = item.sizeId;
+        sub.value = item.sizeName;
+        [__array addObject:sub];
+    }
+    if ([self viewWithTag:Properties_Size_Tag]) {
+        id item = [self viewWithTag:Properties_Size_Tag];
+        [item removeFromSuperview];
+    }
+    view = [[FSPropertiesSelectView alloc] init];
+    view.title = @"尺寸";
+    item = __array[data.selectSizeIndex];
+    view.selectedKey = item.key;
+    view.showData = __array;
+    view.delegate = self;
+    view.tag = Properties_Size_Tag;
+    
+    if (xOffset + view.frame.size.width > 310) {
+        _cellHeight += 45;
+        xOffset = 10;
         CGRect _rect = view.frame;
         _rect.origin.y = _cellHeight;
-        _rect.origin.x = 10;
+        _rect.origin.x = xOffset;
         view.frame = _rect;
         [self addSubview:view];
     }
+    else{
+        CGRect _rect = view.frame;
+        _rect.origin.y = _cellHeight;
+        _rect.origin.x = xOffset;
+        view.frame = _rect;
+        [self addSubview:view];
+        xOffset += view.frame.size.width + 25;
+    }
+    _cellHeight += 45;
+    
+    //添加数量选择
+    __array = [NSMutableArray array];
+    for (int i = 0; i < 5; i++) {
+        FSKeyValueItem *sub = [[FSKeyValueItem alloc] init];
+        sub.key = i+1;
+        sub.value = [NSString stringWithFormat:@"%d", i+1];
+        [__array addObject:sub];
+    }
+    if ([self viewWithTag:Properties_Size_Tag]) {
+        id item = [self viewWithTag:Properties_Count_Tag];
+        [item removeFromSuperview];
+    }
+    view = [[FSPropertiesSelectView alloc] init];
+    view.title = @"数量";
+    item = __array[data.selectCountIndex];
+    view.selectedKey = item.key;
+    view.showData = __array;
+    view.delegate = self;
+    view.tag = Properties_Count_Tag;
+    
+    xOffset = 10;
+    _rect = view.frame;
+    _rect.origin.y = _cellHeight;
+    _rect.origin.x = xOffset;
+    view.frame = _rect;
+    [self addSubview:view];
     
     _cellHeight += 45;
 }
 
--(FSPropertiesSelectView *)propertiesView:(FSPurchasePropertiesItem*)item
+-(void)updataSizeControlData
 {
-    FSPropertiesSelectView *view = [[FSPropertiesSelectView alloc] init];
-    [view setData:item upLoadData:uploadData];
-    return view;
+    //更新图片
+    int pHeight = 80;
+    if (data.selectColorIndex < data.saleColors.count) {
+        FSPurchaseSaleColorsItem *item = data.saleColors[data.selectColorIndex];
+        [_productImage setImageWithURL:[item.resource absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+        _productImage.layer.borderWidth = 1;
+        _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        
+        float pWidth = _productImage.frame.size.width;
+        pHeight = item.resource.height * pWidth / item.resource.width;
+        if (isnan(pHeight)) {
+            pHeight = 80;
+        }
+    }
+    if (pHeight > 120) {
+        pHeight = 120;
+    }
+    if (pHeight <= 0) {
+        pHeight = 80;
+    }
+    CGRect rect = _productImage.frame;
+    rect.size.height = pHeight;
+    _productImage.frame = rect;
+    
+    //更新尺码数据
+    NSMutableArray *__array = [NSMutableArray array];
+    NSArray *sizeArray = [data.saleColors[data.selectColorIndex] sizes];
+    for (int i = 0; i < sizeArray.count; i++) {
+        FSPurchaseSaleSizeItem *item = sizeArray[i];
+        FSKeyValueItem *sub = [[FSKeyValueItem alloc] init];
+        sub.key = item.sizeId;
+        sub.value = item.sizeName;
+        [__array addObject:sub];
+    }
+    if ([self viewWithTag:Properties_Size_Tag]) {
+        FSPropertiesSelectView* item = (FSPropertiesSelectView*)[self viewWithTag:Properties_Size_Tag];
+        CGRect rect = item.frame;
+        item.showData = __array;
+        item.frame = rect;
+    }
+}
+
+-(void)didClickOkButton:(FSPropertiesSelectView*)controller
+{
+    if (uploadData.products.count == 0) {
+        return;
+    }
+    FSPurchaseProductItem *item = uploadData.products[0];
+    if (!item.properties) {
+        item.properties = [NSMutableDictionary dictionary];
+    }
+    if (controller.tag == Properties_Color_Tag) {
+        //选中颜色Ok按钮
+        FSKeyValueItem *keyItem = controller.showData[controller.selectedIndex];
+        [item.properties setValue:[NSNumber numberWithInt:keyItem.key] forKey:@"colorvalueid"];
+        [item.properties setValue:keyItem.value forKey:@"colorvaluename"];
+        data.selectColorIndex = controller.selectedIndex;
+        
+        //更新尺码内容
+        [self updataSizeControlData];
+    }
+    else if(controller.tag == Properties_Size_Tag) {
+        //选中尺码Ok按钮
+        FSKeyValueItem *keyItem = controller.showData[controller.selectedIndex];
+        [item.properties setValue:[NSNumber numberWithInt:keyItem.key] forKey:@"sizevalueid"];
+        [item.properties setValue:keyItem.value forKey:@"sizevaluename"];
+        data.selectSizeIndex = controller.selectedIndex;
+    }
+    else if(controller.tag == Properties_Count_Tag) {
+        //选中数量Ok按钮
+        FSKeyValueItem *keyItem = controller.showData[controller.selectedIndex];
+        item.quantity = [keyItem.value intValue];
+        data.selectCountIndex = controller.selectedIndex;
+        
+        //更新请求商品数量统计
+        if (_delegate && [_delegate respondsToSelector:@selector(updateAmountInfo:count:)]) {
+            [_delegate updateAmountInfo:self count:item.quantity];
+        }
+    }
 }
 
 @end
@@ -283,13 +424,13 @@
             _contentLb.hidden = YES;
         }
             break;
-        case 4://预订单备注
+        case 4://订单备注
         {
-            _title.text = @"预订单备注 : ";
+            _title.text = @"订单备注 : ";
             if (![NSString isNilOrEmpty:data.memo]) {
                 _contentField.text = data.memo;
             }
-            _contentField.placeholder = @"点击填写预订单备注信息";
+            _contentField.placeholder = @"点击填写订单备注信息";
             _contentField.hidden = NO;
             _contentLb.hidden = YES;
         }
@@ -400,6 +541,9 @@
     _orderNumber.hidden = NO;
     _orderAmount.text = [NSString stringWithFormat:@"￥%.2f", data.totalamount];
     _orderAmount.hidden = NO;
+    UIImage *image = [UIImage imageNamed:@"btn_bg.png"];
+    [_buyButton setBackgroundImage:image forState:UIControlStateNormal];
+    _cellHeight = 130;
 }
 
 @end

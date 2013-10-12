@@ -76,7 +76,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *productProperties;
 @property (strong, nonatomic) IBOutlet UILabel *prodPriceAndCount;
 
-@property (strong,nonatomic) FSOrderInfo *data;
+@property (strong,nonatomic) FSOrderProduct *data;
 @property (nonatomic) int cellHeight;
 
 @end

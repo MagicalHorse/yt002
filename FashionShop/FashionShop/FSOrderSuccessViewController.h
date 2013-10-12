@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "FSOrder.h"
+#import "FSPurchase.h"
 
 @interface FSOrderSuccessViewController : FSBaseViewController
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic,strong) FSOrderInfo *data;
+@property (nonatomic,strong) FSPurchaseSPaymentItem *payWay;
 
 @end

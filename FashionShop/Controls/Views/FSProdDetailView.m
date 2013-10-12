@@ -163,6 +163,7 @@
     _btnBuy.hidden = YES;
     BOOL isMyself = [_data.fromUser.uid intValue] == [[FSUser localProfile].uid intValue];
     
+    /*
     if(isMyself)
     {
         _btnContact.hidden = YES;
@@ -172,8 +173,8 @@
         _btnContact.center = CGPointMake(SCREEN_WIDTH/2, _btnContact.frame.origin.y + _btnContact.frame.size.height/2);
         yOffset += 50;
     }
+    */
     
-    /*
     //如果是本人
     if (isMyself) {
         _btnContact.hidden = YES;
@@ -205,7 +206,6 @@
         _btnContact.frame = _rect;
         yOffset += 50;
     }
-    */
     
     //_lblFavorCount
     [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];

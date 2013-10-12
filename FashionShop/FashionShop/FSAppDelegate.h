@@ -60,4 +60,6 @@
 -(NSString*)messageForKey:(NSString *)key;
 -(void) setGlobalLayout;
 
+-(void)toAlipayWithOrder:(NSString*)ordernumber name:(NSString*)productName desc:(NSString*)productDesc amount:(float)amount;
+
 @end

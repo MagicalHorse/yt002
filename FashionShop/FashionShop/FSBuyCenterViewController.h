@@ -10,11 +10,13 @@
 #import "FSImageSlideViewController.h"
 #import "FSAddressManagerViewController.h"
 #import "FSMyPickerView.h"
+#import "FSPurchaseProdCell.h"
 
 @protocol FSAddressManagerViewControllerDelegate;
 @protocol FSInvoiceViewControllerDelegate;
+@protocol FSPurchaseProdCellDelegate;
 
-@interface FSBuyCenterViewController : FSBaseViewController<UIAlertViewDelegate,FSImageSlideDataSource,UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
+@interface FSBuyCenterViewController : FSBaseViewController<UIAlertViewDelegate,FSImageSlideDataSource,UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate,FSPurchaseProdCellDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tbAction;
 @property (nonatomic) int productID;

@@ -37,6 +37,14 @@
 #include <net/if.h>
 #include <net/if_dl.h>
 
+//支付宝
+#import "AlixPayResult.h"
+#import "DataVerifier.h"
+#import "DataSigner.h"
+#import "AlixPayOrder.h"
+#import "FSPartnerConfig.h"
+#import "AlixLibService.h"
+
 #import "FSCoreMyLetter.h"
 
 @interface FSAppDelegate(){
@@ -193,8 +201,11 @@ void uncaughtExceptionHandler(NSException *exception)
     {
         return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
     }
-    if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
+    else if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
         return [TencentOAuth HandleOpenURL:url];
+    }
+    else if ([schema hasPrefix:ProductCode]) {
+        [self parse:url application:application];
     }
     return YES; 
 }
@@ -206,8 +217,11 @@ void uncaughtExceptionHandler(NSException *exception)
     {
       return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
     }
-    if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
+    else if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
         return [TencentOAuth HandleOpenURL:url];
+    }
+    else if ([schema hasPrefix:ProductCode]) {
+        [self parse:url application:application];
     }
     return YES;
 }
@@ -796,6 +810,115 @@ void uncaughtExceptionHandler(NSException *exception)
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
+}
+
+#pragma mark - AliPay
+
+- (void)parse:(NSURL *)url application:(UIApplication *)application {
+    
+    //结果处理
+    AlixPayResult * result = nil;
+	
+	if (url != nil && [[url host] compare:@"safepay"] == 0) {
+        NSString * query = [[url query] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		result = [[AlixPayResult alloc] initWithString:query];
+	}
+    
+	if (result)
+    {
+		[self dealAlipayResult:result];
+    }
+}
+
+//====================================================
+// 函数名称: btnForCallClick
+// 函数功能: 支付宝付款
+// 返 回 值: void
+// 形式参数: void
+//====================================================
+-(void)toAlipayWithOrder:(NSString*)ordernumber name:(NSString*)productName desc:(NSString*)productDesc amount:(float)amount {
+	//将商品信息赋予AlixPayOrder的成员变量
+	AlixPayOrder *order = [[AlixPayOrder alloc] init];
+	order.partner = PartnerID;
+	order.seller = SellerID;
+	order.tradeNO = ordernumber;  //订单ID（由商家自行制定）
+	order.productName = productName;         //@"买的一大堆商品";        //商品标题
+	order.productDescription =  productDesc; //@"好东西呀,便宜！杠杠的";   //商品描述
+	//order.amount = [NSString stringWithFormat:@"%.2f", amount];    //商品价格
+    order.amount = [NSString stringWithFormat:@"0.01"];    //商品价格，测试数据，改成了一分
+	order.notifyURL = @"http://www.intime.com.cn";
+	
+	//应用注册scheme,在AlixPayDemo-Info.plist定义URL types,用于安全支付成功后重新唤起商户应用
+	NSString *appScheme = ProductCode;
+	
+	//将商品信息拼接成字符串
+	NSString *orderSpec = [order description];
+	
+	//获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
+	id<DataSigner> signer = CreateRSADataSigner(PartnerPrivKey);
+	NSString *signedString = [signer signString:orderSpec];
+	//将签名成功字符串格式化为订单字符串,请严格按照该格式
+	NSString *orderString = nil;
+	if (signedString != nil) {
+		orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",orderSpec, signedString, @"RSA"];
+	}
+    if (TARGET_OS_IPHONE) {
+        //[AlixLibService payOrder:orderString AndScheme:appScheme seletor:@selector(paymentResult:) target:self];
+    }
+}
+
+-(void)paymentResult:(NSString *)resultd
+{
+    //结果处理
+    AlixPayResult* result = [[AlixPayResult alloc] initWithString:resultd];
+	if (result)
+    {
+		[self dealAlipayResult:result];
+    }
+}
+
+-(void)dealAlipayResult:(AlixPayResult*)result
+{
+    if (result.statusCode == 9000)
+    {
+        /*
+         *用公钥验证签名 严格验证请使用result.resultString与result.signString验签
+         */
+        
+        //交易成功
+        NSString* key = AlipayPubKey;
+        id<DataVerifier> verifier;
+        verifier = CreateRSADataVerifier(key);
+        
+        if ([verifier verifyString:result.resultString withSign:result.signString])
+        {
+            //验证签名成功，交易结果无篡改
+            UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                 message:@"付款成功!"
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"确定"
+                                                       otherButtonTitles:nil];
+            [alertView show];
+        }
+        else {
+            UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                                 message:@"支付宝签名错误"
+                                                                delegate:nil
+                                                       cancelButtonTitle:@"确定"
+                                                       otherButtonTitles:nil];
+            [alertView show];
+        }
+    }
+    else
+    {
+        //交易失败
+        UIAlertView * alertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                             message:result.statusMessage
+                                                            delegate:nil
+                                                   cancelButtonTitle:@"确定"
+                                                   otherButtonTitles:nil];
+        [alertView show];
+    }
 }
 
 @end

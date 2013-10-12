@@ -39,7 +39,7 @@
     _priceLb.text = [NSString stringWithFormat:@"￥%.2f", _data.totalamount];
     _priceLb.backgroundColor = [UIColor clearColor];
     
-    _orderNumber.text = [NSString stringWithFormat:@"预订单编号:%@", _data.orderno];
+    _orderNumber.text = [NSString stringWithFormat:@"订单编号:%@", _data.orderno];
     _orderNumber.textColor = [UIColor colorWithHexString:@"#181818"];
     _orderNumber.font = [UIFont systemFontOfSize:15];
     _orderNumber.adjustsFontSizeToFitWidth = YES;
@@ -96,8 +96,8 @@
     int yCap = 10;
     _cellHeight = yCap;
     
-    [self initComponent:@"预订单编号" value:_data.orderno component:_orderno];
-    [self initComponent:@"预订单状态" value:_data.status component:_orderstatus];
+    [self initComponent:@"订单编号" value:_data.orderno component:_orderno];
+    [self initComponent:@"订单状态" value:_data.status component:_orderstatus];
     if (![NSString isNilOrEmpty:_data.shippingvianame]) {
         [self initComponent:@"支付方式" value:_data.shippingvianame component:_sendway];
     }
@@ -118,7 +118,7 @@
         _invoicetitle.hidden = YES;
     }
     if (![NSString isNilOrEmpty:_data.memo]) {
-        [self initComponent:@"预订单备注" value:_data.memo component:_ordermemo];
+        [self initComponent:@"订单备注" value:_data.memo component:_ordermemo];
     }
     else{
         _ordermemo.hidden = YES;
@@ -151,7 +151,12 @@
     _data = data;
     _cellHeight = 5;
     
-    [self initComponents:_totalQuantity another:_quantityLb content:[NSString stringWithFormat:@"%d件", data.totalquantity]];
+    int total = 0;
+    for (int i = 0; i < data.products.count; i++) {
+        FSOrderProduct *p = data.products[i];
+        total += p.quantity;
+    }
+    [self initComponents:_totalQuantity another:_quantityLb content:[NSString stringWithFormat:@"%d件", total]];
     [self initComponents:_totalPoints another:_pointLb content:(data.totalpoints <= 0?nil:[NSString stringWithFormat:@"%d", data.totalpoints])];
     [self initComponents:_extendPrice another:_priceLb content:[NSString stringWithFormat:@"￥%.2f", data.extendprice]];
     [self initComponents:_totalFee another:_feeLb content:[NSString stringWithFormat:@"￥%.2f", data.shippingfee]];
@@ -159,10 +164,13 @@
     
     _cellHeight += 5;
     
-    _bgImage.image = [[UIImage imageNamed:@"order_amount_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(60, 0, 60, 0)];
+    _bgImage.image = [[UIImage imageNamed:@"order_amount_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(60, 60, 60, 60)];
     CGRect _rect = self.bounds;
     _rect.size.height = _cellHeight;
     _rect.size.width = 300;
+    if (IOS7) {
+        _rect.size.width = 320;
+    }
     _bgImage.frame = _rect;
 }
 
@@ -179,6 +187,9 @@
     first.text = aContent;
     CGRect _rect = first.frame;
     _rect.origin.y = _cellHeight;
+    if (IOS7) {
+        _rect.origin.x = 160;
+    }
     first.frame = _rect;
     
     _rect = sec.frame;
@@ -192,7 +203,7 @@
 
 @implementation FSOrderInfoProductCell
 
--(void)setData:(FSOrderInfo *)data
+-(void)setData:(FSOrderProduct *)data
 {
     if (!data) {
         return;
@@ -200,15 +211,20 @@
     _data = data;
     int yGap = 9;
     
-    FSOrderProduct *product = data.product;
     //productImage
-    [_productImage setImageWithURL:[product.resource absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+    [_productImage setImageWithURL:[data.resource absoluteUrl120] placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
     _productImage.layer.borderWidth = 1;
     _productImage.layer.borderColor = [UIColor lightGrayColor].CGColor;
     float pWidth = _productImage.frame.size.width;
-    float pHeight = product.resource.height * pWidth / product.resource.width;
+    float pHeight = data.resource.height * pWidth / data.resource.width;
     if (pHeight > 120) {
         pHeight = 120;
+    }
+    if (pHeight <= 0) {
+        pHeight = 80;
+    }
+    if (isnan(pHeight)) {
+        pHeight = 80;
     }
     CGRect rect = _productImage.frame;
     rect.size.height = pHeight;
@@ -219,8 +235,8 @@
     rect = _productName.frame;
     UIFont *font = [UIFont systemFontOfSize:13];
     //productName
-    int height = [product.productname sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
-    _productName.text = product.productname;
+    int height = [data.productname sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    _productName.text = data.productname;
     _productName.font = [UIFont boldSystemFontOfSize:13];
     _productName.numberOfLines = 0;
     _productName.lineBreakMode = NSLineBreakByCharWrapping;
@@ -232,14 +248,14 @@
     _cellHeight += rect.size.height + yGap;
     
     //productDesc
-    if (product.properties) {
+    if (data.productdesc) {
         rect = _productProperties.frame;
         _productProperties.font = font;
-        _productProperties.text = product.properties;
+        _productProperties.text = data.productdesc;
         _productProperties.numberOfLines = 0;
         _productProperties.lineBreakMode = NSLineBreakByTruncatingTail;
         _productProperties.textColor = [UIColor colorWithHexString:@"666666"];
-        height = [product.properties sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+        height = [data.productdesc sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
         rect.origin.y = _cellHeight;
         rect.size.height = height;
         _productProperties.frame = rect;
@@ -249,7 +265,7 @@
     //prodPrice
     rect = _prodPriceAndCount.frame;
     _prodPriceAndCount.font = font;
-    _prodPriceAndCount.text = [NSString stringWithFormat:@"￥%.2f x %d件", product.price, product.quantity];
+    _prodPriceAndCount.text = [NSString stringWithFormat:@"￥%.2f x %d件", data.price, data.quantity];
     _prodPriceAndCount.textColor = [UIColor colorWithHexString:@"e5004f"];
     height = [_prodPriceAndCount.text sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
     rect.origin.y = _cellHeight;

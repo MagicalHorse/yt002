@@ -44,7 +44,7 @@
     NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExSuccessFooter" owner:self options:nil];
     if (_array.count > 0) {
         FSCommonSuccessFooter *footer = (FSCommonSuccessFooter*)_array[0];
-        [footer.continueBtn setTitle:@"查看预订单" forState:UIControlStateNormal];
+        [footer.continueBtn setTitle:@"查看订单" forState:UIControlStateNormal];
         [footer.continueBtn addTarget:self action:@selector(clickToOrderDetail:) forControlEvents:UIControlEventTouchUpInside];
         [footer.backHomeBtn setTitle:@"继 续 购 物" forState:UIControlStateNormal];
         [footer.backHomeBtn addTarget:self action:@selector(clickToContinue:) forControlEvents:UIControlEventTouchUpInside];
@@ -105,6 +105,15 @@
     [[FSAnalysis instance] logEvent:CHECK_ORDER_DETAIL withParameters:_dic];
 }
 
+//点击在线支付
+-(void)clickToOnlinePay:(UIButton*)sender
+{
+    if(1){//支付宝支付//[@"1" isEqualToString:self.payWay.code]
+        FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
+        [del toAlipayWithOrder:self.data.orderno name:self.data.orderno desc:self.data.orderno amount:self.data.totalamount];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -133,6 +142,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    [cell.buyButton addTarget:self action:@selector(clickToOnlinePay:) forControlEvents:UIControlEventTouchUpInside];
     [cell setData:_data];
     
     return cell;
@@ -142,7 +152,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 70;
+    return 130;
 }
 
 @end
