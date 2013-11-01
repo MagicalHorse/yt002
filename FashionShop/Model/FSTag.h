@@ -10,9 +10,12 @@
 
 @interface FSTag : FSModelBase
 @property(nonatomic) int id;
-@property(nonatomic) NSString *name;
+@property(nonatomic,strong) NSString *name;
+@property(nonatomic) int sortorder;
+@property(nonatomic,strong) NSString *description;
 
+-(void)logTags;
 
-+(NSArray *)localTags;
+//+(NSArray *)localTags;
 
 @end

@@ -102,13 +102,13 @@
     _lblNickie.frame = _rect;
     
     NSMutableString *str = [NSMutableString stringWithString:@""];
-    BOOL flagUnitPrice = _data.unitPrice && [_data.unitPrice intValue]>0;
-    BOOL flagPrice = _data.price && [_data.price intValue]>0;
+    BOOL flagUnitPrice = _data.unitPrice && [_data.unitPrice floatValue]>0;
+    BOOL flagPrice = _data.price && [_data.price floatValue]>0;
     if (flagPrice) {
-        [str appendFormat:@"<font face='%@' size=18 color='#e5004f'>￥%d</font>",Font_Name_Bold, [_data.price intValue]];
+        [str appendFormat:@"<font face='%@' size=18 color='#e5004f'>￥%.2f</font>",Font_Name_Bold, [_data.price floatValue]];
     }
     if (flagUnitPrice) {
-        [str appendFormat:@"<font face='%@' size=10 color='#666666'>   ￥%d</font>",Font_Name_Normal, [_data.unitPrice intValue]];
+        [str appendFormat:@"<font face='%@' size=10 color='#666666'>   ￥%.2f</font>",Font_Name_Normal, [_data.unitPrice floatValue]];
     }
     if ([NSString isNilOrEmpty:str]) {
         _price.hidden = YES;

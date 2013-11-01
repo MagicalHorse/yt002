@@ -8,44 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
-/**
- * 必填的字符串类型参数
- */
-typedef NSString *TCRequiredStr;
-
-/**
- * 必填的UIImage类型参数
- */
-typedef UIImage *TCRequiredImage;
-
-/**
- * 必填的整型参数
- */
-typedef NSInteger TCRequiredInt;
-
-/**
- * 可选的字符串类型参数
- */
-typedef NSString *TCOptionalStr;
-
-/**
- * 可选的UIImage类型参数
- */
-typedef UIImage *TCOptionalImage;
-
-/**
- * 可选的整型参数
- */
-typedef NSInteger TCOptionalInt;
-
-typedef void TCRequiredVoid;
-typedef void TCOptionalVoid;
-
-
-@interface TCMutableDictionary : NSMutableDictionary
-
-@end
+#import "sdkdef.h"
 
 
 #pragma mark -
@@ -56,7 +19,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCAddTopicDic : TCMutableDictionary
+@interface TCAddTopicDic : TCAPIRequest
 
 /** 
  * 返回一个对象用来进行API参数的填充
@@ -142,7 +105,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCAddOneBlogDic : TCMutableDictionary
+@interface TCAddOneBlogDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -168,7 +131,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCAddAlbumDic : TCMutableDictionary
+@interface TCAddAlbumDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -220,7 +183,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCUploadPicDic : TCMutableDictionary
+@interface TCUploadPicDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -298,7 +261,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCAddShareDic : TCMutableDictionary
+@interface TCAddShareDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -372,7 +335,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCCheckPageFansDic : TCMutableDictionary
+@interface TCCheckPageFansDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -394,7 +357,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCSetUserHeadpic : TCMutableDictionary
+@interface TCSetUserHeadpic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -413,18 +376,15 @@ typedef void TCOptionalVoid;
 @property (nonatomic, retain) TCOptionalStr paramFileName;
 @end
 
-
-
-
 #pragma mark -
 #pragma mark TCListPhotoDic
 
 /**
- * \brief 设置用户头像
+ * \brief 获取用户QQ空间相册中的照片列表
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCListPhotoDic : TCMutableDictionary
+@interface TCListPhotoDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -447,7 +407,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCMatchNickTipsDic : TCMutableDictionary
+@interface TCMatchNickTipsDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -476,7 +436,7 @@ typedef void TCOptionalVoid;
  *
  * 可以直接填写相应参数后将对象当作参数传入API中
  */
-@interface TCGetIntimateFriendsDic : TCMutableDictionary
+@interface TCGetIntimateFriendsDic : TCAPIRequest
 
 /**
  * 返回一个对象用来进行API参数的填充
@@ -489,5 +449,55 @@ typedef void TCOptionalVoid;
  * 请求个数（1-20）
  */
 @property (nonatomic, retain) TCRequiredStr paramReqnum;
+
+@end
+
+#pragma mark -
+#pragma mark TCSendStoryDic
+/**
+ * \brief QQ空间定向分享的参数字典定义
+ *
+ * 该分享支持@到指定好友，最多支持10个好友。
+ * 其中第三方应用可预传最多5个指定好友的openid，其余好友由用户自行选择。
+ * 该分享形式仅提供跳QZone分享和本地Html5分享两种形式。
+ */
+@interface TCSendStoryDic : TCAPIRequest
+
+/**
+ * 返回一个对象用来进行API参数的填充
+ *
+ * \note 不用释放，返回的对象是自动释放的
+ */
++ (TCSendStoryDic *) dictionary;
+
+/**
+ * 分享的标题
+ */
+@property (nonatomic, retain) TCRequiredStr paramTitle;
+
+/**
+ * 故事摘要，最多不超过50个汉字，可以为空
+ */
+@property (nonatomic, retain) TCOptionalStr paramSummary;
+
+/**
+ * 默认展示在输入框里的分享理由，最多120个汉字，可以为空
+ */
+@property (nonatomic, retain) TCOptionalStr paramDescription;
+
+/**
+ * 图片url
+ */
+@property (nonatomic, retain) TCOptionalStr paramPics;
+
+/**
+ * 如果不填，则默认为"进入应用"
+ */
+@property (nonatomic, retain) TCRequiredStr paramAct;
+
+/**
+ * 点击分享的Url
+ */
+@property (nonatomic, retain) TCOptionalStr paramShareUrl;
 
 @end

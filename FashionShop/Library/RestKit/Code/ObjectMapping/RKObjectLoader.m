@@ -276,10 +276,12 @@
     NSAssert(self.mappingQueue, @"mappingQueue cannot be nil");
     dispatch_async(self.mappingQueue, ^{
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
         RKLogDebug(@"Beginning object mapping activities within GCD queue labeled: %s", dispatch_queue_get_label(self.mappingQueue));
         NSError *error = nil;
         _result = [[self performMapping:&error] retain];
+        if (error) {
+            RKLogDebug(@"error1:%@", error.description);
+        }
         NSAssert(_result || error, @"Expected performMapping to return a mapping result or an error.");
         if (self.result) {
             [self processMappingResult:self.result];

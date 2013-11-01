@@ -118,8 +118,6 @@
                  withFont:[BubbleView font]
             lineBreakMode:NSLineBreakByWordWrapping
                 alignment:(self.style == BubbleMessageStyleOutgoing) ? NSTextAlignmentLeft : NSTextAlignmentLeft];
-    
-    NSLog(@"bubbleFrame height:%.0f\ntextFrame height:%.0f", bubbleFrame.size.height, textFrame.size.height);
 }
 
 #pragma mark - Bubble view

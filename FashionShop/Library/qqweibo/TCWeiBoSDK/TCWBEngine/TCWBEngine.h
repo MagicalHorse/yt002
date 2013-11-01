@@ -47,7 +47,7 @@
 	SEL                 onFailureCallback;
 
     NSMutableArray      *httpRequests;          //存放request请求数组
-    UIViewController    *rootViewController;    
+    UIViewController    *rootViewController;
 }
 
 @property (nonatomic, retain) NSString          *appKey;

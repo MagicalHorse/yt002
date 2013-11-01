@@ -289,11 +289,11 @@
                 <outlet property="productProperties" destination="136" id="147"/>
             </connections>
         </tableViewCell>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FSOrderRMAListCell" rowHeight="161" id="152" customClass="FSOrderRMAListCell">
-            <rect key="frame" x="0.0" y="0.0" width="300" height="264"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="FSOrderRMAListCell" rowHeight="188" id="152" customClass="FSOrderRMAListCell">
+            <rect key="frame" x="0.0" y="0.0" width="300" height="291"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="152" id="0cD-X4-tD6">
-                <rect key="frame" x="0.0" y="0.0" width="300" height="263"/>
+                <rect key="frame" x="0.0" y="0.0" width="300" height="290"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" id="161" customClass="RTLabel">
@@ -341,6 +341,11 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <view contentMode="scaleToFill" id="xqT-6Y-Z4B" customClass="RTLabel">
+                        <rect key="frame" x="10" y="260" width="280" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                     <view contentMode="scaleToFill" id="183" customClass="RTLabel">
                         <rect key="frame" x="10" y="122" width="280" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -376,6 +381,7 @@
                 <outlet property="chargePostFee" destination="183" id="186"/>
                 <outlet property="chargegiftFee" destination="184" id="187"/>
                 <outlet property="createTime" destination="161" id="172"/>
+                <outlet property="mailAddress" destination="xqT-6Y-Z4B" id="MKR-kN-Zcw"/>
                 <outlet property="rebatePostFee" destination="185" id="188"/>
                 <outlet property="rejectReason" destination="191" id="192"/>
                 <outlet property="rmaAmount" destination="155" id="180"/>

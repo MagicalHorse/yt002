@@ -97,6 +97,7 @@
 @property (strong, nonatomic) IBOutlet RTLabel *actualAmount;
 @property (strong, nonatomic) IBOutlet RTLabel *rejectReason;
 @property (strong, nonatomic) IBOutlet RTLabel *status;
+@property (strong, nonatomic) IBOutlet RTLabel *mailAddress;
 
 
 @property (nonatomic,strong) FSOrderRMAItem* data;

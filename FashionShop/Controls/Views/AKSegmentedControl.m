@@ -132,7 +132,7 @@
         [button setFrame:CGRectMake(offsetX, offsetY, dButtonWidth, buttonSize.height)];
         
         // replacing each separators
-        if (increment < separtorsNumber)
+        if (increment < separtorsNumber && increment < separatorsArray.count)
         {
             UIImageView *separatorImageView = separatorsArray[increment];
             [separatorImageView setFrame:CGRectMake(CGRectGetMaxX(button.frame),

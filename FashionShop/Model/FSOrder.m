@@ -68,7 +68,7 @@
 
 @implementation FSOrderRMAItem
 @synthesize rejectreason,bankcard,bankaccount,rmatype,bankname,rmano,createdate,status;
-@synthesize chargegiftfee,rmaamount,rebatepostfee,chargepostfee,actualamount,reason;
+@synthesize chargegiftfee,rmaamount,rebatepostfee,chargepostfee,actualamount,reason,mailAddress;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -88,6 +88,7 @@
     [relationMapping mapKeyPath:@"rebatepostfee" toAttribute:@"rebatepostfee"];
     [relationMapping mapKeyPath:@"chargegiftfee" toAttribute:@"chargegiftfee"];
     [relationMapping mapKeyPath:@"actualamount" toAttribute:@"actualamount"];
+    [relationMapping mapKeyPath:@"mailaddress" toAttribute:@"mailAddress"];
     
     return relationMapping;
 }
@@ -95,7 +96,7 @@
 @end
 
 @implementation FSOrderProduct
-@synthesize itemdesc,itemno,quantity,price,productid,productname,properties,resource,productdesc;
+@synthesize itemdesc,itemno,quantity,price,productid,productname,resource,productdesc;
 
 +(RKObjectMapping *)getRelationDataMap
 {
@@ -107,7 +108,12 @@
     [relationMapping mapKeyPath:@"productid" toAttribute:@"productid"];
     [relationMapping mapKeyPath:@"productname" toAttribute:@"productname"];
     [relationMapping mapKeyPath:@"productdesc" toAttribute:@"productdesc"];
-    [relationMapping mapKeyPath:@"properties" toAttribute:@"properties"];
+    
+    [relationMapping mapKeyPath:@"colorvalue" toAttribute:@"colorvalue"];
+    [relationMapping mapKeyPath:@"colorvalueid" toAttribute:@"colorvalueid"];
+    [relationMapping mapKeyPath:@"sizevalue" toAttribute:@"sizevalue"];
+    [relationMapping mapKeyPath:@"sizevalueid" toAttribute:@"sizevalueid"];
+    
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
     

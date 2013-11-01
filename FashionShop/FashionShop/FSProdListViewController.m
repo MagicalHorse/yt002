@@ -24,6 +24,8 @@
 #import "FSConfigListRequest.h"
 #import "FSKeyword.h"
 
+#import "NSString+Extention.h"
+
 #define  PROD_LIST_TAG_CELL @"FSProdListTagCell"
 #define PROD_LIST_DETAIL_CELL @"FSProdListDetailCell"
 #define  PROD_LIST_DETAIL_CELL_WIDTH 100
@@ -37,6 +39,7 @@
 @implementation FSSearchBar
 
 - (void)layoutSubviews {
+    [NSString logControl:self];
     self.autoresizesSubviews = YES;
 	NSUInteger numViews = [self.subviews count];
 	for(int i = 0; i < numViews; i++) {
@@ -63,6 +66,7 @@
 
 -(void)setCancelButtonEnable:(BOOL)_enable
 {
+    [cancel setEnabled:YES];
     if (cancel) {
         [cancel setEnabled:_enable];
     }
@@ -111,11 +115,11 @@
 
 @interface FSProdListViewController ()
 {
-    NSMutableArray *_tags;
     NSMutableArray *_prods;
     NSMutableArray *_prodKeywords;
     NSMutableArray *_brandKeywords;
     NSMutableArray *_stores;
+    NSMutableArray *_tags;
     
     BOOL _isInLoading;
     BOOL _firstTimeLoadDone;
@@ -157,8 +161,6 @@
                                            [UIFont systemFontOfSize:18],UITextAttributeFont,
                                            [UIColor redColor],UITextAttributeTextColor,
                                            [NSValue valueWithCGSize:CGSizeMake(0, 0)],UITextAttributeTextShadowOffset,nil];
-    //[self.searchBar setScopeBarBackgroundImage:[UIImage imageNamed:@"list_title_bg.png"]];
-    //[self.searchBar setScopeBarButtonBackgroundImage:[UIImage imageNamed:@"tab_normal.png"] forState:UIControlStateNormal];
     [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesUnSelected forState:UIControlStateNormal];
     [self.searchBar setScopeBarButtonTitleTextAttributes:textAttibutesSelected forState:UIControlStateSelected];
     
@@ -180,9 +182,13 @@
 
 - (void)viewDidLoad
 {
+    NSLog(@"ProdListViewController viewDidLoad Method1");
     [super viewDidLoad];
+    NSLog(@"ProdListViewController viewDidLoad Method2");
     [self prepareData];
+    NSLog(@"ProdListViewController viewDidLoad Method3");
     [self prepareLayout];
+    NSLog(@"ProdListViewController viewDidLoad Method4");
     
     UISearchBar *_bar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 10, 320, 24)];
     _bar.placeholder = NSLocalizedString(@"Search Bar PlaceHolder String", nil);
@@ -196,6 +202,7 @@
 			break;
 		}
 	}
+    NSLog(@"ProdListViewController viewDidLoad Method5");
 }
 
 -(void)onSearch:(UIButton*)sender
@@ -226,6 +233,7 @@
         _tableSearch.showsVerticalScrollIndicator = NO;
         [self.view addSubview:_tableSearch];
     }
+    self.wantsFullScreenLayout = NO;
     _tableSearch.contentOffset = CGPointMake(0, 0);
     [self.searchBar becomeFirstResponder];
     if(!_isSearching){
@@ -264,6 +272,7 @@
 
 -(void)viewDidAppear:(BOOL)animated
 {
+    NSLog(@"ProdListViewController viewDidLoad Method6");
     if (!_firstTimeLoadDone)
     {
         if (_tags.count>0)
@@ -278,7 +287,7 @@
             [self prepareData];
         }
     }
-    
+    NSLog(@"ProdListViewController viewDidLoad Method7");
     //统计
     [[FSAnalysis instance] logEvent:CHECK_DONGDONG_PAGE withParameters:nil];
 }
@@ -291,14 +300,12 @@
 
 -(void) prepareData
 {
-    _tags = [@[] mutableCopy];
     _prods = [@[] mutableCopy];
+    
+    _tags = theApp.allTags;
     
      _actualTagWidth = 0;
     [self zeroMemoryBlock];
-    if (theApp.allTags) {
-        [_tags addObjectsFromArray:theApp.allTags];
-    }
     if (!_tags ||
         _tags.count<1)
     {
@@ -308,10 +315,11 @@
         request.routeResourcePath = RK_REQUEST_CONFIG_TAG_ALL;
         [request send:[FSTag class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [blockSelf endLoading:_cvTags];
-            if (blockSelf->_tags.count>0) {
+            if (_tags.count>0) {
                 return;
             }
-            [blockSelf->_tags addObjectsFromArray:[FSTag localTags]];
+            theApp.allTags = resp.responseData;
+            _tags = theApp.allTags;
             [blockSelf endPrepareData];
         }];
     }
@@ -319,7 +327,6 @@
     {
         [self endPrepareData];
     }
-   
 }
 
 -(void)endPrepareData
@@ -356,7 +363,7 @@
     
     //add iamgeView
     imageTagBgV = [[UIImageView alloc] initWithFrame:_tagContainer.bounds];
-   NSString *vString = [[[UIDevice currentDevice] systemVersion] substringToIndex:1];
+    NSString *vString = [[[UIDevice currentDevice] systemVersion] substringToIndex:1];
     if ([vString intValue] >= 6) {
         UIImage *image = [[UIImage imageNamed:@"tag_bg_2.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 0, 0) resizingMode:UIImageResizingModeTile];
         imageTagBgV.image = image;
@@ -376,7 +383,6 @@
     _cvTags.scrollEnabled = NO;
     _tagContainer.clipsToBounds = YES;
     [_tagContainer addSubview:_cvTags];
-    //[_cvTags registerNib:[UINib nibWithNibName:@"FSProdTagCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
     [_cvTags registerClass:[FSProdTagCell class] forCellWithReuseIdentifier:PROD_LIST_TAG_CELL];
     _tagContainer.contentMode = UIViewContentModeCenter;
     _cvTags.showsHorizontalScrollIndicator = NO;
@@ -474,7 +480,6 @@
             _tagContainer.frame = _rect;
             
             imageTagBgV.frame = _tagContainer.bounds;
-            //_cvTags.frame = _tagContainer.bounds;
         } completion:^(BOOL finished) {
             isAnimating = NO;
         }];
@@ -494,14 +499,16 @@
     clayout.columnCount = 3;
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
-    CGRect conFrame = _contentContainer.bounds;
-    conFrame.origin.y = 0;
-    conFrame.size.height -= NAV_HIGH + TAB_HIGH;
-    _cvContent = [[PSUICollectionView alloc] initWithFrame:conFrame collectionViewLayout:clayout];
+    CGRect _con = _contentContainer.frame;
+    _con.size.height -= NAV_HIGH + TAB_HIGH;
+    if (IOS7 && ![UIApplication sharedApplication].statusBarHidden) {
+        _con.size.height -= 20;
+    }
+    _contentContainer.frame = _con;
+    _cvContent = [[PSUICollectionView alloc] initWithFrame:_contentContainer.bounds collectionViewLayout:clayout];
     [_contentContainer addSubview:_cvContent];
     [_cvContent setCollectionViewLayout:clayout];
-    _cvContent.backgroundColor = RGBCOLOR(242, 242, 242);//[UIColor whiteColor];
-    //[_cvContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
+    _cvContent.backgroundColor = RGBCOLOR(242, 242, 242);
     [_cvContent registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_cvContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^(){
@@ -713,10 +720,12 @@
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-    if (view == _cvTags)
+    NSLog(@"ProdListViewController viewDidLoad Method7");
+    if (view == _cvTags && _tags.count > 0)
     {
         return _tags.count;
-    } else if (view == _cvContent)
+    }
+    else if (view == _cvContent)
     {
         return _prods.count;
     }
@@ -729,11 +738,14 @@
 }
 
 - (PSUICollectionViewCell *)collectionView:(PSUICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"ProdListViewController viewDidLoad Method8");
     PSUICollectionViewCell * cell = nil;
     if (cv == _cvTags)
     {
         cell = [cv dequeueReusableCellWithReuseIdentifier:PROD_LIST_TAG_CELL forIndexPath:indexPath];
+        NSLog(@"End 1");
         [(FSProdTagCell *)cell setData:[_tags objectAtIndex:indexPath.row]];
+        NSLog(@"End 2");
     }
     else if (cv == _cvContent)
     {
@@ -757,13 +769,16 @@
 
 - (void)collectionView:(PSUICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"ProdListViewController viewDidLoad Method9");
     if(collectionView == _cvTags)
     {
         //首先结束上一次的loading动画
         [self endLoading:self.view];
         [[collectionView cellForItemAtIndexPath:indexPath] setSelected:TRUE];
         [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:TRUE];
+        NSLog(@"End 3");
         FSTag *tag = [_tags objectAtIndex:indexPath.row];
+        NSLog(@"End 4");
         [self beginSwitchTag:tag];
         _currentSelTag = tag;
         
@@ -796,7 +811,7 @@
 
 -(void)collectionView:(PSUICollectionView *)collectionView didEndDisplayingCell:(PSUICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    NSLog(@"ProdListViewController viewDidLoad Method10");
     if (collectionView == _cvContent)
     {
         [(FSProdDetailCell *)cell willRemoveFromView];
@@ -805,20 +820,24 @@
 }
 -(CGSize)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"ProdListViewController viewDidLoad Method11");
     if (collectionView == _cvTags &&
         _tags)
     {
-        if ([[_tags objectAtIndex:indexPath.row] isKindOfClass:[FSTag class]] && [_tags objectAtIndex:indexPath.row]) {
-            FSTag *tag = (FSTag*)[_tags objectAtIndex:indexPath.row];
-            if (tag.name) {
-                CGSize actualSize = [tag.name sizeWithFont:ME_FONT(12)];
+        if (_tags.count > indexPath.row) {
+            FSTag *_tag = (FSTag*)[_tags objectAtIndex:indexPath.row];
+            NSLog(@"End 5");
+            if (_tag.name) {
+                CGSize actualSize = [_tag.name sizeWithFont:ME_FONT(12)];
                 CGFloat width = MAX(actualSize.width, DEFAULT_TAG_WIDTH);
-                _actualTagWidth+=width+5;
+                _actualTagWidth += width+5;
                 return CGSizeMake(width, MAX(actualSize.height, Tag_Item_Height));
             }
+            NSLog(@"ProdListViewController viewDidLoad Method14");
             return CGSizeZero;
         }
     }
+    NSLog(@"ProdListViewController viewDidLoad Method13");
     return  CGSizeMake(ITEM_CELL_WIDTH, ITEM_CELL_WIDTH);
 }
 
@@ -826,8 +845,9 @@
                    layout:(SpringboardLayout *)collectionViewLayout
  heightForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"ProdListViewController viewDidLoad Method12");
     FSProdItemEntity * data = [_prods objectAtIndex:indexPath.row];
-    FSResource * resource = data.resource&&data.resource.count>0?[data.resource objectAtIndex:0]:nil;
+    FSResource * resource = data.resource && data.resource.count>0?[data.resource objectAtIndex:0]:nil;
     float totalHeight = 0.1f;
     if (resource &&
         resource.width>0 &&
@@ -860,6 +880,7 @@
     return view.sourceType;
     return FSSourceProduct;
 }
+
 -(BOOL)proDetailViewNeedRefreshFromContext:(FSProDetailViewController *)view forIndex:(NSInteger)index
 {
     return TRUE;
@@ -910,6 +931,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"ProdListViewController viewDidLoad Method13");
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     if (_selectedIndex == 0) {
@@ -947,19 +969,22 @@
 
 #pragma mark - Search Delegate
 
-//- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar
-//{
-//    if (searchBar.tag == Default_SearchBar_Tag) {
-//        [searchBar resignFirstResponder];
-//        [self onSearch:nil];
-//    }
-//    
-//    return YES;
-//}
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    if (searchBar.tag == Default_SearchBar_Tag && IOS7) {
+        [self onSearch:nil];
+    }
+    return YES;
+}
+
+- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return YES;
+}
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    if (searchBar.tag == Default_SearchBar_Tag) {
+    if (searchBar.tag == Default_SearchBar_Tag && !IOS7) {
         [searchBar resignFirstResponder];
         [self onSearch:nil];
     }
@@ -974,8 +999,15 @@
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar
 {
-    if (_isSearching && searchBar.tag != Default_SearchBar_Tag) {
+    if (_isSearching) {// && searchBar.tag != Default_SearchBar_Tag) {
+        id search = [self.view viewWithTag:Default_SearchBar_Tag];
+        if (search && [search isKindOfClass:[UISearchBar class]]) {
+            UISearchBar *search1 = (UISearchBar*)search;
+            [search1 resignFirstResponder];
+        }
+        
         self.searchBar.text = @"";
+        [searchBar resignFirstResponder];
         [_tableSearch removeFromSuperview];
         [self.navigationController setNavigationBarHidden:NO animated:YES];
         _isSearching = NO;

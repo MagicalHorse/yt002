@@ -11,7 +11,7 @@
 #import "FSMyPickerView.h"
 #import "FSPurchase.h"
 
-@interface FSInvoiceViewController : FSBaseViewController<UITextFieldDelegate,FSMyPickerViewDatasource,FSMyPickerViewDelegate>
+@interface FSInvoiceViewController : FSBaseViewController<UITextFieldDelegate>
 
 @property (strong, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *contentView;
 @property (strong, nonatomic) IBOutlet UITextField *invoiceTitle;
@@ -19,8 +19,6 @@
 @property (nonatomic,strong) FSPurchase *data;
 @property (nonatomic,strong) FSPurchaseForUpload *uploadData;
 @property (nonatomic,strong) id delegate;
-
-- (IBAction)selectDetail:(id)sender;
 
 @end
 

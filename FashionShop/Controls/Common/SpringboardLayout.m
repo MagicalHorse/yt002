@@ -2,6 +2,7 @@
 
 #import "SpringboardLayout.h"
 #import "SpringboardLayoutAttributes.h" // TO UNCOMMENT LATER
+
 @interface SpringboardLayout()
 @property (nonatomic, assign) NSInteger itemCount;
 @property (nonatomic, assign) CGFloat interitemSpacing;
@@ -16,7 +17,6 @@
 {
     if (self = [super init])
     {
-
         self.scrollDirection = UICollectionViewScrollDirectionVertical;
         _sectionInset = UIEdgeInsetsZero;
     }

@@ -13,7 +13,7 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
-#define REST_API_CLIENT_VERSION @"2.2.4"
+#define REST_API_CLIENT_VERSION @"2.5.0"
 
 //正式库
 //#define REST_API_URL   @"http://itoo.yintai.com/api"
@@ -21,14 +21,14 @@
 //#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库-内网
-//    #define REST_API_URL   @"http://10.92.200.109/api"
-//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
-//    #define REST_API_APP_SECRET_KEY @"yintai123456"
-
-//预生产库
-    #define REST_API_URL   @"http://apis.youhuiin.com/api"
+    #define REST_API_URL   @"http://10.92.200.109/api"
     #define REST_API_URL_OUT @"http://stage.youhuiin.com"
     #define REST_API_APP_SECRET_KEY @"yintai123456"
+
+////预生产库
+//    #define REST_API_URL   @"http://apis.youhuiin.com/api"
+//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+//    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
@@ -66,6 +66,11 @@
 #define EM_O_R_SUCC @"O_R_SUCC"
 #define EM_O_C_HELP @"O_C_HELP"
 
+//支付方式代码
+#define DELIVERY_PAY_CODE @"1001" //货到付款
+#define ALI_PAY_CODE @"25"    //支付宝支付
+#define WEIXIN_PAY_CODE @"26" //微信支付
+
 #define CollectionView_Default_Height 100.0f
 
 //判断系统是否是iOS7
@@ -98,6 +103,9 @@
 #define BFONT(a)            [UIFont boldSystemFontOfSize:a]
 
 #define ATTENTION_XHYT_URL @"http://weixin.qq.com/r/FHWNghXEhiv5hwThnyAw"
+
+#define PickerView_Background_Color RGBACOLOR(255,255,255,1.0)
+#define PickerView_Alpha 0.9
 
 #endif
 
@@ -145,3 +153,4 @@ typedef enum {
     FSAddressDetailStateEdit,
     FSAddressDetailStateNew,
 }FSAddressDetailState;
+

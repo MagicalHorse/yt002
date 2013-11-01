@@ -10,7 +10,6 @@
 #import "NSString+Extention.h"
 
 @interface FSInvoiceViewController () {
-    FSMyPickerView *invoicePickerView;
     id activityField;
 }
 
@@ -38,12 +37,8 @@
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     [_invoiceTitle becomeFirstResponder];
     
-    if (!_data.invoicedetails) {
-        _data.invoicedetails = [NSMutableArray arrayWithCapacity:4];
-    }
-    if (_data.invoicedetails.count <= 0) {
-        [_data.invoicedetails addObject:@"服装"];
-    }
+    _invoiceTitle.text = _uploadData.invoicetitle;
+    _invoiceDetail.text = _uploadData.invoicedetail;
 }
 
 -(void)addRightButton:(NSString*)title
@@ -73,10 +68,9 @@
         return;
     }
     if ([NSString isNilOrEmpty:_invoiceDetail.text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请选择发票明细" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入发票明细" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
-        
-        [self selectDetail:nil];
+        [_invoiceDetail becomeFirstResponder];
         return;
     }
     [self reportError:@"保存成功"];
@@ -90,32 +84,12 @@
     [self setInvoiceTitle:nil];
     [self setInvoiceDetail:nil];
     [self setContentView:nil];
-    [theApp cleanAllPickerView];
     [super viewDidUnload];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [theApp hiddenPickerView];
-}
-
-- (IBAction)selectDetail:(id)sender {
-    if (!invoicePickerView) {
-        invoicePickerView = [[FSMyPickerView alloc] init];
-        invoicePickerView.delegate = self;
-        invoicePickerView.datasource = self;
-    }
-    //初始化选中项
-    for (int i = 0; i < _data.invoicedetails.count; i++) {
-        NSString *item = _data.invoicedetails[i];
-        if ([item isEqualToString:_uploadData.invoicedetail]) {
-            [invoicePickerView.picker selectRow:i inComponent:0 animated:NO];
-            break;
-        }
-    }
-    [activityField resignFirstResponder];
-    [invoicePickerView showPickerView:nil];
 }
 
 #pragma mark - UITextFieldDelegate
@@ -123,47 +97,15 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     activityField = textField;
-    [invoicePickerView hidenPickerView:YES action:nil];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    [textField resignFirstResponder];
+    if (textField == _invoiceDetail) {
+        [self saveInvoice:nil];
+        [textField resignFirstResponder];
+    }
     return YES;
-}
-
-#pragma mark - FSMyPickerViewDatasource
-
-- (NSInteger)numberOfComponentsInMyPickerView:(FSMyPickerView *)pickerView
-{
-    if (pickerView == invoicePickerView) {
-        return 1;
-    }
-    return 0;
-}
-
-- (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-{
-    if (pickerView == invoicePickerView) {
-        return _data.invoicedetails.count;
-    }
-    return 0;
-}
-
-#pragma mark - FSMyPickerViewDelegate
-
-- (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
-{
-    if (aMyPickerView == invoicePickerView) {
-        int index = [aMyPickerView.picker selectedRowInComponent:0];
-        NSString *aItem = _data.invoicedetails[index];
-        _invoiceDetail.text = aItem;
-    }
-}
-
-- (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
-{
-    return _data.invoicedetails[row];
 }
 
 @end

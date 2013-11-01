@@ -33,12 +33,16 @@
 #import "FSOrderListViewController.h"
 #import "FSOrderDetailViewController.h";
 
+#import "WxPayOrder.h"
+
 #define PRO_LIST_FILTER_NEWEST @"newest"
 #define PRO_LIST_FILTER_NEAREST @"nearest"
 #define PRO_LIST_FILTER_WILLPUBLISH @"willpublish"
 #define PRO_LIST_BANNER @"banner"
 #define PRO_LIST_NEAREST_HEADER_CELL @"ProNearestHeaderTableCell"
 #define PRO_LIST_NEAREST_CELL @"ProTableCell"
+
+#define Banner_Height 44
 
 @interface FSProListViewController ()
 {
@@ -58,6 +62,8 @@
     NSMutableArray *_firstTimeList;
     BOOL _inLoading;
     BOOL _isInRefreshing;
+    
+    WxPayOrder *wxPayOrder;
 }
 
 @end
@@ -79,6 +85,7 @@
 
     _currentSearchIndex = SortByDistance;
     _contentView.backgroundView = nil;
+    _contentView.showsVerticalScrollIndicator = YES;
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     _contentView.separatorColor = [UIColor clearColor];
     [_contentView registerNib:[UINib nibWithNibName:@"FSProNearestHeaderTableCell" bundle:nil] forCellReuseIdentifier:PRO_LIST_NEAREST_HEADER_CELL];
@@ -208,12 +215,20 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    if (_dataSourceBannerData.count > 0) {
-//        [self.navigationController setNavigationBarHidden:YES animated:YES];
-//    }
+    if (_dataSourceBannerData.count > 0) {
+        [self.navigationController setNavigationBarHidden:YES animated:NO];
+    }
     [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
     //统计
     [[FSAnalysis instance] logEvent:CHECK_PROLIST_PAGE withParameters:nil];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_dataSourceBannerData.count > 0) {
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+    }
 }
 
 - (void)viewDidUnload {
@@ -239,10 +254,10 @@
             if (aView) {
                 [aView removeFromSuperview];
             }
-            FSCycleScrollView *csView = [[FSCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, NAV_HIGH)];
+            FSCycleScrollView *csView = [[FSCycleScrollView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, Banner_Height)];
             csView.delegate = self;
             csView.datasource = self;
-            csView.pageControl.frame = CGRectMake(0, 27, APP_WIDTH, 19);
+            csView.pageControl.frame = CGRectMake(0, Banner_Height - 27, APP_WIDTH, 19);
             csView.tag = 4321;
             [self.view addSubview:csView];
             [self updateFrame];
@@ -302,22 +317,22 @@
 -(void)updateFrame
 {
     CGRect rect;
-    if (_dataSourceBannerData.count > 0 && self.segFilters.frame.origin.y < NAV_HIGH) {
+    if (_dataSourceBannerData.count > 0 && self.segFilters.frame.origin.y < Banner_Height) {
         rect =  self.contentView.frame;
-        rect.origin.y += NAV_HIGH;
-        rect.size.height -= NAV_HIGH;
+        rect.origin.y += Banner_Height;
+        rect.size.height -= Banner_Height;
         self.contentView.frame = rect;
         rect =  self.segFilters.frame;
-        rect.origin.y += NAV_HIGH;
+        rect.origin.y += Banner_Height;
         self.segFilters.frame = rect;
     }
     else if(_dataSourceBannerData.count <= 0){
         rect =  self.contentView.frame;
-        rect.origin.y -= NAV_HIGH;
-        rect.size.height += NAV_HIGH;
+        rect.origin.y -= Banner_Height;
+        rect.size.height += Banner_Height;
         self.contentView.frame = rect;
         rect =  self.segFilters.frame;
-        rect.origin.y -= NAV_HIGH;
+        rect.origin.y -= Banner_Height;
         self.segFilters.frame = rect;
     }
 }
@@ -690,7 +705,7 @@
             FSStoreDetailViewController *storeController = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
             storeController.storeID = store.id;
             storeController.title = store.name;
-            [self.navigationController setNavigationBarHidden:NO];
+            //[self.navigationController setNavigationBarHidden:NO];
             [self.navigationController pushViewController:storeController animated:YES];
             
             //统计
@@ -943,6 +958,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    wxPayOrder = [[WxPayOrder alloc] init];
+    wxPayOrder.productid = @"1234567890";
+    [wxPayOrder payOrder];
+    return;
     if (_inLoading) {
         return;
     }
@@ -1033,9 +1052,9 @@
     }
     FSProItemEntity * item = _dataSourceBannerData[index];
     NSURL *url = [(FSResource *)item.resource[0] absoluteUr:APP_WIDTH height:NAV_HIGH];
-    UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, NAV_HIGH)];
+    UIImageView *view = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, Banner_Height)];
     view.contentMode = UIViewContentModeScaleAspectFill;
-    [view setImageUrl:url resizeWidth:CGSizeMake(APP_WIDTH, NAV_HIGH) placeholderImage:[UIImage imageNamed:@"default_icon320x44.png"]];
+    [view setImageUrl:url resizeWidth:CGSizeMake(APP_WIDTH, Banner_Height) placeholderImage:[UIImage imageNamed:@"default_icon320x110.png"]];
     return view;
 }
 

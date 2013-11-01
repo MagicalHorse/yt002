@@ -23,6 +23,8 @@
     
     BOOL pickerIsShow;  //当前picker是否显示
     int tableYOffset;
+    
+    NSMutableDictionary *_genders;
 }
 
 -(void)initPickerView;
@@ -76,6 +78,8 @@
     _picker.delegate = self;
     _picker.dataSource = self;
     _picker.showsSelectionIndicator = YES;
+    _picker.backgroundColor = PickerView_Background_Color;
+    _picker.alpha = PickerView_Alpha;
     [pickerView addSubview:_picker];
     
     [theApp.window insertSubview:pickerView atIndex:1000];
@@ -87,11 +91,11 @@
     {
         pickerIsShow = YES;
         [_activityField resignFirstResponder];
-        if ([_btnSex.titleLabel.text isEqualToString:NSLocalizedString(@"Male", nil)]) {
-            [_picker selectRow:0 inComponent:0 animated:NO];
-        }
-        else{
-            [_picker selectRow:1 inComponent:0 animated:NO];
+        
+        NSArray *_array = [_genders allKeysForObject:_btnSex.titleLabel.text];
+        if (_array.count > 0) {
+            int selectedRow = [_array[0] intValue];
+            [_picker selectRow:selectedRow inComponent:0 animated:NO];
         }
         
         tableYOffset = self.tbAction.contentOffset.y;
@@ -134,12 +138,8 @@
 -(void)okPickerView:(UIButton*)sender
 {
     [self hidenPickerView:YES];
-    if ([_picker selectedRowInComponent:0] == 0) {
-        [_btnSex setTitle:NSLocalizedString(@"Male", nil) forState:UIControlStateNormal];
-    }
-    if ([_picker selectedRowInComponent:0] == 1) {
-        [_btnSex setTitle:NSLocalizedString(@"Female", nil) forState:UIControlStateNormal];
-    }
+    int selectedRow = [_picker selectedRowInComponent:0];
+    [_btnSex setTitle:[_genders valueForKey:[NSString stringWithFormat:@"%d", selectedRow]] forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
@@ -150,6 +150,11 @@
     [self bindControl];
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
+    
+    _genders = [NSMutableDictionary dictionary];
+    [_genders setValue:NSLocalizedString(@"SexUnknow", nil) forKey:@"0"];
+    [_genders setValue:NSLocalizedString(@"Male", nil) forKey:@"1"];
+    [_genders setValue:NSLocalizedString(@"Female", nil) forKey:@"2"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -256,7 +261,7 @@
                 UIEdgeInsets _inset = _btnSex.contentEdgeInsets;
                 _inset.right = 35;
                 _btnSex.contentEdgeInsets = _inset;
-                [_btnSex setTitle:(currentUser.gender==1?NSLocalizedString(@"Male", nil):NSLocalizedString(@"Female", nil)) forState:UIControlStateNormal];
+                [_btnSex setTitle:[_genders valueForKey:[NSString stringWithFormat:@"%d", currentUser.gender]] forState:UIControlStateNormal];
                 [_btnSex setBackgroundImage:[UIImage imageNamed:@"gendar_icon.png"] forState:UIControlStateNormal];
                 [_btnSex setTitleColor:RGBCOLOR(38, 38, 38) forState:UIControlStateNormal];
                 _btnSex.frame = CGRectMake(_sexLb.frame.origin.x + _sexLb.frame.size.width, 7, 90, 30);
@@ -355,7 +360,13 @@
         request.nickie = [_nickField.text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
         request.phone = [_phoneField.text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
         request.signature = [_signField.text stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@" "]];
-        request.gender = [NSNumber numberWithInt:[_btnSex.titleLabel.text isEqualToString:NSLocalizedString(@"Male", nil)]?1:2];
+        NSArray *_array = [_genders allKeysForObject:_btnSex.titleLabel.text];
+        if (_array.count > 0) {
+            request.gender = [NSNumber numberWithInt:[_array[0] intValue]];
+        }
+        else{
+            request.gender = [NSNumber numberWithInt:0];
+        }
         [self beginLoading:self.view];
         [request send:[FSUser class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             if (!resp.isSuccess)
@@ -380,7 +391,7 @@
                 [_dic setValue:request.nickie forKey:@"昵称"];
                 [_dic setValue:request.phone forKey:@"联系方式"];
                 [_dic setValue:request.signature forKey:@"签名"];
-                [_dic setValue:request.gender.intValue==1?@"男":@"女" forKey:@"Gender"];
+                [_dic setValue:request.gender.intValue==1?@"男":(request.gender.intValue==2?@"女":@"保密") forKey:@"Gender"];
                 [_dic setValue:@"用户资料编辑页" forKey:@"来源页面"];
                 FSUser *user = [FSUser localProfile];
                 [_dic setValue:user.uid forKey:@"用户ID"];
@@ -406,19 +417,14 @@
 }
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return 2;
+    return 3;
 }
 #pragma UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (row == 0) {
-        return NSLocalizedString(@"Male", nil);
-    }
-    if (row == 1) {
-        return  NSLocalizedString(@"Female", nil);
-    }
-    return @"";
+    return [_genders valueForKey:[NSString stringWithFormat:@"%d", row]];
 }
+
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
 }

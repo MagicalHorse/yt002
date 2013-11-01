@@ -68,6 +68,8 @@ static FSMyPickerView *myPickerViewInstance;
     _picker.delegate = self;
     _picker.dataSource = self;
     _picker.showsSelectionIndicator = YES;
+    _picker.backgroundColor = PickerView_Background_Color;
+    _picker.alpha = PickerView_Alpha;
     [self addSubview:_picker];
     
     [theApp.window insertSubview:self atIndex:1000];

@@ -7,6 +7,8 @@
 ///
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 
 /**
  * \brief APIResponse.retCode可能的枚举常量
@@ -21,17 +23,30 @@ typedef enum
 } REPONSE_RESULT;
 
 /**
+ * \brief 增量授权失败原因
+ *
+ * \note 增量授权失败不影响原token的有效性（原token已失效的情况除外）
+ */
+typedef enum
+{
+    kUpdateFailUnknown = 1,  ///< 未知原因
+    kUpdateFailUserCancel,   ///< 用户取消
+    kUpdateFailNetwork,      ///< 网络问题
+} UpdateFailType;
+
+/**
  * \brief 封装服务器返回的结果
  *
  * APIResponse用于封装所有请求的返回结果，包括错误码、错误信息、原始返回数据以及返回数据的json格式字典
  */
-@interface APIResponse : NSObject {
+@interface APIResponse : NSObject<NSCoding> {
     int      _detailRetCode;
 	int		 _retCode;
 	int		 _seq;
 	NSString *_errorMsg;
 	NSDictionary *_jsonResponse;
 	NSString *_message;
+    id       _userData;
 }
 
 /**
@@ -67,8 +82,18 @@ typedef enum
  */
 @property (nonatomic, retain) NSString *message;
 
+/**
+ * 用户保留数据
+ */
+@property (nonatomic, retain) id userData;
+
 @end
 
+
+/**
+ * 用户自定义的保留字段
+ */
+FOUNDATION_EXTERN NSString * const PARAM_USER_DATA;
 
 /**
  * \name 应用邀请参数字段定义
@@ -138,6 +163,9 @@ FOUNDATION_EXTERN NSString * const PARAM_RETCODE;
 /** 服务器返回错误信息的key */
 FOUNDATION_EXTERN NSString * const PARAM_MESSAGE;
 
+/** 服务器返回额外数据的key */
+FOUNDATION_EXTERN NSString * const PARAM_DATA;
+
 ///@}
 
 /**
@@ -153,6 +181,9 @@ FOUNDATION_EXTERN NSString * const TCOpenSDKErrorKeyRetCode;
 
 /** 详细错误信息字典中错误语句的key */
 FOUNDATION_EXTERN NSString * const TCOpenSDKErrorKeyMsg;
+
+/** 不支持的接口 */
+FOUNDATION_EXTERN NSString * const TCOpenSDKErrorMsgUnsupportedAPI;
 
 /** 操作成功 */
 FOUNDATION_EXTERN NSString * const TCOpenSDKErrorMsgSuccess;
@@ -207,6 +238,7 @@ FOUNDATION_EXTERN NSString * const TCOpenSDKErrorMsgUserHeadPicLarge;
 typedef enum
 {
     kOpenSDKInvalid = -1,                       ///< 无效的错误码
+    kOpenSDKErrorUnsupportedAPI = -2,                ///< 不支持的接口
     
     /**
      * \name CommonErrorCode
@@ -251,15 +283,6 @@ typedef enum
     kOpenSDKErrorUserHeadPicLarge = 0x010000,   ///< 图片过大 设置头像自定义错误码
     ///@}
 } OpenSDKError;
-
-/**
- * \brief 由openSDKErr错误码取得对应的错误语句
- *
- * \param openSDKErr 详细错误码，具体取值参见\ref OpenSDKError
- * \return 错误码openSDKErr对应的错误语句
- * \note 当找不到与openSDKErr匹配的错误语句时返回nil
- */
-NSString *TCOpenSDKErrorMsgForErrorCode(OpenSDKError openSDKErr);
 
 /**
  * \name SDK版本(v1.3)支持的授权列表常量
@@ -331,4 +354,153 @@ FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_GET_USER_INFO;
 
 /** 移动端获取用户信息 */
 FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_GET_SIMPLE_USER_INFO;
+
+/** 微云上传图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_PIC;
+
+/** 微云下载图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_PIC;
+
+/** 微云获得图片列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PIC_LIST;
+
+/** 微云删除图片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_PIC;
+
+/** 微云获取缩略图 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PIC_THUMB;
+
+/** 微云上传音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_MUSIC;
+
+/** 微云下载音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_MUSIC;
+
+/** 微云获取音乐列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_MUSIC_LIST;
+
+/** 微云删除音乐 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_MUSIC;
+
+/** 微云上传视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_VIDEO;
+
+/** 微云下载视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_VIDEO;
+
+/** 微云获取视频列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_VIDEO_LIST;
+
+/** 微云删除视频 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_VIDEO;
+
+/** 微云上传照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_UPLOAD_PHOTO;
+
+/** 微云下载照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DOWNLOAD_PHOTO;
+
+/** 微云获得照片列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PHOTO_LIST;
+
+/** 微云删除照片 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_PHOTO;
+
+/** 微云获取图片缩略图 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_PHOTO_THUMB;
+
+/** 微云检查记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_CHECK_RECORD;
+
+/** 微云创建记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_CREATE_RECORD;
+
+/** 微云删除记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_DELETE_RECORD;
+
+/** 微云获取记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_GET_RECORD;
+
+/** 微云修改记录 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_MODIFY_RECORD;
+
+/** 微云获取所有记录列表 */
+FOUNDATION_EXTERN NSString *const kOPEN_PERMISSION_WEIYUN_QUERY_ALL_RECORD;
 ///@}
+
+
+/**
+ * \name CGI接口相关参数类型定义
+ */
+///@{
+
+/** 必填的字符串类型参数 */
+typedef NSString *TCRequiredStr;
+
+/** 必填的UIImage类型参数 */
+typedef UIImage *TCRequiredImage;
+
+/** 必填的整型参数 */
+typedef NSInteger TCRequiredInt;
+
+/** 必填的数字类型 */
+typedef NSNumber *TCRequiredNumber;
+
+/** 必填的NSData参数 */
+typedef NSData *TCRequiredData;
+
+/** 可选的字符串类型参数 */
+typedef NSString *TCOptionalStr;
+
+/** 可选的UIImage类型参数 */
+typedef UIImage *TCOptionalImage;
+
+/** 可选的整型参数 */
+typedef NSInteger TCOptionalInt;
+
+/** 可选的数字类型 */
+typedef NSNumber *TCOptionalNumber;
+
+/** 可选的不定类型参数 */
+typedef id TCRequiredId;
+///@}
+
+
+/**
+ * \brief CGI请求的参数字典封装辅助基类
+ *
+ * 将相应属性的值以key-value的形式保存到参数字典中
+ */
+@interface TCAPIRequest : NSMutableDictionary
+
+/** CGI请求的URL地址 */
+@property (nonatomic, readonly) NSURL *apiURL;
+
+/** CGI请求方式："GET"，"POST" */
+@property (nonatomic, readonly) NSString *method;
+
+/**
+ * API参数中的保留字段，可以塞入任意字典支持的类型，再调用完成后会带回给调用方
+ */
+@property (nonatomic, retain) TCRequiredId paramUserData;
+
+/**
+ * APIResponse,API的返回结果
+ */
+@property (nonatomic, readonly) APIResponse *response;
+
+/** 取消相应的CGI请求任务 */
+- (void)cancel;
+
+@end
+
+@protocol TCAPIRequestDelegate <NSObject>
+@optional
+- (void)cgiRequest:(TCAPIRequest *)request didResponse:(APIResponse *)response;
+
+- (void)cgiRequest:(TCAPIRequest *)request didSendBodyData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten totalBytesExpectedToWrite:(long long)totalBytesExpectedToWrite;
+
+- (void)cgiRequest:(TCAPIRequest *)request didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long) expectedTotalBytes;
+
+@end
+

@@ -38,6 +38,8 @@
 #import "UIDevice+Extention.h"
 #import "FSBaseViewController.h"
 
+#define CUSTOM_APPEARANCE 0
+
 #endif
 
 

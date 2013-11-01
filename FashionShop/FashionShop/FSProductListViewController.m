@@ -154,8 +154,6 @@
                 CGRect aRect = _productContent.frame;
                 aRect.size.height -= _brandShowView.frame.size.height;
                 aRect.origin.y += _brandShowView.frame.size.height;
-                //_productContent.frame = aRect;
-                //_productContent.contentOffset = CGPointMake(0, _contentOffsetY + _brandShowView.frame.size.height);
             } completion:^(BOOL finished) {
                 //nothing
             }];
@@ -178,8 +176,6 @@
             _rect = _productContent.frame;
             _rect.size.height += height;
             _rect.origin.y -= height;
-            //_productContent.frame = _rect;
-            //_productContent.contentOffset = CGPointMake(0, _contentOffsetY + _brandShowView.frame.size.height);
         } completion:^(BOOL finished) {
             _brandShowView.hidden = YES;
         }];
@@ -218,11 +214,15 @@
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
     
+    CGRect _con = _contentView.frame;
+    double tabHeight = [self.navigationController tabBarController]?TAB_HIGH:0;
+    double statusBarHeight = [UIApplication sharedApplication].statusBarHidden?0:20;
+    _con.size.height = SCREEN_HIGH - NAV_HIGH - tabHeight - statusBarHeight;
+    _contentView.frame = _con;
     _productContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
     [_contentView addSubview:_productContent];
     
     _productContent.backgroundColor = [UIColor whiteColor];
-    //[_productContent registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [_productContent registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
     [self prepareRefreshLayout:_productContent withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:YES withCallback:^(){

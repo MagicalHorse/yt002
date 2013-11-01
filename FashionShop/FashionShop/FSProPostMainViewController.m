@@ -13,7 +13,6 @@
 #import "FSBrand.h"
 #import "FSGroupBrand.h"
 #import "FSCoreBrand.h"
-#import "FSCoreTag.h"
 #import "FSProPostTitleViewController.h"
 #import "FSPostTableSelViewController.h"
 #import "FSProItemEntity.h"
@@ -352,9 +351,9 @@
             _proRequest.descrip = [(NSArray *)value objectAtIndex:1];
             _proRequest.fileName = [(NSArray *)value objectAtIndex:2];
             NSString *price = [(NSArray *)value objectAtIndex:3];
-            _proRequest.price =[NSNumber numberWithInt:[price intValue]];
+            _proRequest.price =[NSNumber numberWithInt:[price floatValue]];
             price = [(NSArray *)value objectAtIndex:4];
-            _proRequest.originalPrice =[NSNumber numberWithInt:[price intValue]];
+            _proRequest.originalPrice =[NSNumber numberWithInt:[price floatValue]];
             _proRequest.upccode = [(NSArray *)value objectAtIndex:5];
             break;
         }
@@ -513,7 +512,7 @@
 {
     FSPostTableSelViewController *tableSelect = [[FSPostTableSelViewController alloc] initWithNibName:@"FSPostTableSelViewController" bundle:Nil];
     [tableSelect setDataSource:^id{
-        return theApp.allTags;//[FSCoreTag findAllSortedBy:@"name" ascending:TRUE];
+        return theApp.allTags;
     } step:PostStepTagFinished selectedCallbackTarget:self];
     tableSelect.navigationItem.title =NSLocalizedString(@"PRO_POST_TAG_NOTEXT", nil);
     [self.navigationController pushViewController:tableSelect animated:TRUE];

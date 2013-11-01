@@ -11,10 +11,13 @@
 #import "FSOrder.h"
 #import "FSOrderListCell.h"
 #import "FSOrderRMARequestViewController.h"
+#import "FSOrderRMACommitViewController.h"
+#import "WxPayOrder.h"
 
 @interface FSOrderDetailViewController ()
 {
     FSOrderInfo *orderInfo;
+    WxPayOrder *wxPayOrder;
 }
 
 @end
@@ -62,6 +65,23 @@
         if (respData.isSuccess)
         {
             orderInfo = respData.responseData;
+            //显示右上角按钮
+            if (orderInfo.statust == 0 && ![DELIVERY_PAY_CODE isEqualToString:orderInfo.paymentcode]) {
+                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [btn addTarget:self action:@selector(requestOnlinePay:) forControlEvents:UIControlEventTouchUpInside];
+                [btn setTitle:@"在线支付" forState:UIControlStateNormal];
+                btn.titleLabel.font = ME_FONT(13);
+                btn.showsTouchWhenHighlighted = YES;
+                [btn setBackgroundImage:[UIImage imageNamed:@"btn_big_normal.png"] forState:UIControlStateNormal];
+                [btn sizeToFit];
+                UIBarButtonItem *baritemSet= [[UIBarButtonItem alloc] initWithCustomView:btn];
+                [self.navigationItem setRightBarButtonItem:baritemSet];
+            }
+            else {
+                [self.navigationItem setRightBarButtonItem:nil];
+            }
+            
+            //创建表尾
             _tbAction.tableFooterView = [self createTableFooterView];
             _tbAction.contentOffset = CGPointMake(0, 0);
             [_tbAction reloadData];
@@ -87,11 +107,23 @@
     if (!orderInfo.canvoid && !orderInfo.canrma) {
         return nil;
     }
-    int height = 20;
+    int height = 15;
     int xOffset = 49;
     
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = [UIColor clearColor];
+    
+    if (orderInfo.statust == 0 && ![DELIVERY_PAY_CODE isEqualToString:orderInfo.paymentcode]) {
+        UIButton *btnOnlinePay = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnOnlinePay.frame = CGRectMake(xOffset, height, 222, 40);
+        [btnOnlinePay setTitle:@"在线支付" forState:UIControlStateNormal];
+        [btnOnlinePay setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+        [btnOnlinePay setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [btnOnlinePay addTarget:self action:@selector(requestOnlinePay:) forControlEvents:UIControlEventTouchUpInside];
+        btnOnlinePay.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+        [view addSubview:btnOnlinePay];
+        height += 55;
+    }
     
     if (orderInfo.canrma) {
         UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -102,8 +134,26 @@
         [btnClean addTarget:self action:@selector(requestRMA:) forControlEvents:UIControlEventTouchUpInside];
         btnClean.titleLabel.font = [UIFont boldSystemFontOfSize:18];
         [view addSubview:btnClean];
-        height += 50;
+        height += 55;
     }
+    
+    /*
+    if (orderInfo.rmas.count > 0) {
+        FSOrderRMAItem *item = orderInfo.rmas[0];
+        if ([item.statusCode isEqualToString:@"2"]) {   //1: 新创建 2：审核通过，可看邮寄地址 10：退货完成 -10：取消
+            UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
+            btnClean.frame = CGRectMake(xOffset, height, 222, 40);
+            [btnClean setTitle:@"确认退货" forState:UIControlStateNormal];
+            [btnClean setBackgroundImage:[UIImage imageNamed:@"btn_bg.png"] forState:UIControlStateNormal];
+            [btnClean setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [btnClean addTarget:self action:@selector(commitRMA:) forControlEvents:UIControlEventTouchUpInside];
+            btnClean.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+            [view addSubview:btnClean];
+            height += 55;
+        }
+    }
+     */
+    
     if (orderInfo.canvoid) {
         UIButton *btnClean = [UIButton buttonWithType:UIButtonTypeCustom];
         btnClean.frame = CGRectMake(xOffset, height, 222, 40);
@@ -113,7 +163,7 @@
         [btnClean addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
         btnClean.titleLabel.font = [UIFont boldSystemFontOfSize:18];
         [view addSubview:btnClean];
-        height += 50;
+        height += 55;
     }
     height += 10;
     
@@ -121,10 +171,27 @@
     return view;
 }
 
+-(void)requestOnlinePay:(id)sender
+{
+    if([ALI_PAY_CODE isEqualToString:orderInfo.paymentcode]){   //支付宝支付
+        FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
+        FSOrderProduct *_prod = nil;
+        if (orderInfo.products.count > 0) {
+            _prod = orderInfo.products[0];
+        }
+        [del toAlipayWithOrder:orderInfo.orderno name:_prod?_prod.productname:orderInfo.orderno desc:_prod?_prod.productdesc:orderInfo.orderno amount:orderInfo.totalamount];
+    }
+    else if([WEIXIN_PAY_CODE isEqualToString:orderInfo.paymentcode]) { //微信支付
+        wxPayOrder = [[WxPayOrder alloc] init];
+        wxPayOrder.productid = orderInfo.orderno;
+        [wxPayOrder payOrder];
+    }
+}
+
 -(void)requestRMA:(UIButton*)sender
 {
     FSOrderRMARequestViewController *controller = [[FSOrderRMARequestViewController alloc] initWithNibName:@"FSOrderRMARequestViewController" bundle:nil];
-    controller.orderno = orderno;
+    controller.orderinfo = orderInfo;
     [self.navigationController pushViewController:controller animated:YES];
     
     //统计
@@ -132,6 +199,18 @@
     [_dic setValue:@"订单详情页" forKey:@"来源页面"];
     [_dic setValue:[NSString stringWithFormat:@"%@", orderInfo.orderno] forKey:@"订单号"];
     [[FSAnalysis instance] logEvent:CLICK_ORDER_RMA withParameters:_dic];
+}
+
+- (IBAction)commitRMA:(UIButton*)sender {
+    FSOrderRMACommitViewController *controller = [[FSOrderRMACommitViewController alloc] initWithNibName:@"FSOrderRMACommitViewController" bundle:nil];
+    controller.orderRMAItem = orderInfo.rmas[0];
+    [self.navigationController pushViewController:controller animated:YES];
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:4];
+    [_dic setValue:@"订单详情页" forKey:@"来源页面"];
+    [_dic setValue:[NSString stringWithFormat:@"%@", orderInfo.orderno] forKey:@"订单号"];
+    [[FSAnalysis instance] logEvent:CLICK_ORDER_RMA_CONFIRM withParameters:_dic];
 }
 
 #define Request_Cancel_Tag 200
@@ -262,7 +341,6 @@
         return cell;
     }
     
-    
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
 }
 
@@ -357,7 +435,5 @@
         [self requestData];
     }
 }
-
-
 
 @end

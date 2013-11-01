@@ -37,3 +37,10 @@
 @property (nonatomic, strong) NSString *message;
 
 @end
+
+@interface FSEnRMAReasonItem : FSModelBase
+
+@property (nonatomic, strong) NSString *key;
+@property (nonatomic, strong) NSString *reason;
+
+@end

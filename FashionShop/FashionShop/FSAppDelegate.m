@@ -204,7 +204,7 @@ void uncaughtExceptionHandler(NSException *exception)
     else if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
         return [TencentOAuth HandleOpenURL:url];
     }
-    else if ([schema hasPrefix:ProductCode]) {
+    else if ([schema hasPrefix:AlipayProductCode]) {
         [self parse:url application:application];
     }
     return YES; 
@@ -220,7 +220,7 @@ void uncaughtExceptionHandler(NSException *exception)
     else if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
         return [TencentOAuth HandleOpenURL:url];
     }
-    else if ([schema hasPrefix:ProductCode]) {
+    else if ([schema hasPrefix:AlipayProductCode]) {
         [self parse:url application:application];
     }
     return YES;
@@ -844,12 +844,11 @@ void uncaughtExceptionHandler(NSException *exception)
 	order.tradeNO = ordernumber;  //订单ID（由商家自行制定）
 	order.productName = productName;         //@"买的一大堆商品";        //商品标题
 	order.productDescription =  productDesc; //@"好东西呀,便宜！杠杠的";   //商品描述
-	//order.amount = [NSString stringWithFormat:@"%.2f", amount];    //商品价格
-    order.amount = [NSString stringWithFormat:@"0.01"];    //商品价格，测试数据，改成了一分
-	order.notifyURL = @"http://www.intime.com.cn";
+	order.amount = [NSString stringWithFormat:@"%.2f", amount];    //商品价格
+	order.notifyURL = AlipayNotifyURL;
 	
 	//应用注册scheme,在AlixPayDemo-Info.plist定义URL types,用于安全支付成功后重新唤起商户应用
-	NSString *appScheme = ProductCode;
+	NSString *appScheme = AlipayProductCode;
 	
 	//将商品信息拼接成字符串
 	NSString *orderSpec = [order description];
@@ -862,9 +861,9 @@ void uncaughtExceptionHandler(NSException *exception)
 	if (signedString != nil) {
 		orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",orderSpec, signedString, @"RSA"];
 	}
-    if (TARGET_OS_IPHONE) {
-        //[AlixLibService payOrder:orderString AndScheme:appScheme seletor:@selector(paymentResult:) target:self];
-    }
+    
+    //支付宝支付请求暂时只支持非模拟器，如果使用模拟器调试，请屏蔽该内容。
+    //[AlixLibService payOrder:orderString AndScheme:appScheme seletor:@selector(paymentResult:) target:self];
 }
 
 -(void)paymentResult:(NSString *)resultd
@@ -919,6 +918,17 @@ void uncaughtExceptionHandler(NSException *exception)
                                                    otherButtonTitles:nil];
         [alertView show];
     }
+}
+
+#pragma mark - UITabBarControllerDelegate
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController NS_AVAILABLE_IOS(3_0)
+{
+    return YES;
+}
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    
 }
 
 @end

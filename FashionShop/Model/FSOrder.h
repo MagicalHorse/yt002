@@ -60,6 +60,7 @@
 @property (nonatomic,strong) NSString *rmano;
 @property (nonatomic,strong) NSDate *createdate;
 @property (nonatomic,strong) NSString *status;
+@property (nonatomic,strong) NSString *mailAddress;
 
 @property (nonatomic,strong) NSNumber* chargepostfee;
 @property (nonatomic,strong) NSNumber* rmaamount;
@@ -91,11 +92,15 @@
 @property (nonatomic,strong) NSString *itemno;
 @property (nonatomic) int quantity;
 @property (nonatomic) float price;
-@property (nonatomic,strong) NSString *properties;
 @property (nonatomic,strong) NSString *productname;
 @property (nonatomic,strong) NSString *itemdesc;
 @property (nonatomic,strong) NSString *productdesc;
 @property (nonatomic,strong) NSString *productid;
 @property (nonatomic,strong) FSResource *resource;
+
+@property (nonatomic,strong) NSString *sizevalue;
+@property (nonatomic,strong) NSString *sizevalueid;
+@property (nonatomic,strong) NSString *colorvalue;
+@property (nonatomic,strong) NSString *colorvalueid;
 
 @end

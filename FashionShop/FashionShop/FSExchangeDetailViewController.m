@@ -212,6 +212,8 @@
     _picker.delegate = self;
     _picker.dataSource = self;
     _picker.showsSelectionIndicator = YES;
+    _picker.backgroundColor = PickerView_Background_Color;
+    _picker.alpha = PickerView_Alpha;
     [pickerView addSubview:_picker];
     
     [theApp.window insertSubview:pickerView atIndex:1000];

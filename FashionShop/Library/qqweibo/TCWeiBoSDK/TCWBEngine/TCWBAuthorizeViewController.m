@@ -63,7 +63,7 @@
 
     [self.navigationItem setLeftBarButtonItem:[[[UIBarButtonItem alloc] initWithCustomView:sheepButton] autorelease]];
 
-    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 320, 420)];
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, APP_HIGH + (IOS7?20:-NAV_HIGH))];
 
     [webView setDelegate:self];
     NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:requestURLString]

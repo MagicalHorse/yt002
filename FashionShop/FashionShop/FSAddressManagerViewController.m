@@ -185,7 +185,7 @@
     if (_likes.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_contentView withImage:@"blank_order.png" withText:NSLocalizedString(@"TipInfo_Address_List_None", nil)  originOffset:90];
+        [self showNoResultImage:_contentView withImage:@"blank_order.png" withText:NSLocalizedString(@"TipInfo_Address_List_None", nil)  originOffset:IOS7?30:90];
     }
     else
     {

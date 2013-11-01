@@ -15,8 +15,12 @@
 #define RK_REQUEST_ORDER_LIST       @"/order/my"                //我的订单列表
 #define RK_REQUEST_ORDER_DETAIL     @"/order/detail"            //订单详情
 #define RK_REQUEST_ORDER_RMA        @"/order/rma"               //订单申请退货
+#define RK_REQUEST_ORDER_RMA_UPDATE @"/rma/update"              //退货填写银行信息
+
+//以下暂时未用
 #define RK_REQUEST_ORDER_RMA_LIST   @"/rma/list"                //退货列表
 #define RK_REQUEST_ORDER_RMA_DETAIL @"/rma/detail"              //退货详情
+
 
 @interface FSPurchaseRequest : FSEntityRequestBase
 
@@ -33,10 +37,19 @@
 
 //退货参数
 @property(nonatomic,strong) NSString *reason;//退货理由
+@property(nonatomic,strong) NSString *rmareason;//退货理由参数
+@property(nonatomic,strong) NSString *products;//退货商品
+
 @property(nonatomic,strong) NSString *bankname;//银行名称
 @property(nonatomic,strong) NSString *bankcard;//银行卡号
-@property(nonatomic,strong) NSString *bankaccount;//银行用户名
+
+@property(nonatomic,strong) NSString *rmano;//退货号
+@property(nonatomic,strong) NSString *username;//联系人
 @property(nonatomic,strong) NSString *contactphone;//电话
+@property(nonatomic,strong) NSString * shipvia;//退货物流
+@property(nonatomic,strong) NSString * shipviano;//退货物流单号
 
 
 @end
+
+

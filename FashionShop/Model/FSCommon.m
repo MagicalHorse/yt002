@@ -47,3 +47,16 @@
 }
 
 @end
+
+@implementation FSEnRMAReasonItem
+
++(RKObjectMapping *) getRelationDataMap
+{
+    RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
+    [relationMap mapKeyPath:@"id" toAttribute:@"key"];
+    [relationMap mapKeyPath:@"reason" toAttribute:@"reason"];
+    
+    return relationMap;
+}
+
+@end

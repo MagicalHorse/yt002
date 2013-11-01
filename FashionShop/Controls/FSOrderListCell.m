@@ -220,11 +220,8 @@
     if (pHeight > 120) {
         pHeight = 120;
     }
-    if (pHeight <= 0) {
-        pHeight = 80;
-    }
-    if (isnan(pHeight)) {
-        pHeight = 80;
+    if (pHeight <= 0 || isnan(pHeight)) {
+        pHeight = _productImage.frame.size.width;
     }
     CGRect rect = _productImage.frame;
     rect.size.height = pHeight;
@@ -283,7 +280,7 @@
 @implementation FSOrderRMAListCell
 @synthesize createTime,rmano,rmaReason,bankName,bankCard;
 @synthesize bankAccount,rmaType,chargegiftFee,chargePostFee,rebatePostFee;
-@synthesize rmaAmount,accessoryType,status,actualAmount,rejectReason;
+@synthesize rmaAmount,accessoryType,status,actualAmount,rejectReason,mailAddress;
 
 -(void)setData:(FSOrderRMAItem *)data
 {
@@ -306,6 +303,7 @@
     [self initComponent:@"实际退还金额" value:data.actualamount component:actualAmount];
     [self initComponent:@"厂家退回原因" value:data.rejectreason component:rejectReason];
     [self initComponent:@"退单状态" value:data.status component:status];
+    [self initComponent:@"退货联系地址" value:data.mailAddress component:mailAddress];
 }
 
 -(void)initComponent:(NSString*)title value:(id)aValue component:(RTLabel*)label
@@ -317,6 +315,23 @@
     label.hidden = NO;
     int yCap = 10;
     NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>%@ : </font><font face='%@' size=14 color='#181818'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
+    [label setText:str];
+    CGRect _rect = label.frame;
+    _rect.origin.y = _cellHeight;
+    _rect.size.height = label.optimumSize.height;
+    label.frame = _rect;
+    _cellHeight += _rect.size.height + yCap;
+}
+
+-(void)initComponentOfAddress:(NSString*)title value:(id)aValue component:(RTLabel*)label
+{
+    if (!aValue) {
+        label.hidden = YES;
+        return;
+    }
+    label.hidden = NO;
+    int yCap = 10;
+    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#ff0000'>%@ : </font><font face='%@' size=14 color='#ff0000'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
     [label setText:str];
     CGRect _rect = label.frame;
     _rect.origin.y = _cellHeight;

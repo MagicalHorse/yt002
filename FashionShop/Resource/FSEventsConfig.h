@@ -92,6 +92,8 @@
 #define CHECK_ORDERLIST_TAB     @"查看订单列表分类标签"
 #define ORDER_CANCEL            @"取消订单"
 #define CLICK_ORDER_RMA         @"点击申请退货按钮"
+#define CLICK_ORDER_RMA_CONFIRM @"点击确认退货"
 #define ORDER_RMA               @"申请退货"
+#define ORDER_RMA_CONFIRM       @"确认退货"
 
 #endif

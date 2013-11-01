@@ -166,7 +166,6 @@
     self.tbAction.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tbAction.backgroundColor = APP_BACKGROUND_COLOR;
     
-    self.navigationItem.title = NSLocalizedString(@"Topics", nil);
     [self prepareRefreshLayout:tbAction withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^(){
             action();

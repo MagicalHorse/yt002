@@ -250,13 +250,13 @@
     request.shippingcontactperson = _name.text;
     request.shippingaddress = _addressDetail.text;
     request.shippingcontactphone = _telephone.text;
-    request.shippingzipcde = addr3.zipCode;
     request.shippingprovince = addr.province;
     request.shippingprovinceid = addr.provinceID;
     request.shippingcity = addr2.city;
     request.shippingcityid = addr2.cityID;
     request.shippingdistrict = addr3.district;
     request.shippingdistrictid = addr3.districtID;
+    request.shippingzipcde = addr3.zipCode;
     request.id = _addressID;
     
     return request;
@@ -520,6 +520,8 @@
     _picker.delegate = self;
     _picker.dataSource = self;
     _picker.showsSelectionIndicator = YES;
+    _picker.backgroundColor = PickerView_Background_Color;
+    _picker.alpha = PickerView_Alpha;
     [pickerView addSubview:_picker];
     
     [theApp.window insertSubview:pickerView atIndex:1000];

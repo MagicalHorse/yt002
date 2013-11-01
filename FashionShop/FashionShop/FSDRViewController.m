@@ -174,14 +174,15 @@
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     layout.delegate = self;
     
+    CGRect rect = _itemsContainer.frame;
+    rect.size.height = APP_HIGH - TAB_HIGH - _segHeader.frame.origin.y - _segHeader.frame.size.height;
+    _itemsContainer.frame = rect;
     _itemsView = [[PSUICollectionView alloc] initWithFrame:_itemsContainer.bounds collectionViewLayout:layout];
     _itemsView.backgroundColor = [UIColor whiteColor];
     [_itemsContainer addSubview:_itemsView];
     _itemsView.dataSource = self;
     _itemsView.delegate = self;
-    //[_itemsView registerNib:[UINib nibWithNibName:@"FSProdDetailCell" bundle:nil] forCellWithReuseIdentifier:DR_DETAIL_CELL];
     [_itemsView registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:DR_DETAIL_CELL];
-    //[_itemsView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
     [_itemsView registerClass:[FSFavorProCell class] forCellWithReuseIdentifier:DR_FAVOR_DETAIL_CELL];
     [self prepareRefreshLayout:_itemsView withRefreshAction:^(dispatch_block_t action) {
         [self refreshContent:TRUE withCallback:^{
@@ -367,7 +368,7 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:30];
+        [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:IOS7?0:30];
     }
     else
     {

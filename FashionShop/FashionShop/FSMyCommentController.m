@@ -485,10 +485,10 @@
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
     if (tmpPros.count < 1) {
         if (_currentSelIndex == 0) {
-            [self showNoResultImage:_tbAction withImage:@"blank_message.png" withText:NSLocalizedString(@"TipInfo_Private_Letter_None", nil)  originOffset:100];
+            [self showNoResultImage:_tbAction withImage:@"blank_message.png" withText:NSLocalizedString(@"TipInfo_Private_Letter_None", nil)  originOffset:IOS7?40:100];
         }
         else{
-            [self showNoResultImage:_tbAction withImage:@"blank_comment.png" withText:NSLocalizedString(@"TipInfo_Comment_None", nil)  originOffset:100];
+            [self showNoResultImage:_tbAction withImage:@"blank_comment.png" withText:NSLocalizedString(@"TipInfo_Comment_None", nil)  originOffset:IOS7?40:100];
         }
     }
     else{

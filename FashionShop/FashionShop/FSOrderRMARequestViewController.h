@@ -10,27 +10,25 @@
 #import "FSPlaceHoldTextView.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "FSOrder.h"
+#import "FSMyPickerView.h"
 
-@interface FSOrderRMARequestViewController : FSBaseViewController
+@interface FSOrderRMARequestViewController : FSBaseViewController<FSMyPickerViewDatasource,FSMyPickerViewDelegate>
 
 @property (strong, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *contentView;
 @property (strong, nonatomic) IBOutlet FSPlaceHoldTextView *reason;
-@property (strong, nonatomic) IBOutlet UITextField *bankName;
-@property (strong, nonatomic) IBOutlet UITextField *bankNumber;
-@property (strong, nonatomic) IBOutlet UITextField *bankUserName;
-@property (strong, nonatomic) IBOutlet UITextField *telephone;
-@property (strong, nonatomic) IBOutlet UIButton *submitBtn;
+@property (strong, nonatomic) IBOutlet UITextField *rmaCount;
+@property (strong, nonatomic) IBOutlet UITextField *reasonCode;
 
 @property (strong, nonatomic) FSOrderRMAItem *rmaData;
+@property (nonatomic,strong) FSOrderInfo *orderinfo;
 
-@property (nonatomic,strong) NSString *orderno;
 - (IBAction)requestRMA:(id)sender;
+- (IBAction)selectReason:(id)sender;
 
 @property (nonatomic,strong) id delegate;
 
 @end
 
 @interface NSObject(FSOrderRMARequestViewControllerDelegate)
-
 -(void)refreshViewController:(UIViewController*)controller needRefresh:(BOOL)flag;
 @end

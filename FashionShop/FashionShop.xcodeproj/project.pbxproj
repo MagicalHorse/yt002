@@ -87,7 +87,6 @@
 		022A6D2516D4F79600374639 /* arrow_left@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2116D4F79600374639 /* arrow_left@2x.png */; };
 		022A6D2716D4F79600374639 /* arrow_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 022A6D2316D4F79600374639 /* arrow_right@2x.png */; };
 		022D4C471806691800A1C651 /* libFlurry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 022D4C461806691800A1C651 /* libFlurry.a */; };
-		022D4C4D1806696100A1C651 /* libWeChatSDK_armv7_armv7s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 022D4C4C1806696100A1C651 /* libWeChatSDK_armv7_armv7s.a */; };
 		022D4C6D18066CAB00A1C651 /* Alixpay.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 022D4C5118066CAB00A1C651 /* Alixpay.bundle */; };
 		022D4C7018066CAB00A1C651 /* AlixPayOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 022D4C5518066CAB00A1C651 /* AlixPayOrder.m */; };
 		022D4C7118066CAB00A1C651 /* AlixPayResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 022D4C5718066CAB00A1C651 /* AlixPayResult.m */; };
@@ -119,6 +118,10 @@
 		024D1759173BB01E0016C443 /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D1758173BB01E0016C443 /* message@2x.png */; };
 		024D4E5D178EC5B800F525AD /* selected_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D4E5B178EC5B800F525AD /* selected_icon@2x.png */; };
 		024D4E5E178EC5B800F525AD /* unselect_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D4E5C178EC5B800F525AD /* unselect_icon@2x.png */; };
+		02593457180F803C0068C4D0 /* WxPayOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 02593456180F803C0068C4D0 /* WxPayOrder.m */; };
+		025934621810DBD30068C4D0 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025934611810DBD30068C4D0 /* libWeChatSDK.a */; };
+		0259346618110FF20068C4D0 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259346518110FF20068C4D0 /* CoreTelephony.framework */; };
+		02593468181110360068C4D0 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02593467181110360068C4D0 /* libstdc++.dylib */; };
 		025A544516BBA5F2001919EA /* blank_activity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025A543916BBA5F2001919EA /* blank_activity@2x.png */; };
 		025A544F16BBA5F2001919EA /* blank_specialtopic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 025A544316BBA5F2001919EA /* blank_specialtopic@2x.png */; };
 		025C4C9B16E2FBA800A7D1E7 /* FSQQConnectActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C4C9A16E2FBA800A7D1E7 /* FSQQConnectActivity.m */; };
@@ -307,6 +310,8 @@
 		02B813BE173A24E70003BCBA /* FSPagedExchangeList.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813BD173A24E70003BCBA /* FSPagedExchangeList.m */; };
 		02B813C5173A25170003BCBA /* FSExchange.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B813C4173A25170003BCBA /* FSExchange.m */; };
 		02B813C7173A50330003BCBA /* btn_bg_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */; };
+		02BD8C4F1813C85700E3691E /* FSOrderRMACommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02BD8C4C1813C85600E3691E /* FSOrderRMACommitViewController.xib */; };
+		02BD8C501813C85700E3691E /* FSOrderRMACommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BD8C4E1813C85600E3691E /* FSOrderRMACommitViewController.m */; };
 		02D285231780599D0017F744 /* FSOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02D285211780599D0017F744 /* FSOrderDetailViewController.m */; };
 		02D285241780599D0017F744 /* FSOrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02D285221780599D0017F744 /* FSOrderDetailViewController.xib */; };
 		02D4E7D616BD392200B6385A /* default_icon320@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D416BD392200B6385A /* default_icon320@2x.png */; };
@@ -335,13 +340,13 @@
 		02E185AA17046E29003C918F /* comment_input_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185A917046E29003C918F /* comment_input_bg@2x.png */; };
 		02E185AD17047040003C918F /* audio_btn_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AB17047040003C918F /* audio_btn_normal@2x.png */; };
 		02E185AE17047040003C918F /* audio_btn_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E185AC17047040003C918F /* audio_btn_sel@2x.png */; };
+		02E49C4B18092D8200D57BFF /* default_icon320x110@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02E49C4A18092D8200D57BFF /* default_icon320x110@2x.png */; };
 		02EA91A217826D7600BE8B2E /* FSOrderRMASuccessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */; };
 		02EA91A317826D7600BE8B2E /* FSOrderRMASuccessViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */; };
 		02EC2FE4170BF8F500C6B641 /* audio_btn_100x100@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE1170BF8F500C6B641 /* audio_btn_100x100@2x.png */; };
 		02EC2FE5170BF8F500C6B641 /* audio_btn_160x50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */; };
 		02EC2FE6170BF8F500C6B641 /* audio_btn_270x70@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC2FE3170BF8F500C6B641 /* audio_btn_270x70@2x.png */; };
 		02EC42C21738A05B0034DFCE /* 图形1bb.png in Resources */ = {isa = PBXBuildFile; fileRef = 02EC42C11738A05B0034DFCE /* 图形1bb.png */; };
-		02ED46291707EB6B0064D95B /* default_icon320x44.png in Resources */ = {isa = PBXBuildFile; fileRef = 02ED46281707EB6B0064D95B /* default_icon320x44.png */; };
 		02ED4635170805A70064D95B /* public_button_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02ED4633170805A70064D95B /* public_button_normal@2x.png */; };
 		02F6158716B3DBC0001F93ED /* FSTopicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6158616B3DBC0001F93ED /* FSTopicViewController.m */; };
 		02F6159316B3DC57001F93ED /* FSTopicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F6159116B3DC57001F93ED /* FSTopicListCell.m */; };
@@ -855,7 +860,6 @@
 		022A6D2116D4F79600374639 /* arrow_left@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_left@2x.png"; sourceTree = "<group>"; };
 		022A6D2316D4F79600374639 /* arrow_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_right@2x.png"; sourceTree = "<group>"; };
 		022D4C461806691800A1C651 /* libFlurry.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurry.a; sourceTree = "<group>"; };
-		022D4C4C1806696100A1C651 /* libWeChatSDK_armv7_armv7s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK_armv7_armv7s.a; path = Library/qqweixin/libWeChatSDK_armv7_armv7s.a; sourceTree = "<group>"; };
 		022D4C5018066CAB00A1C651 /* AlixLibService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlixLibService.h; sourceTree = "<group>"; };
 		022D4C5118066CAB00A1C651 /* Alixpay.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Alixpay.bundle; sourceTree = "<group>"; };
 		022D4C5418066CAB00A1C651 /* AlixPayOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlixPayOrder.h; sourceTree = "<group>"; };
@@ -901,6 +905,12 @@
 		024D1758173BB01E0016C443 /* message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message@2x.png"; sourceTree = "<group>"; };
 		024D4E5B178EC5B800F525AD /* selected_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_icon@2x.png"; sourceTree = "<group>"; };
 		024D4E5C178EC5B800F525AD /* unselect_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@2x.png"; sourceTree = "<group>"; };
+		02593450180F79240068C4D0 /* FSWXConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSWXConfig.h; sourceTree = "<group>"; };
+		02593455180F803C0068C4D0 /* WxPayOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WxPayOrder.h; sourceTree = "<group>"; };
+		02593456180F803C0068C4D0 /* WxPayOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WxPayOrder.m; sourceTree = "<group>"; };
+		025934611810DBD30068C4D0 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = Library/qqweixin/libWeChatSDK.a; sourceTree = "<group>"; };
+		0259346518110FF20068C4D0 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		02593467181110360068C4D0 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 		025A543916BBA5F2001919EA /* blank_activity@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank_activity@2x.png"; sourceTree = "<group>"; };
 		025A544316BBA5F2001919EA /* blank_specialtopic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blank_specialtopic@2x.png"; sourceTree = "<group>"; };
 		025C4C9916E2FBA800A7D1E7 /* FSQQConnectActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSQQConnectActivity.h; sourceTree = "<group>"; };
@@ -1165,6 +1175,9 @@
 		02B813C3173A25170003BCBA /* FSExchange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FSExchange.h; path = Model/FSExchange.h; sourceTree = "<group>"; };
 		02B813C4173A25170003BCBA /* FSExchange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FSExchange.m; path = Model/FSExchange.m; sourceTree = "<group>"; };
 		02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "btn_bg_sel@2x.png"; sourceTree = "<group>"; };
+		02BD8C4C1813C85600E3691E /* FSOrderRMACommitViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderRMACommitViewController.xib; sourceTree = "<group>"; };
+		02BD8C4D1813C85600E3691E /* FSOrderRMACommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMACommitViewController.h; sourceTree = "<group>"; };
+		02BD8C4E1813C85600E3691E /* FSOrderRMACommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMACommitViewController.m; sourceTree = "<group>"; };
 		02BFABFB17434FCF00269E8B /* FashionShop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FashionShop.entitlements; sourceTree = "<group>"; };
 		02D285201780599D0017F744 /* FSOrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderDetailViewController.h; sourceTree = "<group>"; };
 		02D285211780599D0017F744 /* FSOrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderDetailViewController.m; sourceTree = "<group>"; };
@@ -1200,6 +1213,7 @@
 		02E185A917046E29003C918F /* comment_input_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "comment_input_bg@2x.png"; sourceTree = "<group>"; };
 		02E185AB17047040003C918F /* audio_btn_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_normal@2x.png"; sourceTree = "<group>"; };
 		02E185AC17047040003C918F /* audio_btn_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_sel@2x.png"; sourceTree = "<group>"; };
+		02E49C4A18092D8200D57BFF /* default_icon320x110@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_icon320x110@2x.png"; sourceTree = "<group>"; };
 		02EA919F17826D7600BE8B2E /* FSOrderRMASuccessViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMASuccessViewController.h; sourceTree = "<group>"; };
 		02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMASuccessViewController.m; sourceTree = "<group>"; };
 		02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderRMASuccessViewController.xib; sourceTree = "<group>"; };
@@ -1207,7 +1221,6 @@
 		02EC2FE2170BF8F500C6B641 /* audio_btn_160x50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_160x50@2x.png"; sourceTree = "<group>"; };
 		02EC2FE3170BF8F500C6B641 /* audio_btn_270x70@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_btn_270x70@2x.png"; sourceTree = "<group>"; };
 		02EC42C11738A05B0034DFCE /* 图形1bb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "图形1bb.png"; path = "Resource/图形1bb.png"; sourceTree = "<group>"; };
-		02ED46281707EB6B0064D95B /* default_icon320x44.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default_icon320x44.png; sourceTree = "<group>"; };
 		02ED4633170805A70064D95B /* public_button_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "public_button_normal@2x.png"; sourceTree = "<group>"; };
 		02F6158516B3DBC0001F93ED /* FSTopicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTopicViewController.h; sourceTree = "<group>"; };
 		02F6158616B3DBC0001F93ED /* FSTopicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTopicViewController.m; sourceTree = "<group>"; };
@@ -1752,6 +1765,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02593468181110360068C4D0 /* libstdc++.dylib in Frameworks */,
+				0259346618110FF20068C4D0 /* CoreTelephony.framework in Frameworks */,
 				026CF254178696DB00BFCCD4 /* libsqlite3.dylib in Frameworks */,
 				02847771172D810E002763F6 /* CoreText.framework in Frameworks */,
 				02160E521703E98A00D77FE0 /* AudioToolbox.framework in Frameworks */,
@@ -1770,6 +1785,7 @@
 				746C3924164E3C0400531DBB /* Security.framework in Frameworks */,
 				74BE8AD6164B593000EF9B59 /* AssetsLibrary.framework in Frameworks */,
 				022D4C8218068BB700A1C651 /* libcrypto.a in Frameworks */,
+				025934621810DBD30068C4D0 /* libWeChatSDK.a in Frameworks */,
 				74C5BEB3164644E3003CBEE3 /* MapKit.framework in Frameworks */,
 				022D4C8018068BB700A1C651 /* AlixPaylib_Arc.a in Frameworks */,
 				74C5BEB1164642D7003CBEE3 /* ImageIO.framework in Frameworks */,
@@ -1784,7 +1800,6 @@
 				74CD91971643A78500970F55 /* UIKit.framework in Frameworks */,
 				74CD91991643A78500970F55 /* Foundation.framework in Frameworks */,
 				74CD919B1643A78500970F55 /* CoreGraphics.framework in Frameworks */,
-				022D4C4D1806696100A1C651 /* libWeChatSDK_armv7_armv7s.a in Frameworks */,
 				025C4CA116E2FDBB00A7D1E7 /* TencentOpenAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2004,6 +2019,17 @@
 			name = PointCell;
 			sourceTree = "<group>";
 		};
+		0259344F180F79240068C4D0 /* wxpay */ = {
+			isa = PBXGroup;
+			children = (
+				02593450180F79240068C4D0 /* FSWXConfig.h */,
+				02593455180F803C0068C4D0 /* WxPayOrder.h */,
+				02593456180F803C0068C4D0 /* WxPayOrder.m */,
+			);
+			name = wxpay;
+			path = Library/wxpay;
+			sourceTree = "<group>";
+		};
 		025A543716BBA5DE001919EA /* blankimages */ = {
 			isa = PBXGroup;
 			children = (
@@ -2013,7 +2039,7 @@
 				02D89546174C95B5005148DB /* blank_order@2x.png */,
 				02D89547174C95B5005148DB /* blank_bag@2x.png */,
 				02D89548174C95B5005148DB /* blank_message@2x.png */,
-				02ED46281707EB6B0064D95B /* default_icon320x44.png */,
+				02E49C4A18092D8200D57BFF /* default_icon320x110@2x.png */,
 				02D4E7D816BD68F500B6385A /* default_icon50@2x.png */,
 				02D4E7DA16BD68F600B6385A /* default_icon120@2x.png */,
 				02D4E7D416BD392200B6385A /* default_icon320@2x.png */,
@@ -2246,7 +2272,7 @@
 			children = (
 				74BBA2771689881F00E59665 /* WXApi.h */,
 				74BBA2781689881F00E59665 /* WXApiObject.h */,
-				022D4C4C1806696100A1C651 /* libWeChatSDK_armv7_armv7s.a */,
+				025934611810DBD30068C4D0 /* libWeChatSDK.a */,
 			);
 			name = qqweixin;
 			sourceTree = "<group>";
@@ -2549,11 +2575,11 @@
 		74A380CA1651223B003FF79D /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				0259344F180F79240068C4D0 /* wxpay */,
+				022D4C4E18066CAB00A1C651 /* alipay */,
 				027252DF1807A85D00671CBE /* Renative */,
 				027252B91807A82000671CBE /* PSTCollectionView */,
-				022D4C4E18066CAB00A1C651 /* alipay */,
 				0217166D16D242390098288A /* EGOPhotoViewer */,
-				74AD94431682EC91000F7BBF /* font */,
 				74CD29CA1675E5BE001DFE4D /* flurry */,
 				74B550D01667186B00E402DC /* qqweibo */,
 				741A1F82165CBD5A00289BE2 /* qqweixin */,
@@ -2585,13 +2611,6 @@
 				74CD29CF1675E87A001DFE4D /* FSAnalysis.m */,
 			);
 			name = ModelService;
-			sourceTree = "<group>";
-		};
-		74AD94431682EC91000F7BBF /* font */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = font;
 			sourceTree = "<group>";
 		};
 		74B48BA616548DED00777CC8 /* MBProgress */ = {
@@ -2727,6 +2746,9 @@
 				02755A84178179E600DFFF85 /* FSOrderRMARequestViewController.h */,
 				02755A85178179E600DFFF85 /* FSOrderRMARequestViewController.m */,
 				02755A86178179E600DFFF85 /* FSOrderRMARequestViewController.xib */,
+				02BD8C4C1813C85600E3691E /* FSOrderRMACommitViewController.xib */,
+				02BD8C4D1813C85600E3691E /* FSOrderRMACommitViewController.h */,
+				02BD8C4E1813C85600E3691E /* FSOrderRMACommitViewController.m */,
 				02EA919F17826D7600BE8B2E /* FSOrderRMASuccessViewController.h */,
 				02EA91A017826D7600BE8B2E /* FSOrderRMASuccessViewController.m */,
 				02EA91A117826D7600BE8B2E /* FSOrderRMASuccessViewController.xib */,
@@ -3303,6 +3325,8 @@
 		74CD91951643A78500970F55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				02593467181110360068C4D0 /* libstdc++.dylib */,
+				0259346518110FF20068C4D0 /* CoreTelephony.framework */,
 				026CF253178696DA00BFCCD4 /* libsqlite3.dylib */,
 				02847770172D810D002763F6 /* CoreText.framework */,
 				02160E511703E98900D77FE0 /* AudioToolbox.framework */,
@@ -3477,6 +3501,11 @@
 				CLASSPREFIX = FS;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = Fashion;
+				TargetAttributes = {
+					74CD91911643A78500970F55 = {
+						DevelopmentTeam = 4T8S383NVQ;
+					};
+				};
 			};
 			buildConfigurationList = 74CD918C1643A78500970F55 /* Build configuration list for PBXProject "FashionShop" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3644,6 +3673,7 @@
 				74630DF01679E19200549D65 /* FSPostTableSelViewController.xib in Resources */,
 				74BA422E167B224E009182E2 /* FSProdDetailView.xib in Resources */,
 				74B8674216844762001E1C97 /* FSThumnailViewController.xib in Resources */,
+				02E49C4B18092D8200D57BFF /* default_icon320x110@2x.png in Resources */,
 				74B8674D16846F23001E1C97 /* FSDRViewController.xib in Resources */,
 				74B6FF4616880D030063BC68 /* FSProCommentHeader.xib in Resources */,
 				74C3FD771689B9F60009D7D9 /* timeline_nav_sep@2x.png in Resources */,
@@ -3735,7 +3765,6 @@
 				0229DD771705392300BF02EB /* audio_play3@2x.png in Resources */,
 				0229DD7917053A0800BF02EB /* play_icon@2x.png in Resources */,
 				0229DD7D1705EEAA00BF02EB /* audio_play0@2x.png in Resources */,
-				02ED46291707EB6B0064D95B /* default_icon320x44.png in Resources */,
 				02ED4635170805A70064D95B /* public_button_normal@2x.png in Resources */,
 				02EC2FE4170BF8F500C6B641 /* audio_btn_100x100@2x.png in Resources */,
 				02EC2FE5170BF8F500C6B641 /* audio_btn_160x50@2x.png in Resources */,
@@ -3801,6 +3830,7 @@
 				027EBC931744D75B005D15BD /* play_normal@2x.png in Resources */,
 				027EBC9D1744E993005D15BD /* aboutyt_icon@2x.png in Resources */,
 				027EBC9E1744E993005D15BD /* address_icon@2x.png in Resources */,
+				02BD8C4F1813C85700E3691E /* FSOrderRMACommitViewController.xib in Resources */,
 				027EBC9F1744E993005D15BD /* bindcard_icon@2x.png in Resources */,
 				027EBCA01744E993005D15BD /* checkversion_icon@2x.png in Resources */,
 				027EBCA11744E993005D15BD /* clean_icon@2x.png in Resources */,
@@ -4090,6 +4120,7 @@
 				023EFC7A16BE402800E96E30 /* FSTabBar.m in Sources */,
 				0298BA3F16C379EA00BB2C29 /* FSStoreMapViewController.m in Sources */,
 				0298BA4316C40EC300BB2C29 /* FSGroupBrand.m in Sources */,
+				02BD8C501813C85700E3691E /* FSOrderRMACommitViewController.m in Sources */,
 				027252D81807A82000671CBE /* PSTCollectionViewItemKey.m in Sources */,
 				0211778B16CF54E700559653 /* PositionAnnotation.m in Sources */,
 				0217169E16D242390098288A /* EGOPhotoViewController.m in Sources */,
@@ -4115,6 +4146,7 @@
 				02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */,
 				0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */,
 				02DFCB1E170E7D540032F9BB /* FSAudioHelper.m in Sources */,
+				02593457180F803C0068C4D0 /* WxPayOrder.m in Sources */,
 				02FB6294170FE442002F29B3 /* FSAudioShowView.m in Sources */,
 				02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */,
 				02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */,
@@ -4264,8 +4296,8 @@
 				IBSC_ERRORS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 			};
@@ -4312,8 +4344,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
@@ -4350,8 +4382,8 @@
 				IBSC_ERRORS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -4376,8 +4408,8 @@
 				IBSC_ERRORS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = NO;
 			};
@@ -4428,8 +4460,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
@@ -4480,8 +4512,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "37FE8B8D-13F9-4365-9B04-A8E3DF4DA88E";
+				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;

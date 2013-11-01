@@ -46,4 +46,8 @@
 
 +(void)logControl:(UIView*)view;
 
++(NSString *)randomString;
+
++(NSString *)sha1:(NSString *)str;
+
 @end

@@ -91,7 +91,7 @@
 {
     FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_PROD_BUY_INFO;
-    _productID = 976;//976;//882;//893;////////////////////////////////////////////////////temp test
+    _productID = 487927;//487924;//977;
     request.id = [NSNumber numberWithInt:_productID];
     request.uToken = [[FSModelManager sharedModelManager] loginToken];
     if (!_amountLoading) {
@@ -107,6 +107,9 @@
         if (respData.isSuccess)
         {
             _purchaseData = respData.responseData;
+            _purchaseData.selectColorIndex = 0;
+            _purchaseData.selectSizeIndex = -1;
+            _purchaseData.selectCountIndex = 0;
             if (!_purchaseData) {
                 [self reportError:@"数据更新中。。。"];
                 [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0];
@@ -267,6 +270,7 @@
         [msg appendFormat:@"是否需要发票 : %@\n", flag?@"否":@"是"];
         if (!flag) {
             [msg appendFormat:@"发票抬头 : %@\n", _uploadData.invoicetitle];
+            [msg appendFormat:@"发票明细 : %@\n", _uploadData.invoicedetail];
         }
         if (![NSString isNilOrEmpty:_uploadData.memo]) {
             [msg appendFormat:@"订单备注 : %@\n", _uploadData.memo];
@@ -302,12 +306,13 @@
         return NO;
     }
     FSPurchaseProductItem *__product = _uploadData.products[0];
-    if (![__product.properties objectForKey:@"sizevalueid"]) {
-        *error = @"请选择尺码";
-        return NO;
-    }
     if (![__product.properties objectForKey:@"colorvalueid"]) {
         *error = @"请选择颜色";
+        return NO;
+    }
+    NSNumber *nNum = [__product.properties objectForKey:@"sizevalueid"];
+    if (!nNum || [nNum intValue] < 0) {
+        *error = @"请选择尺码";
         return NO;
     }
     if (!_uploadData.address) {
@@ -446,7 +451,7 @@
             }
             cell.contentField.delegate = self;
         }
-        if (indexPath.row <= 1) {
+        if (indexPath.row <= 2) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleBlue;
         }
@@ -534,7 +539,7 @@
             }
             [paywayPickerView showPickerView:^{
                 [activityField resignFirstResponder];
-            }];;
+            }];
         }
         else if(indexPath.row == 2) {
             FSInvoiceViewController *invoiceView = [[FSInvoiceViewController alloc] initWithNibName:@"FSInvoiceViewController" bundle:nil];

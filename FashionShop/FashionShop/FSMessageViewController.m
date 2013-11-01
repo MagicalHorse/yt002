@@ -339,9 +339,6 @@
     for (int i = 0; i < array.count; i++) {
         [self performSelector:@selector(sendMessage:) withObject:array[i] afterDelay:i * 0.5];
     }
-//    for (int i = 0; i < 99999; i++) {
-//        [self performSelector:@selector(sendMessage:) withObject:[NSString stringWithFormat:@"%f", i * 3.141592653] afterDelay:i * 0.3];
-//    }
 }
 
 -(void)sendMessage:(NSString*)text

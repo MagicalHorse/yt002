@@ -94,7 +94,7 @@
     _noMoreList = [@[] mutableCopy];
     _refreshTimeList = [@[] mutableCopy];
     
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 4; i++) {
         [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
         [_pageIndexList insertObject:@1 atIndex:i];
         [_noMoreList insertObject:@NO atIndex:i];
@@ -113,6 +113,14 @@
     [_segFilters setSeparatorImage:[UIImage imageNamed:@"segmented-separator.png"]];
     
     UIImage *buttonPressImage = [UIImage imageNamed:@"tab_two_bg_selected"];
+    UIButton *btn0 = [[UIButton alloc] init];
+    [btn0 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
+    [btn0 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
+    [btn0 setBackgroundImage:buttonPressImage forState:(UIControlStateHighlighted|UIControlStateSelected)];
+    [btn0 setTitle:NSLocalizedString(@"Order List UnPay", nil) forState:UIControlStateNormal];
+    btn0.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
+    btn0.showsTouchWhenHighlighted = YES;
+    
     UIButton *btn1 = [[UIButton alloc] init];
     [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
     [btn1 setBackgroundImage:buttonPressImage forState:UIControlStateSelected];
@@ -120,7 +128,6 @@
     [btn1 setTitle:NSLocalizedString(@"Order List Carry On", nil) forState:UIControlStateNormal];
     btn1.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn1.showsTouchWhenHighlighted = YES;
-    //[btn1 setTitleColor:[UIColor colorWithHexString:@"#007f06"] forState:UIControlStateNormal];
     
     UIButton *btn2 = [[UIButton alloc] init];
     [btn2 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
@@ -129,7 +136,6 @@
     [btn2 setTitle:NSLocalizedString(@"Order List Completion", nil) forState:UIControlStateNormal];
     btn2.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn2.showsTouchWhenHighlighted = YES;
-    //[btn2 setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
     
     UIButton *btn3 = [[UIButton alloc] init];
     [btn3 setBackgroundImage:buttonPressImage forState:UIControlStateHighlighted];
@@ -138,9 +144,8 @@
     [btn3 setTitle:NSLocalizedString(@"Order List Disable", nil) forState:UIControlStateNormal];
     btn3.titleLabel.font = [UIFont systemFontOfSize:COMMON_SEGMENT_FONT_SIZE];
     btn3.showsTouchWhenHighlighted = YES;
-    //[btn3 setTitleColor:[UIColor colorWithHexString:@"#bbbbbb"] forState:UIControlStateNormal];
     
-    [_segFilters setButtonsArray:@[btn1, btn2, btn3]];
+    [_segFilters setButtonsArray:@[btn0,btn1, btn2, btn3]];
     _segFilters.selectedIndex = 0;
 }
 
@@ -223,7 +228,7 @@
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
     if (tmpPros.count < 1) {
-        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Order_List_None", nil)  originOffset:100];
+        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Order_List_None", nil)  originOffset:IOS7?20:100];
     }
     else{
         [self hideNoResultImage:_contentView];
@@ -236,7 +241,7 @@
     request.uToken = [FSModelManager sharedModelManager].loginToken;
     request.pageSize = [NSNumber numberWithInt:COMMON_PAGE_SIZE];
     request.nextPage =[NSNumber numberWithInt:index];
-    request.type = _currentSelIndex+1;
+    request.type = _currentSelIndex;
     request.routeResourcePath = RK_REQUEST_ORDER_LIST;
     return request;
 }
@@ -277,16 +282,9 @@
         cell.selectionStyle = UITableViewCellSelectionStyleBlue;
     }
     
-    if (_currentSelIndex == OrderSortByCompletion) {
-        cell.priceLb.textColor = [UIColor colorWithHexString:@"#007f06"];
-        cell.orderNumber.textColor = [UIColor colorWithHexString:@"#007f06"];
-        cell.crateDate.textColor = [UIColor colorWithHexString:@"#007f06"];
-    }
-    else if(_currentSelIndex == OrderSortByDisable) {
-        cell.priceLb.textColor = [UIColor colorWithHexString:@"#666666"];
-        cell.orderNumber.textColor = [UIColor colorWithHexString:@"#666666"];
-        cell.crateDate.textColor = [UIColor colorWithHexString:@"#666666"];
-    }
+    cell.priceLb.textColor = [UIColor colorWithHexString:@"#007f06"];
+    cell.orderNumber.textColor = [UIColor colorWithHexString:@"#007f06"];
+    cell.crateDate.textColor = [UIColor colorWithHexString:@"#007f06"];
     
     NSMutableArray *_likes = _dataSourceList[_currentSelIndex];
     FSOrderInfo *order = [_likes objectAtIndex:indexPath.section];

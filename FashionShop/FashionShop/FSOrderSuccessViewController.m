@@ -13,8 +13,11 @@
 #import "FSMeViewController.h"
 #import "FSOrderListViewController.h"
 #import "FSOrderDetailViewController.h"
+#import "WxPayOrder.h"
 
-@interface FSOrderSuccessViewController ()
+@interface FSOrderSuccessViewController () {
+    WxPayOrder *wxPayOrder;
+}
 
 @end
 
@@ -44,7 +47,7 @@
     NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExSuccessFooter" owner:self options:nil];
     if (_array.count > 0) {
         FSCommonSuccessFooter *footer = (FSCommonSuccessFooter*)_array[0];
-        [footer.continueBtn setTitle:@"查看订单" forState:UIControlStateNormal];
+        [footer.continueBtn setTitle:@"查 看 订 单" forState:UIControlStateNormal];
         [footer.continueBtn addTarget:self action:@selector(clickToOrderDetail:) forControlEvents:UIControlEventTouchUpInside];
         [footer.backHomeBtn setTitle:@"继 续 购 物" forState:UIControlStateNormal];
         [footer.backHomeBtn addTarget:self action:@selector(clickToContinue:) forControlEvents:UIControlEventTouchUpInside];
@@ -106,11 +109,20 @@
 }
 
 //点击在线支付
--(void)clickToOnlinePay:(UIButton*)sender
+-(void)requestOnlinePay:(UIButton*)sender
 {
-    if(1){//支付宝支付//[@"1" isEqualToString:self.payWay.code]
+    if ([ALI_PAY_CODE isEqualToString:self.payWay.code]) { //支付宝支付
         FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
-        [del toAlipayWithOrder:self.data.orderno name:self.data.orderno desc:self.data.orderno amount:self.data.totalamount];
+        FSOrderProduct *_prod = nil;
+        if (_data.products.count > 0) {
+            _prod = _data.products[0];
+        }
+        [del toAlipayWithOrder:self.data.orderno name:_prod?_prod.productname:_data.orderno desc:_prod?_prod.productdesc:_data.orderno amount:self.data.totalamount];
+    }
+    else if([WEIXIN_PAY_CODE isEqualToString:self.payWay.code]) {   //微信支付
+        wxPayOrder = [[WxPayOrder alloc] init];
+        wxPayOrder.productid = self.data.orderno;
+        [wxPayOrder payOrder];
     }
 }
 
@@ -139,10 +151,17 @@
         else{
             cell = [[FSOrderSuccessCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Order_Success_Cell_Indentifier];
         }
+        if([DELIVERY_PAY_CODE isEqualToString:self.payWay.code]){   //货到付款
+            cell.buyButton.hidden = YES;
+        }
+        else {
+            cell.buyButton.hidden = NO;
+        }
+
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    [cell.buyButton addTarget:self action:@selector(clickToOnlinePay:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.buyButton addTarget:self action:@selector(requestOnlinePay:) forControlEvents:UIControlEventTouchUpInside];
     [cell setData:_data];
     
     return cell;
@@ -152,6 +171,9 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if([DELIVERY_PAY_CODE isEqualToString:self.payWay.code]){   //货到付款
+        return 70;
+    }
     return 130;
 }
 

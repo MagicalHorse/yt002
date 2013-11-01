@@ -258,9 +258,11 @@
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VNJ-9h-UkJ">
-                        <rect key="frame" x="63" y="82" width="175" height="30"/>
+                        <rect key="frame" x="39" y="77" width="222" height="40"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <state key="normal" title="在线支付">
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <state key="normal" title="在 线 支 付" backgroundImage="btn_bg.png">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -274,6 +276,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="btn_bg.png" width="221" height="37"/>
         <image name="buy_amount_bg.png" width="320" height="140"/>
         <image name="line_s.png" width="289" height="2"/>
     </resources>

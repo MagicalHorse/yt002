@@ -44,6 +44,10 @@
     
     _tbContent.backgroundView = nil;
     _tbContent.backgroundColor = APP_TABLE_BG_COLOR;
+    FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
+    if (!theApp.allBrands) {
+        [del.modelManager forceReloadAllBrands];
+    }
 }
 
 -(void) setDataSource:(PostTableDataSource)source step:(PostProgressStep)current selectedCallbackTarget:(id)target

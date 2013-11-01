@@ -240,9 +240,19 @@
     
     NSArray *views =[[NSBundle mainBundle] loadNibNamed:@"FSLoginView" owner:self options:nil];
     _loginView = [views objectAtIndex:0];
+    if (IOS7 && ![UIDevice isRunningOniPhone5]) {
+        CGRect rect = _loginView.frame;
+        rect.origin.y -= NAV_HIGH;
+        _loginView.frame = rect;
+    }
     views = [[NSBundle mainBundle] loadNibNamed:@"FSUserProfileView" owner:self options:nil];
 
     _userProfileView = [views objectAtIndex:0];
+    if (IOS7) {
+        CGRect rect = _userProfileView.frame;
+        rect.origin.y -= NAV_HIGH;
+        _userProfileView.frame = rect;
+    }
     _isFirstLoad = true;
     [self switchView];
 }
@@ -505,6 +515,9 @@
 - (IBAction)attentionXHYT:(id)sender {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:ATTENTION_XHYT_URL]];
     
+//    NSString *str = [NSString stringWithFormat:@"weixin://qr/%@",ATTENTION_XHYT_URL];
+//    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    
     NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:1];
     [_dic setValue:@"登录页" forKey:@"来源页面"];
     [[FSAnalysis instance] logEvent:ATTETION_XHYT withParameters:_dic];
@@ -671,13 +684,12 @@
     layout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     layout.delegate = self;
     CGRect rect = _likeContainer.frame;
-    rect.size.height = APP_HIGH-TAB_HIGH-_segHeader.frame.origin.y - _segHeader.frame.size.height;
+    rect.size.height = APP_HIGH - TAB_HIGH - _segHeader.frame.origin.y - _segHeader.frame.size.height;
     _likeContainer.frame = rect;
     _likeView = [[PSUICollectionView alloc] initWithFrame:_likeContainer.bounds collectionViewLayout:layout];
     _likeView.backgroundColor = [UIColor whiteColor];
     [_likeContainer addSubview:_likeView];
     
-    //[_likeView registerNib:[UINib nibWithNibName:@"FSFavorProCell" bundle:nil] forCellWithReuseIdentifier:@"FSFavorProCell"];
     [_likeView registerClass:[FSFavorProCell class] forCellWithReuseIdentifier:@"FSFavorProCell"];
     
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(activateDeletionMode:)];

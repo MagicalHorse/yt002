@@ -7,23 +7,31 @@
 //
 
 #import "FSTag.h"
-#import "FSCoreTag.h"
 
 @implementation FSTag
 
 @synthesize   id;
 @synthesize name;
+@synthesize sortorder;
+@synthesize description;
 
 +(RKObjectMapping *) getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
-    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",nil];
+    [relationMapping mapKeyPathsToAttributes:@"id",@"id",@"name",@"name",@"description",@"description",@"sortorder",@"sortorder",nil];
 
     return relationMapping;
 }
 
+-(void)logTags
+{
+    NSLog(@"id:%d,name:%@,description:%@", id,name,description);
+}
+
+/*
 +(NSArray *) localTags
 {
-    return [FSCoreTag findAllSortedBy:@"sort" ascending:NO];
+    return [FSTag findAllSortedBy:@"sortorder" ascending:NO];
 }
+ */
 @end

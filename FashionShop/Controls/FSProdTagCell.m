@@ -15,7 +15,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-
+        
     }
     return self;
 }
@@ -44,6 +44,9 @@
 
 -(void)setData:(FSTag *)data
 {
+    if (![data isKindOfClass:[FSTag class]]) {
+        return;
+    }
     _data = data;
   
     if (!_lblTag)

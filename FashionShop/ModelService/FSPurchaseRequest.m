@@ -11,7 +11,8 @@
 @implementation FSPurchaseRequest
 @synthesize id,uToken,quantity;
 @synthesize order,type,nextPage,pageSize,orderno;
-@synthesize bankaccount,bankcard,bankname,reason,contactphone;
+@synthesize reason,products;
+@synthesize rmano,username,contactphone,shipvia,shipviano;
 @synthesize routeResourcePath=_routeResourcePath;
 
 -(void)setRouteResourcePath:(NSString *)aRouteResourcePath
@@ -45,10 +46,17 @@
     else if([_routeResourcePath isEqualToString:RK_REQUEST_ORDER_RMA]) {
         [map mapKeyPath:@"orderno" toAttribute:@"request.orderno"];
         [map mapKeyPath:@"reason" toAttribute:@"request.reason"];
+        [map mapKeyPath:@"rmareason" toAttribute:@"request.rmareason"];
+        [map mapKeyPath:@"products" toAttribute:@"request.products"];
+    }
+    else if([_routeResourcePath isEqualToString:RK_REQUEST_ORDER_RMA_UPDATE]) {
+        [map mapKeyPath:@"rmano" toAttribute:@"request.rmano"];
         [map mapKeyPath:@"bankname" toAttribute:@"request.bankname"];
         [map mapKeyPath:@"bankcard" toAttribute:@"request.bankcard"];
         [map mapKeyPath:@"bankaccount" toAttribute:@"request.bankaccount"];
         [map mapKeyPath:@"contactphone" toAttribute:@"request.contactphone"];
+        [map mapKeyPath:@"shipvia" toAttribute:@"request.shipvia"];
+        [map mapKeyPath:@"shipviano" toAttribute:@"request.shipviano"];
     }
 }
 

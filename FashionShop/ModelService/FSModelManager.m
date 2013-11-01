@@ -10,7 +10,6 @@
 //#import "RestKit.h"
 #import "FSConfigListRequest.h"
 #import "FSLocalPersist.h"
-#import "FSCoreTag.h"
 #import "SDImageCache.h"
 #import "FSLocationManager.h"
 #import "FSCoreStore.h"
@@ -30,6 +29,7 @@
 
 @end
 static FSModelManager *_modelManager;
+
 @implementation FSModelManager
 
 - (void) initModelManager{
@@ -96,8 +96,6 @@ static FSModelManager *_modelManager;
     }
 }
 
-
-
 -(void)enqueueBackgroundOperation:(NSOperation *)operation{
     [_asyncQueue addOperation:operation];
 }
@@ -105,7 +103,6 @@ static FSModelManager *_modelManager;
 -(void)enqueueBackgroundBlock:(dispatch_block_t)block{
     [_asyncQueue addOperationWithBlock:block];
 }
-
 
 -(NSString *) loginToken
 {
@@ -216,6 +213,13 @@ static FSModelManager *_modelManager;
 
 -(void) initConfig
 {
+    if (IOS7) {
+        [self forceReloadTags];
+        //[self forceReloadAllBrands];
+        [self forceReloadStores];
+        [self forceREloadEnviromentMessage];
+        return;
+    }
     //延迟加载
     [self performSelector:@selector(forceReloadTags) withObject:nil afterDelay:1];
     [self performSelector:@selector(forceReloadAllBrands) withObject:nil afterDelay:3];

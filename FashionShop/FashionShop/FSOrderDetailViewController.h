@@ -10,6 +10,7 @@
 #import "FSProDetailViewController.h"
 
 @protocol FSOrderRMARequestViewControllerDelegate;
+@protocol FSOrderRMACommitViewControllerDelegate;
 
 @interface FSOrderDetailViewController : FSBaseViewController<FSProDetailItemSourceProvider>
 

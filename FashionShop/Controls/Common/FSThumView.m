@@ -72,27 +72,9 @@
         return;
     _imgButton = [[UIButton alloc] initWithFrame:self.bounds];
     
-    if (IOS7) {
-        _imgView=[[UIImageView alloc] initWithImage:nil];
-        _imgView.contentMode=UIViewContentModeScaleAspectFit;
-        _imgView.frame = _imgButton.frame;
-        UIImageView *imgV = [[UIImageView alloc] initWithFrame:_imgButton.bounds];
-        imgV.image = [UIImage imageNamed:@"thumb_side.png"];
-        imgV.contentMode = UIViewContentModeScaleToFill;
-        [_imgButton addSubview:_imgView];
-        [self addSubview:_imgButton];
-        return;
-    }
-    UIImage *backgroundImage = [UIImage imageNamed:@"default_icon50.png"];
-    _imgView=[[UIImageView alloc] initWithImage:backgroundImage];
-    _imgView.contentMode=UIViewContentModeScaleAspectFit;
+    _imgView=[[UIImageView alloc] init];
+    _imgView.contentMode = UIViewContentModeScaleAspectFit;
     _imgView.frame = _imgButton.frame;
-//    _imgView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-//    _imgView.layer.borderWidth = 1;
-    UIImageView *imgV = [[UIImageView alloc] initWithFrame:_imgButton.bounds];
-    imgV.image = [UIImage imageNamed:@"thumb_side.png"];
-    imgV.contentMode = UIViewContentModeScaleToFill;
-    [_imgView addSubview:imgV];
     [_imgButton addSubview:_imgView];
     [self addSubview:_imgButton];
 }
@@ -101,7 +83,6 @@
 {
     if (delegate)
     {
-        [self ensureImageButton];
         [_imgButton setUserInteractionEnabled:TRUE];
         [_imgButton addTarget:self action:@selector(doTapThumb:) forControlEvents:UIControlEventTouchUpInside];
         _delegate = delegate;

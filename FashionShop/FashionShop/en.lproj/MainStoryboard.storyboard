@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4510" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="4">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment defaultVersion="1280" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
     </dependencies>
     <scenes>
         <!--Tab Bar Controller-->
@@ -30,7 +31,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="Ejs-a5-7xe" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="专题" image="bottom_nav_topic_icon.png" id="6by-kL-uJV"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="blackOpaque" id="TzD-Q2-mdx">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="TzD-Q2-mdx">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -46,11 +47,11 @@
             <objects>
                 <viewController id="iBb-IO-WFz" customClass="FSTopicViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="PcC-Uf-zSN">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OKa-83-DWH">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="OKa-83-DWH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -75,7 +76,7 @@
             <objects>
                 <navigationController title="Third" definesPresentationContext="YES" id="dRO-en-ZNo" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="我" image="bottom_nav_me_icon.png" id="vCv-zG-nRD"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="blackOpaque" id="ciJ-dq-APo">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="ciJ-dq-APo">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -91,7 +92,7 @@
             <objects>
                 <viewController id="EiT-hw-pfl" customClass="FSProListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CPP-Mn-d8u">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="BN1-P8-FbK" customClass="AKSegmentedControl">
@@ -100,7 +101,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9Yb-zn-iQc">
-                                <rect key="frame" x="0.0" y="30" width="320" height="425"/>
+                                <rect key="frame" x="0.0" y="30" width="320" height="538"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
@@ -112,7 +113,6 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="sUT-hB-r1R"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="contentView" destination="9Yb-zn-iQc" id="wTo-dw-MYX"/>
                         <outlet property="segFilters" destination="BN1-P8-FbK" id="sND-X1-qSr"/>
@@ -127,7 +127,7 @@
             <objects>
                 <viewController id="slp-jI-hP2" customClass="FSProdListViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3YR-Tl-agb">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="Zeu-9c-Fhj">
@@ -136,7 +136,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="G2T-9o-ytL">
-                                <rect key="frame" x="0.0" y="52" width="320" height="403"/>
+                                <rect key="frame" x="0.0" y="52" width="320" height="516"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
@@ -158,7 +158,7 @@
             <objects>
                 <viewController storyboardIdentifier="userProfile" id="vxx-vO-Kwm" customClass="FSMeViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JyQ-Cu-cRb">
-                        <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -213,68 +213,6 @@
         <image name="bottom_nav_promotion_icon.png" width="24" height="18"/>
         <image name="bottom_nav_topic_icon.png" width="24" height="24"/>
     </resources>
-    <classes>
-        <class className="AKSegmentedControl" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/AKSegmentedControl.h"/>
-        </class>
-        <class className="FSMeViewController" superclassName="FSRefreshableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSMeViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="attentionXHYT:"/>
-                <relationship kind="action" name="doLogin:"/>
-                <relationship kind="action" name="doLoginQQ:"/>
-                <relationship kind="action" name="doLoginQQWeiBo:"/>
-                <relationship kind="action" name="doShowCoupons:"/>
-                <relationship kind="action" name="doShowFans:"/>
-                <relationship kind="action" name="doShowLikes:"/>
-                <relationship kind="action" name="doShowPoints:"/>
-                <relationship kind="action" name="doSuggest:"/>
-                <relationship kind="outlet" name="btnCoupons" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="btnFans" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="btnHeaderBg" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="btnHeaderImgV" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="btnLike" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="btnPoints" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="btnSuggest" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="imgLevel" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="lblNickie" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="likeContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="likeView" candidateClass="PSUICollectionView"/>
-                <relationship kind="outlet" name="segHeader" candidateClass="AKSegmentedControl"/>
-                <relationship kind="outlet" name="tbScroll" candidateClass="UIScrollView"/>
-                <relationship kind="outlet" name="thumbImg" candidateClass="FSThumView"/>
-            </relationships>
-        </class>
-        <class className="FSProListViewController" superclassName="FSRefreshableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSProListViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="contentView" candidateClass="UITableView"/>
-                <relationship kind="outlet" name="segFilters" candidateClass="AKSegmentedControl"/>
-            </relationships>
-        </class>
-        <class className="FSProdListViewController" superclassName="FSRefreshableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSProdListViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="contentContainer" candidateClass="UIView"/>
-                <relationship kind="outlet" name="cvContent" candidateClass="PSUICollectionView"/>
-                <relationship kind="outlet" name="cvTags" candidateClass="PSUICollectionView"/>
-                <relationship kind="outlet" name="lblTitle" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="tagContainer" candidateClass="UIView"/>
-            </relationships>
-        </class>
-        <class className="FSRefreshableViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSRefreshableViewController.h"/>
-        </class>
-        <class className="FSThumView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSThumView.h"/>
-        </class>
-        <class className="FSTopicViewController" superclassName="FSRefreshableViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/FSTopicViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="tbAction" candidateClass="UITableView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

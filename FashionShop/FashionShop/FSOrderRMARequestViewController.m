@@ -10,12 +10,18 @@
 #import "FSPurchaseRequest.h"
 #import "NSString+Extention.h"
 #import "FSOrderRMASuccessViewController.h"
+#import "JSONKit.h"
+#import "FSCommonRequest.h"
+#import "FSCommon.h"
 
 @interface FSOrderRMARequestViewController ()
 {
     id activityField;
     UIColor *fieldTextColor;
     UIColor *redColor;
+    NSArray *reasons; //退货理由
+    FSMyPickerView *reasonPickerView;
+    int selectedIndex;
 }
 
 @end
@@ -35,7 +41,6 @@
 {
     [super viewDidLoad];
     self.title = @"申请在线退货";
-    [self initControlData];
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
@@ -45,46 +50,48 @@
     _reason.layer.borderColor = [UIColor lightGrayColor].CGColor;
     _reason.layer.shadowColor = [UIColor darkGrayColor].CGColor;
     _reason.layer.shadowOffset = CGSizeMake(3, 3);
-    _reason.placeholder = @"请输入您的退货原因";
+    _reason.placeholder = @"请输入您申请退货的具体原因";
     _contentView.backgroundColor = APP_TABLE_BG_COLOR;
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
     
     redColor = [UIColor redColor];
-    fieldTextColor = _bankName.textColor;
-}
-
-- (void)initControlData
-{
-    if (!_rmaData) {
-        return;
-    }
-    _bankName.text = _rmaData.bankname;
-    _bankNumber.text = _rmaData.bankcard;
-    _bankUserName.text = _rmaData.bankaccount;
+    fieldTextColor = _rmaCount.textColor;
+    
+    [self requestReasons];
 }
 
 - (void)viewDidUnload {
     [self setContentView:nil];
-    [self setBankName:nil];
-    [self setBankNumber:nil];
-    [self setBankUserName:nil];
-    [self setTelephone:nil];
-    [self setSubmitBtn:nil];
+    [self setRmaCount:nil];
     [self setContentView:nil];
     [super viewDidUnload];
 }
 
-- (IBAction)onButtonBack:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+-(void)requestReasons
+{
+    if (reasons) {
+        return;
+    }
+    FSCommonRequest *request = [[FSCommonRequest alloc] init];
+    request.routeResourcePath = RK_REQUEST_SUPPORT_RMAREASONS;
+    request.rootKeyPath = @"data.items";
+    [self beginLoading:self.view];
+    [request send:[FSEnRMAReasonItem class] withRequest:request completeCallBack:^(FSEntityBase *req) {
+        if (req.isSuccess) {
+            reasons = req.responseData;
+            if (reasons.count > 0) {
+                selectedIndex = 0;
+            }
+        }
+        else{
+            reasons = nil;
+        }
+        [self endLoading:self.view];
+    }];
 }
 
--(FSPurchaseRequest*)createRequest:(NSString *)routePath
-{   
-    FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
-    request.uToken = [FSModelManager sharedModelManager].loginToken;
-    request.routeResourcePath = routePath;
-    
-    return request;
+- (IBAction)onButtonBack:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(BOOL)check
@@ -93,71 +100,14 @@
     {
         //判断是否合理
         //银行名称
-        if (_bankName.text.length <= 0) {
-            _bankName.text = @"请输入银行名称";
-            _bankName.textColor = redColor;
+        if (_rmaCount.text.length <= 0) {
+            _rmaCount.text = @"请输入退货件数";
+            _rmaCount.textColor = redColor;
             
             flag = NO;
         }
         else {
-            if ([_bankName.textColor isEqual:redColor]) {
-                flag = NO;
-            }
-        }
-        
-        //银行卡号
-        if (_bankNumber.text.length <= 0) {
-            _bankNumber.text = _bankNumber.placeholder;
-            _bankNumber.textColor = redColor;
-            flag = NO;
-        }
-        else {
-            if ([_bankNumber.textColor isEqual:redColor]) {
-                flag = NO;
-            }
-        }
-        
-        //银行卡对应的用户名
-        if (_bankUserName.text.length <= 0) {
-            _bankUserName.text = _bankUserName.placeholder;
-            _bankUserName.textColor = redColor;
-        }
-        else {
-            if ([_bankUserName.textColor isEqual:redColor]) {
-                flag = NO;
-            }
-        }
-        
-        //手机号码
-        if (_telephone.text.length <= 0) {
-            _telephone.text = _telephone.placeholder;
-            _telephone.textColor = redColor;
-            flag = NO;
-        }
-        else {
-            BOOL tempFlag = YES;
-            if ([_telephone.textColor isEqual:redColor]) {
-                flag = NO;
-                tempFlag = NO;
-            }
-            if (tempFlag && ![NSString isMobileNum:_telephone.text]) {
-                _telephone.text = @"请输入正确的联系方式";
-                _telephone.textColor = redColor;
-                
-                flag = NO;
-            }
-        }
-        
-        if (_telephone.text.length > 0) {
-            BOOL tempFlag = YES;
-            if ([_telephone.textColor isEqual:redColor]) {
-                flag = NO;
-                tempFlag = NO;
-            }
-            if (tempFlag && ![NSString isPhoneNum:_telephone.text]) {
-                _telephone.text = @"请输入正确的联系方式";
-                _telephone.textColor = redColor;
-                
+            if ([_rmaCount.textColor isEqual:redColor]) {
                 flag = NO;
             }
         }
@@ -169,11 +119,9 @@
     if ([self check]) {
         //退货预览
         NSMutableString *msg = [NSMutableString stringWithString:@""];
-        [msg appendFormat:@"收款银行 : %@\n", _bankName.text];
-        [msg appendFormat:@"银行卡号 : %@\n", _bankNumber.text];
-        [msg appendFormat:@"银行卡开户用户名 : %@\n", _bankUserName.text];
-        [msg appendFormat:@"联系方式 : %@\n", _telephone.text];
-        [msg appendFormat:@"退货原因 : %@\n", _reason.text];
+        FSEnRMAReasonItem *item = reasons[selectedIndex];
+        [msg appendFormat:@"退货原因 : %@-%@\n",item.reason, _reason.text];
+        [msg appendFormat:@"退货件数 : %@件\n", _rmaCount.text];
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:msg delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", nil) otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
         
@@ -191,6 +139,22 @@
     }
 }
 
+- (IBAction)selectReason:(id)sender {
+    //退货原因
+    if (!reasonPickerView) {
+        reasonPickerView = [[FSMyPickerView alloc] init];
+        reasonPickerView.delegate = self;
+        reasonPickerView.datasource = self;
+    }
+    //初始化选中项
+    if (reasons.count > 0) {
+        [reasonPickerView.picker selectRow:selectedIndex inComponent:0 animated:NO];
+    }
+    [reasonPickerView showPickerView:^{
+        [activityField resignFirstResponder];
+    }];
+}
+
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -204,18 +168,6 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-    if (textField == _bankName) {
-        [_bankNumber becomeFirstResponder];
-    }
-    else if(textField == _bankNumber) {
-        [_bankUserName becomeFirstResponder];
-    }
-    else if(textField == _bankUserName) {
-        [_telephone becomeFirstResponder];
-    }
-    else if(textField == _telephone){
-        [_telephone resignFirstResponder];
-    }
     return YES;
 }
 
@@ -228,6 +180,7 @@
         textView.textColor = fieldTextColor;
     }
     activityField = textView;
+    [reasonPickerView hidenPickerView:YES action:nil];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -238,11 +191,33 @@
         FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
         request.routeResourcePath = RK_REQUEST_ORDER_RMA;
         request.reason = _reason.text;
-        request.bankname = _bankName.text;
-        request.bankcard = _bankNumber.text;
-        request.bankaccount = _bankUserName.text;
-        request.contactphone = _telephone.text;
-        request.orderno = _orderno;
+        FSEnRMAReasonItem *item = reasons[selectedIndex];
+        request.rmareason = item.key;
+        if (_orderinfo.products.count > 0) {
+            FSOrderProduct *item = _orderinfo.products[0];
+            item.quantity = [_rmaCount.text intValue];
+            {
+                NSMutableArray *array = [NSMutableArray array];
+                for (int i = 0; i < _orderinfo.products.count; i++) {
+                    FSOrderProduct *item = _orderinfo.products[i];
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+                    [dic setValue:item.productid forKey:@"productid"];
+                    [dic setValue:item.productdesc forKey:@"desc"];
+                    [dic setValue:[NSString stringWithFormat:@"%d", item.quantity] forKey:@"quantity"];
+                    NSMutableDictionary *_dic = [NSMutableDictionary dictionary];
+                    [_dic setValue:item.colorvalue forKey:@"colorvaluename"];
+                    [_dic setValue:item.colorvalueid forKey:@"colorvalueid"];
+                    [_dic setValue:item.sizevalue forKey:@"sizevaluename"];
+                    [_dic setValue:item.sizevalueid forKey:@"sizevalueid"];
+                    [dic setValue:_dic forKey:@"properties"];
+                    [array addObject:dic];
+                }
+                NSString *products = [array JSONString];
+                request.products = products;
+            }
+            
+        }
+        request.orderno = _orderinfo.orderno;
         request.uToken = [[FSModelManager sharedModelManager] loginToken];
         [self beginLoading:self.view];
         [activityField resignFirstResponder];
@@ -253,7 +228,7 @@
                 FSOrderRMAItem *rmaData = respData.responseData;
                 FSOrderRMASuccessViewController *controller = [[FSOrderRMASuccessViewController alloc] initWithNibName:@"FSOrderRMASuccessViewController" bundle:nil];
                 controller.data = rmaData;
-                controller.title = @"退货申请成功";
+                controller.title = @"申请退货成功";
                 [self.navigationController pushViewController:controller animated:YES];
                 if (_delegate && [_delegate respondsToSelector:@selector(refreshViewController:needRefresh:)]) {
                     [_delegate refreshViewController:self needRefresh:YES];
@@ -266,16 +241,51 @@
             
             //统计
             NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:7];
-            [_dic setValue:[NSString stringWithFormat:@"%@", _orderno] forKey:@"订单号"];
+            [_dic setValue:[NSString stringWithFormat:@"%@", _orderinfo.orderno] forKey:@"订单号"];
             [_dic setValue:(respData.isSuccess?@"申请退货成功":@"申请退货失败") forKey:@"申请退货状态"];
             [_dic setValue:_reason.text forKey:@"退货原因"];
-            [_dic setValue:_bankName.text forKey:@"银行名称"];
-            [_dic setValue:_bankNumber.text forKey:@"银行卡号"];
-            [_dic setValue:_bankUserName.text forKey:@"银行账户"];
-            [_dic setValue:_telephone.text forKey:@"联系方式"];
+            [_dic setValue:_rmaCount.text forKey:@"退货件数"];
             [[FSAnalysis instance] logEvent:ORDER_RMA withParameters:_dic];
         }];
     }
+}
+
+#pragma mark - FSMyPickerViewDatasource
+
+- (NSInteger)numberOfComponentsInMyPickerView:(FSMyPickerView *)pickerView
+{
+    if (pickerView == reasonPickerView) {
+        return 1;
+    }
+    return 0;
+}
+
+- (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == reasonPickerView) {
+        return reasons.count;
+    }
+    return 0;
+}
+
+#pragma mark - FSMyPickerViewDelegate
+
+- (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
+{
+    if (aMyPickerView == reasonPickerView) {
+        int index = [aMyPickerView.picker selectedRowInComponent:0];
+        if (index < reasons.count) {
+            selectedIndex = index;
+            FSEnRMAReasonItem *item = reasons[index];
+            _reasonCode.text = item.reason;
+        }
+    }
+}
+
+- (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    FSEnRMAReasonItem *item = reasons[row];
+    return item.reason;
 }
 
 @end

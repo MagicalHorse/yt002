@@ -82,10 +82,8 @@ static FSWeixinActivity *singleon;
         Is_Weixin_Registered=true;
     }
     [self onRequestAppMessage];
-    
-        
-    
 }
+
 -(UIImage *)cropImage:(UIImage *)image {
     CGSize newSize = CGSizeMake(100, 100*image.size.height/image.size.width);
    
@@ -160,15 +158,15 @@ static FSWeixinActivity *singleon;
     {
         [self activityDidFinish:resp.errCode==0?TRUE:FALSE];
     }
-    else if([resp isKindOfClass:[SendAuthResp class]])
-    {
-        NSString *strTitle = [NSString stringWithFormat:@"Auth结果"];
-        NSString *strMsg = [NSString stringWithFormat:@"Auth结果:%d", resp.errCode];
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
-
-    }
+//    else if([resp isKindOfClass:[SendAuthResp class]])
+//    {
+//        NSString *strTitle = [NSString stringWithFormat:@"Auth结果"];
+//        NSString *strMsg = [NSString stringWithFormat:@"Auth结果:%d", resp.errCode];
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        [alert show];
+//
+//    }
 
 }
 @end
