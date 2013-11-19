@@ -2,7 +2,7 @@
 //  PSTCollectionViewItemKey.h
 //  PSPDFKit
 //
-//  Copyright (c) 2012 Peter Steinberger. All rights reserved.
+//  Copyright (c) 2012-2013 Peter Steinberger. All rights reserved.
 //
 
 #import "PSTCollectionViewCommon.h"
@@ -18,8 +18,7 @@ NSString *PSTCollectionViewItemTypeToString(PSTCollectionViewItemType type); // 
 @interface PSTCollectionViewItemKey : NSObject <NSCopying>
 
 + (id)collectionItemKeyForLayoutAttributes:(PSTCollectionViewLayoutAttributes *)layoutAttributes;
-+ (id)collectionItemKeyForDecorationViewOfKind:(NSString *)elementKind andIndexPath:(NSIndexPath *)indexPath;
-+ (id)collectionItemKeyForSupplementaryViewOfKind:(NSString *)elementKind andIndexPath:(NSIndexPath *)indexPath;
+
 + (id)collectionItemKeyForCellWithIndexPath:(NSIndexPath *)indexPath;
 
 @property (nonatomic, assign) PSTCollectionViewItemType type;

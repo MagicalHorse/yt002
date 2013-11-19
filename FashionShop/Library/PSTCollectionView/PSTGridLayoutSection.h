@@ -1,11 +1,11 @@
 //
-//  PSTCollectionLayoutSection.h
+//  PSTGridLayoutSection.h
 //  PSPDFKit
 //
-//  Copyright (c) 2012 Peter Steinberger. All rights reserved.
+//  Copyright (c) 2012-2013 Peter Steinberger. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class PSTGridLayoutInfo, PSTGridLayoutRow, PSTGridLayoutItem;
 
@@ -55,6 +55,7 @@
 - (void)computeLayout;
 
 - (PSTGridLayoutItem *)addItem;
+
 - (PSTGridLayoutRow *)addRow;
 
 // Copy snapshot of current object

@@ -22,7 +22,8 @@
 @property (strong, nonatomic) IBOutlet UIView *imgNameView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgView;
 @property (strong, nonatomic) IBOutlet FSThumView *imgThumb;
-@property (strong, nonatomic) IBOutlet RTLabel *price;
+@property (strong, nonatomic) IBOutlet UILabel *price1;
+@property (strong, nonatomic) IBOutlet UILabel *priceOriginal;
 @property (strong, nonatomic) IBOutlet UILabel *lblNickie;
 @property (strong, nonatomic) IBOutlet UIButton *btnBrand;
 
@@ -35,9 +36,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *btnBuy;
 @property (strong, nonatomic) IBOutlet UILabel *lblDescrip;
 @property (strong, nonatomic) IBOutlet UIButton *btnStore;
-@property (strong, nonatomic) IBOutlet RTLabel *lbStore;
 @property (strong, nonatomic) IBOutlet UIButton *btnToDail;
-@property (strong, nonatomic) IBOutlet RTLabel *lbToDail;
 
 @property (strong, nonatomic) IBOutlet UITableView *tbComment;
 

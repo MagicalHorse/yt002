@@ -217,6 +217,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
+    
     if(!_noMoreResult
        && !_isInLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 100 > scrollView.contentSize.height

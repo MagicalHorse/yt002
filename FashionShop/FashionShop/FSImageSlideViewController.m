@@ -124,7 +124,6 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    int x = scrollView.contentOffset.x;
     CGFloat pageWidth = _svContent.frame.size.width;
     int nextPage =floor((_svContent.contentOffset.x - pageWidth / 2) / pageWidth) + 1;
     [self setCurrentPage:nextPage];

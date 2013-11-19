@@ -337,9 +337,9 @@
                 _currentUser.appID = @"615975780";
             }
             NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%@",_currentUser.appID];
-            if (IOS7) {
-                str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/guang-dian-bi-zhi/id%@?mt=8", _currentUser.appID];
-            }
+//            if (IOS7) {
+//                str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/cn/app/guang-dian-bi-zhi/id%@?mt=8", _currentUser.appID];
+//            }
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
             
             

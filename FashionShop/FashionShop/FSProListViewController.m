@@ -63,7 +63,7 @@
     BOOL _inLoading;
     BOOL _isInRefreshing;
     
-    WxPayOrder *wxPayOrder;
+    WxpayOrder *wxPayOrder;
 }
 
 @end
@@ -218,7 +218,7 @@
     if (_dataSourceBannerData.count > 0) {
         [self.navigationController setNavigationBarHidden:YES animated:NO];
     }
-    [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:0.8];
+    [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:1.2];
     //统计
     [[FSAnalysis instance] logEvent:CHECK_PROLIST_PAGE withParameters:nil];
 }
@@ -280,8 +280,8 @@
         [_dataSourceList insertObject:[@[] mutableCopy] atIndex:i];
         [_pageIndexList insertObject:@1 atIndex:i];
         [_noMoreList insertObject:@NO atIndex:i];
-        [_refreshTimeList insertObject:[NSDate date] atIndex:i];
-        [_firstTimeList insertObject:[NSDate date] atIndex:i];
+        [_refreshTimeList insertObject:[NSDate distantPast] atIndex:i];
+        [_firstTimeList insertObject:[NSDate distantPast] atIndex:i];
     }
     
     _dataSourceProvider = [@{} mutableCopy];
@@ -705,6 +705,7 @@
             FSStoreDetailViewController *storeController = [[FSStoreDetailViewController alloc] initWithNibName:@"FSStoreDetailViewController" bundle:nil];
             storeController.storeID = store.id;
             storeController.title = store.name;
+            storeController.pController = self;
             //[self.navigationController setNavigationBarHidden:NO];
             [self.navigationController pushViewController:storeController animated:YES];
             
@@ -958,10 +959,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    wxPayOrder = [[WxPayOrder alloc] init];
-    wxPayOrder.productid = @"1234567890";
-    [wxPayOrder payOrder];
-    return;
+//    [WxpayOrder sendPay:@"123214234"];
+//    return;
+    
     if (_inLoading) {
         return;
     }
@@ -1007,6 +1007,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
+    
     bool cannotLoadMore = [[_noMoreList objectAtIndex:_currentSearchIndex] boolValue];
     if(!_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height

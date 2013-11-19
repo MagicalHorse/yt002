@@ -2,7 +2,7 @@
 //  PSTCollectionViewCell.h
 //  PSPDFKit
 //
-//  Copyright (c) 2012 Peter Steinberger. All rights reserved.
+//  Copyright (c) 2012-2013 Peter Steinberger. All rights reserved.
 //
 
 #import "PSTCollectionViewCommon.h"
@@ -18,7 +18,6 @@
 
 // Apply layout attributes on cell.
 - (void)applyLayoutAttributes:(PSTCollectionViewLayoutAttributes *)layoutAttributes;
-
 - (void)willTransitionFromLayout:(PSTCollectionViewLayout *)oldLayout toLayout:(PSTCollectionViewLayout *)newLayout;
 - (void)didTransitionFromLayout:(PSTCollectionViewLayout *)oldLayout toLayout:(PSTCollectionViewLayout *)newLayout;
 
@@ -37,7 +36,7 @@
 
 // Cells become highlighted when the user touches them.
 // The selected state is toggled when the user lifts up from a highlighted cell.
-// Override these methods to provide custom PS for a selected or highlighted state.
+// Override these methods to provide custom UI for a selected or highlighted state.
 // The collection view may call the setters inside an animation block.
 @property (nonatomic, getter=isSelected) BOOL selected;
 @property (nonatomic, getter=isHighlighted) BOOL highlighted;

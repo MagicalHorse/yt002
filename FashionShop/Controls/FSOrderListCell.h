@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "FSOrder.h"
-#import "RTLabel.h"
 
 @interface FSOrderListCell : UITableViewCell
 
@@ -23,9 +22,9 @@
 
 @interface FSOrderInfoAddressCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet RTLabel *name;
-@property (strong, nonatomic) IBOutlet RTLabel *address;
-@property (strong, nonatomic) IBOutlet RTLabel *telephone;
+@property (strong, nonatomic) IBOutlet UILabel *name;
+@property (strong, nonatomic) IBOutlet UILabel *address;
+@property (strong, nonatomic) IBOutlet UILabel *telephone;
 
 @property (strong,nonatomic) FSOrderInfo *data;
 @property (nonatomic) int cellHeight;
@@ -34,15 +33,15 @@
 
 @interface FSOrderInfoMessageCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet RTLabel *orderno;
-@property (strong, nonatomic) IBOutlet RTLabel *orderstatus;
-@property (strong, nonatomic) IBOutlet RTLabel *sendway;
-@property (strong, nonatomic) IBOutlet RTLabel *payway;
-@property (strong, nonatomic) IBOutlet RTLabel *createtime;
-@property (strong, nonatomic) IBOutlet RTLabel *needinvoice;
-@property (strong, nonatomic) IBOutlet RTLabel *invoicetitle;
-@property (strong, nonatomic) IBOutlet RTLabel *invoicedetail;
-@property (strong, nonatomic) IBOutlet RTLabel *ordermemo;
+@property (strong, nonatomic) IBOutlet UILabel *orderno;
+@property (strong, nonatomic) IBOutlet UILabel *orderstatus;
+@property (strong, nonatomic) IBOutlet UILabel *sendway;
+@property (strong, nonatomic) IBOutlet UILabel *payway;
+@property (strong, nonatomic) IBOutlet UILabel *createtime;
+@property (strong, nonatomic) IBOutlet UILabel *needinvoice;
+@property (strong, nonatomic) IBOutlet UILabel *invoicetitle;
+@property (strong, nonatomic) IBOutlet UILabel *invoicedetail;
+@property (strong, nonatomic) IBOutlet UILabel *ordermemo;
 
 @property (strong,nonatomic) FSOrderInfo *data;
 @property (nonatomic) int cellHeight;
@@ -83,21 +82,21 @@
 
 @interface FSOrderRMAListCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet RTLabel *createTime;
-@property (strong, nonatomic) IBOutlet RTLabel *rmano;
-@property (strong, nonatomic) IBOutlet RTLabel *rmaReason;
-@property (strong, nonatomic) IBOutlet RTLabel *bankName;
-@property (strong, nonatomic) IBOutlet RTLabel *bankCard;
-@property (strong, nonatomic) IBOutlet RTLabel *bankAccount;
-@property (strong, nonatomic) IBOutlet RTLabel *rmaType;
-@property (strong, nonatomic) IBOutlet RTLabel *chargePostFee;
-@property (strong, nonatomic) IBOutlet RTLabel *chargegiftFee;
-@property (strong, nonatomic) IBOutlet RTLabel *rebatePostFee;
-@property (strong, nonatomic) IBOutlet RTLabel *rmaAmount;
-@property (strong, nonatomic) IBOutlet RTLabel *actualAmount;
-@property (strong, nonatomic) IBOutlet RTLabel *rejectReason;
-@property (strong, nonatomic) IBOutlet RTLabel *status;
-@property (strong, nonatomic) IBOutlet RTLabel *mailAddress;
+@property (strong, nonatomic) IBOutlet UILabel *createTime;
+@property (strong, nonatomic) IBOutlet UILabel *rmano;
+@property (strong, nonatomic) IBOutlet UILabel *rmaReason;
+@property (strong, nonatomic) IBOutlet UILabel *bankName;
+@property (strong, nonatomic) IBOutlet UILabel *bankCard;
+@property (strong, nonatomic) IBOutlet UILabel *bankAccount;
+@property (strong, nonatomic) IBOutlet UILabel *rmaType;
+@property (strong, nonatomic) IBOutlet UILabel *chargePostFee;
+@property (strong, nonatomic) IBOutlet UILabel *chargegiftFee;
+@property (strong, nonatomic) IBOutlet UILabel *rebatePostFee;
+@property (strong, nonatomic) IBOutlet UILabel *rmaAmount;
+@property (strong, nonatomic) IBOutlet UILabel *actualAmount;
+@property (strong, nonatomic) IBOutlet UILabel *rejectReason;
+@property (strong, nonatomic) IBOutlet UILabel *status;
+@property (strong, nonatomic) IBOutlet UILabel *mailAddress;
 
 
 @property (nonatomic,strong) FSOrderRMAItem* data;

@@ -372,20 +372,6 @@
     }];
 }
 
-#pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-//    if ([commentView.txtComment isFirstResponder]) {
-//        [commentView.txtComment resignFirstResponder];
-//    }
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    
-}
-
 #pragma mark - FSThumbView delegate
 
 -(void)didTapThumView:(id)sender

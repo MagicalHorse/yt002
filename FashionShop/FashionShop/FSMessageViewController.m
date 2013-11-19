@@ -429,6 +429,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    [super scrollViewDidScroll:scrollView];
+    
     if (!_isLoadData && !noMore && scrollView.contentOffset.y < -40) {
         [self beginLoadData:self.tableView];
         self.tableView.tableHeaderView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];

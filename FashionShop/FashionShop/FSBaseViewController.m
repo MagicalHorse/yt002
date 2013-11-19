@@ -26,29 +26,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if (IOS7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-        self.extendedLayoutIncludesOpaqueBars = YES;
-        
-        FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
-        [del setGlobalLayout];
-    }
+//    if (IOS7) {
+//        self.edgesForExtendedLayout = UIRectEdgeNone;
+//        self.extendedLayoutIncludesOpaqueBars = YES;
+//        
+//        FSAppDelegate *del = (FSAppDelegate*)[UIApplication sharedApplication].delegate;
+//        [del setGlobalLayout];
+//    }
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
-}
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleLightContent;
+//}
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
-    return NO;
-}
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return NO;
+//}
 
 - (void)didReceiveMemoryWarning
 {

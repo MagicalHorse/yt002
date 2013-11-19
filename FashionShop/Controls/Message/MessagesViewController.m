@@ -253,17 +253,17 @@
 {
     CGFloat maxHeight = [MessageInputView maxHeight];
     CGFloat textViewContentHeight = textView.contentSize.height;
-    if (IOS7) {
-        CGFloat width = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 246.0f : 690.0f;
-        int txtHeight = [textView.text sizeWithFont:[BubbleView font] constrainedToSize:CGSizeMake(width, 10000) lineBreakMode:NSLineBreakByCharWrapping].height;
-        if (txtHeight < [MessageInputView textViewLineHeight]) {
-            txtHeight = [MessageInputView textViewLineHeight];
-        }
-        else {
-            txtHeight += [MessageInputView textViewLineHeight] - 18;
-        }
-        textViewContentHeight = txtHeight;
-    }
+//    if (IOS7) {
+//        CGFloat width = ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone) ? 246.0f : 690.0f;
+//        int txtHeight = [textView.text sizeWithFont:[BubbleView font] constrainedToSize:CGSizeMake(width, 10000) lineBreakMode:NSLineBreakByCharWrapping].height;
+//        if (txtHeight < [MessageInputView textViewLineHeight]) {
+//            txtHeight = [MessageInputView textViewLineHeight];
+//        }
+//        else {
+//            txtHeight += [MessageInputView textViewLineHeight] - 18;
+//        }
+//        textViewContentHeight = txtHeight;
+//    }
     CGFloat changeInHeight = textViewContentHeight - self.previousTextViewContentHeight;
     
     changeInHeight = (textViewContentHeight + changeInHeight >= maxHeight) ? 0.0f : changeInHeight;

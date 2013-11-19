@@ -2,7 +2,7 @@
 //  PSTGridLayoutItem.m
 //  PSPDFKit
 //
-//  Copyright (c) 2012 Peter Steinberger. All rights reserved.
+//  Copyright (c) 2012-2013 Peter Steinberger. All rights reserved.
 //
 
 #import "PSTGridLayoutItem.h"
@@ -13,7 +13,7 @@
 #pragma mark - NSObject
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p itemFrame:%@>", NSStringFromClass([self class]), self, NSStringFromCGRect(self.itemFrame)];
+    return [NSString stringWithFormat:@"<%@: %p itemFrame:%@>", NSStringFromClass(self.class), self, NSStringFromCGRect(self.itemFrame)];
 }
 
 @end

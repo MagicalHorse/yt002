@@ -33,7 +33,8 @@
 - (void)initScrollView
 {
     int sHeight = [UIApplication sharedApplication].statusBarHidden?0:20;
-	m_pagesView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, SCREEN_WIDTH, APP_HIGH + (IOS7?sHeight:0))];
+	//m_pagesView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, SCREEN_WIDTH, APP_HIGH + (IOS7?sHeight:0))];
+    m_pagesView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, SCREEN_WIDTH, APP_HIGH)];
     m_pagesView.scrollEnabled = YES;
     m_pagesView.backgroundColor = [UIColor blackColor];
 	m_pagesView.contentSize = CGSizeMake(320.0 * PAGES, APP_HIGH);
@@ -53,7 +54,8 @@
             filename = [NSString stringWithFormat:@"Splash%d.jpg",i];
         }
 		UIImageView *iv = [[UIImageView alloc] initWithImage:[UIImage imageNamed:filename]];
-        iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, IOS7?sHeight:0, SCREEN_WIDTH, APP_HIGH);
+        //iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, IOS7?sHeight:0, SCREEN_WIDTH, APP_HIGH);
+        iv.frame = CGRectMake((i-1) * SCREEN_WIDTH, 0, SCREEN_WIDTH, APP_HIGH);
 		[m_pagesView addSubview:iv];
 	}
 	[self.view addSubview:m_pagesView];

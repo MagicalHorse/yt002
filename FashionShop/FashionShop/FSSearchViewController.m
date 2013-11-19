@@ -141,12 +141,14 @@
                 if (!IOS7) {
                     [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
                 }
+                //[_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
             } else
             {
                 [_prods insertObject:obj atIndex:0];
                 if (!IOS7) {
                     [_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
                 }
+                //[_brandContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
         }
     }];

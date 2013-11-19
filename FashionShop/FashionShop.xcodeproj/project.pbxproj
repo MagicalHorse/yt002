@@ -118,7 +118,6 @@
 		024D1759173BB01E0016C443 /* message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D1758173BB01E0016C443 /* message@2x.png */; };
 		024D4E5D178EC5B800F525AD /* selected_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D4E5B178EC5B800F525AD /* selected_icon@2x.png */; };
 		024D4E5E178EC5B800F525AD /* unselect_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 024D4E5C178EC5B800F525AD /* unselect_icon@2x.png */; };
-		02593457180F803C0068C4D0 /* WxPayOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 02593456180F803C0068C4D0 /* WxPayOrder.m */; };
 		025934621810DBD30068C4D0 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 025934611810DBD30068C4D0 /* libWeChatSDK.a */; };
 		0259346618110FF20068C4D0 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0259346518110FF20068C4D0 /* CoreTelephony.framework */; };
 		02593468181110360068C4D0 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02593467181110360068C4D0 /* libstdc++.dylib */; };
@@ -241,6 +240,11 @@
 		0278B77E173A01B500BA99D5 /* clock_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0278B77B173A01B500BA99D5 /* clock_icon@2x.png */; };
 		0278B77F173A01B500BA99D5 /* goback_icon_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0278B77C173A01B500BA99D5 /* goback_icon_sel@2x.png */; };
 		0278B780173A01B500BA99D5 /* share_icon_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0278B77D173A01B500BA99D5 /* share_icon_sel@2x.png */; };
+		027BF81318337C3B002B811E /* ApiDigest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 027BF80C18337C3B002B811E /* ApiDigest.mm */; };
+		027BF81418337C3B002B811E /* ApiXml.mm in Sources */ = {isa = PBXBuildFile; fileRef = 027BF80E18337C3B002B811E /* ApiXml.mm */; };
+		027BF81518337C3B002B811E /* WxpayReq.mm in Sources */ = {isa = PBXBuildFile; fileRef = 027BF81018337C3B002B811E /* WxpayReq.mm */; };
+		027BF81618337C3B002B811E /* WxpayResp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 027BF81218337C3B002B811E /* WxpayResp.mm */; };
+		027BF819183381A5002B811E /* WxpayOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 027BF818183381A5002B811E /* WxpayOrder.m */; };
 		027D90F31751DC7400DA1C58 /* Splash1_5@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 027D90EF1751DC7400DA1C58 /* Splash1_5@2x.jpg */; };
 		027D90F41751DC7400DA1C58 /* Splash2_5@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 027D90F01751DC7400DA1C58 /* Splash2_5@2x.jpg */; };
 		027D90F51751DC7400DA1C58 /* Splash3_5@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 027D90F11751DC7400DA1C58 /* Splash3_5@2x.jpg */; };
@@ -312,6 +316,7 @@
 		02B813C7173A50330003BCBA /* btn_bg_sel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02B813C6173A50330003BCBA /* btn_bg_sel@2x.png */; };
 		02BD8C4F1813C85700E3691E /* FSOrderRMACommitViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02BD8C4C1813C85600E3691E /* FSOrderRMACommitViewController.xib */; };
 		02BD8C501813C85700E3691E /* FSOrderRMACommitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BD8C4E1813C85600E3691E /* FSOrderRMACommitViewController.m */; };
+		02CD157B183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CD1579183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.m */; };
 		02D285231780599D0017F744 /* FSOrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02D285211780599D0017F744 /* FSOrderDetailViewController.m */; };
 		02D285241780599D0017F744 /* FSOrderDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02D285221780599D0017F744 /* FSOrderDetailViewController.xib */; };
 		02D4E7D616BD392200B6385A /* default_icon320@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02D4E7D416BD392200B6385A /* default_icon320@2x.png */; };
@@ -537,7 +542,6 @@
 		74C1C8591674962B000B51BE /* FSProCommentInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C1C8581674962B000B51BE /* FSProCommentInputView.m */; };
 		74C3FD771689B9F60009D7D9 /* timeline_nav_sep@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C3FD751689B9F60009D7D9 /* timeline_nav_sep@2x.png */; };
 		74C427AF16929D9500651F79 /* bottom_nav_notlike_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C427AD16929D9500651F79 /* bottom_nav_notlike_icon@2x.png */; };
-		74C427C71692C2E300651F79 /* libRestKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 74C427BC1692C20700651F79 /* libRestKit.a */; };
 		74C4FC7916969D110055D90C /* FSImageUploadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC7816969D110055D90C /* FSImageUploadCell.xib */; };
 		74C4FC7D1696BB190055D90C /* location_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 74C4FC7B1696BB190055D90C /* location_icon@2x.png */; };
 		74C4FC8A1696C4050055D90C /* FSStoreDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74C4FC881696C4050055D90C /* FSStoreDetailViewController.m */; };
@@ -690,44 +694,44 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		74C427BB1692C20700651F79 /* PBXContainerItemProxy */ = {
+		02CD156C1834665700C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160D1614564E810060A5C5;
 			remoteInfo = RestKit;
 		};
-		74C427BD1692C20700651F79 /* PBXContainerItemProxy */ = {
+		02CD156E1834665700C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160D2614564E820060A5C5;
 			remoteInfo = RestKitTests;
 		};
-		74C427BF1692C20700651F79 /* PBXContainerItemProxy */ = {
+		02CD15701834665700C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160E62145651060060A5C5;
 			remoteInfo = RestKitFramework;
 		};
-		74C427C11692C20700651F79 /* PBXContainerItemProxy */ = {
+		02CD15721834665700C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 25160E78145651060060A5C5;
 			remoteInfo = RestKitFrameworkTests;
 		};
-		74C427C31692C20700651F79 /* PBXContainerItemProxy */ = {
+		02CD15741834665700C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 259C301615128079003066A2;
 			remoteInfo = RestKitResources;
 		};
-		74C427C51692C2D300651F79 /* PBXContainerItemProxy */ = {
+		02CD15761834666500C15054 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+			containerPortal = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 25160D1514564E810060A5C5;
 			remoteInfo = RestKit;
@@ -905,9 +909,6 @@
 		024D1758173BB01E0016C443 /* message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "message@2x.png"; sourceTree = "<group>"; };
 		024D4E5B178EC5B800F525AD /* selected_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "selected_icon@2x.png"; sourceTree = "<group>"; };
 		024D4E5C178EC5B800F525AD /* unselect_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "unselect_icon@2x.png"; sourceTree = "<group>"; };
-		02593450180F79240068C4D0 /* FSWXConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSWXConfig.h; sourceTree = "<group>"; };
-		02593455180F803C0068C4D0 /* WxPayOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WxPayOrder.h; sourceTree = "<group>"; };
-		02593456180F803C0068C4D0 /* WxPayOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WxPayOrder.m; sourceTree = "<group>"; };
 		025934611810DBD30068C4D0 /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libWeChatSDK.a; path = Library/qqweixin/libWeChatSDK.a; sourceTree = "<group>"; };
 		0259346518110FF20068C4D0 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		02593467181110360068C4D0 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
@@ -1082,6 +1083,17 @@
 		0278B77B173A01B500BA99D5 /* clock_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clock_icon@2x.png"; sourceTree = "<group>"; };
 		0278B77C173A01B500BA99D5 /* goback_icon_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "goback_icon_sel@2x.png"; sourceTree = "<group>"; };
 		0278B77D173A01B500BA99D5 /* share_icon_sel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_icon_sel@2x.png"; sourceTree = "<group>"; };
+		027BF80B18337C3B002B811E /* ApiDigest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApiDigest.h; path = Library/qqweixin/ApiDigest.h; sourceTree = "<group>"; };
+		027BF80C18337C3B002B811E /* ApiDigest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ApiDigest.mm; path = Library/qqweixin/ApiDigest.mm; sourceTree = "<group>"; };
+		027BF80D18337C3B002B811E /* ApiXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApiXml.h; path = Library/qqweixin/ApiXml.h; sourceTree = "<group>"; };
+		027BF80E18337C3B002B811E /* ApiXml.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ApiXml.mm; path = Library/qqweixin/ApiXml.mm; sourceTree = "<group>"; };
+		027BF80F18337C3B002B811E /* WxpayReq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WxpayReq.h; path = Library/qqweixin/WxpayReq.h; sourceTree = "<group>"; };
+		027BF81018337C3B002B811E /* WxpayReq.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WxpayReq.mm; path = Library/qqweixin/WxpayReq.mm; sourceTree = "<group>"; };
+		027BF81118337C3B002B811E /* WxpayResp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WxpayResp.h; path = Library/qqweixin/WxpayResp.h; sourceTree = "<group>"; };
+		027BF81218337C3B002B811E /* WxpayResp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = WxpayResp.mm; path = Library/qqweixin/WxpayResp.mm; sourceTree = "<group>"; };
+		027BF817183381A5002B811E /* WxpayOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WxpayOrder.h; path = Library/qqweixin/WxpayOrder.h; sourceTree = "<group>"; };
+		027BF818183381A5002B811E /* WxpayOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WxpayOrder.m; path = Library/qqweixin/WxpayOrder.m; sourceTree = "<group>"; };
+		027BF81A183385D2002B811E /* WxpayConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WxpayConfig.h; path = Library/qqweixin/WxpayConfig.h; sourceTree = "<group>"; };
 		027D90EF1751DC7400DA1C58 /* Splash1_5@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash1_5@2x.jpg"; sourceTree = "<group>"; };
 		027D90F01751DC7400DA1C58 /* Splash2_5@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash2_5@2x.jpg"; sourceTree = "<group>"; };
 		027D90F11751DC7400DA1C58 /* Splash3_5@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Splash3_5@2x.jpg"; sourceTree = "<group>"; };
@@ -1179,6 +1191,10 @@
 		02BD8C4D1813C85600E3691E /* FSOrderRMACommitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderRMACommitViewController.h; sourceTree = "<group>"; };
 		02BD8C4E1813C85600E3691E /* FSOrderRMACommitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderRMACommitViewController.m; sourceTree = "<group>"; };
 		02BFABFB17434FCF00269E8B /* FashionShop.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FashionShop.entitlements; sourceTree = "<group>"; };
+		02CD15641834665600C15054 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = Library/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
+		02CD1578183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSIndexPath+PSTCollectionViewAdditions.h"; sourceTree = "<group>"; };
+		02CD1579183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSIndexPath+PSTCollectionViewAdditions.m"; sourceTree = "<group>"; };
+		02CD157A183466AD00C15054 /* PSTCollectionViewLayout+Internals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PSTCollectionViewLayout+Internals.h"; sourceTree = "<group>"; };
 		02D285201780599D0017F744 /* FSOrderDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSOrderDetailViewController.h; sourceTree = "<group>"; };
 		02D285211780599D0017F744 /* FSOrderDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSOrderDetailViewController.m; sourceTree = "<group>"; };
 		02D285221780599D0017F744 /* FSOrderDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSOrderDetailViewController.xib; sourceTree = "<group>"; };
@@ -1543,7 +1559,6 @@
 		74C3FD7316898EB00009D7D9 /* SYPaginatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SYPaginatorView.h; path = Controls/Common/SYPaginatorView.h; sourceTree = "<group>"; };
 		74C3FD751689B9F60009D7D9 /* timeline_nav_sep@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "timeline_nav_sep@2x.png"; sourceTree = "<group>"; };
 		74C427AD16929D9500651F79 /* bottom_nav_notlike_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_nav_notlike_icon@2x.png"; sourceTree = "<group>"; };
-		74C427B01692C20600651F79 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = Library/RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
 		74C4FC7816969D110055D90C /* FSImageUploadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = FSImageUploadCell.xib; path = Controls/FSImageUploadCell.xib; sourceTree = "<group>"; };
 		74C4FC7B1696BB190055D90C /* location_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "location_icon@2x.png"; sourceTree = "<group>"; };
 		74C4FC871696C4050055D90C /* FSStoreDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSStoreDetailViewController.h; sourceTree = "<group>"; };
@@ -1774,7 +1789,6 @@
 				02160E4E1703E57D00D77FE0 /* CoreAudio.framework in Frameworks */,
 				025C4CA316E2FDFC00A7D1E7 /* libiconv.dylib in Frameworks */,
 				74B551AA16671A0400E402DC /* libicucore.dylib in Frameworks */,
-				74C427C71692C2E300651F79 /* libRestKit.a in Frameworks */,
 				74B6F6CD166B17E6003ACB90 /* PassKit.framework in Frameworks */,
 				74BAC5FE1651F7CA00D7F866 /* CoreData.framework in Frameworks */,
 				74A381C81651294A003FF79D /* CoreLocation.framework in Frameworks */,
@@ -2019,17 +2033,6 @@
 			name = PointCell;
 			sourceTree = "<group>";
 		};
-		0259344F180F79240068C4D0 /* wxpay */ = {
-			isa = PBXGroup;
-			children = (
-				02593450180F79240068C4D0 /* FSWXConfig.h */,
-				02593455180F803C0068C4D0 /* WxPayOrder.h */,
-				02593456180F803C0068C4D0 /* WxPayOrder.m */,
-			);
-			name = wxpay;
-			path = Library/wxpay;
-			sourceTree = "<group>";
-		};
 		025A543716BBA5DE001919EA /* blankimages */ = {
 			isa = PBXGroup;
 			children = (
@@ -2118,6 +2121,9 @@
 			isa = PBXGroup;
 			children = (
 				027252BA1807A82000671CBE /* PSTCollectionView.h */,
+				02CD1578183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.h */,
+				02CD1579183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.m */,
+				02CD157A183466AD00C15054 /* PSTCollectionViewLayout+Internals.h */,
 				027252BB1807A82000671CBE /* PSTCollectionView.m */,
 				027252BC1807A82000671CBE /* PSTCollectionViewCell.h */,
 				027252BD1807A82000671CBE /* PSTCollectionViewCell.m */,
@@ -2246,6 +2252,18 @@
 			name = Buy;
 			sourceTree = "<group>";
 		};
+		02CD15651834665600C15054 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02CD156D1834665700C15054 /* libRestKit.a */,
+				02CD156F1834665700C15054 /* RestKitTests.octest */,
+				02CD15711834665700C15054 /* RestKit.framework */,
+				02CD15731834665700C15054 /* RestKitFrameworkTests.octest */,
+				02CD15751834665700C15054 /* RestKitResources.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		02DC938B172BB13000281A5E /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -2270,9 +2288,20 @@
 		741A1F82165CBD5A00289BE2 /* qqweixin */ = {
 			isa = PBXGroup;
 			children = (
+				027BF80B18337C3B002B811E /* ApiDigest.h */,
+				027BF80C18337C3B002B811E /* ApiDigest.mm */,
+				027BF80D18337C3B002B811E /* ApiXml.h */,
+				027BF80E18337C3B002B811E /* ApiXml.mm */,
+				027BF80F18337C3B002B811E /* WxpayReq.h */,
+				027BF81018337C3B002B811E /* WxpayReq.mm */,
+				027BF81118337C3B002B811E /* WxpayResp.h */,
+				027BF81218337C3B002B811E /* WxpayResp.mm */,
 				74BBA2771689881F00E59665 /* WXApi.h */,
 				74BBA2781689881F00E59665 /* WXApiObject.h */,
 				025934611810DBD30068C4D0 /* libWeChatSDK.a */,
+				027BF817183381A5002B811E /* WxpayOrder.h */,
+				027BF818183381A5002B811E /* WxpayOrder.m */,
+				027BF81A183385D2002B811E /* WxpayConfig.h */,
 			);
 			name = qqweixin;
 			sourceTree = "<group>";
@@ -2575,7 +2604,6 @@
 		74A380CA1651223B003FF79D /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				0259344F180F79240068C4D0 /* wxpay */,
 				022D4C4E18066CAB00A1C651 /* alipay */,
 				027252DF1807A85D00671CBE /* Renative */,
 				027252B91807A82000671CBE /* PSTCollectionView */,
@@ -2626,7 +2654,7 @@
 		74B492011654AE6700777CC8 /* RestKit */ = {
 			isa = PBXGroup;
 			children = (
-				74C427B01692C20600651F79 /* RestKit.xcodeproj */,
+				02CD15641834665600C15054 /* RestKit.xcodeproj */,
 			);
 			name = RestKit;
 			sourceTree = "<group>";
@@ -3038,18 +3066,6 @@
 				74BA422D167B224E009182E2 /* FSProdDetailView.xib */,
 			);
 			name = Pro;
-			sourceTree = "<group>";
-		};
-		74C427B11692C20600651F79 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				74C427BC1692C20700651F79 /* libRestKit.a */,
-				74C427BE1692C20700651F79 /* RestKitTests.octest */,
-				74C427C01692C20700651F79 /* RestKit.framework */,
-				74C427C21692C20700651F79 /* RestKitFrameworkTests.octest */,
-				74C427C41692C20700651F79 /* RestKitResources.bundle */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		74C5BE921646411B003CBEE3 /* SDImageView */ = {
@@ -3485,7 +3501,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				74C427C61692C2D300651F79 /* PBXTargetDependency */,
+				02CD15771834666500C15054 /* PBXTargetDependency */,
 			);
 			name = FashionShop;
 			productName = FashionShop;
@@ -3524,8 +3540,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 74C427B11692C20600651F79 /* Products */;
-					ProjectRef = 74C427B01692C20600651F79 /* RestKit.xcodeproj */;
+					ProductGroup = 02CD15651834665600C15054 /* Products */;
+					ProjectRef = 02CD15641834665600C15054 /* RestKit.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -3536,39 +3552,39 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		74C427BC1692C20700651F79 /* libRestKit.a */ = {
+		02CD156D1834665700C15054 /* libRestKit.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRestKit.a;
-			remoteRef = 74C427BB1692C20700651F79 /* PBXContainerItemProxy */;
+			remoteRef = 02CD156C1834665700C15054 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		74C427BE1692C20700651F79 /* RestKitTests.octest */ = {
+		02CD156F1834665700C15054 /* RestKitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitTests.octest;
-			remoteRef = 74C427BD1692C20700651F79 /* PBXContainerItemProxy */;
+			remoteRef = 02CD156E1834665700C15054 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		74C427C01692C20700651F79 /* RestKit.framework */ = {
+		02CD15711834665700C15054 /* RestKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = RestKit.framework;
-			remoteRef = 74C427BF1692C20700651F79 /* PBXContainerItemProxy */;
+			remoteRef = 02CD15701834665700C15054 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		74C427C21692C20700651F79 /* RestKitFrameworkTests.octest */ = {
+		02CD15731834665700C15054 /* RestKitFrameworkTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitFrameworkTests.octest;
-			remoteRef = 74C427C11692C20700651F79 /* PBXContainerItemProxy */;
+			remoteRef = 02CD15721834665700C15054 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		74C427C41692C20700651F79 /* RestKitResources.bundle */ = {
+		02CD15751834665700C15054 /* RestKitResources.bundle */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = RestKitResources.bundle;
-			remoteRef = 74C427C31692C20700651F79 /* PBXContainerItemProxy */;
+			remoteRef = 02CD15741834665700C15054 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -3966,11 +3982,13 @@
 				741C8FAB165638E200DDEC44 /* FSEntityRequestBase.m in Sources */,
 				741C8FAE1656468400DDEC44 /* FSSuggestListRequest.m in Sources */,
 				7439F1481657372C00490E7A /* FSProListViewController.m in Sources */,
+				027BF81518337C3B002B811E /* WxpayReq.mm in Sources */,
 				7439F14F1657471900490E7A /* FSLocationManager.m in Sources */,
 				7439F15216577AE100490E7A /* FSProListRequest.m in Sources */,
 				7439F15516577C0C00490E7A /* FSProItemEntity.m in Sources */,
 				7439F15C1657888400490E7A /* FSProListTableCell.m in Sources */,
 				74B4A6151658D494003502C8 /* FSProNearestHeaderTableCell.m in Sources */,
+				027BF81618337C3B002B811E /* WxpayResp.mm in Sources */,
 				74D2B572165B58C700E3D13D /* FSCity.m in Sources */,
 				74D2B575165B60B000E3D13D /* FSConfigListRequest.m in Sources */,
 				74D2B57D165B6B9200E3D13D /* FSProDetailViewController.m in Sources */,
@@ -4105,6 +4123,7 @@
 				749B2B9A169845680073F4B5 /* FSFeedbackRequest.m in Sources */,
 				749B2B9B169845680073F4B5 /* FSFeedbackViewController.m in Sources */,
 				74C018F41699105F00576942 /* FSSearchViewController.m in Sources */,
+				027BF81418337C3B002B811E /* ApiXml.mm in Sources */,
 				74254F55169D3C3A002E269E /* FSItemBase.m in Sources */,
 				74254F58169D3C93002E269E /* FSPagedItem.m in Sources */,
 				74C0093E169EE31900DA759A /* SplashViewController.m in Sources */,
@@ -4146,11 +4165,11 @@
 				02160E481703DB0100D77FE0 /* CL_AudioRecorder.m in Sources */,
 				0229DD6D170526ED00BF02EB /* FSAudioButton.m in Sources */,
 				02DFCB1E170E7D540032F9BB /* FSAudioHelper.m in Sources */,
-				02593457180F803C0068C4D0 /* WxPayOrder.m in Sources */,
 				02FB6294170FE442002F29B3 /* FSAudioShowView.m in Sources */,
 				02779B92171AF21D0050D7C7 /* LeftDemoViewController.m in Sources */,
 				02779B94171AF21D0050D7C7 /* PKRevealController.m in Sources */,
 				02779B95171AF21D0050D7C7 /* PKRevealControllerContainerView.m in Sources */,
+				027BF81318337C3B002B811E /* ApiDigest.mm in Sources */,
 				02779B96171AF21D0050D7C7 /* UIViewController+PKRevealController.m in Sources */,
 				02660A9317223FB800156566 /* AGSimpleImageEditorView.m in Sources */,
 				02660A971722411700156566 /* FSImageEditViewController.m in Sources */,
@@ -4179,8 +4198,10 @@
 				027F6DCE173CE64F004F7ACE /* FSCommon.m in Sources */,
 				027F6DD3173D5952004F7ACE /* FSPagedGiftList.m in Sources */,
 				0216DF26173EA7BD00C6CA9B /* FSAboutViewController.m in Sources */,
+				02CD157B183466AD00C15054 /* NSIndexPath+PSTCollectionViewAdditions.m in Sources */,
 				0216DF381740B16700C6CA9B /* FSContentViewController.m in Sources */,
 				0216DF3F1741DA5F00C6CA9B /* FSStoreDetailCell.m in Sources */,
+				027BF819183381A5002B811E /* WxpayOrder.m in Sources */,
 				0216DF4B17422D5800C6CA9B /* FSMyCommentController.m in Sources */,
 				0216DF4F1742301700C6CA9B /* FSMyCommentCell.m in Sources */,
 				0216DF5417423F3500C6CA9B /* FSPagedMyComment.m in Sources */,
@@ -4238,10 +4259,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		74C427C61692C2D300651F79 /* PBXTargetDependency */ = {
+		02CD15771834666500C15054 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = RestKit;
-			targetProxy = 74C427C51692C2D300651F79 /* PBXContainerItemProxy */;
+			targetProxy = 02CD15761834666500C15054 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4311,8 +4332,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4344,10 +4365,10 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				PROVISIONING_PROFILE = "A4311C0F-3DCE-4F5A-9A20-B2D62E4C8C01";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A4311C0F-3DCE-4F5A-9A20-B2D62E4C8C01";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/** \"$(BUILT_PRODUCTS_DIR)/../../Headers/RestKit\"";
@@ -4463,7 +4484,7 @@
 				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/** \"$(BUILT_PRODUCTS_DIR)/../../Headers/RestKit\"";
@@ -4515,7 +4536,7 @@
 				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
 				STRIP_STYLE = "non-global";
 				USER_HEADER_SEARCH_PATHS = "\"$(BUILT_PRODUCTS_DIR)/../../Headers\"/** \"$(BUILT_PRODUCTS_DIR)/../../Headers/RestKit\"";

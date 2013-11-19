@@ -311,12 +311,23 @@
 
 -(void)updateToolBar:(BOOL)flag
 {
-    UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
-    [_btnFavor setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
-    image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
-    [_btnComment setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
-    image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
-    [_btnCoupon setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]:image];
+//    if (IOS7) {
+//        UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+//        [_btnFavor setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+//        [_btnComment setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+//        [_btnCoupon setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+//    }
+//    else
+    {
+        UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+        [_btnFavor setImage:image];
+        image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+        [_btnComment setImage:image];
+        image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+        [_btnCoupon setImage:image];
+    }
     //[_btnCoupon setImage:image];
     //更新优惠按钮
     if (!flag) {

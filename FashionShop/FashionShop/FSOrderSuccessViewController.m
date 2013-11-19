@@ -16,7 +16,7 @@
 #import "WxPayOrder.h"
 
 @interface FSOrderSuccessViewController () {
-    WxPayOrder *wxPayOrder;
+    WxpayOrder *wxPayOrder;
 }
 
 @end
@@ -120,10 +120,15 @@
         [del toAlipayWithOrder:self.data.orderno name:_prod?_prod.productname:_data.orderno desc:_prod?_prod.productdesc:_data.orderno amount:self.data.totalamount];
     }
     else if([WEIXIN_PAY_CODE isEqualToString:self.payWay.code]) {   //微信支付
-        wxPayOrder = [[WxPayOrder alloc] init];
-        wxPayOrder.productid = self.data.orderno;
-        [wxPayOrder payOrder];
+        [WxpayOrder sendPay:self.data.orderno];
     }
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+    [_dic setValue:_data.orderno forKey:@"订单号"];
+    [_dic setValue:_data.paymentname forKey:@"支付方式"];
+    [_dic setValue:@"订单成功页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:ORDER_PAY withParameters:_dic];
 }
 
 #pragma mark - UITableViewDataSource

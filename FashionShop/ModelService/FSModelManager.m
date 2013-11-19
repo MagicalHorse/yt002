@@ -213,16 +213,16 @@ static FSModelManager *_modelManager;
 
 -(void) initConfig
 {
-    if (IOS7) {
-        [self forceReloadTags];
-        //[self forceReloadAllBrands];
-        [self forceReloadStores];
-        [self forceREloadEnviromentMessage];
-        return;
-    }
+//    if (IOS7) {
+//        [self forceReloadTags];
+//        //[self forceReloadAllBrands];
+//        [self forceReloadStores];
+//        [self forceREloadEnviromentMessage];
+//        return;
+//    }
     //延迟加载
     [self performSelector:@selector(forceReloadTags) withObject:nil afterDelay:1];
-    [self performSelector:@selector(forceReloadAllBrands) withObject:nil afterDelay:3];
+    //[self performSelector:@selector(forceReloadAllBrands) withObject:nil afterDelay:3];
     [self performSelector:@selector(forceReloadStores) withObject:nil afterDelay:5];
     [self performSelector:@selector(forceREloadEnviromentMessage) withObject:nil afterDelay:6];
 }

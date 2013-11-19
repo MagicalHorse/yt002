@@ -29,11 +29,7 @@
 
 @interface FSProdListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider,UISearchBarDelegate, UISearchDisplayDelegate,UITableViewDataSource, UITableViewDelegate,MySegmentValueChangedDelegate,UITextFieldDelegate>
 
-@property (strong, nonatomic) IBOutlet PSUICollectionView *cvTags;
-@property (strong, nonatomic) IBOutlet UIView *tagContainer;
-@property (strong, nonatomic) IBOutlet UIView *contentContainer;
-@property (strong, nonatomic) IBOutlet UILabel *lblTitle;
-
+@property (strong, nonatomic) PSUICollectionView *cvTags;
 @property (strong, nonatomic) PSUICollectionView *cvContent;
 
 @end

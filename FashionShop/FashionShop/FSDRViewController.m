@@ -176,6 +176,9 @@
     
     CGRect rect = _itemsContainer.frame;
     rect.size.height = APP_HIGH - TAB_HIGH - _segHeader.frame.origin.y - _segHeader.frame.size.height;
+//    if (IOS7) {
+//        rect.size.height += NAV_HIGH;
+//    }
     _itemsContainer.frame = rect;
     _itemsView = [[PSUICollectionView alloc] initWithFrame:_itemsContainer.bounds collectionViewLayout:layout];
     _itemsView.backgroundColor = [UIColor whiteColor];
@@ -296,8 +299,6 @@
 {
     if(!_items)
         _items = [@[] mutableCopy];
-    if (!prods)
-        return;
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_items indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1)
          {
@@ -338,8 +339,8 @@
 {
     if(!_items)
         _items = [@[] mutableCopy];
-    if (!prods)
-        return;
+//    if (!prods)
+//        return;
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_items indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1)
          {
@@ -368,7 +369,13 @@
     if (!_items || _items.count<1)
     {
         //加载空视图
-        [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:IOS7?0:30];
+//        if (IOS7) {
+//            [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:0];
+//        }
+//        else
+        {
+            [self showNoResultImage:_itemsView withImage:@"blank_bag.png" withText:NSLocalizedString(@"TipInfo_DR_Liked_List", nil)  originOffset:30];
+        }
     }
     else
     {
@@ -641,6 +648,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
+    
     [self loadImagesForOnscreenRows];
     if (!_noMoreResult &&
         !_isInLoadingMore &&

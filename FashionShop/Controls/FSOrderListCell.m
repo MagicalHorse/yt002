@@ -32,9 +32,12 @@
 {
     _data = data;
     
-    FSResource *defaultRes = _data.resource;
-    [_imgPro setImageWithURL:defaultRes.absoluteUrl120];
-    _imgPro.contentMode = UIViewContentModeScaleAspectFit;
+    if (_data.products.count > 0) {
+        FSOrderProduct *_p = _data.products[0];
+        FSResource *defaultRes = _p.resource;
+        [_imgPro setImageWithURL:defaultRes.absoluteUrl120 placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+        _imgPro.contentMode = UIViewContentModeScaleAspectFit;
+    }
     
     _priceLb.text = [NSString stringWithFormat:@"￥%.2f", _data.totalamount];
     _priceLb.backgroundColor = [UIColor clearColor];
@@ -69,7 +72,7 @@
     [self initComponent:@"联系电话" value:_data.shippingcontactphone component:_telephone];
 }
 
--(void)initComponent:(NSString*)title value:(NSString*)aValue component:(RTLabel*)label
+-(void)initComponent:(NSString*)title value:(NSString*)aValue component:(UILabel*)label
 {
     if (!aValue) {
         label.hidden = YES;
@@ -77,13 +80,14 @@
     }
     label.hidden = NO;
     int yCap = 10;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>%@ : </font><font face='%@' size=14 color='#181818'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
+    NSString *str = [NSString stringWithFormat:@"%@: %@", title, aValue];
     [label setText:str];
     CGRect _rect = label.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = label.optimumSize.height;
+    _rect.size.height = 200;
     label.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [label sizeToFit];
+    _cellHeight += label.frame.size.height + yCap;
 }
 
 @end
@@ -125,7 +129,7 @@
     }
 }
 
--(void)initComponent:(NSString*)title value:(NSString*)aValue component:(RTLabel*)label
+-(void)initComponent:(NSString*)title value:(NSString*)aValue component:(UILabel*)label
 {
     if (!aValue) {
         label.hidden = YES;
@@ -133,13 +137,14 @@
     }
     label.hidden = NO;
     int yCap = 10;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>%@ : </font><font face='%@' size=14 color='#181818'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
+    NSString *str = [NSString stringWithFormat:@"%@: %@", title, aValue];
     [label setText:str];
     CGRect _rect = label.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = label.optimumSize.height;
+    _rect.size.height = 200;
     label.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [label sizeToFit];
+    _cellHeight += label.frame.size.height + yCap;
 }
 
 @end
@@ -168,9 +173,9 @@
     CGRect _rect = self.bounds;
     _rect.size.height = _cellHeight;
     _rect.size.width = 300;
-    if (IOS7) {
-        _rect.size.width = 320;
-    }
+//    if (IOS7) {
+//        _rect.size.width = 320;
+//    }
     _bgImage.frame = _rect;
 }
 
@@ -187,9 +192,9 @@
     first.text = aContent;
     CGRect _rect = first.frame;
     _rect.origin.y = _cellHeight;
-    if (IOS7) {
-        _rect.origin.x = 160;
-    }
+//    if (IOS7) {
+//        _rect.origin.x = 160;
+//    }
     first.frame = _rect;
     
     _rect = sec.frame;
@@ -306,7 +311,7 @@
     [self initComponent:@"退货联系地址" value:data.mailAddress component:mailAddress];
 }
 
--(void)initComponent:(NSString*)title value:(id)aValue component:(RTLabel*)label
+-(void)initComponent:(NSString*)title value:(id)aValue component:(UILabel*)label
 {
     if (!aValue) {
         label.hidden = YES;
@@ -314,16 +319,17 @@
     }
     label.hidden = NO;
     int yCap = 10;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>%@ : </font><font face='%@' size=14 color='#181818'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
+    NSString *str = [NSString stringWithFormat:@"%@: %@", title, aValue];
     [label setText:str];
     CGRect _rect = label.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = label.optimumSize.height;
+    _rect.size.height = 200;
     label.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [label sizeToFit];
+    _cellHeight += label.frame.size.height + yCap;
 }
 
--(void)initComponentOfAddress:(NSString*)title value:(id)aValue component:(RTLabel*)label
+-(void)initComponentOfAddress:(NSString*)title value:(id)aValue component:(UILabel*)label
 {
     if (!aValue) {
         label.hidden = YES;
@@ -331,13 +337,15 @@
     }
     label.hidden = NO;
     int yCap = 10;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#ff0000'>%@ : </font><font face='%@' size=14 color='#ff0000'>%@</font>", Font_Name_Bold, title, Font_Name_Normal, aValue];
+    NSString *str = [NSString stringWithFormat:@"%@: %@", title, aValue];
     [label setText:str];
+    label.font = [UIFont boldSystemFontOfSize:14];
     CGRect _rect = label.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = label.optimumSize.height;
+    _rect.size.height = 200;
     label.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [label sizeToFit];
+    _cellHeight += label.frame.size.height + yCap;
 }
 
 @end

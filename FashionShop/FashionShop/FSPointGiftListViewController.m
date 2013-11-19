@@ -226,7 +226,13 @@
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
     if (tmpPros.count < 1) {
-        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:IOS7?20:100];
+        if (IOS7) {
+            [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:20];
+        }
+        else
+        {
+            [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_None_Gift", nil)  originOffset:100];
+        }
     }
     else{
         [self hideNoResultImage:_contentView];
@@ -307,6 +313,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
+    
     BOOL _noMore = [[_noMoreList objectAtIndex:_currentSelIndex] boolValue];
     if(!_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 150 > scrollView.contentSize.height

@@ -54,6 +54,12 @@
     _tbAction.backgroundView = nil;
     _tbAction.backgroundColor = APP_TABLE_BG_COLOR;
     _tbAction.hidden = YES;
+    if(IOS7 && _pController) {
+        CGRect _rect = _tbAction.frame;
+        _rect.origin.y += NAV_HIGH;
+        _rect.size.height -= NAV_HIGH;
+        _tbAction.frame = _rect;
+    }
     
     if (!_picImage) {
         _picImage = [[UIImageView alloc] init];
@@ -167,6 +173,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    [super scrollViewDidScroll:scrollView];
+    
     if (!_noMoreResult &&
         !_isInLoading &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height
@@ -231,6 +239,9 @@
     dr.keyWords = _store.name;
     dr.pageType = FSPageTypeStore;
     dr.titleName = dr.keyWords;
+    if (_pController) {
+        dr.pViewController = self;
+    }
     [self.navigationController pushViewController:dr animated:YES];
     
     //统计

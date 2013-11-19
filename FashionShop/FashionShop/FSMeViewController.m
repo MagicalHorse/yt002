@@ -36,7 +36,6 @@
 #import "FSLocationManager.h"
 #import "UIImageView+WebCache.h"
 #import "TCWBEngine.h"
-#import "FSConfiguration.h"
 #import <PassKit/PassKit.h>
 #import <MobileCoreServices/UTCoreTypes.h>
 
@@ -240,19 +239,19 @@
     
     NSArray *views =[[NSBundle mainBundle] loadNibNamed:@"FSLoginView" owner:self options:nil];
     _loginView = [views objectAtIndex:0];
-    if (IOS7 && ![UIDevice isRunningOniPhone5]) {
-        CGRect rect = _loginView.frame;
-        rect.origin.y -= NAV_HIGH;
-        _loginView.frame = rect;
-    }
+//    if (IOS7 && ![UIDevice isRunningOniPhone5]) {
+//        CGRect rect = _loginView.frame;
+//        rect.origin.y -= NAV_HIGH;
+//        _loginView.frame = rect;
+//    }
     views = [[NSBundle mainBundle] loadNibNamed:@"FSUserProfileView" owner:self options:nil];
 
     _userProfileView = [views objectAtIndex:0];
-    if (IOS7) {
-        CGRect rect = _userProfileView.frame;
-        rect.origin.y -= NAV_HIGH;
-        _userProfileView.frame = rect;
-    }
+//    if (IOS7) {
+//        CGRect rect = _userProfileView.frame;
+//        rect.origin.y -= NAV_HIGH;
+//        _userProfileView.frame = rect;
+//    }
     _isFirstLoad = true;
     [self switchView];
 }
@@ -295,7 +294,7 @@
     if (!_toDetail) {
         [self.navigationController.navigationBar setBackgroundImage: [UIImage imageNamed: @"top_title_bg"] forBarMetrics: UIBarMetricsDefault];
         self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-        if(!IOS7)
+        //if(!IOS7)
             self.navigationController.navigationBar.translucent = NO;
         self.navigationController.navigationBar.tintColor = [UIColor blackColor];
         self.navigationController.navigationBar.backgroundColor = [UIColor blackColor];
@@ -355,9 +354,10 @@
     if (index ==NSNotFound)
         return;
     [_likePros removeObjectAtIndex:index];
-    if (!IOS7) {
-        [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
-    }
+//    if (!IOS7) {
+//        [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+//    }
+    [_likeView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
     [_likeView reloadData];
 }
 
@@ -825,12 +825,15 @@
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
+                //[_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
             }
         }];
         if ((isInsert && !IOS7) || IOS7){
             [_likeView reloadData];
             [self resetScrollViewSize];
         }
+//        [_likeView reloadData];
+//        [self resetScrollViewSize];
         
         if (_likePros.count<1)
         {
@@ -870,12 +873,15 @@
                 {
                     [_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
                 }
+                //[_likeView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_likePros.count-1 inSection:0]]];
             }
         }];
         if ((isInsert && !IOS7) || IOS7) {
             [_likeView reloadData];
             [self resetScrollViewSize];
         }
+//        [_likeView reloadData];
+//        [self resetScrollViewSize];
         
         if (_likePros.count<1)
         {
@@ -1201,9 +1207,10 @@
                 {
                     FSProdItemEntity *item = [(FSFavorProCell *)cell data];
                     [_likePros removeObject:item];
-                    if (!IOS7) {
-                        [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
-                    }
+//                    if (!IOS7) {
+//                        [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
+//                    }
+                    [_likeView deleteItemsAtIndexPaths:@[[_likeView indexPathForCell:cell]]];
                     [_likeView reloadData];
                     if (_likePros.count<1)
                     {

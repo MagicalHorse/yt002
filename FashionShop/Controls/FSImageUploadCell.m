@@ -136,9 +136,9 @@
     if (indexPath)
     {
         [_images removeObjectAtIndex:indexPath.row];
-        if (!IOS7) {
-            [imageContent deleteItemsAtIndexPaths:@[indexPath]];
-        }
+//        if (!IOS7) {
+//            [imageContent deleteItemsAtIndexPaths:@[indexPath]];
+//        }
         [imageContent reloadData];
         if (sizeIndex == indexPath.row) {
             sizeIndex = -1;

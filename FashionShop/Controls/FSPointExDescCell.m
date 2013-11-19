@@ -18,13 +18,14 @@
     _cellHeight = yCap;
     
     //title
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=16 color='#181818'>活动描述</font>", Font_Name_Bold];
+    NSString *str = @"活动描述";
     [_titleView setText:str];
     CGRect _rect = _titleView.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _titleView.optimumSize.height;
+    _rect.size.height = 99;
     _titleView.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_titleView sizeToFit];
+    _cellHeight += _titleView.frame.size.height + yCap;
     
     //line1
     _rect = _line1.frame;
@@ -36,24 +37,26 @@
     //活动时间
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yy年MM月dd日"];
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>活动时间 : %@ 至 %@</font>", Font_Name_Normal, [df stringFromDate:_data.activeStartDate], [df stringFromDate:_data.activeEndDate]];
+    str = [NSString stringWithFormat:@"活动时间 : %@ 至 %@", [df stringFromDate:_data.activeStartDate], [df stringFromDate:_data.activeEndDate]];
     [_activityTime setText:str];
     _activityTime.textColor = [UIColor colorWithHexString:@"#666666"];
     _rect = _activityTime.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _activityTime.optimumSize.height;
+    _rect.size.height = 100;
     _activityTime.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_activityTime sizeToFit];
+    _cellHeight += _activityTime.frame.size.height + yCap;
     
     //使用有效期
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>使用有效期 : %@止</font>", Font_Name_Normal, [df stringFromDate:_data.couponEndDate]];
+    str = [NSString stringWithFormat:@"使用有效期 : %@止", [df stringFromDate:_data.couponEndDate]];
     [_useTime setText:str];
     _useTime.textColor = [UIColor colorWithHexString:@"#666666"];
     _rect = _useTime.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _useTime.optimumSize.height;
+    _rect.size.height = 100;
     _useTime.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_useTime sizeToFit];
+    _cellHeight += _useTime.frame.size.height + yCap;
     
     //参与门店title
     _rect = _joinStoreTitle.frame;
@@ -71,15 +74,16 @@
             [storeDesc appendFormat:@"%@", com.storename];
         }
     }
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal, storeDesc];
+    str = [NSString stringWithFormat:@"%@", storeDesc];
     [_joinStore setText:str];
     _rect = _joinStore.frame;
     _rect.origin.y = _cellHeight + 4;
     _rect.origin.x = 90;
     _rect.size.width = 210;
-    _rect.size.height = _joinStore.optimumSize.height;
+    _rect.size.height = 100;
     _joinStore.frame = _rect;
-    _cellHeight += _rect.size.height + yCap + 3;
+    [_joinStore sizeToFit];
+    _cellHeight += _joinStore.frame.size.height + yCap + 3;
     
     //礼券使用范围
     str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>礼券使用范围  </font><font face='%@' size=13 color='0090ff'><a href=''>点击查看</a></font>", Font_Name_Normal, Font_Name_Normal];
@@ -162,26 +166,28 @@
         if (!array) {
             [self initArray];
         }
-        PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
-        if (!IOS7) {
+        if (!_additionalView.collectionViewLayout) {
+            PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
             _additionalView.collectionViewLayout = layout;
+//            [_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
+            [_additionalView registerClass:[FSScopeCell class] forCellWithReuseIdentifier:@"FSScopeCell"];
         }
+        
         _additionalView.hidden = NO;
         _additionalView.frame = CGRectMake(10, _cellHeight, 300, (_changeDaga.rules.count+1)*30);
         _additionalView.backgroundColor = [UIColor clearColor];
-        //[_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
-        [_additionalView registerClass:[FSScopeCell class] forCellWithReuseIdentifier:@"FSScopeCell"];
         _additionalView.showsHorizontalScrollIndicator = NO;
         _additionalView.showsVerticalScrollIndicator = NO;
         _additionalView.scrollEnabled = NO;
         _additionalView.delegate = self;
         _additionalView.dataSource = self;
         _cellHeight += _additionalView.frame.size.height + 8;
+        
+        [_additionalView reloadData];
     }
     else{
         _additionalView.hidden = YES;
     }
-    [_additionalView reloadData];
 }
 
 -(void)initArray
@@ -198,7 +204,7 @@
     }
 }
 
-#pragma mark - PSUICollectionView Datasource
+#pragma mark - PSUICollectionView Datasource && PSUICollectionViewDelegate
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section
 {
@@ -214,8 +220,6 @@
     [(FSScopeCell *)cell setContent:array[indexPath.row]];
     return cell;
 }
-
-#pragma mark - PSUICollectionViewDelegate
 
 -(CGSize)collectionView:(PSTCollectionView *)collectionView layout:(PSTCollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {

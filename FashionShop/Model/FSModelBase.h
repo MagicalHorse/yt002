@@ -22,7 +22,7 @@
 
 @protocol FSManagedModelMappable <FSModelMappable>
 
-+ (RKObjectMapping *) getRelationDataMap:(Class)class withParentMap:(RKObjectMapping *)parentMap;
++ (RKObjectMapping *) getRelationDataMap:(Class)aClass withParentMap:(RKObjectMapping *)parentMap;
 
 @end
 

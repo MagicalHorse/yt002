@@ -92,6 +92,9 @@
 
 -(void) send:(Class)responseClass withRequest:(FSEntityRequestBase *)request completeCallBack:(FSRequestLoadComplete)completeCallback
 {
+    if (!completeCallback) {
+        return;
+    }
     RKObjectManager *innerManager = [FSModelManager sharedManager];
    
     FSEntityBase *entityObject = [[FSEntityBase alloc] init];

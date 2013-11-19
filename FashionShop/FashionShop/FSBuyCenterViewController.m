@@ -91,7 +91,7 @@
 {
     FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
     request.routeResourcePath = RK_REQUEST_PROD_BUY_INFO;
-    _productID = 487927;//487924;//977;
+    //_productID = 487927;//487924;//977;
     request.id = [NSNumber numberWithInt:_productID];
     request.uToken = [[FSModelManager sharedModelManager] loginToken];
     if (!_amountLoading) {
@@ -435,7 +435,7 @@
             index = 2;
         }
         if (indexPath.row == index) {
-            cell.textLabel.text = @"退换货政策";
+            cell.textLabel.text = @"退货政策";
         }
         return cell;
     }
@@ -676,10 +676,11 @@
 {
     [NSString logControl:_tbAction];
     FSPurchaseCommonCell *cell;
-    if (!IOS7) {
-        cell = (FSPurchaseCommonCell*)textField.superview.superview;
-    }
-    else {
+//    if (!IOS7) {
+//        cell = (FSPurchaseCommonCell*)textField.superview.superview;
+//    }
+//    else
+    {
         cell = (FSPurchaseCommonCell*)textField.superview.superview.superview;
     }
     NSIndexPath *path = [_tbAction indexPathForCell:cell];

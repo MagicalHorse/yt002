@@ -199,7 +199,7 @@
     // with the appropriate MIME Type with no content (such as for a successful PUT or DELETE). Make sure we don't generate an error
     // in these cases
     id bodyAsString = [self.response bodyAsString];
-    //RKLogTrace(@"bodyAsString: %@", bodyAsString);
+    RKLogTrace(@"bodyAsString: %@", bodyAsString);
     if (bodyAsString == nil || [[bodyAsString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0) {
         RKLogDebug(@"Mapping attempted on empty response body...");
         if (self.targetObject) {

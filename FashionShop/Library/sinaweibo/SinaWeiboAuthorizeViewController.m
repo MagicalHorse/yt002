@@ -47,7 +47,8 @@
     //NSString *strCancel = NSLocalizedString(@"SINA_WB_BACK", nil);
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonCancel)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
-    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, APP_HIGH + (IOS7?20:-NAV_HIGH))];
+    //webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, APP_HIGH + (IOS7?20:-NAV_HIGH))];
+    webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, APP_WIDTH, APP_HIGH -NAV_HIGH)];
     [self.view addSubview:webView];
     
     indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];

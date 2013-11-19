@@ -214,13 +214,12 @@
     clayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
     clayout.delegate = self;
     
-    CGRect _con = _contentView.frame;
+    CGRect _con = CGRectMake(0, 0, APP_WIDTH, APP_WIDTH);
     double tabHeight = [self.navigationController tabBarController]?TAB_HIGH:0;
     double statusBarHeight = [UIApplication sharedApplication].statusBarHidden?0:20;
     _con.size.height = SCREEN_HIGH - NAV_HIGH - tabHeight - statusBarHeight;
-    _contentView.frame = _con;
-    _productContent = [[PSUICollectionView alloc] initWithFrame:_contentView.bounds collectionViewLayout:clayout];
-    [_contentView addSubview:_productContent];
+    _productContent = [[PSUICollectionView alloc] initWithFrame:_con collectionViewLayout:clayout];
+    [self.view addSubview:_productContent];
     
     _productContent.backgroundColor = [UIColor whiteColor];
     [_productContent registerClass:[FSProdDetailCell class] forCellWithReuseIdentifier:PROD_LIST_DETAIL_CELL];
@@ -233,6 +232,12 @@
     
     _productContent.delegate = self;
     _productContent.dataSource = self;
+    
+    if(IOS7 && _pViewController) {
+        CGRect _rect = _productContent.frame;
+        _rect.origin.y += NAV_HIGH;
+        _productContent.frame = _rect;
+    }
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
@@ -267,12 +272,14 @@
                 if (!IOS7) {
                     [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
                 }
+                //[_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:_prods.count-1 inSection:0]]];
             } else
             {
                 [_prods insertObject:obj atIndex:0];
                 if (!IOS7) {
                     [_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
                 }
+                //[_productContent insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
             }
         }
     }];
@@ -422,6 +429,7 @@
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     [super scrollViewDidScroll:scrollView];
+    
     [self loadImagesForOnscreenRows];
     if (!_noMoreResult && !_isLoading &&
         (scrollView.contentOffset.y+scrollView.frame.size.height) + 200 > scrollView.contentSize.height

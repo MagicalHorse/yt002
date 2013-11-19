@@ -96,4 +96,6 @@
 #define ORDER_RMA               @"申请退货"
 #define ORDER_RMA_CONFIRM       @"确认退货"
 
+#define ORDER_PAY               @"订单支付"
+
 #endif

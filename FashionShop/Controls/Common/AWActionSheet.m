@@ -196,7 +196,8 @@
         if (IOS7) {
             self.titleLabel.textColor = [UIColor blackColor];
         }
-        else {
+        else
+        {
             self.titleLabel.textColor = [UIColor whiteColor];
         }
         self.titleLabel.backgroundColor = [UIColor clearColor];

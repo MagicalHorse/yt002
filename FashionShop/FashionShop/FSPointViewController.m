@@ -55,6 +55,10 @@
     [self preparePresent];
 }
 
+-(void)viewDidUnload {
+    
+}
+
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -441,7 +445,8 @@
 
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [super scrollViewDidScroll:scrollView];
+//    [super scrollViewDidScroll:scrollView];
+    
     if(!_noMore
        && !_inLoading
        && (scrollView.contentOffset.y+scrollView.frame.size.height) + 100 > scrollView.contentSize.height

@@ -37,8 +37,28 @@
     _data = data;
     
     [_titleView setText:_data.name];
-    
-    [_desc setText:_data.desc];
+    //search store name
+    NSMutableString *stores = [NSMutableString string];
+    for (int i = 0; i < _data.inscopenotices.count; i++) {
+        FSCommon *item = _data.inscopenotices[i];
+        if (i != _data.inscopenotices.count - 1) {
+            [stores appendFormat:@"%@\n", item.storename];
+        }
+        else {
+            [stores appendFormat:@"%@", item.storename];
+        }
+    }
+    int height = [stores sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake(201, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
+    if (height < 24) {
+        height = 24;
+    }
+    if (height > 30) {
+        height = 40;
+    }
+    CGRect _rect = _desc.frame;
+    _rect.size.height = height;
+    _desc.frame = _rect;
+    [_desc setText:stores];
     _desc.textColor = RGBCOLOR(102, 102, 102);
     
     NSDateFormatter *df = [[NSDateFormatter alloc] init];

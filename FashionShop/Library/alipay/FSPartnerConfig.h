@@ -22,7 +22,7 @@
 
 #define AlipayProductCode @"xhytalipay"
 
-#define AlipayNotifyURL @"http://apis.youhuiin.com/api/payment/notify"
+#define AlipayNotifyURL @"http://apis.youhuiin.com/api/payment/notify2"
 
 //安全校验码（MD5）密钥  用签约支付宝账号登录www.alipay.com后，在商家服务页面中获取。
 #define MD5_KEY @"n4q74v8r3bnhzsbthx0yf3g1ama9mntm"

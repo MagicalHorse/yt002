@@ -101,27 +101,45 @@
     _rect.origin.y = yOffset + _imgThumb.frame.size.height - 17;
     _lblNickie.frame = _rect;
     
-    NSMutableString *str = [NSMutableString stringWithString:@""];
-    BOOL flagUnitPrice = _data.unitPrice && [_data.unitPrice floatValue]>0;
-    BOOL flagPrice = _data.price && [_data.price floatValue]>0;
-    if (flagPrice) {
-        [str appendFormat:@"<font face='%@' size=18 color='#e5004f'>￥%.2f</font>",Font_Name_Bold, [_data.price floatValue]];
-    }
-    if (flagUnitPrice) {
-        [str appendFormat:@"<font face='%@' size=10 color='#666666'>   ￥%.2f</font>",Font_Name_Normal, [_data.unitPrice floatValue]];
-    }
-    if ([NSString isNilOrEmpty:str]) {
-        _price.hidden = YES;
-    }
-    else{
-        _price.hidden = NO;
-        [_price setText:str];
-        _rect = _price.frame;
-        _rect.size.height = _price.optimumSize.height;
-        _rect.origin.y = yOffset + 28 - _rect.size.height/2;
-        _price.frame = _rect;
-        [_price setTextAlignment:kCTCenterTextAlignment];
-    }
+    
+     NSMutableString *str = [NSMutableString stringWithString:@""];
+     BOOL flagUnitPrice = _data.unitPrice && [_data.unitPrice floatValue]>0;
+     BOOL flagPrice = _data.price && [_data.price floatValue]>0;
+     if (flagPrice) {
+         str = [NSString stringWithFormat:@"￥%.2f", [_data.price floatValue]];
+         
+         [_price1 setTextAlignment:NSTextAlignmentLeft];
+         [_price1 setText:str];
+         _rect = _price1.frame;
+         _rect.origin.x = _imgThumb.frame.origin.x + _imgThumb.frame.size.width + 8;
+         _rect.origin.y = yOffset + 26 - _rect.size.height/2;
+         _price1.frame = _rect;
+         [_price1 sizeToFit];
+     }
+     if (flagUnitPrice) {
+         str = [NSString stringWithFormat:@"￥%.2f", [_data.unitPrice floatValue]];
+     
+         [_priceOriginal setText:str];
+         _rect = _priceOriginal.frame;
+         if (flagPrice) {
+             _rect.origin.x = _price1.frame.origin.x + _price1.frame.size.width + 8;
+         }
+         else {
+             _rect.origin.x = _imgThumb.frame.origin.x + _imgThumb.frame.size.width + 15;
+         }
+         _rect.origin.y = yOffset + 26 - _rect.size.height/2 + 5;
+         _priceOriginal.frame = _rect;
+         [_priceOriginal sizeToFit];
+     }
+     if ([NSString isNilOrEmpty:str]) {
+         _price1.hidden = YES;
+         _priceOriginal.hidden = YES;
+     }
+     else{
+         _price1.hidden = NO;
+         _priceOriginal.hidden = NO;
+     }
+    
     
     //_btnBrand
     [_btnBrand setTitleColor:[UIColor colorWithRed:51 green:51 blue:51] forState:UIControlStateNormal];
@@ -238,55 +256,43 @@
     yOffset += _lblDescrip.frame.size.height + 15;
     
     //_btnStore
-    _rect = _btnStore.frame;
-    _rect.origin.y = yOffset;
-    _rect.size.width = 290;
-    _btnStore.frame = _rect;
-    [self bringSubviewToFront:_btnStore];
-    
     NSString *distanceString = [NSString stringMetersFromDouble:_data.store.distance];
     if (distanceString.length > 0)
     {
-        distanceString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>%@ \(%@)</u></font>",Font_Name_Normal, _data.store.name,distanceString];
+        distanceString = [NSString stringWithFormat:@" %@ \(%@)", _data.store.name,distanceString];
     }
     else
     {
-        distanceString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>%@</u></font>",Font_Name_Normal, _data.store.name];
+        distanceString = [NSString stringWithFormat:@" %@", _data.store.name];
     }
-    [_lbStore setText:distanceString];
-    _lbStore.textColor = [UIColor colorWithHexString:@"#e5004f"];
-    _rect = _lbStore.frame;
+    [_btnStore setTitle:distanceString forState:UIControlStateNormal];
+    [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
+    [_btnStore setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
+    CGSize storesize =[_btnStore sizeThatFits:_btnStore.frame.size];
+    _rect = _btnStore.frame;
     _rect.origin.y = yOffset;
-    _rect.origin.x = _btnStore.frame.origin.x + 20;
-    _rect.size.width = 270;
-    _rect.size.height = _lbStore.optimumSize.height;
-    _lbStore.frame = _rect;
-    yOffset += _lbStore.frame.size.height + 15;
+    _rect.size.width = storesize.width;
+    _rect.size.height = storesize.height;
+    _btnStore.frame = _rect;
+    yOffset += _btnStore.frame.size.height + 10;
     
     //_btnToDail
-    _rect = _btnToDail.frame;
-    _rect.origin.y = yOffset;
-    _rect.size.width = 290;
-    _btnToDail.frame = _rect;
-    [self bringSubviewToFront:_btnToDail];
-    
     if (![NSString isNilOrEmpty:_data.contactPhone]) {
         _btnToDail.hidden = NO;
-        _lbToDail.hidden = NO;
-        NSString *phoneString = [NSString stringWithFormat:@"<font face='%@' size=14 color='#e5004f'><u>专柜电话 : %@</u></font>", Font_Name_Normal, _data.contactPhone];
-        [_lbToDail setText:phoneString];
-        _lbToDail.textColor = [UIColor colorWithHexString:@"#e5004f"];
-        _rect = _lbToDail.frame;
+        NSString *phoneString = [NSString stringWithFormat:@" 专柜电话 : %@", _data.contactPhone];
+        [_btnToDail setTitle:phoneString forState:UIControlStateNormal];
+        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateNormal];
+        [_btnToDail setTitleColor:[UIColor colorWithHexString:@"#e5004f"] forState:UIControlStateHighlighted];
+        CGSize storesize =[_btnToDail sizeThatFits:_btnToDail.frame.size];
+        _rect = _btnToDail.frame;
         _rect.origin.y = yOffset;
-        _rect.origin.x = _btnToDail.frame.origin.x + 20;
-        _rect.size.width = 270;
-        _rect.size.height = _lbToDail.optimumSize.height;
-        _lbToDail.frame = _rect;
-        yOffset += _lbToDail.frame.size.height + 15;
+        _rect.size.width = storesize.width;
+        _rect.size.height = storesize.height;
+        _btnToDail.frame = _rect;
+        yOffset += _btnToDail.frame.size.height + 10;
     }
     else{
         _btnToDail.hidden = YES;
-        _lbToDail.hidden = YES;
     }
     
     _rect = _descAddView.frame;
@@ -390,12 +396,24 @@
 
 -(void)updateToolBar:(BOOL)flag
 {
-    UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
-    [_btnFavor setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
-    image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
-    [_btnComment setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
-    image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
-    [_btnCoupon setImage:IOS7?[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]:image];
+//    if (IOS7) {
+//        UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+//        [_btnFavor setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+//        [_btnComment setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//        image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+//        [_btnCoupon setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+//    }
+//    else
+    {
+        UIImage *image = [UIImage imageNamed:@"bottom_nav_like_icon.png"];
+        [_btnFavor setImage:image];
+        image = [UIImage imageNamed:@"bottom_nav_comment_icon.png"];
+        [_btnComment setImage:image];
+        image = [UIImage imageNamed:@"bottom_nav_promo-code_icon.png"];
+        [_btnCoupon setImage:image];
+    }
+    
     //更新优惠按钮
     if (!flag) {
         NSMutableArray *_array = [NSMutableArray arrayWithArray:self.myToolBar.items];

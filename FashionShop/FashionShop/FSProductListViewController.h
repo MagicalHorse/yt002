@@ -23,7 +23,6 @@ typedef enum {
 }FSPageType;
 
 @interface FSProductListViewController : FSRefreshableViewController<PSUICollectionViewDataSource,PSUICollectionViewDelegateFlowLayout,SpringboardLayoutDelegate,FSProDetailItemSourceProvider>
-@property (strong, nonatomic) IBOutlet UIView *contentView;
 @property (strong, nonatomic) FSBrand *brand;
 @property (strong, nonatomic) FSStore *store;
 @property (strong, nonatomic) FSTopic *topic;
@@ -32,5 +31,6 @@ typedef enum {
 @property (nonatomic) FSPageType pageType;
 @property (nonatomic, strong) NSString *keyWords;
 @property (nonatomic, assign) BOOL isModel;
+@property (strong, nonatomic) id pViewController;
 
 @end

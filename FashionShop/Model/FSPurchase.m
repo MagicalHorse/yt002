@@ -102,13 +102,15 @@
 @end
 
 @implementation FSPurchaseSPaymentItem
-@synthesize code,name;
+@synthesize code,name,supportmobile,supportpc;
 
 +(RKObjectMapping *)getRelationDataMap
 {
     RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
     [relationMapping mapKeyPath:@"code" toAttribute:@"code"];
     [relationMapping mapKeyPath:@"name" toAttribute:@"name"];
+    [relationMapping mapKeyPath:@"supportmobile" toAttribute:@"supportmobile"];
+    [relationMapping mapKeyPath:@"supportpc" toAttribute:@"supportpc"];
     
     return relationMapping;
 }

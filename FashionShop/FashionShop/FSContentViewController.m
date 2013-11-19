@@ -30,6 +30,12 @@
     [super viewDidLoad];
     [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:fileName]]];
     webView.backgroundColor = [UIColor clearColor];
+    if (IOS7) {
+        CGRect _rect = webView.frame;
+        _rect.origin.y = NAV_HIGH;
+        _rect.size.height = _rect.size.height - NAV_HIGH;
+        webView.frame = _rect;
+    }
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];

@@ -17,7 +17,7 @@
 @interface FSOrderDetailViewController ()
 {
     FSOrderInfo *orderInfo;
-    WxPayOrder *wxPayOrder;
+    WxpayOrder *wxPayOrder;
 }
 
 @end
@@ -84,6 +84,7 @@
             //创建表尾
             _tbAction.tableFooterView = [self createTableFooterView];
             _tbAction.contentOffset = CGPointMake(0, 0);
+            [_tbAction reloadData];
             [_tbAction reloadData];
         }
         else
@@ -182,10 +183,15 @@
         [del toAlipayWithOrder:orderInfo.orderno name:_prod?_prod.productname:orderInfo.orderno desc:_prod?_prod.productdesc:orderInfo.orderno amount:orderInfo.totalamount];
     }
     else if([WEIXIN_PAY_CODE isEqualToString:orderInfo.paymentcode]) { //微信支付
-        wxPayOrder = [[WxPayOrder alloc] init];
-        wxPayOrder.productid = orderInfo.orderno;
-        [wxPayOrder payOrder];
+        [WxpayOrder sendPay:orderInfo.orderno];
     }
+    
+    //统计
+    NSMutableDictionary *_dic = [NSMutableDictionary dictionaryWithCapacity:5];
+    [_dic setValue:orderInfo.orderno forKey:@"订单号"];
+    [_dic setValue:orderInfo.paymentname forKey:@"支付方式"];
+    [_dic setValue:@"订单详情页" forKey:@"来源页面"];
+    [[FSAnalysis instance] logEvent:ORDER_PAY withParameters:_dic];
 }
 
 -(void)requestRMA:(UIButton*)sender
@@ -268,6 +274,7 @@
                 cell = [[FSOrderInfoMessageCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:OrderInfo_Message_Cell_Indentifier];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell setNeedsDisplay];
         }
         [cell setData:orderInfo];
         

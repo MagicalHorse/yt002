@@ -128,7 +128,6 @@
 }
 
 - (void)viewDidUnload {
-    [self setTbAction:nil];
     [super viewDidUnload];
 }
 
@@ -680,15 +679,15 @@
 }
 
 #pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    if (scrollView == _tbAction) {
-        if (isNeedResignResponse && activityField) {
-            [activityField resignFirstResponder];
-            isNeedResignResponse = NO;
-        }
-    }
-}
+//
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    if (scrollView == _tbAction) {
+//        if (isNeedResignResponse && activityField) {
+//            [activityField resignFirstResponder];
+//            isNeedResignResponse = NO;
+//        }
+//    }
+//}
 
 @end

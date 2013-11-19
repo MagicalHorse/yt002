@@ -16,14 +16,14 @@
 #define REST_API_CLIENT_VERSION @"2.5.0"
 
 //正式库
-//#define REST_API_URL   @"http://itoo.yintai.com/api"
-//#define REST_API_URL_OUT @"http://api.youhuiin.com"
-//#define REST_API_APP_SECRET_KEY @"yintai123456"
+#define REST_API_URL   @"http://itoo.yintai.com/api"
+#define REST_API_URL_OUT @"http://api.youhuiin.com"
+#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库-内网
-    #define REST_API_URL   @"http://10.92.200.109/api"
-    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
+//    #define REST_API_URL   @"http://10.92.200.109/api"
+//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+//    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 ////预生产库
 //    #define REST_API_URL   @"http://apis.youhuiin.com/api"
@@ -69,12 +69,14 @@
 //支付方式代码
 #define DELIVERY_PAY_CODE @"1001" //货到付款
 #define ALI_PAY_CODE @"25"    //支付宝支付
-#define WEIXIN_PAY_CODE @"26" //微信支付
+#define WEIXIN_PAY_CODE @"27" //微信支付
+#define CAIFUTONG_PAY_CODE @"27" //财付通支付
 
 #define CollectionView_Default_Height 100.0f
 
 //判断系统是否是iOS7
 #define IOS7 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0 ? YES : NO)
+#define MinIOS6 ([[[UIDevice currentDevice] systemVersion] floatValue] < 6.0 ? YES : NO)
 
 #define NAV_HIGH        44
 #define TAB_HIGH        49

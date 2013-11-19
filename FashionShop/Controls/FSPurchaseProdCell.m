@@ -61,7 +61,7 @@
         _productName.textColor = [UIColor colorWithHexString:@"181818"];
         int height = [data.name sizeWithFont:font constrainedToSize:CGSizeMake(rect.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
         rect.origin.y = _cellHeight;
-        rect.size.height = height + 10;
+        rect.size.height = height;
         _productName.frame = rect;
         _cellHeight += rect.size.height;
         _productName.hidden = NO;
@@ -569,9 +569,9 @@
     _orderAmount.text = [NSString stringWithFormat:@"￥%.2f", data.totalamount];
     _orderAmount.hidden = NO;
     [_buyButton setTitle:@"在 线 支 付" forState:UIControlStateNormal];
-    if (IOS7) {
-        [_buyButton setCenter:CGPointMake(SCREEN_WIDTH/2, _buyButton.center.y)];
-    }
+//    if (IOS7) {
+//        [_buyButton setCenter:CGPointMake(SCREEN_WIDTH/2, _buyButton.center.y)];
+//    }
 }
 
 @end

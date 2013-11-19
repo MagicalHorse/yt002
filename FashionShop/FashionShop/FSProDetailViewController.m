@@ -158,8 +158,9 @@
 	if (!view) {
         if (source == FSSourcePromotion)
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProDetailView" owner:self options:nil] lastObject];
-        else
+        else {
             view = [[[NSBundle mainBundle] loadNibNamed:@"FSProdDetailView" owner:self options:nil] lastObject];
+        }
     }
     [view setPType:source];
     CGRect _rect = view.myToolBar.frame;
@@ -251,6 +252,10 @@
             if (resp.isSuccess)
             {
                 [blockViewForRefresh setData:resp.responseData];
+                if ([blockViewForRefresh respondsToSelector:@selector(imgThumb)])
+                {
+                    [(FSThumView *)[(id)blockViewForRefresh imgThumb] setDelegate:self];
+                }
                 [(FSProDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
                 NSString *navTitle = [blockViewForRefresh.data valueForKey:@"title"];
                 if (blockSelf->_sourceType==FSSourcePromotion)

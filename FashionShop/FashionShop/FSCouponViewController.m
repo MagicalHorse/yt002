@@ -230,7 +230,13 @@
 {
     NSMutableArray *tmpPros = [_dataSourceList objectAtIndex:_currentSelIndex];
     if (tmpPros.count < 1) {
-        [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:IOS7?20:100];
+//        if (IOS7) {
+//            [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:20];
+//        }
+//        else
+        {
+            [self showNoResultImage:_contentView withImage:@"blank_coupon.png" withText:NSLocalizedString(@"TipInfo_Coupon_List", nil)  originOffset:100];
+        }
     }
     else{
         [self hideNoResultImage:_contentView];

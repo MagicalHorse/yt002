@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RTLabel.h"
 #import "FSExchange.h"
 #import "FSCommon.h"
+#import "RTLabel.h"
 
 @interface FSPointExDescCell : UITableViewCell
 
-@property (strong, nonatomic) IBOutlet RTLabel *titleView;
-@property (strong, nonatomic) IBOutlet RTLabel *activityTime;
-@property (strong, nonatomic) IBOutlet RTLabel *useTime;
-@property (strong, nonatomic) IBOutlet RTLabel *joinStore;
+@property (strong, nonatomic) IBOutlet UILabel *titleView;
+@property (strong, nonatomic) IBOutlet UILabel *activityTime;
+@property (strong, nonatomic) IBOutlet UILabel *useTime;
+@property (strong, nonatomic) IBOutlet UILabel *joinStore;
 @property (strong, nonatomic) IBOutlet UILabel *joinStoreTitle;
 @property (strong, nonatomic) IBOutlet RTLabel *useScope;
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
@@ -42,7 +42,7 @@
 
 @end
 
-@interface FSPointExCommonCell : UITableViewCell<PSUICollectionViewDelegate, PSUICollectionViewDataSource>
+@interface FSPointExCommonCell : UITableViewCell<PSUICollectionViewDelegate, PSUICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UILabel *titleView;

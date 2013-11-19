@@ -239,9 +239,18 @@
 
 -(FSAddressRequest*)createRequest:(NSString *)routePath
 {
-    FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[firstRow];
-    FSAddressDB *addr2 = addr.items[secondRow];
+    FSAddressDB *addr = nil;
+    FSAddressDB *addr2 = nil;
     FSAddressDB *addr3 = [addr2.items objectAtIndex:thirdRow];
+    if (theApp.allAddress.count > firstRow) {
+        addr = (FSAddressDB*)theApp.allAddress[firstRow];
+        if (addr.items.count > secondRow) {
+            addr2 = addr.items[secondRow];
+            if (addr2.items.count > thirdRow) {
+                addr3 = [addr2.items objectAtIndex:thirdRow];
+            }
+        }
+    }
     
     FSAddressRequest *request = [[FSAddressRequest alloc] init];
     FSUser *currentUser = [FSUser localProfile];
@@ -256,7 +265,7 @@
     request.shippingcityid = addr2.cityID;
     request.shippingdistrict = addr3.district;
     request.shippingdistrictid = addr3.districtID;
-    request.shippingzipcde = addr3.zipCode;
+    request.shippingzipcde = _zipCode.text;//addr3.zipCode;
     request.id = _addressID;
     
     return request;
@@ -629,7 +638,9 @@
             if (theApp.allAddress.count > first) {
                 FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
                 int second = [_pickerView selectedRowInComponent:1];
-                row = [[addr.items[second] items] count];
+                if (second < addr.items.count) {
+                    row = [[addr.items[second] items] count];
+                }
             }
         }
 			break;
@@ -651,17 +662,28 @@
 		case 1:
         {
             int first = [_pickerView selectedRowInComponent:0];
-            FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
-			str = [addr.items[row] city];
+            if (theApp.allAddress.count > first) {
+                FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
+                if (addr.items.count > row) {
+                    str = [addr.items[row] city];
+                }
+            }
         }
 			break;
 		case 2:
         {
             int first = [_pickerView selectedRowInComponent:0];
-            FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
-            int second = [_pickerView selectedRowInComponent:1];
-			addr = [[addr.items[second] items] objectAtIndex:row];
-			str = addr.district;
+            if (theApp.allAddress.count > first) {
+                FSAddressDB *addr = (FSAddressDB*)theApp.allAddress[first];
+                int second = [_pickerView selectedRowInComponent:1];
+                if (addr.items.count > second) {
+                    FSAddressDB *addr2 = addr.items[second];
+                    if (addr2.items.count > row) {
+                        addr = [addr2.items objectAtIndex:row];
+                        str = addr.district;
+                    }
+                }
+            }
         }
 			break;
 		default:

@@ -19,7 +19,7 @@
 @property (nonatomic,strong) NSString *description;//商品描述
 @property (nonatomic) float price;//销售价
 @property (nonatomic) float originprice;//吊牌价
-@property (nonatomic,strong) NSString *rmapolicy;//退换货政策
+@property (nonatomic,strong) NSString *rmapolicy;//退货政策
 @property (nonatomic,strong) NSMutableArray *saleColors;//商品所有颜色，数组 //FSPurchaseSaleColorsItem
 @property (nonatomic,strong) NSMutableArray *supportpayments;//支持的支付方式数组
 @property (nonatomic,strong) NSMutableArray *invoicedetails;//支持的发票明细数组
@@ -70,6 +70,8 @@
 
 @property (nonatomic, strong) NSString *code;//支付方式编码
 @property (nonatomic, strong) NSString *name;//支付方式名
+@property (nonatomic) BOOL supportmobile;//是否支持mobile
+@property (nonatomic) BOOL supportpc;//是否支持pc
 
 @end
 
