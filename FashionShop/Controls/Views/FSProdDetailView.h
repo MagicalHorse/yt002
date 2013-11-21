@@ -50,5 +50,6 @@
 
 @property (strong, nonatomic) NSString *imageURL;
 @property (nonatomic,strong) FSAudioButton *audioButton;
+@property (nonatomic) BOOL isCanTalk;
 
 @end

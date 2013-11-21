@@ -225,6 +225,9 @@
     if (pHeight > 120) {
         pHeight = 120;
     }
+    if (pHeight < 55) {
+        pHeight = 55;
+    }
     if (pHeight <= 0 || isnan(pHeight)) {
         pHeight = _productImage.frame.size.width;
     }
@@ -232,7 +235,7 @@
     rect.size.height = pHeight;
     _productImage.frame = rect;
     
-    _cellHeight = ((pHeight+20) - 3*22)/2;
+    _cellHeight = ((pHeight+20) - 3*20)/2;
     
     rect = _productName.frame;
     UIFont *font = [UIFont systemFontOfSize:13];

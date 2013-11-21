@@ -43,6 +43,7 @@
 @synthesize promotionFlag;
 @synthesize isCouponed;
 @synthesize isFavored;
+@synthesize isCanTalk;
 
 /*
 @synthesize type;
@@ -96,6 +97,7 @@
     [relationMap mapKeyPath:@"promotionFlag" toAttribute:@"promotionFlag"];
     [relationMap mapKeyPath:@"isfavored" toAttribute:@"isFavored"];
     [relationMap mapKeyPath:@"ifcancoupon" toAttribute:@"isCouponed"];
+    [relationMap mapKeyPath:@"ifcantalk" toAttribute:@"isCanTalk"];
 //    [relationMap mapKeyPath:@"isfavorited" toAttribute:@"isFavored"];
 //    [relationMap mapKeyPath:@"isreceived" toAttribute:@"isCouponed"];
     

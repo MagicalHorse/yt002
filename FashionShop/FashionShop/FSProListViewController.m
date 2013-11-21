@@ -210,12 +210,15 @@
     
     [self setFilterType];
     [self initContentView];
+    if (IOS7) {
+        [self updateInitialFrame];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (_dataSourceBannerData.count > 0) {
+    if (_dataSourceBannerData.count > 0 && _storeSource && _storeSource.count > 0) {
         [self.navigationController setNavigationBarHidden:YES animated:NO];
     }
     [self performSelector:@selector(loadBannerData) withObject:nil afterDelay:1.2];
@@ -335,6 +338,18 @@
         rect.origin.y -= Banner_Height;
         self.segFilters.frame = rect;
     }
+}
+
+- (void)updateInitialFrame
+{
+    CGRect rect;
+    rect =  self.contentView.frame;
+    rect.origin.y += NAV_HIGH;
+    rect.size.height -= NAV_HIGH;
+    self.contentView.frame = rect;
+    rect =  self.segFilters.frame;
+    rect.origin.y += NAV_HIGH;
+    self.segFilters.frame = rect;
 }
 
 -(void) setFilterType
@@ -879,7 +894,8 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            //NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            NSString * str = [NSString stringWithFormat:@"%@\n至\n%@\n", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
             
             return listCell;
@@ -929,7 +945,9 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            //NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
+            
+            NSString * str = [NSString stringWithFormat:@"%@\n至\n%@\n", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             
             [listCell setTitle:proData.title desc:proData.descrip address:proData.store.name dateString:str];
             

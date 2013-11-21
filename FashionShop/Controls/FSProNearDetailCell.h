@@ -14,7 +14,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *lblTitle;
 @property (strong, nonatomic) IBOutlet UILabel *lblSubTitle;
-@property (strong, nonatomic) IBOutlet RTLabel *timeView;
+@property (strong, nonatomic) IBOutlet UILabel *timeView;
 @property (strong, nonatomic) IBOutlet UIImageView *line;
 @property (weak, nonatomic) IBOutlet UIImageView *line2;
 @property (nonatomic) int cellHeight;
@@ -29,7 +29,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *titleView;
 @property (strong, nonatomic) IBOutlet UILabel *descView;
 @property (strong, nonatomic) IBOutlet UILabel *address;
-@property (strong, nonatomic) IBOutlet RTLabel *timeView;
+@property (strong, nonatomic) IBOutlet UILabel *timeView;
 @property (strong, nonatomic) IBOutlet UIImageView *addressIcon;
 @property (strong, nonatomic) IBOutlet UIImageView *line;
 @property (strong, nonatomic) IBOutlet UIImageView *line2;

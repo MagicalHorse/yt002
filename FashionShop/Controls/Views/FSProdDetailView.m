@@ -176,8 +176,6 @@
     
     yOffset = 0;
     //在线咨询按钮和在线订购
-    
-    
     _btnBuy.hidden = YES;
     BOOL isMyself = [_data.fromUser.uid intValue] == [[FSUser localProfile].uid intValue];
     
@@ -215,14 +213,26 @@
         else{
             _btnBuy.hidden = NO;
             _rect = _btnBuy.frame;
-            _rect.origin.x = _x + 20 + _btnContact.frame.size.width;
+            if (_isCanTalk) {
+                _rect.origin.x = _x + 20 + _btnContact.frame.size.width;
+            }
+            else {
+                _rect.origin.x = (SCREEN_WIDTH - _btnBuy.frame.size.width)/2;
+            }
             _btnBuy.frame = _rect;
         }
-        _rect = _btnContact.frame;
-        _rect.origin.x = _x;
-        _btnContact.hidden = NO;
-        _btnContact.frame = _rect;
-        yOffset += 50;
+        if (_isCanTalk) {
+            _btnContact.hidden = NO;
+            _rect = _btnContact.frame;
+            _rect.origin.x = _x;
+            _btnContact.frame = _rect;
+        }
+        else {
+            _btnContact.hidden = YES;
+        }
+        if (_isCanTalk || _data.is4sale) {
+            yOffset += 50;
+        }
     }
     
     //_lblFavorCount

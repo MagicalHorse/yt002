@@ -192,7 +192,6 @@
     [(id)view svContent].delegate = self;
     [(id)view tbComment].delegate = self;
     [(id)view tbComment].dataSource = self;
-    [(id)view tbComment].scrollEnabled = FALSE;
     [(id)view svContent].scrollEnabled = TRUE;
     //view.showViewMask = TRUE;
     
@@ -277,6 +276,10 @@
     {
         [dataProviderInContext proDetailViewDataFromContext:self forIndex:pageIndex completeCallback:^(id input){
             [blockViewForRefresh setData:input];
+            if ([blockViewForRefresh respondsToSelector:@selector(imgThumb)])
+            {
+                [(FSThumView *)[(id)blockViewForRefresh imgThumb] setDelegate:self];
+            }
             [(FSProdDetailView*)blockViewForRefresh audioButton].audioDelegate = self;
             [self endLoading:blockViewForRefresh];
             _inLoading = NO;
@@ -318,7 +321,13 @@
             [blockViewForRefresh updateToolBar:flag];
             if ([blockViewForRefresh.data isKindOfClass:[FSProdItemEntity class]])
             {
-                ((FSProdItemEntity *)blockViewForRefresh.data).isFavored = item.isFavored;
+                FSProdDetailView *pView = (FSProdDetailView*)blockViewForRefresh;
+                FSProdItemEntity *pProd = (FSProdItemEntity *)pView.data;
+                pProd.isFavored = item.isFavored;
+                srand(1000);
+                pView.isCanTalk = item.isCanTalk;
+                [pView setData:pProd];
+                [pView resetScrollViewSize];
             } else if ([blockViewForRefresh.data isKindOfClass:[FSProItemEntity class]])
             {
                 ((FSProItemEntity *)blockViewForRefresh.data).isFavored = item.isFavored;

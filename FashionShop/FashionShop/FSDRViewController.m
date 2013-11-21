@@ -23,6 +23,7 @@
 #import "FSProdItemEntity.h"
 #import "FSPLetterViewController.h"
 #import "FSMessageViewController.h"
+#import "FSProDetailViewController.h"
 
 #define DR_DETAIL_CELL @"DRdetailcell"
 #define DR_FAVOR_DETAIL_CELL @"DR_FAVOR_DETAIL_CELL"
@@ -179,6 +180,13 @@
 //    if (IOS7) {
 //        rect.size.height += NAV_HIGH;
 //    }
+    NSArray *array = self.navigationController.viewControllers;
+    if (array.count >= 2) {
+        id con = array[array.count - 2];
+        if ([con isKindOfClass:[FSProDetailViewController class]]) {
+            rect.size.height += NAV_HIGH;
+        }
+    }
     _itemsContainer.frame = rect;
     _itemsView = [[PSUICollectionView alloc] initWithFrame:_itemsContainer.bounds collectionViewLayout:layout];
     _itemsView.backgroundColor = [UIColor whiteColor];
@@ -195,6 +203,7 @@
     
    
 }
+
 -(void) presentData
 {
     [self presentData:TRUE];
@@ -318,8 +327,6 @@
             {
                 [_items insertObject:obj atIndex:0];
             }
-            
-            
         }
     }];
     

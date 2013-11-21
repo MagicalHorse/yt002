@@ -43,6 +43,7 @@
 @property (nonatomic,assign) BOOL promotionFlag;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
+@property (nonatomic,assign) BOOL isCanTalk;
 
 //no need mapping attributes
 @property (nonatomic, strong) NSMutableArray *comments;

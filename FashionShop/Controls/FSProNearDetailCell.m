@@ -18,14 +18,14 @@
     [_lblTitle setTextColor:[UIColor colorWithHexString:@"#ffffff"]];
     [_lblSubTitle setTextColor:[UIColor colorWithHexString:@"#dddddd"]];
     
-    [_timeView setTextAlignment:RTTextAlignmentCenter];
+    //[_timeView setTextAlignment:RTTextAlignmentCenter];
     [_timeView setText:_dateString];
-    CGRect _rect = _timeView.frame;
-    _rect.origin.y = (_cellHeight - _timeView.optimumSize.height)/2;
-    _rect.size.height = _timeView.optimumSize.height;
-    _timeView.frame = _rect;
+//    CGRect _rect = _timeView.frame;
+//    _rect.origin.y = (_cellHeight - _timeView.optimumSize.height)/2;
+//    _rect.size.height = _timeView.optimumSize.height;
+//    _timeView.frame = _rect;
     
-    _rect = _line.frame;
+    CGRect _rect = _line.frame;
     _rect.origin.y = 12;
     _rect.size.height = _cellHeight - 24;
     _line.frame = _rect;
@@ -52,14 +52,14 @@
     [_titleView setTextColor:[UIColor colorWithHexString:@"#ffffff"]];
     [_address setTextColor:[UIColor colorWithHexString:@"#dddddd"]];
     
-    [_timeView setTextAlignment:RTTextAlignmentCenter];
+    //[_timeView setTextAlignment:RTTextAlignmentCenter];
     [_timeView setText:_dateString];
-    CGRect _rect = _timeView.frame;
-    _rect.origin.y = (_cellHeight - _timeView.optimumSize.height)/2;
-    _rect.size.height = _timeView.optimumSize.height;
-    _timeView.frame = _rect;
+//    CGRect _rect = _timeView.frame;
+//    _rect.origin.y = (_cellHeight - _timeView.optimumSize.height)/2;
+//    _rect.size.height = _timeView.optimumSize.height;
+//    _timeView.frame = _rect;
     
-    _rect = _line.frame;
+    CGRect _rect = _line.frame;
     _rect.origin.y = 12;
     _rect.size.height = _cellHeight - 24;
     _line.frame = _rect;

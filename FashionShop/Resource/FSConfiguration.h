@@ -13,6 +13,14 @@
 #ifndef FashionShop_FSConfiguration_h
 #define FashionShop_FSConfiguration_h
 
+/*
+ 1、切换成正式库接口地址
+ 2、检查版本号
+ 3、检查是否打开了支付宝支付功能
+ 4、检查是否Flurry是正式库
+ 5、检查是否使用了正确的证书
+ */
+
 #define REST_API_CLIENT_VERSION @"2.5.0"
 
 //正式库
@@ -69,8 +77,8 @@
 //支付方式代码
 #define DELIVERY_PAY_CODE @"1001" //货到付款
 #define ALI_PAY_CODE @"25"    //支付宝支付
+#define CAIFUTONG_PAY_CODE @"26" //财付通支付
 #define WEIXIN_PAY_CODE @"27" //微信支付
-#define CAIFUTONG_PAY_CODE @"27" //财付通支付
 
 #define CollectionView_Default_Height 100.0f
 
