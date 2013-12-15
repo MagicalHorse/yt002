@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RTLabel.h"
 #import "FSExchange.h"
 #import "FSPurchase.h"
 
@@ -15,7 +14,7 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *continueBtn;
 @property (strong, nonatomic) IBOutlet UIButton *backHomeBtn;
-@property (strong, nonatomic) IBOutlet RTLabel *infomationDesc;
+@property (strong, nonatomic) IBOutlet UILabel *infomationDesc;
 
 -(void)initView:(NSString*)content;
 

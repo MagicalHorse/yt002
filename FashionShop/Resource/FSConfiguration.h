@@ -24,9 +24,13 @@
 #define REST_API_CLIENT_VERSION @"2.5.0"
 
 //正式库
-#define REST_API_URL   @"http://itoo.yintai.com/api"
-#define REST_API_URL_OUT @"http://api.youhuiin.com"
-#define REST_API_APP_SECRET_KEY @"yintai123456"
+//#define REST_API_URL   @"http://intimeapi.elasticbeanstalk.com/api"
+//#define REST_API_URL_OUT @"http://api.youhuiin.com"
+//#define REST_API_APP_SECRET_KEY @"yintai123456"
+
+//#define REST_API_URL   @"http://itoo.yintai.com/api"
+//#define REST_API_URL_OUT @"http://api.youhuiin.com"
+//#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库-内网
 //    #define REST_API_URL   @"http://10.92.200.109/api"
@@ -34,9 +38,9 @@
 //    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 ////预生产库
-//    #define REST_API_URL   @"http://apis.youhuiin.com/api"
-//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
-//    #define REST_API_APP_SECRET_KEY @"yintai123456"
+    #define REST_API_URL   @"http://apis.youhuiin.com/api"
+    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //新浪微博
 #define SINA_WEIBO_APP_KEY @"2978041275"
@@ -78,7 +82,7 @@
 #define DELIVERY_PAY_CODE @"1001" //货到付款
 #define ALI_PAY_CODE @"25"    //支付宝支付
 #define CAIFUTONG_PAY_CODE @"26" //财付通支付
-#define WEIXIN_PAY_CODE @"27" //微信支付
+#define WEIXIN_PAY_CODE @"28" //微信支付
 
 #define CollectionView_Default_Height 100.0f
 

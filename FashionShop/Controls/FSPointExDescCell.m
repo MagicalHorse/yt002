@@ -86,13 +86,18 @@
     _cellHeight += _joinStore.frame.size.height + yCap + 3;
     
     //礼券使用范围
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>礼券使用范围  </font><font face='%@' size=13 color='0090ff'><a href=''>点击查看</a></font>", Font_Name_Normal, Font_Name_Normal];
+    str = [NSString stringWithFormat:@"礼券使用范围  "];
     [_useScope setText:str];
     _rect = _useScope.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _useScope.optimumSize.height;
     _useScope.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_useScope sizeToFit];
+    _cellHeight += _useScope.frame.size.height + yCap;
+    
+    _rect = _useScopeBtn.frame;
+    _rect.origin.y = _useScope.frame.origin.y - (_rect.size.height - _useScope.frame.size.height)/2;
+    _rect.origin.x = _useScope.frame.origin.x + _useScope.frame.size.width;
+    _useScopeBtn.frame = _rect;
     
     //line2
     _rect = _line2.frame;
@@ -154,13 +159,13 @@
     _line2.frame = _rect;
     _cellHeight += _rect.size.height + yCap;
     
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal, _desc];
-    [_content setText:str];
+    [_content setText:_desc];
     _rect = _content.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _content.optimumSize.height;
     _content.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_content sizeToFit];
+    NSLog(@"_content height:%.2f\n_desc:%@", _content.frame.size.height, _desc);
+    _cellHeight += _content.frame.size.height + yCap;
     
     if (_hasAddionalView) {
         if (!array) {
@@ -169,7 +174,6 @@
         if (!_additionalView.collectionViewLayout) {
             PSUICollectionViewFlowLayout *layout = [[PSUICollectionViewFlowLayout alloc] init];
             _additionalView.collectionViewLayout = layout;
-//            [_additionalView registerNib:[UINib nibWithNibName:@"FSScopeCell" bundle:nil] forCellWithReuseIdentifier:@"FSScopeCell"];
             [_additionalView registerClass:[FSScopeCell class] forCellWithReuseIdentifier:@"FSScopeCell"];
         }
         
@@ -237,21 +241,21 @@
     _cellHeight = yCap;
     
     //title
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>使用门店 : </font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal, Font_Name_Normal, _data.storename];
+    NSString *str = [NSString stringWithFormat:@"使用门店 : %@", _data.storename];
     [_storeName setText:str];
     CGRect _rect = _storeName.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _storeName.optimumSize.height;
     _storeName.frame = _rect;
+    [_storeName sizeToFit];
     _cellHeight += _rect.size.height + yCap - 6;
     
-    str = [NSString stringWithFormat:@"<font face='%@' size=14 color='#181818'>使用范围 : </font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Normal,Font_Name_Normal,_data.excludes];
+    str = [NSString stringWithFormat:@"使用范围 : %@",_data.excludes];
     [_useScope setText:str];
     _rect = _useScope.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _useScope.optimumSize.height;
     _useScope.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_useScope sizeToFit];
+    _cellHeight += _useScope.frame.size.height + yCap;
 }
 
 @end

@@ -70,9 +70,9 @@
     }
     slectedButton.frame = CGRectMake(titleLb.frame.size.width, 0, 72, 30);
     UIEdgeInsets edge = slectedButton.contentEdgeInsets;
-    edge.right = 20;
+    edge.right = 25;
     slectedButton.contentEdgeInsets = edge;
-    UIFont *font = [UIFont systemFontOfSize:14];
+    UIFont *font = [UIFont systemFontOfSize:12];
     [slectedButton.titleLabel setFont:font];
     slectedButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     slectedButton.titleLabel.minimumFontSize = 10;
@@ -158,6 +158,7 @@
     }
     FSKeyValueItem *item = showData[selectedIndex];
     [slectedButton setTitle:item.value forState:UIControlStateNormal];
+    [slectedButton sizeToFit];
     if (delegate && [delegate respondsToSelector:@selector(didClickOkButton:)]) {
         [delegate didClickOkButton:self];
     }

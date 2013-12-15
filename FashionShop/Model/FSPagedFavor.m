@@ -8,6 +8,7 @@
 
 #import "FSPagedFavor.h"
 #import "FSFavor.h"
+#import "FSProdItemEntity.h"
 
 @implementation FSPagedFavor
 +(NSString *)pagedKeyPath
@@ -18,5 +19,17 @@
 +(Class)pagedModel
 {
     return [FSFavor class];
+}
+@end
+
+@implementation FSPagedDarenFavor
++(NSString *)pagedKeyPath
+{
+    return @"items";
+}
+
++(Class)pagedModel
+{
+    return [FSProdItemEntity class];
 }
 @end

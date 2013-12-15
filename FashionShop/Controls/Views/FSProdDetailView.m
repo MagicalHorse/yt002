@@ -236,7 +236,7 @@
     }
     
     //_lblFavorCount
-    [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.favorTotal] forKey:@"text"];
+    [_lblFavorCount setValue:[NSString stringWithFormat:@"%d" ,_data.likeCount] forKey:@"text"];
     [self bringSubviewToFront:_lblCoupons];
     _lblFavorCount.font = ME_FONT(13);
     _lblFavorCount.textColor = [UIColor colorWithHexString:@"#e5004f"];
@@ -344,7 +344,7 @@
     if (_data)
     {
         [_data addObserver:self forKeyPath:@"couponTotal" options:NSKeyValueObservingOptionNew context:nil];
-        [_data addObserver:self forKeyPath:@"favorTotal" options:NSKeyValueObservingOptionNew context:nil];
+        [_data addObserver:self forKeyPath:@"likeCount" options:NSKeyValueObservingOptionNew context:nil];
         [_data addObserver:self forKeyPath:@"isFavored" options:NSKeyValueObservingOptionNew context:nil];
     }
 }
@@ -353,7 +353,7 @@
     if (_data)
     {
         [_data removeObserver:self forKeyPath:@"couponTotal"];
-        [_data removeObserver:self forKeyPath:@"favorTotal"];
+        [_data removeObserver:self forKeyPath:@"likeCount"];
         [_data removeObserver:self forKeyPath:@"isFavored"];
     }
 }
@@ -364,9 +364,9 @@
     if ([key isEqualToString:@"couponTotal"])
     {
         _lblCoupons.text = [NSString stringWithFormat:@"%d",_data.couponTotal];
-    } else if([key isEqualToString:@"favorTotal"])
+    } else if([key isEqualToString:@"likeCount"])
     {
-        _lblFavorCount.text = [NSString stringWithFormat:@"%d",_data.favorTotal];
+        _lblFavorCount.text = [NSString stringWithFormat:@"%d",_data.likeCount];
     } else if ([key isEqualToString:@"isFavored"])
     {
         [self updateInteraction];

@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSString * title;
 @property (nonatomic,assign) NSInteger couponTotal;
 @property (nonatomic,assign) NSInteger favorTotal;
+@property (nonatomic,assign) NSInteger likeCount;
 @property (nonatomic,strong) NSNumber *price;
 @property (nonatomic,strong) NSNumber *unitPrice;
 @property (nonatomic, strong) NSString * descrip;
@@ -41,6 +42,7 @@
 //other need attributes
 @property (nonatomic,strong) NSString *brandDesc;
 @property (nonatomic,assign) BOOL promotionFlag;
+@property (nonatomic,assign) BOOL isCanBuyFlag;
 @property (nonatomic,assign) BOOL isFavored;
 @property (nonatomic,assign) BOOL isCouponed;
 @property (nonatomic,assign) BOOL isCanTalk;

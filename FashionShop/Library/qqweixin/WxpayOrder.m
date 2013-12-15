@@ -10,10 +10,14 @@
 #import "WXApi.h"
 #import "NSString+Extention.h"
 #import "WxpayConfig.h"
+#import "WxpayReq.h"
+#import "WxpayResp.h"
+#import "FSPurchaseRequest.h"
 
 @implementation WxpayOrder
+@synthesize fromController;
 
-+ (BOOL)sendPay:(NSString*)productid
+- (BOOL)sendPay:(NSString*)productid
 {
     if ([NSString isNilOrEmpty:productid]) {
         return NO;
@@ -24,27 +28,38 @@
         [alertView show];
         return NO;
     }
-    NSString *timestamp = [NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]];
-    NSString *noncestr = [[NSString randomString] lowercaseString];
-    NSString *changeOrderNumber = [self changeOrderNumber:productid];
     
-    NSMutableString *mutStr = [NSMutableString stringWithFormat:@"appid=%@&", WXAppId];
-    [mutStr appendFormat:@"appkey=%@&", WXPaySignKey];
-    [mutStr appendFormat:@"noncestr=%@&", noncestr];
-    [mutStr appendFormat:@"roductid=%@&", changeOrderNumber];
-    [mutStr appendFormat:@"timestamp=%@", timestamp];
-    NSString *signString = [NSString sha1:[mutStr lowercaseString]];
-    
-    //调起微信支付
-    PayReq* req = [[PayReq alloc] init];
-    req.openID      = WXAppId;
-    req.partnerId   = WXPartnerId;
-    req.prepayId    = changeOrderNumber;
-    req.nonceStr    = noncestr;
-    req.timeStamp   = [timestamp intValue];
-    req.package     = nil;
-    req.sign        = signString;
-    [WXApi safeSendReq:req];
+    [FSModelManager localLogin:fromController withBlock:^{
+        FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
+        request.routeResourcePath = RK_REQUEST_ORDER_WXAPPPAY;
+        NSString *changeOrderNumber = [NSString stringWithFormat:@"%@", productid];
+        request.orderno = changeOrderNumber;
+        [fromController beginLoading:fromController.view];
+        request.uToken = [[FSModelManager sharedModelManager] loginToken];
+        [request send:[FSOrderWxPayInfo class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+            [fromController endLoading:fromController.view];
+            if (respData.isSuccess)
+            {
+                purchase = respData.responseData;
+                NSString *appid = WXAppId;//@"wxd930ea5d5a258f4f";
+                //调起微信支付
+                PayReq* req = [[PayReq alloc] init];
+                req.openID      = appid;
+                [WXApi registerApp:req.openID];
+                req.partnerId   = purchase.parterid;
+                req.prepayId    = purchase.prepayid;
+                req.nonceStr    = purchase.noncestr;
+                req.timeStamp   = [purchase.timestamp intValue];
+                req.package     = purchase.package;
+                req.sign        = purchase.sign;
+                [WXApi safeSendReq:req];
+            }
+            else
+            {
+                [fromController reportError:respData.errorDescrip];
+            }
+        }];
+    }];
     
     return YES;
 }
@@ -61,6 +76,7 @@
      3. product号支付，类型为3， 类型inventoryid-storeid-sectionid
      */
 }
+/*
 
 -(void) onReq:(BaseReq*)req
 {
@@ -126,5 +142,6 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     [alert show];
 }
+ */
 
 @end

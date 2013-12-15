@@ -11,6 +11,7 @@
 
 @interface FSInvoiceViewController () {
     id activityField;
+    FSMyPickerView *titlePickerView;
 }
 
 @end
@@ -34,10 +35,12 @@
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
     [self addRightButton:@"保存"];
     
-    _contentView.backgroundColor = APP_TABLE_BG_COLOR;
-    [_invoiceTitle becomeFirstResponder];
+    _contentView.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = APP_TABLE_BG_COLOR;
     
-    _invoiceTitle.text = _uploadData.invoicetitle;
+    [self updateFrame:_uploadData.isCompany];
+    [_invoiceTitle setText:(_uploadData.isCompany?@"公司":@"个人")];
+    _companyName.text = _uploadData.invoicetitle;
     _invoiceDetail.text = _uploadData.invoicedetail;
 }
 
@@ -61,18 +64,19 @@
 
 -(void)saveInvoice:(UIButton*)sender
 {
-    if ([NSString isNilOrEmpty:_invoiceTitle.text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入发票抬头" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    if ([NSString isNilOrEmpty:_companyName.text] && _uploadData.isCompany) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入公司名称" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
-        [_invoiceTitle becomeFirstResponder];
+        [_companyName becomeFirstResponder];
         return;
     }
     if ([NSString isNilOrEmpty:_invoiceDetail.text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入发票明细" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入发票备注" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
         [_invoiceDetail becomeFirstResponder];
         return;
     }
+    [activityField resignFirstResponder];
     [self reportError:@"保存成功"];
     [self performSelector:@selector(onButtonBack:) withObject:nil afterDelay:1.0f];
     if (_delegate && [_delegate respondsToSelector:@selector(completeInvoiceInput:)]) {
@@ -106,6 +110,96 @@
         [textField resignFirstResponder];
     }
     return YES;
+}
+
+- (IBAction)clickToSelectTitle:(id)sender {
+    if (!titlePickerView) {
+        titlePickerView = [[FSMyPickerView alloc] init];
+        titlePickerView.delegate = self;
+        titlePickerView.datasource = self;
+    }
+    //初始化选中项
+    int index = _uploadData.isCompany?1:0;
+    [titlePickerView.picker selectRow:index inComponent:0 animated:NO];
+    [titlePickerView showPickerView:^{
+        [activityField resignFirstResponder];
+    }];
+}
+
+-(void)updateFrame:(BOOL)isCompany
+{
+    _lbCompanyName.hidden = !isCompany;
+    _companyName.hidden = !isCompany;
+    int yOffset = 87;
+    int yHeight = 8;
+    CGRect _rect;
+    
+    if (isCompany) {
+        _rect = _lbCompanyName.frame;
+        _rect.origin.y = yOffset;
+        _lbCompanyName.frame = _rect;
+        yOffset += _lbCompanyName.frame.size.height + yHeight;
+        
+        _rect = _companyName.frame;
+        _rect.origin.y = yOffset;
+        _companyName.frame = _rect;
+        yOffset += _companyName.frame.size.height + yHeight;
+    }
+    
+    _rect = _lbDetail.frame;
+    _rect.origin.y = yOffset;
+    _lbDetail.frame = _rect;
+    yOffset += _lbDetail.frame.size.height + yHeight;
+    
+    _rect = _invoiceDetail.frame;
+    _rect.origin.y = yOffset;
+    _invoiceDetail.frame = _rect;
+    yOffset += _invoiceDetail.frame.size.height + yHeight;
+    
+    _rect = _lbDesc.frame;
+    _rect.origin.y = yOffset;
+    _lbDesc.frame = _rect;
+    yOffset += _lbDesc.frame.size.height + yHeight;
+}
+
+#pragma mark - FSMyPickerViewDatasource
+
+- (NSInteger)numberOfComponentsInMyPickerView:(FSMyPickerView *)pickerView
+{
+    if (pickerView == titlePickerView) {
+        return 1;
+    }
+    return 0;
+}
+
+- (NSInteger)myPickerView:(FSMyPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if (pickerView == titlePickerView) {
+        return 2;
+    }
+    return 0;
+}
+
+#pragma mark - FSMyPickerViewDelegate
+
+- (void)didClickOkButton:(FSMyPickerView *)aMyPickerView
+{
+    if (aMyPickerView == titlePickerView) {
+        int index = [aMyPickerView.picker selectedRowInComponent:0];
+        _uploadData.isCompany = (index==0?NO:YES);
+        [self updateFrame:_uploadData.isCompany];
+        [_invoiceTitle setText:(_uploadData.isCompany?@"公司":@"个人")];
+    }
+}
+
+- (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if (row == 0) {
+        return @"个人";
+    }
+    else {
+        return @"公司";
+    }
 }
 
 @end

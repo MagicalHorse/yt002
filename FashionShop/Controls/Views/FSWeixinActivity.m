@@ -8,7 +8,7 @@
 
 #import "FSWeixinActivity.h"
 #import "FSShareView.h"
-
+#import "WxpayResp.h"
 
 static BOOL Is_Weixin_Registered = false;
 static FSWeixinActivity *singleon;
@@ -149,14 +149,33 @@ static FSWeixinActivity *singleon;
     {
         [self onRequestAppMessage];
     }
-       
 }
 
 -(void) onResp:(BaseResp*)resp
 {
+    NSString *strMsg = [NSString stringWithFormat:@"errcode:%d", resp.errCode];
+    NSString *strTitle;
+    
     if([resp isKindOfClass:[SendMessageToWXResp class]])
     {
         [self activityDidFinish:resp.errCode==0?TRUE:FALSE];
+    }
+    else if([resp isKindOfClass:[PayResp class]]) {
+        strTitle = [NSString stringWithFormat:@"支付结果"];
+        
+        switch (resp.errCode) {
+            case WXSuccess:
+                strMsg = @"支付结果：成功！";
+                NSLog(@"支付成功－PaySuccess，retcode = %d", resp.errCode);
+                break;
+                
+            default:
+                strMsg = [NSString stringWithFormat:@"支付结果：失败！retcode = %d, retstr = %@", resp.errCode,resp.errStr];
+                NSLog(@"错误，retcode = %d, retstr = %@", resp.errCode,resp.errStr);
+                break;
+        }
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
     }
 //    else if([resp isKindOfClass:[SendAuthResp class]])
 //    {

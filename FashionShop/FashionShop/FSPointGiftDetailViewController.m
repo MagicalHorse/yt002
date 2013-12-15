@@ -52,6 +52,7 @@
         [self endLoading:self.view];
         if (respData.isSuccess)
         {
+            _tbAction.hidden = NO;
             _data = respData.responseData;
             if (!_data) {
                 [self reportError:@"数据更新中，将返回刷新数据！"];
@@ -61,7 +62,6 @@
                 if (_data.status == 1) {
                     _tbAction.tableFooterView = [self createTableFooterView];
                 }
-                _tbAction.hidden = NO;
                 [_tbAction reloadData];
             }
         }
@@ -123,6 +123,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_data == nil) {
+        return 0;
+    }
     return 3;
 }
 
@@ -173,6 +176,8 @@
             [str appendFormat:@"使用门店：%@\n使用范围：%@\n\n", item.storename, item.excludes];
         }
         cell.desc = str;
+        cell.hasAddionalView = NO;
+        
         [cell setData];
         
         return cell;
@@ -193,6 +198,8 @@
         cell.title = @"注意事项";
         NSMutableString *str = [NSMutableString stringWithFormat:@"%@", _data.promotion.notice];
         cell.desc = str;
+        cell.hasAddionalView = NO;
+        
         [cell setData];
         
         return cell;

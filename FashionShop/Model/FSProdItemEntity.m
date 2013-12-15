@@ -19,6 +19,7 @@
 @synthesize title;
 @synthesize couponTotal;
 @synthesize favorTotal;
+@synthesize likeCount;
 @synthesize descrip;
 @synthesize price;
 @synthesize unitPrice;
@@ -41,6 +42,7 @@
 //other need attributes
 @synthesize brandDesc;
 @synthesize promotionFlag;
+@synthesize isCanBuyFlag;
 @synthesize isCouponed;
 @synthesize isFavored;
 @synthesize isCanTalk;
@@ -62,6 +64,7 @@
     [relationMap mapKeyPath:@"id" toAttribute:@"id"];
     [relationMap mapKeyPath:@"name" toAttribute:@"title"];
     [relationMap mapKeyPath:@"favoritecount" toAttribute:@"favorTotal"];
+    [relationMap mapKeyPath:@"likecount" toAttribute:@"likeCount"];
     [relationMap mapKeyPath:@"couponcount" toAttribute:@"couponTotal"];
     [relationMap mapKeyPath:@"description" toAttribute:@"descrip"];
     [relationMap mapKeyPath:@"price" toAttribute:@"price"];
@@ -95,6 +98,7 @@
     //other need attributes
     [relationMap mapKeyPath:@"branddesc" toAttribute:@"brandDesc"];
     [relationMap mapKeyPath:@"promotionFlag" toAttribute:@"promotionFlag"];
+    [relationMap mapKeyPath:@"is4sale" toAttribute:@"isCanBuyFlag"];
     [relationMap mapKeyPath:@"isfavored" toAttribute:@"isFavored"];
     [relationMap mapKeyPath:@"ifcancoupon" toAttribute:@"isCouponed"];
     [relationMap mapKeyPath:@"ifcantalk" toAttribute:@"isCanTalk"];

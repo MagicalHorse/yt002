@@ -312,7 +312,7 @@
                 NSArray *_array = [[NSBundle mainBundle] loadNibNamed:@"FSPointExDescCell" owner:self options:nil];
                 if (_array.count > 0) {
                     cell = (FSPointExDescCell*)_array[0];
-                    cell.useScope.delegate = self;
+                    //cell.useScope.delegate = self;
                 }
                 else{
                     cell = [[FSPointExDescCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Point_Ex_Detail_Desc_Cell_Indentifier];
@@ -321,6 +321,7 @@
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
             [cell setData:_data];
+            [cell.useScopeBtn addTarget:self action:@selector(clickToScope:) forControlEvents:UIControlEventTouchUpInside];
             
             return cell;
         }
@@ -455,6 +456,13 @@
 #pragma mark - RTLabelDelegate
 
 - (void)rtLabel:(id)rtLabel didSelectLinkWithURL:(NSURL*)url
+{
+    FSUseScopeViewController *controller = [[FSUseScopeViewController alloc] initWithNibName:@"FSUseScopeViewController" bundle:nil];
+    controller.stores = stores;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
+- (void)clickToScope:(UIButton*)sender
 {
     FSUseScopeViewController *controller = [[FSUseScopeViewController alloc] initWithNibName:@"FSUseScopeViewController" bundle:nil];
     controller.stores = stores;

@@ -282,13 +282,13 @@
         }];
     }
     else {
-        [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedDarenFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             [self endLoading:self.view];
             if (!resp.isSuccess)
                 [self reportError:resp.errorDescrip];
             else
             {
-                FSPagedFavor *result = resp.responseData;
+                FSPagedDarenFavor *result = resp.responseData;
                 if (self.isInRefresh)
                     _refreshLatestDate = [[NSDate alloc] init];
                 else
@@ -346,12 +346,10 @@
 {
     if(!_items)
         _items = [@[] mutableCopy];
-//    if (!prods)
-//        return;
     [prods enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         int index = [_items indexOfObjectPassingTest:^BOOL(id obj1, NSUInteger idx1, BOOL *stop1)
          {
-             if ([[(FSFavor *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
+             if ([[(FSProdItemEntity *)obj1 valueForKey:@"id"] isEqualToValue:[(FSFavor *)obj valueForKey:@"id"]])
              {
                  return TRUE;
                  *stop1 = TRUE;
@@ -593,11 +591,11 @@
         }];
     } else
     {
-        [request send:[FSPagedFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
+        [request send:[FSPagedDarenFavor class] withRequest:request completeCallBack:^(FSEntityBase *resp) {
             callback();
             if (resp.isSuccess)
             {
-                FSPagedFavor *result = resp.responseData;
+                FSPagedDarenFavor *result = resp.responseData;
                 if (isRefresh)
                     _refreshLatestDate = [[NSDate alloc] init];
                 else
@@ -694,9 +692,9 @@
     id item = [_items objectAtIndex:indexPath.row];
     [(id)cell setData:item];
     if (_segHeader.selectedIndex == 0) {
-        if ([item isKindOfClass:[FSFavor class]]) {
-            FSFavor *_fav = (FSFavor*)item;
-            if (_fav.hasPromotion && _fav.sourceType == FSSourceProduct) {
+        if ([item isKindOfClass:[FSProdItemEntity class]]) {
+            FSProdItemEntity *_fav = (FSProdItemEntity*)item;
+            if (_fav.hasPromotion) {
                 [(FSFavorProCell *)cell showProIcon];
             }
             else {
@@ -708,10 +706,16 @@
         if ([item isKindOfClass:[FSProdItemEntity class]]) {
             FSProdItemEntity *_fav = (FSProdItemEntity*)item;
             if (_fav.hasPromotion) {
-                [(FSFavorProCell *)cell showProIcon];
+                [(FSProdDetailCell *)cell showProIcon];
             }
             else {
-                [(FSFavorProCell *)cell hidenProIcon];
+                [(FSProdDetailCell *)cell hidenProIcon];
+            }
+            if (_fav.isCanBuyFlag) {
+                [(FSProdDetailCell *)cell showProBag];
+            }
+            else {
+                [(FSProdDetailCell *)cell hidenProBag];
             }
         }
     }
@@ -763,7 +767,7 @@
         resources = [[_items objectAtIndex:indexPath.row] resource];
     } else
     {
-        resources = [(FSFavor *)[_items objectAtIndex:indexPath.row] resources];
+        resources = [(FSProdItemEntity *)[_items objectAtIndex:indexPath.row] resource];
     }
     FSResource * resource = resources&&resources.count>0?[resources objectAtIndex:0]:nil;
     float totalHeight = 0.0f;
@@ -794,46 +798,17 @@
             errorBlock();
     }
     else {
-        __block FSFavor * favorCurrent = [view.navContext objectAtIndex:index];
-        /*
-        FSCommonProRequest *request = [[FSCommonProRequest alloc] init];
-        request.id = [NSNumber numberWithInt:favorCurrent.sourceId];
-        request.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
-        request.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
-        request.uToken = [FSModelManager sharedModelManager].loginToken;
-        Class respClass;
-        
-        if (favorCurrent.sourceType == FSSourceProduct)
-        {
-            request.pType = FSSourceProduct;
-            request.routeResourcePath = RK_REQUEST_PROD_DETAIL;
-            respClass = [FSProdItemEntity class];
-        }
-        else
-        {
-            request.pType = FSSourcePromotion;
-            request.routeResourcePath = RK_REQUEST_PRO_DETAIL;
-            respClass = [FSProItemEntity class];
-            
-        }
-        [request send:respClass withRequest:request completeCallBack:^(FSEntityBase *resp) {
-            if (!resp.isSuccess)
-            {
-                [view reportError:NSLocalizedString(@"COMM_OPERATE_FAILED", nil)];
-                errorBlock();
-            }
-            else
-            {
-                block(resp.responseData);
-            }
-        }];
-         */
+        __block FSProdItemEntity * favorCurrent = [view.navContext objectAtIndex:index];
         
         FSCommonProRequest *drequest = [[FSCommonProRequest alloc] init];
         drequest.uToken = [FSModelManager sharedModelManager].loginToken;
         drequest.longit =[NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.longitude];
         drequest.lantit = [NSNumber numberWithFloat:[FSLocationManager sharedLocationManager].currentCoord.latitude];
         Class respClass;
+        drequest.pType = FSSourceProduct;
+        drequest.routeResourcePath = [NSString stringWithFormat:@"/product/%@",[NSNumber numberWithInt:favorCurrent.id]];
+        respClass = [FSProdItemEntity class];
+        /*
         if (favorCurrent.sourceType == FSSourceProduct)
         {
             drequest.pType = FSSourceProduct;
@@ -846,6 +821,7 @@
             drequest.routeResourcePath = [NSString stringWithFormat:@"/promotion/%@",[NSNumber numberWithInt:favorCurrent.sourceId]];
             respClass = [FSProItemEntity class];
         }
+         */
         [drequest setBaseURL:2];
         [drequest send:respClass withRequest:drequest completeCallBack:^(FSEntityBase *resp) {
             if (!resp.isSuccess)

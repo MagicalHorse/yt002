@@ -22,7 +22,7 @@ typedef enum{
     FSSourceAll = 0,
     FSSourceProduct = 1,
     FSSourcePromotion = 2,
-    
+    FSSourceComment = 3,
 }FSSourceType;
 
 

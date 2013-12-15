@@ -24,6 +24,7 @@
 @property (nonatomic,assign) int likeTotal;
 @property (nonatomic,assign) int fansTotal;
 @property (nonatomic,assign) int pointsTotal;
+@property (nonatomic,assign) NSNumber*  uLevel;
 @property (nonatomic,assign) FSUserLevel  userLevelId;
 @property (nonatomic,strong) NSString *userLevelName;
 @property (nonatomic,strong) NSString *thumnail;

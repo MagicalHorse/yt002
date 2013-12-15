@@ -82,6 +82,7 @@
     UITabBarController *root = (UITabBarController*)theApp.window.rootViewController;
     root.selectedIndex = 3;
     UINavigationController *nav = (UINavigationController*)root.viewControllers[3];
+    [nav popToRootViewControllerAnimated:NO];
     NSMutableArray *_mutArray = [NSMutableArray arrayWithObject:nav.topViewController];
     FSGiftListViewController *couponView = [[FSGiftListViewController alloc] initWithNibName:@"FSGiftListViewController" bundle:nil];
     couponView.currentUser = [FSUser localProfile];

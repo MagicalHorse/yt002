@@ -18,6 +18,7 @@
 #import "FSPointMemberCardCell.h"
 #import "FSPointExchangeListViewController.h"
 #import "FSCardBindViewController.h"
+#import "FSTopicViewController.h"
 
 @interface FSPointViewController ()
 {
@@ -53,6 +54,16 @@
     [_contentView registerNib:[UINib nibWithNibName:@"FSPointMemberCardCell" bundle:Nil] forCellReuseIdentifier:USER_POINT_CARD_MEMBER_CELL];
     _contentView.hidden = YES;
     [self preparePresent];
+    NSArray *array = self.navigationController.viewControllers;
+    if (array.count >= 2) {
+        id con = array[array.count - 2];
+        if ([con isKindOfClass:[FSTopicViewController class]]) {
+            CGRect _rect = _contentView.frame;
+            _rect.size.height -= NAV_HIGH;
+            _rect.origin.y += NAV_HIGH;
+            _contentView.frame = _rect;
+        }
+    }
 }
 
 -(void)viewDidUnload {

@@ -72,7 +72,7 @@
     if (selected)
     {
         _lblTag.textColor= RGBCOLOR(218, 33, 85);
-        _lblTag.font = [UIFont boldSystemFontOfSize:12];
+        _lblTag.font = [UIFont systemFontOfSize:12];
        
     } else
     {

@@ -10,7 +10,7 @@
 #define MQPDemo_FSWXConfig_h
 
 //公众号身份标识
-#define WXAppId @"wx413d6a12d10df434"//wxec92040268f6acec
+#define WXAppId @"wx413d6a12d10df434"//wxec92040268f6acec/
 
 //公众号支付请求中用于加密的密钥 Key,可验证商户唯一身份,PaySignKey 对应于支付场景中的 appKey 值。
 #define WXPaySignKey @"EmamuLc5zRJ8eCnQRhelhFnaQIgYPSiZKvRMO7mVtBzIJsB9MT165VNsa8Wvvf1NNp6C2X5wBGhSGWwtl57XyXXeAphDIPWwf5cOxjnGvIzJFDKyLU4Pn2ztroEHJ7hw"

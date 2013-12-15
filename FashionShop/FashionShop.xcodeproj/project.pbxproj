@@ -301,6 +301,7 @@
 		028C9E6B1722CC5400FCBD02 /* FSImageBrowserView.m in Sources */ = {isa = PBXBuildFile; fileRef = 028C9E6A1722CC5400FCBD02 /* FSImageBrowserView.m */; };
 		029182E61783B7F5004D624D /* FSTableMultiSelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 029182E41783B7F5004D624D /* FSTableMultiSelViewController.m */; };
 		029182E71783B7F5004D624D /* FSTableMultiSelViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 029182E51783B7F5004D624D /* FSTableMultiSelViewController.xib */; };
+		0292B9A21843028B00BBFD42 /* icon_bag@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0292B9A11843028B00BBFD42 /* icon_bag@2x.png */; };
 		029371B817165819000B4ACE /* audio_trash_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 029371B717165819000B4ACE /* audio_trash_icon@2x.png */; };
 		0293986F174633EE009489E0 /* feedback_text_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0293986E174633EE009489E0 /* feedback_text_bg@2x.png */; };
 		02939871174634E7009489E0 /* input_text@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 02939870174634E7009489E0 /* input_text@2x.png */; };
@@ -1168,6 +1169,7 @@
 		029182E31783B7F5004D624D /* FSTableMultiSelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FSTableMultiSelViewController.h; sourceTree = "<group>"; };
 		029182E41783B7F5004D624D /* FSTableMultiSelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FSTableMultiSelViewController.m; sourceTree = "<group>"; };
 		029182E51783B7F5004D624D /* FSTableMultiSelViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FSTableMultiSelViewController.xib; sourceTree = "<group>"; };
+		0292B9A11843028B00BBFD42 /* icon_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_bag@2x.png"; sourceTree = "<group>"; };
 		029371B717165819000B4ACE /* audio_trash_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "audio_trash_icon@2x.png"; sourceTree = "<group>"; };
 		0293986E174633EE009489E0 /* feedback_text_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "feedback_text_bg@2x.png"; sourceTree = "<group>"; };
 		02939870174634E7009489E0 /* input_text@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "input_text@2x.png"; sourceTree = "<group>"; };
@@ -2837,6 +2839,7 @@
 		74B95A06167838D300FE47AB /* images */ = {
 			isa = PBXGroup;
 			children = (
+				0292B9A11843028B00BBFD42 /* icon_bag@2x.png */,
 				024D4E5B178EC5B800F525AD /* selected_icon@2x.png */,
 				024D4E5C178EC5B800F525AD /* unselect_icon@2x.png */,
 				0271CEEB178D989A00745226 /* gift_icon@2x.png */,
@@ -3837,6 +3840,7 @@
 				0216DF3B1740D39C00C6CA9B /* brand_story_bg@2x.png in Resources */,
 				0216DF451741DA7200C6CA9B /* FSStoreDetailCell.xib in Resources */,
 				0216DF471741E81F00C6CA9B /* arrow_down_1@2x.png in Resources */,
+				0292B9A21843028B00BBFD42 /* icon_bag@2x.png in Resources */,
 				0216DF4C17422D5800C6CA9B /* FSMyCommentController.xib in Resources */,
 				0216DF511742302C00C6CA9B /* FSMyCommentCell.xib in Resources */,
 				0260274F1743D403009DCC14 /* favorite_tag@2x.png in Resources */,
@@ -4445,7 +4449,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4481,8 +4485,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;

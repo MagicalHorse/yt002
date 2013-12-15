@@ -50,10 +50,18 @@
 +(RKObjectMapping *) getRelationDataMap:(BOOL)isCollection
 {
     RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
-    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"userLevelId",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",nil];
+    [relationMap mapKeyPathsToAttributes:@"nickname",@"nickie",@"level",@"uLevel",@"pointtotal",@"pointsTotal",@"coupontotal",@"couponsTotal",@"token",@"uToken",@"id",@"uid",@"liketotal",@"likeTotal",@"likedtotal",@"fansTotal",@"mobile",@"phone",@"logo",@"thumnail",@"isliked",@"isLiked",@"gender",@"gender",@"desc",@"signature",@"appid",@"appID",@"isbindcard",@"isBindCard",nil];
     RKObjectMapping *resourceRelation = [FSResource getRelationDataMap];
     [relationMap mapKeyPath:@"logobg" toRelationship:@"logobg" withMapping:resourceRelation];
     return relationMap;
+}
+
+-(FSUserLevel)userLevelId
+{
+    if (!_uLevel) {
+        return FSNormalUser;
+    }
+    return [_uLevel intValue];
 }
 
 + (void) removeUserProfile

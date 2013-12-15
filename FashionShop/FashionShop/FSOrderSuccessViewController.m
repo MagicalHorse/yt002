@@ -120,7 +120,9 @@
         [del toAlipayWithOrder:self.data.orderno name:_prod?_prod.productname:_data.orderno desc:_prod?_prod.productdesc:_data.orderno amount:self.data.totalamount];
     }
     else if([WEIXIN_PAY_CODE isEqualToString:self.payWay.code]) {   //微信支付
-        [WxpayOrder sendPay:self.data.orderno];
+        WxpayOrder *wxpay = [[WxpayOrder alloc] init];
+        wxpay.fromController = self;
+        [wxpay sendPay:self.data.orderno];
     }
     
     //统计

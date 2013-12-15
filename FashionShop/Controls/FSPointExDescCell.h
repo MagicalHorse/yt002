@@ -18,7 +18,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *useTime;
 @property (strong, nonatomic) IBOutlet UILabel *joinStore;
 @property (strong, nonatomic) IBOutlet UILabel *joinStoreTitle;
-@property (strong, nonatomic) IBOutlet RTLabel *useScope;
+@property (strong, nonatomic) IBOutlet UILabel *useScope;
+@property (strong, nonatomic) IBOutlet UIButton *useScopeBtn;
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UIImageView *line2;
 
@@ -47,7 +48,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *line1;
 @property (strong, nonatomic) IBOutlet UILabel *titleView;
 @property (strong, nonatomic) IBOutlet UIImageView *line2;
-@property (strong, nonatomic) IBOutlet RTLabel *content;
+@property (strong, nonatomic) IBOutlet UILabel *content;
 @property (nonatomic,strong) NSString *title;
 @property (nonatomic,strong) NSString *desc;
 @property (strong, nonatomic) IBOutlet PSUICollectionView *additionalView;
@@ -61,8 +62,9 @@
 
 //礼券使用范围Cell
 @interface FSPointScopeCell : UITableViewCell
-@property (strong, nonatomic) IBOutlet RTLabel *storeName;
-@property (strong, nonatomic) IBOutlet RTLabel *useScope;
+@property (strong, nonatomic) IBOutlet UILabel *storeName;
+@property (strong, nonatomic) IBOutlet UILabel *useScope;
+
 
 @property (nonatomic) int cellHeight;
 @property (nonatomic, strong) FSCommon* data;

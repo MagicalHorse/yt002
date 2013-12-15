@@ -40,7 +40,8 @@
         [map mapKeyPath:@"pagesize" toAttribute:@"request.pageSize"];
     }
     else if([_routeResourcePath isEqualToString:RK_REQUEST_ORDER_DETAIL] ||
-            [_routeResourcePath isEqualToString:RK_REQUEST_ORDER_CANCEL]) {
+            [_routeResourcePath isEqualToString:RK_REQUEST_ORDER_CANCEL] ||
+            [_routeResourcePath isEqualToString:RK_REQUEST_ORDER_WXAPPPAY]) {
         [map mapKeyPath:@"orderno" toAttribute:@"request.orderno"];
     }
     else if([_routeResourcePath isEqualToString:RK_REQUEST_ORDER_RMA]) {

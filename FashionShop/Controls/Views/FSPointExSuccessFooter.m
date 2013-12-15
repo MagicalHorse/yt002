@@ -23,13 +23,13 @@
 {
     int yCap = 12;
     int _cellHeight = _infomationDesc.frame.origin.y;
-    NSString *str = [NSString stringWithFormat:@"<font face='%@' size=15 color='#181818'>温馨提示 : \n</font><font face='%@' size=14 color='#666666'>%@</font>", Font_Name_Bold,Font_Name_Normal, content];
+    NSString *str = [NSString stringWithFormat:@"温馨提示 : \n%@", content];
     [_infomationDesc setText:str];
     CGRect _rect = _infomationDesc.frame;
     _rect.origin.y = _cellHeight;
-    _rect.size.height = _infomationDesc.optimumSize.height;
     _infomationDesc.frame = _rect;
-    _cellHeight += _rect.size.height + yCap;
+    [_infomationDesc sizeToFit];
+    _cellHeight += _infomationDesc.frame.size.height + yCap;
     
     _rect = self.frame;
     _rect.size.height = _cellHeight;

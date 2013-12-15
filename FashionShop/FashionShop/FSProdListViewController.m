@@ -363,7 +363,7 @@
     
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
     int height = (lineCount) * Tag_Item_Height;
-    CGRect _tagRect = CGRectMake(0, 0, SCREEN_WIDTH, height + 500);
+    CGRect _tagRect = CGRectMake(0, 0, SCREEN_WIDTH, height + 5000);
     if (IOS7) {
         _tagRect.origin.y += NAV_HIGH;
     }
@@ -380,7 +380,7 @@
     imageTagBgV.contentMode = UIViewContentModeScaleToFill;
     [self.view addSubview:imageTagBgV];
     
-    _tagRect.size.height = Tag_View_Height;
+    _tagRect.size.height = Tag_View_Height - 15;
     _cvTags = [[PSUICollectionView alloc] initWithFrame:_tagRect collectionViewLayout:layout];
     _cvTags.scrollEnabled = NO;
     [self.view addSubview:_cvTags];
@@ -401,7 +401,7 @@
 {
     CGRect _rect = _cvTags.bounds;
     _rect.size.height = 15;
-    _rect.origin.y = _cvTags.frame.size.height - 15;
+    _rect.origin.y = _cvTags.frame.size.height + _cvTags.frame.origin.y;
     
     UIView *view = [[UIView alloc] initWithFrame:_rect];
     view.backgroundColor = [UIColor clearColor];
@@ -420,8 +420,8 @@
     UITapGestureRecognizer *viewGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapFrom:)];
     [view addGestureRecognizer:viewGesture];
     
-    [_cvTags addSubview:view];
-    [self.view bringSubviewToFront:_cvTags];
+    [self.view addSubview:view];
+    [self.view bringSubviewToFront:view];
 }
 
 -(void)reCreateContentView
@@ -475,12 +475,17 @@
     if (isAnimating) {
         return;
     }
-    UIView *view = [_cvTags viewWithTag:Tag_Swip_View_Tag];
+    UIView *view = [self.view viewWithTag:Tag_Swip_View_Tag];
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
-    int height = (lineCount - 1) * (Tag_Item_Height + 10);
+    __block int height = (lineCount) * (Tag_Item_Height);
+    __block int __height = 20 + Tag_Item_Height * 8;
     if (isSwipToUp) {
         isAnimating = YES;
         [UIView animateWithDuration:0.25 animations:^{
+            if (height > __height) {
+                height = __height;
+            }
+            _cvTags.scrollEnabled = NO;
             CGRect _rect = view.frame;
             _rect.origin.y -= height;
             view.frame = _rect;
@@ -493,13 +498,23 @@
             _rect.origin.y -= height;
             _rect.size.height += height;
             _cvContent.frame = _rect;
+            
+            _cvTags.contentOffset = CGPointMake(0, 0);
         } completion:^(BOOL finished) {
             isAnimating = NO;
+;
         }];
     }
     else{
         isAnimating = YES;
         [UIView animateWithDuration:0.25 animations:^{
+            if (height > __height) {
+                height = __height;
+                _cvTags.scrollEnabled = YES;
+            }
+            else {
+                _cvTags.scrollEnabled = NO;
+            }
             CGRect _rect = view.frame;
             _rect.origin.y += height;
             view.frame = _rect;
@@ -772,6 +787,12 @@
         }
         else {
             [(FSProdDetailCell *)cell hidenProIcon];
+        }
+        if (_data.isCanBuyFlag) {
+            [(FSProdDetailCell *)cell showProBag];
+        }
+        else {
+            [(FSProdDetailCell *)cell hidenProBag];
         }
         int width = PROD_LIST_DETAIL_CELL_WIDTH;
         int height = cell.frame.size.height;

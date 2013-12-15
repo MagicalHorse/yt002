@@ -448,14 +448,10 @@
 #pragma mark - PSUICollectionView Datasource
 
 - (NSInteger)collectionView:(PSUICollectionView *)view numberOfItemsInSection:(NSInteger)section {
-
         return _prods.count;
-
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (PSUICollectionView *)collectionView {
-    
     return 1;
 }
 
@@ -469,6 +465,12 @@
     }
     else {
         [(FSProdDetailCell *)cell hidenProIcon];
+    }
+    if (_data.isCanBuyFlag) {
+        [(FSProdDetailCell *)cell showProBag];
+    }
+    else {
+        [(FSProdDetailCell *)cell hidenProBag];
     }
     int width = PROD_LIST_DETAIL_CELL_WIDTH;
     int height = cell.frame.size.height;

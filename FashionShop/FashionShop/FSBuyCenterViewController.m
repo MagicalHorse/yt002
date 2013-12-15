@@ -45,7 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"预购中心";
+    self.title = @"订购中心";
     
     UIBarButtonItem *baritemCancel = [self createPlainBarButtonItem:@"goback_icon.png" target:self action:@selector(onButtonBack:)];
     [self.navigationItem setLeftBarButtonItem:baritemCancel];
@@ -266,11 +266,11 @@
         [msg appendFormat:@"购买数量 : %d\n", __p.quantity];
         [msg appendFormat:@"送货地址 : %@\n", _uploadData.address.displayaddress];
         [msg appendFormat:@"支付方式 : %@\n", _uploadData.payment.name];
-        BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
+        BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicedetail];
         [msg appendFormat:@"是否需要发票 : %@\n", flag?@"否":@"是"];
         if (!flag) {
-            [msg appendFormat:@"发票抬头 : %@\n", _uploadData.invoicetitle];
-            [msg appendFormat:@"发票明细 : %@\n", _uploadData.invoicedetail];
+            [msg appendFormat:@"发票抬头 : %@\n", (_uploadData.isCompany?_uploadData.invoicetitle:@"个人")];
+            [msg appendFormat:@"发票备注 : %@\n", _uploadData.invoicedetail];
         }
         if (![NSString isNilOrEmpty:_uploadData.memo]) {
             [msg appendFormat:@"订单备注 : %@\n", _uploadData.memo];
@@ -350,9 +350,9 @@
     }
     [dic setValue:__ps forKey:@"products"];
     
-    BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicetitle];
+    BOOL flag = [NSString isNilOrEmpty:_uploadData.invoicedetail];
     [dic setValue:[NSNumber numberWithBool:!flag] forKey:@"needinvoice"];
-    [dic setValue:_uploadData.invoicetitle forKey:@"invoicetitle"];
+    [dic setValue:(_uploadData.isCompany?_uploadData.invoicetitle:@"个人") forKey:@"invoicetitle"];
     [dic setValue:_uploadData.invoicedetail forKey:@"invoicedetail"];
     [dic setValue:_uploadData.memo forKey:@"memo"];
     
@@ -509,7 +509,7 @@
         }
         //信誉保证
         FSCommonTextShowViewController *controller = [[FSCommonTextShowViewController alloc] initWithNibName:@"FSCommonTextShowViewController" bundle:nil];
-        controller.myTitle = @"商家信誉保证";
+        controller.myTitle = @"退货政策";
         controller.purchase = _purchaseData;
         [self.navigationController pushViewController:controller animated:YES];
     }
@@ -657,7 +657,7 @@
 
 -(void)completeInvoiceInput:(FSInvoiceViewController*)viewController
 {
-    _uploadData.invoicetitle = viewController.invoiceTitle.text;
+    _uploadData.invoicetitle = viewController.companyName.text;
     _uploadData.invoicedetail = viewController.invoiceDetail.text;
     [_tbAction reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationNone];
 }

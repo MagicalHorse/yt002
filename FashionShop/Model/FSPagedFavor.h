@@ -11,3 +11,7 @@
 @interface FSPagedFavor : FSPagedModel
 
 @end
+
+@interface FSPagedDarenFavor : FSPagedModel
+
+@end

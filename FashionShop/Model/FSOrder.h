@@ -104,3 +104,22 @@
 @property (nonatomic,strong) NSString *colorvalueid;
 
 @end
+
+@interface FSOrderWxPayInfo : FSModelBase
+
+@property (nonatomic,strong) NSString *noncestr;
+@property (nonatomic,strong) NSString *package;
+@property (nonatomic,strong) NSString *parterid;
+@property (nonatomic,strong) NSString *prepayid;
+@property (nonatomic,strong) NSString *timestamp;
+@property (nonatomic,strong) NSString *sign;
+
+/*
+ noncestr 	随机码
+ package 	微信支付参数
+ parterid 	微信支付参数
+ prepayid 	微信支付参数
+ timestamp 	微信支付参数
+ sign 	微信支付参数
+ */
+@end

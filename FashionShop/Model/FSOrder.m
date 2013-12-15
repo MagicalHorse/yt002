@@ -31,7 +31,7 @@
     [relationMapping mapKeyPath:@"extendprice" toAttribute:@"extendprice"];
     
     [relationMapping mapKeyPath:@"needinvoice" toAttribute:@"needinvoice"];
-    [relationMapping mapKeyPath:@"invoicesubject" toAttribute:@"invoicesubject"];
+    [relationMapping mapKeyPath:@"invoicetitle" toAttribute:@"invoicesubject"];
     [relationMapping mapKeyPath:@"invoicedetail" toAttribute:@"invoicedetail"];
     
     [relationMapping mapKeyPath:@"canrma" toAttribute:@"canrma"];
@@ -116,6 +116,24 @@
     
     RKObjectMapping *relationMap = [FSResource getRelationDataMap];
     [relationMapping mapKeyPath:@"resource" toRelationship:@"resource" withMapping:relationMap];
+    
+    return relationMapping;
+}
+
+@end
+
+@implementation FSOrderWxPayInfo
+@synthesize noncestr,package,parterid,prepayid,timestamp,sign;
+
++(RKObjectMapping *)getRelationDataMap
+{
+    RKObjectMapping *relationMapping = [RKObjectMapping mappingForClass:[self class]];
+    [relationMapping mapKeyPath:@"noncestr" toAttribute:@"noncestr"];
+    [relationMapping mapKeyPath:@"package" toAttribute:@"package"];
+    [relationMapping mapKeyPath:@"partnerid" toAttribute:@"parterid"];
+    [relationMapping mapKeyPath:@"prepayid" toAttribute:@"prepayid"];
+    [relationMapping mapKeyPath:@"timestamp" toAttribute:@"timestamp"];
+    [relationMapping mapKeyPath:@"sign" toAttribute:@"sign"];
     
     return relationMapping;
 }

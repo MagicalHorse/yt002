@@ -9,6 +9,8 @@
 #import "FSProdDetailCell.h"
 #import "FSResource.h"
 
+#define Icon_Size 15
+
 @implementation FSProdDetailCell
 
 - (id)initWithFrame:(CGRect)frame
@@ -22,17 +24,21 @@
 
 -(void)prepareControl
 {
-    _btnPrice = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 24)];
-    [_btnPrice setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
-    [self.contentView addSubview:_btnPrice];
-    
     _imgPic = [[UIImageView alloc] initWithFrame:self.bounds];
     [self.contentView addSubview:_imgPic];
     _imgPic.clipsToBounds = YES;
     
-    _btnPro = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 25, 25)];
+    _btnPrice = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 23, 24)];
+    //[_btnPrice setImage:[UIImage imageNamed:@"cancel2_icon.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnPrice];
+    
+    _btnPro = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, Icon_Size, Icon_Size)];
     [_btnPro setImage:[UIImage imageNamed:@"promotion_icon.png"] forState:UIControlStateNormal];
     [self.contentView addSubview:_btnPro];
+    
+    _btnProBag = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, Icon_Size, Icon_Size)];
+    [_btnProBag setImage:[UIImage imageNamed:@"icon_bag.png"] forState:UIControlStateNormal];
+    [self.contentView addSubview:_btnProBag];
 }
 
 -(void)prepareForReuse
@@ -51,7 +57,8 @@
         [_data.price intValue]>0)
     {
         _btnPrice.alpha =0.6;
-        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%d",[_data.price intValue]] forState:UIControlStateNormal];
+        _btnPrice.backgroundColor = [UIColor darkGrayColor];
+        [_btnPrice setTitle:[NSString stringWithFormat:@"¥%.2f",[_data.price floatValue]] forState:UIControlStateNormal];
         [_btnPrice setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _btnPrice.titleLabel.font = [UIFont systemFontOfSize:9];
         CGSize newsize = [_btnPrice sizeThatFits:_btnPrice.frame.size];
@@ -66,12 +73,23 @@
 -(void) showProIcon
 {
     _btnPro.hidden = NO;
-    _btnPro.frame = CGRectMake(3, 3, 17, 17);
+    _btnPro.frame = CGRectMake(3, 3, Icon_Size, Icon_Size);
 }
 
 -(void) hidenProIcon
 {
     _btnPro.hidden = YES;
+}
+
+-(void) showProBag
+{
+    _btnProBag.hidden = NO;
+    _btnProBag.frame = CGRectMake(!_data.promotionFlag?3:(Icon_Size + 6), 3, Icon_Size, Icon_Size);
+}
+
+-(void) hidenProBag
+{
+    _btnProBag.hidden = YES;
 }
 
 - (void)imageContainerStartDownload:(id)container withObject:(id)indexPath andCropSize:(CGSize)crop

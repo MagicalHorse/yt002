@@ -115,7 +115,7 @@
     [self initComponent:@"开发票" value:_data.needinvoice?@"是":@"否" component:_needinvoice];
     if (_data.needinvoice) {
         [self initComponent:@"发票抬头" value:_data.invoicesubject component:_invoicetitle];
-        [self initComponent:@"发票内容" value:_data.invoicedetail component:_invoicedetail];
+        [self initComponent:@"发票备注" value:_data.invoicedetail component:_invoicedetail];
     }
     else{
         _invoicedetail.hidden = YES;

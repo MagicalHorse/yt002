@@ -8,9 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "WXApi.h"
+#import "FSOrder.h"
 
-@interface WxpayOrder : NSObject<WXApiDelegate>
+@interface WxpayOrder : NSObject {
+    FSOrderWxPayInfo *purchase;
+}
+@property (nonatomic,strong) UIViewController *fromController;
 
-+ (BOOL)sendPay:(NSString*)productid;
+- (BOOL)sendPay:(NSString*)productid;
 
 @end

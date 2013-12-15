@@ -15,10 +15,13 @@
 
 @property (strong, nonatomic) UIButton *btnPrice;
 @property (strong, nonatomic) UIButton *btnPro;
+@property (strong, nonatomic) UIButton *btnProBag;
 
 @property(nonatomic,strong) FSProdItemEntity *data;
 
 -(void) showProIcon;
 -(void) hidenProIcon;
+-(void) showProBag;
+-(void) hidenProBag;
 -(void)willRemoveFromView;
 @end

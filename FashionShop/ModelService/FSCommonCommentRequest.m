@@ -87,6 +87,11 @@
         errorMsg = @"语音和文字描述都不存在，无法进行评论！";
     }
     
+    NSArray *keys = [params attachments];
+    for (RKParamsAttachment *item in keys) {
+        NSLog(@"%@:%@", item.name, item.value);
+    }
+    
     if (flag) {
         NSString *baseUrl =[self appendCommonRequestQueryPara:[FSModelManager sharedManager]];
         completeBlock = blockcomplete;

@@ -127,6 +127,28 @@
         }
        
     }
+    else if (!self.imgResource.image &&
+             [_data respondsToSelector:@selector(resource)])
+    {
+        if ([_data resource] && [_data resource].count>0)
+        {
+            FSResource *resource = nil;
+            for (FSResource *res in [_data resource]) {
+                if (res.type == 1) {
+                    resource = res;
+                    break;
+                }
+            }
+            if (resource) {
+                NSURL *url = [resource absoluteUrl];
+                if (url)
+                {
+                    [self.imgResource setImageUrl:url resizeWidth:CGSizeMake(crop.width*RetinaFactor, crop.height*RetinaFactor) placeholderImage:[UIImage imageNamed:@"default_icon120.png"]];
+                }
+            }
+        }
+        
+    }
 }
 
 

@@ -81,7 +81,7 @@
 
 -(void)clickRightButton:(UIButton*)sender
 {
-    if (_likes.count >= 10) {
+    if (_likes.count >= 8) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warm prompt", nil) message:NSLocalizedString(@"Address Allow Max Number", nil) delegate:self cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK",nil), nil];
         [alert show];
         return;

@@ -80,6 +80,7 @@
 
 @property (nonatomic, strong) NSMutableArray *products;     //products  FSPurchaseProductItem
 @property (nonatomic) BOOL needinvoice;                     //是否需要发票
+@property (nonatomic) BOOL isCompany;                       //是否是公司
 @property (nonatomic, strong) NSString *invoicetitle;       //发票抬头
 @property (nonatomic, strong) NSString *invoicedetail;      //发票明细
 @property (nonatomic, strong) NSString *memo;               //订单备注

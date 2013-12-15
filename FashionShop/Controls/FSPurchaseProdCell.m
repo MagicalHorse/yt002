@@ -420,12 +420,12 @@
              */
             
             _title.text = @"发票 : ";
-            if ([NSString isNilOrEmpty:data.invoicetitle]) {
+            if ([NSString isNilOrEmpty:data.invoicetitle] && [NSString isNilOrEmpty:data.invoicedetail]) {
                 _contentLb.text = @"点击填写发票信息";
                 _contentLb.textColor = [UIColor lightGrayColor];
             }
             else{
-                _contentLb.text = [NSString stringWithFormat:@"抬头:%@  明细:%@",data.invoicetitle, data.invoicedetail];
+                _contentLb.text = [NSString stringWithFormat:@"抬头:%@  备注:%@",(!data.isCompany?@"个人":data.invoicetitle), data.invoicedetail];
                 _contentLb.textColor = [UIColor colorWithHexString:@"181818"];
                 int height = [_contentLb.text sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(_contentLb.frame.size.width, 1000) lineBreakMode:NSLineBreakByCharWrapping].height;
                 CGRect rect = _contentLb.frame;

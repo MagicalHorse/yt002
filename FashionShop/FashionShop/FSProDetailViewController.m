@@ -324,7 +324,6 @@
                 FSProdDetailView *pView = (FSProdDetailView*)blockViewForRefresh;
                 FSProdItemEntity *pProd = (FSProdItemEntity *)pView.data;
                 pProd.isFavored = item.isFavored;
-                srand(1000);
                 pView.isCanTalk = item.isCanTalk;
                 [pView setData:pProd];
                 [pView resetScrollViewSize];
@@ -462,7 +461,6 @@
 
 -(void) internalDoFavor:(UIBarButtonItem *)button
 {
-    
     FSFavorRequest *request = [[FSFavorRequest alloc] init];
     request.userToken = [FSModelManager sharedModelManager].loginToken;
     request.productId = [self.itemSource valueForKey:@"id"];
@@ -492,10 +490,11 @@
             {
                 ((FSProdItemEntity *)view.data).isFavored = !favored;
                 if (favored)
-                    ((FSProdItemEntity *)view.data).favorTotal --;
+                    ((FSProdItemEntity *)view.data).likeCount --;
                 else
-                    ((FSProdItemEntity *)view.data).favorTotal ++;
-            } else if ([view.data isKindOfClass:[FSProItemEntity class]])
+                    ((FSProdItemEntity *)view.data).likeCount ++;
+            }
+            else if ([view.data isKindOfClass:[FSProItemEntity class]])
             {
                 ((FSProItemEntity *)view.data).isFavored = !favored;
                 if (favored)
@@ -973,6 +972,11 @@
         FSDetailBaseView *parentView = (FSDetailBaseView *)[currentView tbComment].superview.superview;
         FSComment *item = (FSComment*)[[parentView.data comments] objectAtIndex:replyIndex];
         request.replyuserID = item.inUser.uid;
+        
+        //回复其他人
+        //sourcetype=3时，sourceid是comment的id
+        request.sourceid = [NSNumber numberWithInt:item.commentid];
+        request.sourceType = [NSNumber numberWithInt:FSSourceComment];
     }
     
     __block FSProDetailViewController *blockSelf = self;
@@ -1015,7 +1019,12 @@
                 user.uid = [NSNumber numberWithInt:[[customer objectForKey:@"id"] intValue]];
                 user.thumnail = [customer objectForKey:@"logo"];
                 user.nickie = [customer objectForKey:@"nickname"];
-                user.userLevelId = [[customer objectForKey:@"level"] intValue];
+                if ([customer objectForKey:@"level"]) {
+                    user.userLevelId = [[customer objectForKey:@"level"] intValue];
+                }
+                else {
+                    user.userLevelId = FSNormalUser;
+                }
                 _comment.inUser = user;
             }
             

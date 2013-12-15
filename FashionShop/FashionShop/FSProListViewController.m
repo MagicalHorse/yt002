@@ -977,7 +977,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [WxpayOrder sendPay:@"123214234"];
+//    WxpayOrder *wxpay = [[WxpayOrder alloc] init];
+//    wxpay.fromController = self;
+//    [wxpay sendPay:@"123214234"];
 //    return;
     
     if (_inLoading) {

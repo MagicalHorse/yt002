@@ -216,7 +216,7 @@ void uncaughtExceptionHandler(NSException *exception)
     NSString *schema = url.scheme ;
     if ([schema hasPrefix:WEIXIN_API_APP_KEY])
     {
-      return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
+        return  [[FSWeixinActivity sharedInstance] handleOpenUrl:url];
     }
     else if ([schema hasSuffix:QQ_CONNECT_APP_ID]) {
         return [TencentOAuth HandleOpenURL:url];
