@@ -31,7 +31,7 @@
 
 @end
 
-@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider,FSAudioDelegate,FSCL_AudioDelegate,PKAddPassesViewControllerDelegate>
+@interface FSProDetailViewController : SYPaginatorViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UITextViewDelegate,FSThumViewDelegate,FSImageSlideDataSource,FSProDetailItemSourceProvider,FSAudioDelegate,FSCL_AudioDelegate,PKAddPassesViewControllerDelegate,UIAlertViewDelegate>
 
 - (IBAction)doBack:(id)sender;
 - (IBAction)doComment:(id)sender;

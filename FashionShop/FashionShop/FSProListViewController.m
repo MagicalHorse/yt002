@@ -894,7 +894,6 @@
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
             
-            //NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             NSString * str = [NSString stringWithFormat:@"%@\n至\n%@\n", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             [listCell setTitle:proData.title subTitle:proData.descrip dateString:str];
             
@@ -944,8 +943,6 @@
             [smdf setDateFormat:@"yyyy.MM.dd"];
             NSDateFormatter *emdf = [[NSDateFormatter alloc]init];
             [emdf setDateFormat:@"yyyy.MM.dd"];
-            
-            //NSString * str = [NSString stringWithFormat:@"<font size=12 color='#ccd2a3'>%@\n</font><font size=12 color='#dddddd'>至\n</font><font size=12 color='#ccd2a3'>%@\n</font>", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             
             NSString * str = [NSString stringWithFormat:@"%@\n至\n%@\n", [smdf stringFromDate:proData.startDate], [emdf stringFromDate:proData.endDate]];
             

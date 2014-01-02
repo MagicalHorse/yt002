@@ -60,3 +60,16 @@
 }
 
 @end
+
+@implementation FSCommonItem
+
++(RKObjectMapping *) getRelationDataMap
+{
+    RKObjectMapping *relationMap = [RKObjectMapping mappingForClass:[self class]];
+    [relationMap mapKeyPath:@"id" toAttribute:@"id"];
+    [relationMap mapKeyPath:@"name" toAttribute:@"name"];
+    
+    return relationMap;
+}
+
+@end

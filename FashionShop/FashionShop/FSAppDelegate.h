@@ -34,6 +34,7 @@
 @property (strong,nonatomic) AVAudioPlayer *audioPlayer;
 @property (strong,nonatomic) FSCommon *versionData;
 @property (nonatomic,strong) NSMutableArray *allAddress;
+@property (nonatomic,strong) NSMutableArray *allInvoiceDetails;
 //通用提示语
 @property (nonatomic, strong) NSMutableArray *messageItems;
 

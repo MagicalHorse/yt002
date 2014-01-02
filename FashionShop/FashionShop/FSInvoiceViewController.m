@@ -8,10 +8,13 @@
 
 #import "FSInvoiceViewController.h"
 #import "NSString+Extention.h"
+#import "FSPurchaseRequest.h"
+#import "FSCommon.h"
 
 @interface FSInvoiceViewController () {
     id activityField;
     FSMyPickerView *titlePickerView;
+    FSMyPickerView *detailPickerView;
 }
 
 @end
@@ -38,10 +41,42 @@
     _contentView.backgroundColor = [UIColor clearColor];
     self.view.backgroundColor = APP_TABLE_BG_COLOR;
     
+    //请求发票明细数据
+    if (![theApp allInvoiceDetails]) {
+        [self requestInvoiceDetail];
+    }
+    else {
+        [self initControl];
+    }
+}
+
+-(void)initControl
+{
     [self updateFrame:_uploadData.isCompany];
     [_invoiceTitle setText:(_uploadData.isCompany?@"公司":@"个人")];
     _companyName.text = _uploadData.invoicetitle;
     _invoiceDetail.text = _uploadData.invoicedetail;
+}
+
+- (void)requestInvoiceDetail
+{
+    FSPurchaseRequest *request = [[FSPurchaseRequest alloc] init];
+    request.routeResourcePath = RK_REQUEST_INVOICE_DETAIL;
+    request.rootKeyPath = @"data.items";
+    [self beginLoading:self.view];
+    [request send:[FSCommonItem class] withRequest:request completeCallBack:^(FSEntityBase *respData) {
+        [self endLoading:self.view];
+        if (respData.isSuccess)
+        {
+            FSAppDelegate *del = theApp;
+            del.allInvoiceDetails = respData.responseData;
+            [self initControl];
+        }
+        else
+        {
+            [self reportError:respData.errorDescrip];
+        }
+    }];
 }
 
 -(void)addRightButton:(NSString*)title
@@ -71,7 +106,7 @@
         return;
     }
     if ([NSString isNilOrEmpty:_invoiceDetail.text]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入发票备注" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请选择发票备注" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
         [_invoiceDetail becomeFirstResponder];
         return;
@@ -126,6 +161,28 @@
     }];
 }
 
+- (IBAction)clickToSelDetail:(id)sender {
+    if (!detailPickerView) {
+        detailPickerView = [[FSMyPickerView alloc] init];
+        detailPickerView.delegate = self;
+        detailPickerView.datasource = self;
+    }
+    //初始化选中项
+    FSAppDelegate *del = theApp;
+    int index = 0;
+    for (int i = 0; i < del.allInvoiceDetails.count; i++) {
+        FSCommonItem *item = del.allInvoiceDetails[i];
+        if ([item.name isEqualToString:_uploadData.invoicedetail]) {
+            index = i;
+            break;
+        }
+    }
+    [detailPickerView.picker selectRow:index inComponent:0 animated:NO];
+    [detailPickerView showPickerView:^{
+        [activityField resignFirstResponder];
+    }];
+}
+
 -(void)updateFrame:(BOOL)isCompany
 {
     _lbCompanyName.hidden = !isCompany;
@@ -154,12 +211,11 @@
     _rect = _invoiceDetail.frame;
     _rect.origin.y = yOffset;
     _invoiceDetail.frame = _rect;
-    yOffset += _invoiceDetail.frame.size.height + yHeight;
     
-    _rect = _lbDesc.frame;
+    _rect = _detailBtn.frame;
     _rect.origin.y = yOffset;
-    _lbDesc.frame = _rect;
-    yOffset += _lbDesc.frame.size.height + yHeight;
+    _detailBtn.frame = _rect;
+    yOffset += _detailBtn.frame.size.height + yHeight;
 }
 
 #pragma mark - FSMyPickerViewDatasource
@@ -169,6 +225,9 @@
     if (pickerView == titlePickerView) {
         return 1;
     }
+    else if (pickerView == detailPickerView) {
+        return 1;
+    }
     return 0;
 }
 
@@ -176,6 +235,9 @@
 {
     if (pickerView == titlePickerView) {
         return 2;
+    }
+    else if(pickerView == detailPickerView) {
+        return [[theApp allInvoiceDetails] count];
     }
     return 0;
 }
@@ -190,16 +252,31 @@
         [self updateFrame:_uploadData.isCompany];
         [_invoiceTitle setText:(_uploadData.isCompany?@"公司":@"个人")];
     }
+    else if (aMyPickerView == detailPickerView) {
+        int index = [aMyPickerView.picker selectedRowInComponent:0];
+        FSAppDelegate *del = theApp;
+        FSCommonItem *item = del.allInvoiceDetails[index];
+        _uploadData.invoicedetail = item.name;
+        [_invoiceDetail setText:item.name];
+    }
 }
 
 - (NSString *)myPickerView:(FSMyPickerView *)aMyPickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if (row == 0) {
-        return @"个人";
+    if (aMyPickerView == titlePickerView) {
+        if (row == 0) {
+            return @"个人";
+        }
+        else {
+            return @"公司";
+        }
     }
-    else {
-        return @"公司";
+    else if(aMyPickerView == detailPickerView) {
+        FSAppDelegate *del = theApp;
+        FSCommonItem *item = del.allInvoiceDetails[row];
+        return item.name;
     }
+    return @"";
 }
 
 @end

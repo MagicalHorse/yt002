@@ -169,6 +169,7 @@
     FSPurchaseProductItem *__product = [[FSPurchaseProductItem alloc] init];
     __product.productid = _productID;
     __product.quantity = 1;
+    _uploadData.isCompany = YES;
     
     //添加数量
     if (!__product.properties) {

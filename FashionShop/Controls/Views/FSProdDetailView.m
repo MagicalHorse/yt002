@@ -139,6 +139,7 @@
          _price1.hidden = NO;
          _priceOriginal.hidden = NO;
      }
+    _priceOriginal.hidden = YES;
     
     
     //_btnBrand

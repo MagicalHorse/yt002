@@ -59,6 +59,9 @@
         [map mapKeyPath:@"shipvia" toAttribute:@"request.shipvia"];
         [map mapKeyPath:@"shipviano" toAttribute:@"request.shipviano"];
     }
+    else if ([_routeResourcePath isEqualToString:RK_REQUEST_INVOICE_DETAIL]) {
+        //do nothing
+    }
 }
 
 @end

@@ -44,3 +44,10 @@
 @property (nonatomic, strong) NSString *reason;
 
 @end
+
+@interface FSCommonItem : FSModelBase
+
+@property(nonatomic) int id;
+@property(nonatomic,strong) NSString *name;
+
+@end

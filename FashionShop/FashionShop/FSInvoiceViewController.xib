@@ -9,10 +9,10 @@
             <connections>
                 <outlet property="companyName" destination="10" id="427-6C-GUn"/>
                 <outlet property="contentView" destination="4" id="18"/>
+                <outlet property="detailBtn" destination="hP8-el-HRT" id="gCf-SC-g70"/>
                 <outlet property="invoiceDetail" destination="12" id="14"/>
                 <outlet property="invoiceTitle" destination="7qY-nD-HSG" id="sHf-1j-nKK"/>
                 <outlet property="lbCompanyName" destination="9" id="uOs-70-QOe"/>
-                <outlet property="lbDesc" destination="PxQ-dc-Mme" id="ebO-CZ-2NQ"/>
                 <outlet property="lbDetail" destination="11" id="gDb-cb-GXY"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
@@ -77,7 +77,7 @@
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请输入发票备注，例如:礼品" minimumFontSize="12" id="12">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="请选择发票备注" minimumFontSize="12" id="12">
                             <rect key="frame" x="10" y="183" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -86,13 +86,18 @@
                                 <outlet property="delegate" destination="-1" id="vvo-fc-bQC"/>
                             </connections>
                         </textField>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="发票明细将依据发票备注，以及门店所支持的明细而开具。目前支持礼品、日用品以及其他（依据所购买的商品而定）" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PxQ-dc-Mme">
-                            <rect key="frame" x="20" y="221" width="280" height="72"/>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hP8-el-HRT">
+                            <rect key="frame" x="10" y="183" width="300" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <state key="normal">
+                                <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="clickToSelDetail:" destination="-1" eventType="touchUpInside" id="it0-mD-fBc"/>
+                            </connections>
+                        </button>
                     </subviews>
                 </scrollView>
             </subviews>

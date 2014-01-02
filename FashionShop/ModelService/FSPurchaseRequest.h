@@ -17,6 +17,7 @@
 #define RK_REQUEST_ORDER_RMA        @"/order/rma"               //订单申请退货
 #define RK_REQUEST_ORDER_RMA_UPDATE @"/rma/update"              //退货填写银行信息
 #define RK_REQUEST_ORDER_WXAPPPAY   @"/order/wxapppay"          //app微信支付请求数据
+#define RK_REQUEST_INVOICE_DETAIL   @"/environment/SupportInvoiceDetails"     //支持的发票明细
 
 //以下暂时未用
 #define RK_REQUEST_ORDER_RMA_LIST   @"/rma/list"                //退货列表
