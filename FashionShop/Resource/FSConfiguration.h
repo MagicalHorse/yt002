@@ -24,18 +24,18 @@
 #define REST_API_CLIENT_VERSION @"2.5.0"
 
 //正式库
-//#define REST_API_URL   @"http://intimeapi.elasticbeanstalk.com/api"
-//#define REST_API_URL_OUT @"http://api.youhuiin.com"
-//#define REST_API_APP_SECRET_KEY @"yintai123456"
+#define REST_API_URL   @"http://intimeapi.elasticbeanstalk.com/api"
+#define REST_API_URL_OUT @"http://api.youhuiin.com"
+#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //#define REST_API_URL   @"http://itoo.yintai.com/api"
 //#define REST_API_URL_OUT @"http://api.youhuiin.com"
 //#define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //预生产库-内网
-    #define REST_API_URL   @"http://10.92.200.109/api"
-    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
-    #define REST_API_APP_SECRET_KEY @"yintai123456"
+//    #define REST_API_URL   @"http://10.92.200.109/api"
+//    #define REST_API_URL_OUT @"http://stage.youhuiin.com"
+//    #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 ////预生产库
 //    #define REST_API_URL   @"http://apis.youhuiin.com/api"

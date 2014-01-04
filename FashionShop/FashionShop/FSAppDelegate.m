@@ -865,7 +865,7 @@ void uncaughtExceptionHandler(NSException *exception)
 	}
     
     //支付宝支付请求暂时只支持非模拟器，如果使用模拟器调试，请屏蔽该内容。
-    //[AlixLibService payOrder:orderString AndScheme:appScheme seletor:@selector(paymentResult:) target:self];
+    [AlixLibService payOrder:orderString AndScheme:appScheme seletor:@selector(paymentResult:) target:self];
 }
 
 -(void)paymentResult:(NSString *)resultd

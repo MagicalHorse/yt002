@@ -477,8 +477,8 @@
     }
     UIView *view = [self.view viewWithTag:Tag_Swip_View_Tag];
     int lineCount = _tags.count/5 + (_tags.count%5==0?0:1);
-    __block int height = (lineCount) * (Tag_Item_Height);
-    __block int __height = 20 + Tag_Item_Height * 8;
+    __block int height = (lineCount - 1) * (Tag_Item_Height + 10);
+    __block int __height = 20 + (Tag_Item_Height + 10) * 7;
     if (isSwipToUp) {
         isAnimating = YES;
         [UIView animateWithDuration:0.25 animations:^{
