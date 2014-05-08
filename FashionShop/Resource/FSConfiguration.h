@@ -21,11 +21,11 @@
  5、检查是否使用了正确的证书
  */
 
-#define REST_API_CLIENT_VERSION @"2.5.0"
+#define REST_API_CLIENT_VERSION @"2.5.1"
 
 //正式库
-#define REST_API_URL   @"http://intimeapi.elasticbeanstalk.com/api"
-#define REST_API_URL_OUT @"http://api.youhuiin.com"
+#define REST_API_URL   @"http://iapi.intime.com.cn/api"
+#define REST_API_URL_OUT @"http://i.intime.com.cn"
 #define REST_API_APP_SECRET_KEY @"yintai123456"
 
 //#define REST_API_URL   @"http://itoo.yintai.com/api"

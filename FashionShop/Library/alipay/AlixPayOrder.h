@@ -28,8 +28,8 @@
 	NSMutableDictionary * _extraParams;
 }
 
-@property(nonatomic, copy) NSString *appName;
-@property(nonatomic, copy) NSString *bizType;
+@property(nonatomic,copy) NSString *appName;
+@property (nonatomic,copy) NSString *bizType;
 @property(nonatomic, copy) NSString * partner;
 @property(nonatomic, copy) NSString * seller;
 @property(nonatomic, copy) NSString * tradeNO;

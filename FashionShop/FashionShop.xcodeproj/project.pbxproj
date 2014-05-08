@@ -4333,11 +4333,11 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Intime Department Store (Group) Co., Ltd. (4T8S383NVQ)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4369,8 +4369,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F35BEF0A-DE9F-4FE3-818B-A91F24A2DD13";
+				PROVISIONING_PROFILE = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
@@ -4445,11 +4445,11 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Jinssersun Beijing (YR8VFV8DQ9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qingshan He (Y2F7JPML23)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Library/RestKit/Tests/Vendor/OCHamcrest\"",
@@ -4485,8 +4485,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "29961775-BA2D-4CD9-A078-24721FEE779B";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29961775-BA2D-4CD9-A078-24721FEE779B";
+				PROVISIONING_PROFILE = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
@@ -4501,7 +4501,7 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Qingshan He (Y2F7JPML23)";
@@ -4537,8 +4537,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = FashionShop;
-				PROVISIONING_PROFILE = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E4D035F9-7928-4B6F-BDDF-F1188C0AF092";
+				PROVISIONING_PROFILE = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7BE707BA-BFE7-4602-96D6-F7CE3A292490";
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = iphoneos6.0;
 				SKIP_INSTALL = NO;
